@@ -16,7 +16,7 @@ public class HomeActivity extends BaseActivity {
 		super.onCreate(arg0);
 		setContentView(R.layout.activity_home);
 		Intent intent = getIntent();
-		String data = intent.getStringExtra("data");
-		Toast.makeText(this, data, 1).show();
+		String userName = intent.getStringExtra("userName");
+		Toast.makeText(this, "ÓÃ»§Ãû:"+userName, 1).show();
 	}
 }

@@ -5,7 +5,7 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		private static final String URL_BASE = "http://169.254.248.50/android_demo/";
+		private static final String URL_BASE = "http://192.168.56.1/Moment/";
 		
 		/**
 		 * api接口

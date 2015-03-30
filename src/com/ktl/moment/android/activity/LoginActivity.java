@@ -5,16 +5,18 @@
  */
 package com.ktl.moment.android.activity;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -53,22 +55,28 @@ public class LoginActivity extends BaseActivity {
 		RequestParams params = new RequestParams();
 		params.put("mobileNumber", "13397266727");
 		params.put("password", "123456");
-		ApiManager.getInstance().post(this, C.api.USER_LOGIN,params, "User", new HttpCallBack() {
-			
-			@Override
-			public void onSuccess(Object res) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-				intent.putExtra("data", (String)res);
-				startActivity(intent);
-			}
-			
-			@Override
-			public void onFailure(Object res) {
-				// TODO Auto-generated method stub
-				Toast.makeText(LoginActivity.this, (String)res, 1).show();
-			}
-		});
+		ApiManager.getInstance().post(this, C.api.USER_LOGIN,params,loginCallBack,"User");
 	}
-	
+	/**
+	 * callback
+	 */
+	HttpCallBack loginCallBack = new HttpCallBack() {
+		
+		@Override
+		public void onSuccess(Object res) {
+			// TODO Auto-generated method stub
+			@SuppressWarnings("unchecked")
+			ArrayList<User> userList = (ArrayList<User>)res;
+			User user = userList.get(0);
+			Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+			intent.putExtra("userName", user.getUserName());
+			startActivity(intent);
+		}
+		
+		@Override
+		public void onFailure(Object res) {
+			// TODO Auto-generated method stub
+			Toast.makeText(LoginActivity.this, (String)res, 1).show();
+		}
+	};
 }

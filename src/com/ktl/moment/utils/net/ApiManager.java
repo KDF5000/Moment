@@ -5,16 +5,23 @@
  */
 package com.ktl.moment.utils.net;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.apache.http.Header;
+import org.json.JSONException;
 
 import android.content.Context;
 
+import com.ktl.moment.entity.BaseEntity;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.infrastructure.HttpResult;
+import com.ktl.moment.utils.AppUtil;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class ApiManager {
-	private static final String STATUS_OK = "200";//请求成功夺的状态码
+	private static final int STATUS_OK =  200;//请求成功夺的状态码
 	private static ApiManager apiManager = null;// apiManager实例
 
 	public ApiManager() {
@@ -48,8 +55,8 @@ public class ApiManager {
 	 * @param callBack
 	 *            请求成功的回调类
 	 */
-	public void post(Context context, String url, RequestParams params,
-			final String modelName, final HttpCallBack callBack) {
+	public void post(Context context, String url, RequestParams params,final HttpCallBack callBack,
+			final String ... modelNameList) {
 		HttpManager.post(context, url, params, new AsyncHttpResponseHandler() {
 
 			@Override
@@ -57,14 +64,14 @@ public class ApiManager {
 					byte[] responseBody) {
 				// TODO Auto-generated method stub
 				// 成功需要解析返回的数据
-				callBack.onSuccess(new String(responseBody));
+				handleHttpResponse(responseBody,callBack,modelNameList);
 			}
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					byte[] responseBody, Throwable error) {
 				// TODO Auto-generated method stub
-				callBack.onFailure(new String("hello failure"));
+				callBack.onFailure(error.getMessage());
 			}
 		});
 	}
@@ -83,7 +90,7 @@ public class ApiManager {
 	 *            请求成功的回调类
 	 */
 	public void get(Context context, String url, RequestParams params,
-			final String modelName, final HttpCallBack callBack) {
+			final HttpCallBack callBack,final String ... modelNameList) {
 		HttpManager.get(context, url, params, new AsyncHttpResponseHandler() {
 			
 			@Override
@@ -91,16 +98,53 @@ public class ApiManager {
 					byte[] responseBody) {
 				// TODO Auto-generated method stub
 				// 成功需要解析返回的数据
-				callBack.onSuccess(new String("hello success"));
+				handleHttpResponse(responseBody,callBack,modelNameList);
 			}
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					byte[] responseBody, Throwable error) {
 				// TODO Auto-generated method stub
-				callBack.onFailure(new String("hello failure"));
+				callBack.onFailure(error.getMessage());
 			}
 		});
+	}
+	@SuppressWarnings("unchecked")
+	private void handleHttpResponse (byte[] responseBody ,HttpCallBack callBack,String ...modelNameList ){
+		if(responseBody==null){
+			return ;
+		}
+		if(callBack==null){
+			return ;
+		}
+		String response = new String(responseBody);
+		try {
+			HttpResult httpResult = AppUtil.getHttpResult(response);
+			if(STATUS_OK != httpResult.getStatus()){
+				callBack.onFailure(httpResult.getMsg());
+				return;
+			}
+			Object result = null;
+			if(modelNameList==null){
+				callBack.onSuccess(httpResult.getMsg());
+			}else if(modelNameList.length==1){
+				callBack.onSuccess(httpResult.getResultList(modelNameList[0]));
+			}else if(modelNameList.length>1){
+				HashMap<String,ArrayList<? extends BaseEntity>> mapList = new HashMap<String, ArrayList<? extends BaseEntity>>();
+				for(String modelName : modelNameList){
+					result = httpResult.getResultList(modelName);
+					if(result==null){
+						continue;
+					}
+					mapList.put(modelName, (ArrayList<? extends BaseEntity>) result);
+				}
+				callBack.onSuccess(mapList);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			callBack.onFailure("JSON解析出现异常");
+		}
 	}
 	/**
 	 * 取消请求
