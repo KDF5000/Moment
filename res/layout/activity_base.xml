@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_base_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:id="@+id/activity_base_title_container_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/activity_base_title_container_height"
+        android:gravity="center_vertical">
+        
+        <TextView 
+            android:id="@+id/title_left_view_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_left_view_name_text_size"/>
+        
+        <ImageView
+            android:id="@+id/title_refresh_img_view"
+            android:contentDescription="@string/refresh_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/title_left_view_name_tv"
+            android:layout_marginLeft="5dp"
+            android:onClick="doClick"
+            android:src="@drawable/refresh"/>
+        
+        <ImageView
+            android:id="@+id/title_search_img_view"
+            android:contentDescription="@string/search_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/title_remind_img_view"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/search"/>
+        
+        <ImageView 
+            android:id="@+id/title_remind_img_view"
+            android:contentDescription="@string/remind_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/title_add_img_view"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/remind"/>
+        
+        <ImageView 
+            android:id="@+id/title_add_img_view"
+            android:contentDescription="@string/add_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/add"/>
+            
+        <TextView 
+            android:id="@+id/middle_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/account_title_text_size"/>
+	        
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0">
+        
+        <FrameLayout 
+            android:id="@+id/activity_base_content_container"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"></FrameLayout>
+        
+    </RelativeLayout>
+
+</LinearLayout>

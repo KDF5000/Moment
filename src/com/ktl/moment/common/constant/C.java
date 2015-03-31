@@ -5,7 +5,8 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		private static final String URL_BASE = "http://169.254.248.50/android_demo/";
+		private static final String URL_BASE = "http://192.168.96.1/";
+//		private static final String URL_BASE = "http://192.168.249.1/";
 		
 		/**
 		 * api接口
@@ -14,6 +15,6 @@ public class C {
 		/**
 		 * 手机号登录
 		 */
-		public static final String USER_LOGIN = URL_BASE + "login.php";
+		public static final String USER_LOGIN = URL_BASE + "index.php";
 	}
 }

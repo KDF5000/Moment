@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+   <LinearLayout 
+       android:id="@+id/register_content_layout"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="60dp"
+       android:layout_marginLeft="50dp"
+       android:layout_marginRight="50dp"
+       android:layout_centerHorizontal="true"
+       android:orientation="vertical"
+       android:gravity="center">
+       
+       <ImageView 
+           android:id="@+id/register_user_logo_img"
+           android:contentDescription="@string/user_logo_des"
+           android:layout_width="@dimen/user_logo_size"
+           android:layout_height="@dimen/user_logo_size"
+           android:src="@drawable/qq"/>
+       
+       <TextView 
+           android:id="@+id/register_login_tv"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:text="@string/login"
+           android:textSize="12sp"
+           android:gravity="right"
+           android:textColor="@color/white"/>
+       
+       <LinearLayout 
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:background="@drawable/register_edit_layout_shape">
+           
+	       <EditText
+	           android:id="@+id/register_account_et"
+	           android:layout_width="fill_parent"
+	           android:layout_height="40dp"
+	           android:layout_marginTop="5dp"
+	           android:hint="@string/register_hint_input_account"
+	           android:textSize="@dimen/edit_text_size" />
+	       
+	       <EditText
+	           android:id="@+id/register_nickname_et"
+	           android:layout_width="fill_parent"
+	           android:layout_height="40dp"
+	           android:layout_marginTop="5dp"
+	           android:hint="@string/register_hint_input_nickname"
+	           android:textSize="@dimen/edit_text_size" />
+	       
+	       <EditText
+	           android:id="@+id/register_pass_et"
+	           android:layout_width="fill_parent"
+	           android:layout_height="40dp"
+	           android:layout_marginTop="5dp"
+	           android:layout_marginBottom="5dp"
+	           android:hint="@string/register_hint_input_pass"
+	           android:textSize="@dimen/edit_text_size" />
+       </LinearLayout>
+       
+       <Button 
+           android:id="@+id/register_btn"
+           android:layout_width="fill_parent"
+           android:layout_height="45dp"
+           android:background="@drawable/register_button_shape"
+           android:layout_marginTop="10dp"
+           android:text="@string/register"
+           android:textSize="@dimen/account_title_text_size"
+           android:onClick="registerClick"
+           android:textColor="@color/white"/>
+
+   </LinearLayout>
+
+</RelativeLayout>

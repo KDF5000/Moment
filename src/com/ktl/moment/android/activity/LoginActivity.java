@@ -58,9 +58,10 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+				Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
 				intent.putExtra("data", (String)res);
 				startActivity(intent);
+				finish();
 			}
 			
 			@Override
