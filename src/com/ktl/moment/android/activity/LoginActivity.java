@@ -53,7 +53,7 @@ public class LoginActivity extends BaseActivity {
 		RequestParams params = new RequestParams();
 		params.put("mobileNumber", "13397266727");
 		params.put("password", "123456");
-		ApiManager.getInstance().post(this, C.api.USER_LOGIN,params, "User", new HttpCallBack() {
+		ApiManager.getInstance().post(this, C.api.USER_LOGIN,params,new HttpCallBack() {
 			
 			@Override
 			public void onSuccess(Object res) {
@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				Toast.makeText(LoginActivity.this, (String)res, 1).show();
 			}
-		});
+		},"User");
 	}
 	
 }
