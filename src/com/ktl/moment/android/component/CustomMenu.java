@@ -13,8 +13,23 @@ public class CustomMenu extends ViewGroup {
 	private OnMenuItemClickListener onMenuItemClickListener;
 	
 	public void setOnMenuItemClickListener(
-			OnMenuItemClickListener onMenuItemClickListener) {
-		this.onMenuItemClickListener = onMenuItemClickListener;
+			OnMenuItemClickListener itemClickListener) {
+		this.onMenuItemClickListener = itemClickListener;
+		int count = getChildCount();
+		for (int i = 0; i < count ; i++) {
+			View childView = getChildAt(i);
+			final int pos = i;
+			childView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if(onMenuItemClickListener!=null){
+						onMenuItemClickListener.OnClick(v, pos);
+					}
+				}
+			});
+		}
 	}
 
 	public enum Status{
@@ -56,15 +71,15 @@ public class CustomMenu extends ViewGroup {
 			int totalHeight = getMeasuredHeight();
 			int step = ((totalWidth - count * cWidth) - 30 * 2 )/(count-1);
 			for (int i = 0; i < count ; i++) {
-				View child1 = getChildAt(i);
+				View childView = getChildAt(i);
 				int cl = 30 + i * cWidth + i*step;
 				int ct = totalHeight - cHeight - 10;
-				child1.layout(cl, ct, cl + cWidth, ct + cHeight);
+				childView.layout(cl, ct, cl + cWidth, ct + cHeight);
 			}
 		}
 	}
 	/**
-	 * 菜单显示隐藏
+	 * 鑿滃崟鏄剧ず闅愯棌
 	 * @param duration
 	 */
 	public void toggleMenu (int duration){
@@ -118,7 +133,6 @@ public class CustomMenu extends ViewGroup {
 					if(onMenuItemClickListener!=null){
 						onMenuItemClickListener.OnClick(v, pos);
 					}
-					//可以设置s点击后的动画
 				}
 			});
 		}
@@ -128,5 +142,5 @@ public class CustomMenu extends ViewGroup {
 	public interface OnMenuItemClickListener{
 		public void OnClick(View v,int pos);
 	}
-
+	
 }

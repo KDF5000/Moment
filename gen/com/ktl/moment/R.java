@@ -60,8 +60,8 @@ public final class R {
         public static final int activity_base_layout=0x7f090000;
         public static final int activity_base_title_container_layout=0x7f090001;
         public static final int button1=0x7f09000a;
+        public static final int home_content_container=0x7f090009;
         public static final int id_menu=0x7f090012;
-        public static final int list=0x7f090009;
         public static final int middle_title_tv=0x7f090007;
         public static final int register_account_et=0x7f09000e;
         public static final int register_btn=0x7f090011;
@@ -70,6 +70,7 @@ public final class R {
         public static final int register_nickname_et=0x7f09000f;
         public static final int register_pass_et=0x7f090010;
         public static final int register_user_logo_img=0x7f09000c;
+        public static final int textView1=0x7f090013;
         public static final int title_add_img_view=0x7f090006;
         public static final int title_left_view_name_tv=0x7f090002;
         public static final int title_refresh_img_view=0x7f090003;
@@ -82,6 +83,10 @@ public final class R {
         public static final int activity_login=0x7f030002;
         public static final int activity_register=0x7f030003;
         public static final int custom_menu=0x7f030004;
+        public static final int fragment_dynamic=0x7f030005;
+        public static final int fragment_find=0x7f030006;
+        public static final int fragment_me=0x7f030007;
+        public static final int fragment_monment=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f080000;
