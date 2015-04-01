@@ -1,5 +1,5 @@
 /**
- * µÇÂ¼´°¿Ú
+ * ç™»å½•çª—å£
  * @author KDF5000
  * @date 2015-3-29
  */
@@ -26,7 +26,7 @@ public class LoginActivity extends BaseActivity {
 	private static final String TAG = "LoginActivity";
 	
 	@ViewInject(R.id.button1)
-    private Button button;  //Ê¹ÓÃµÚÈı·½¿âxutils×¢Èë
+    private Button button;  //ä½¿ç”¨ç¬¬ä¸‰æ–¹åº“xutilsæ³¨å…¥
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -47,7 +47,7 @@ public class LoginActivity extends BaseActivity {
 		}
 	}
 	/**
-	 * ÊÖ»úºÅµÇÂ¼
+	 * æ‰‹æœºå·ç™»å½•
 	 */
 	private void mobileLogin (){
 		RequestParams params = new RequestParams();
