@@ -1,0 +1,28 @@
+<com.ktl.moment.android.component.CustomMenu 
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/id_menu"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content">
+     <ImageView 
+  			    android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:tag="Find"
+  				android:src="@drawable/find_press"/>
+     <ImageView 
+  			    android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:tag="Focus"
+  				android:src="@drawable/focus"/>
+     <ImageView 
+  			    android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:tag="Inspiration"
+  				android:src="@drawable/inspiration"/>
+     <ImageView 
+  			    android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:tag="Home"
+  				android:src="@drawable/home"/>
+  
+ </com.ktl.moment.android.component.CustomMenu>
