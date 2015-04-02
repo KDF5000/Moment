@@ -11,8 +11,6 @@ import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.CustomMenu;
 import com.ktl.moment.android.component.CustomMenu.OnMenuItemClickListener;
-import com.ktl.moment.android.fragment.FindFragment;
-import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.constant.C;
 
 public class HomeActivity extends BaseActivity {
@@ -21,7 +19,7 @@ public class HomeActivity extends BaseActivity {
 	private CustomMenu customMenu;// 菜单
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
-	private static String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
+	private String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
 
 	@Override
 	protected void onCreate(Bundle arg0) {
