@@ -12,6 +12,7 @@ import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.CustomMenu;
 import com.ktl.moment.android.component.CustomMenu.OnMenuItemClickListener;
 import com.ktl.moment.android.fragment.FindFragment;
+import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.constant.C;
 
 public class HomeActivity extends BaseActivity {
@@ -20,7 +21,7 @@ public class HomeActivity extends BaseActivity {
 	private CustomMenu customMenu;// 菜单
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
-	private static String currentFgTag = "FindFragment";//当前菜单的tag
+	private static String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -28,12 +29,10 @@ public class HomeActivity extends BaseActivity {
 		super.onCreate(arg0);
 		initView();
 		initEvent();
-		fragmentManager = getSupportFragmentManager();//获取fragment的管理器
 		
 		//初始为发现界面
-//		getSupportFragmentManager().beginTransaction()
-//				.replace(R.id.home_content_container, new FindFragment()).commit();
-		switchMenuByTag(currentFgTag);//设置默认的界面
+		fragmentManager = getSupportFragmentManager();//获取fragment的管理器
+		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);//设置默认的界面
 	}
 
 	/**
@@ -87,6 +86,9 @@ public class HomeActivity extends BaseActivity {
 	 * @param selectedTag
 	 */
 	private void switchMenuByTag(String selectedTag){
+		if(selectedTag == currentFgTag || selectedTag.equals(currentFgTag)){
+			return ;
+		}
 		fragmentTransaction = fragmentManager.beginTransaction();
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);//
 		if(selectedTag!=null  && !selectedTag.equals("")){

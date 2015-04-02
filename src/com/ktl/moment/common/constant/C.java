@@ -30,6 +30,7 @@ public class C {
 		public static final String FRAGMENT_DYNAMIC_TAG = "DynamicFragment";//动态
 		public static final String FRAGMENT_MOMENT_TAG = "MomentFragment";//灵感
 		public static final String FRAGMENT_ME_TAG = "MeFragment";//我的
+		public static final String FRAGMENT_DEFAULT_SHOW_TAG = "FindFragment";//默认显示发现
 		
 		/**
 		 * 菜单索引值
