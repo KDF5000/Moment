@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
@@ -34,11 +36,11 @@ import com.sina.weibo.sdk.openapi.models.User;
 public class LoginActivity extends BaseActivity {
 	private static final String TAG = "LoginActivity";
 	
-	@ViewInject(R.id.button1)
-    private Button button;  //使用第三方库xutils注入
+	@ViewInject(R.id.login_btn)
+    private Button loginBtn;  //使用第三方库xutils注入
 	
-	@ViewInject(R.id.button2)
-    private Button button2;  //使用第三方库xutils注入
+	@ViewInject(R.id.login_weibo_img)
+	private ImageView weiboLogin;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -48,13 +50,15 @@ public class LoginActivity extends BaseActivity {
 		ViewUtils.inject(this);
 	}
 	
-	@OnClick({R.id.button1,R.id.button2})
+	@OnClick({R.id.login_btn,R.id.login_weibo_img})
 	public void OnClick(View v){
 		switch (v.getId()) {
-		case R.id.button1:
+		case R.id.login_btn:
+			Toast.makeText(LoginActivity.this, "login", Toast.LENGTH_SHORT).show();
 			mobileLogin();
 			break;
-		case R.id.button2:
+		case R.id.login_weibo_img:
+			Toast.makeText(LoginActivity.this, "weibo", Toast.LENGTH_SHORT).show();
 			weiboLogin();
 			break;
 		default:
