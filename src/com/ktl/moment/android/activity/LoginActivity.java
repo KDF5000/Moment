@@ -1,14 +1,14 @@
 /**
- * µÇÂ¼´°¿Ú
+ * ç™»å½•çª—å£
  * @author KDF5000
  * @date 2015-3-29
  */
 package com.ktl.moment.android.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -22,11 +22,11 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.loopj.android.http.RequestParams;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends Activity {
 	private static final String TAG = "LoginActivity";
 	
-	@ViewInject(R.id.button1)
-    private Button button;  //Ê¹ÓÃµÚÈı·½¿âxutils×¢Èë
+	@ViewInject(R.id.login_btn)
+    private Button button;  //ä½¿ç”¨ç¬¬ä¸‰æ–¹åº“xutilsæ³¨å…¥
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -36,10 +36,10 @@ public class LoginActivity extends BaseActivity {
 		ViewUtils.inject(this);
 	}
 	
-	@OnClick({R.id.button1})
+	@OnClick({R.id.login_btn})
 	public void OnClick(View v){
 		switch (v.getId()) {
-		case R.id.button1:
+		case R.id.login_btn:
 			mobileLogin();
 			break;
 		default:
@@ -47,7 +47,7 @@ public class LoginActivity extends BaseActivity {
 		}
 	}
 	/**
-	 * ÊÖ»úºÅµÇÂ¼
+	 * æ‰‹æœºå·ç™»å½•
 	 */
 	private void mobileLogin (){
 		RequestParams params = new RequestParams();

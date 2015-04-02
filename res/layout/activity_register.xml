@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res/com.ktl.moment">
     
    <LinearLayout 
        android:id="@+id/register_content_layout"
@@ -13,13 +13,14 @@
        android:layout_centerHorizontal="true"
        android:orientation="vertical"
        android:gravity="center">
-       
-       <ImageView 
-           android:id="@+id/register_user_logo_img"
-           android:contentDescription="@string/user_logo_des"
-           android:layout_width="@dimen/user_logo_size"
-           android:layout_height="@dimen/user_logo_size"
-           android:src="@drawable/qq"/>
+
+       <com.ktl.moment.android.component.CircleImageView
+           android:id="@+id/user_logo_img"
+           android:layout_width="80dp"
+           android:layout_height="80dp"
+           android:src="@drawable/user_head"
+           app:border_width="2dp"
+           app:border_color="@color/white" />
        
        <TextView 
            android:id="@+id/register_login_tv"
@@ -42,7 +43,7 @@
 	           android:layout_height="40dp"
 	           android:layout_marginTop="5dp"
 	           android:hint="@string/register_hint_input_account"
-	           android:textSize="@dimen/edit_text_size" />
+	           android:textSize="@dimen/account_text_size" />
 	       
 	       <EditText
 	           android:id="@+id/register_nickname_et"
@@ -50,7 +51,7 @@
 	           android:layout_height="40dp"
 	           android:layout_marginTop="5dp"
 	           android:hint="@string/register_hint_input_nickname"
-	           android:textSize="@dimen/edit_text_size" />
+	           android:textSize="@dimen/account_text_size" />
 	       
 	       <EditText
 	           android:id="@+id/register_pass_et"
@@ -59,7 +60,7 @@
 	           android:layout_marginTop="5dp"
 	           android:layout_marginBottom="5dp"
 	           android:hint="@string/register_hint_input_pass"
-	           android:textSize="@dimen/edit_text_size" />
+	           android:textSize="@dimen/account_text_size" />
        </LinearLayout>
        
        <Button 
@@ -69,9 +70,43 @@
            android:background="@drawable/register_button_shape"
            android:layout_marginTop="10dp"
            android:text="@string/register"
-           android:textSize="@dimen/account_title_text_size"
-           android:onClick="registerClick"
+           android:textSize="@dimen/account_text_size"
+           android:onClick="doClick"
            android:textColor="@color/white"/>
+       
+       <LinearLayout 
+           android:id="@+id/register_third_party_layout"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="100dp"
+           android:gravity="center">
+           
+           <ImageView 
+               android:id="@+id/wechat_img"
+               android:contentDescription="@string/wechat_des"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginRight="40dp"
+           	   android:onClick="doClick"
+               android:src="@drawable/login_wechat"/>
+           
+           <ImageView 
+               android:id="@+id/qq_img"
+               android:contentDescription="@string/weibo_des"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+           	   android:onClick="doClick"
+               android:src="@drawable/login_qq"/>
+           
+           <ImageView 
+               android:id="@+id/weibo_img"
+               android:contentDescription="@string/qq_des"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="40dp"
+           	   android:onClick="doClick"
+               android:src="@drawable/login_weibo"/>
+       </LinearLayout>
 
    </LinearLayout>
 

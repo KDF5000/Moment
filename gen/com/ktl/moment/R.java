@@ -9,18 +9,40 @@ package com.ktl.moment;
 
 public final class R {
     public static final class attr {
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int border_color=0x7f010001;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int border_width=0x7f010000;
     }
     public static final class color {
-        public static final int found_background_color=0x7f040000;
+        public static final int account_text_color=0x7f040002;
+        public static final int found_background_color=0x7f040003;
+        public static final int hint_color=0x7f040001;
+        public static final int login_background_color=0x7f040000;
         /**  发现页面背景色 
          */
-        public static final int register_background_color=0x7f040001;
+        public static final int register_background_color=0x7f040004;
         /**  注册页面背景色 
          */
-        public static final int white=0x7f040002;
+        public static final int white=0x7f040005;
     }
     public static final class dimen {
-        public static final int account_title_text_size=0x7f050004;
+        public static final int account_text_size=0x7f050004;
         public static final int activity_base_title_container_height=0x7f050002;
         /**  Default screen margins, per the Android Design guidelines. 
 
@@ -30,46 +52,63 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f050000;
         public static final int activity_vertical_margin=0x7f050001;
-        /**  登陆注册页面title栏字体大小 
-         */
-        public static final int edit_text_size=0x7f050005;
         /**  title栏高度 
          */
         public static final int title_left_view_name_text_size=0x7f050003;
-        /**  输入框字体大小 
-         */
-        public static final int user_logo_size=0x7f050006;
     }
     public static final class drawable {
         public static final int add=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int logo=0x7f020002;
-        public static final int qq=0x7f020003;
-        public static final int refresh=0x7f020004;
-        public static final int register_button_shape=0x7f020005;
-        public static final int register_edit_layout_shape=0x7f020006;
-        public static final int remind=0x7f020007;
-        public static final int search=0x7f020008;
+        public static final int avatar=0x7f020001;
+        public static final int delete=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int login_button_shape=0x7f020004;
+        public static final int login_card=0x7f020005;
+        public static final int login_qq=0x7f020006;
+        public static final int login_wechat=0x7f020007;
+        public static final int login_weibo=0x7f020008;
+        public static final int logo=0x7f020009;
+        public static final int refresh=0x7f02000a;
+        public static final int register_button_shape=0x7f02000b;
+        public static final int register_edit_layout_shape=0x7f02000c;
+        public static final int remind=0x7f02000d;
+        public static final int search=0x7f02000e;
+        public static final int user_head=0x7f02000f;
     }
     public static final class id {
         public static final int activity_base_content_container=0x7f090008;
         public static final int activity_base_layout=0x7f090000;
         public static final int activity_base_title_container_layout=0x7f090001;
-        public static final int button1=0x7f09000a;
+        public static final int login_account_et=0x7f09000e;
+        public static final int login_account_layout=0x7f09000d;
+        public static final int login_avatar=0x7f09000c;
+        public static final int login_btn=0x7f090013;
+        public static final int login_content_layout=0x7f09000a;
+        public static final int login_delete_account_text_img=0x7f09000f;
+        public static final int login_delete_pass_text_img=0x7f090012;
+        public static final int login_pass_et=0x7f090011;
+        public static final int login_pass_layout=0x7f090010;
+        public static final int login_qq_img=0x7f090016;
+        public static final int login_tv=0x7f09000b;
+        public static final int login_wechat_img=0x7f090014;
+        public static final int login_weibo_img=0x7f090015;
         public static final int middle_title_tv=0x7f090007;
-        public static final int register_account_et=0x7f09000e;
-        public static final int register_btn=0x7f090011;
-        public static final int register_content_layout=0x7f09000b;
-        public static final int register_login_tv=0x7f09000d;
-        public static final int register_nickname_et=0x7f09000f;
-        public static final int register_pass_et=0x7f090010;
-        public static final int register_user_logo_img=0x7f09000c;
+        public static final int qq_img=0x7f090020;
+        public static final int register_account_et=0x7f09001a;
+        public static final int register_btn=0x7f09001d;
+        public static final int register_content_layout=0x7f090017;
+        public static final int register_login_tv=0x7f090019;
+        public static final int register_nickname_et=0x7f09001b;
+        public static final int register_pass_et=0x7f09001c;
+        public static final int register_third_party_layout=0x7f09001e;
         public static final int title_add_img_view=0x7f090006;
         public static final int title_left_view_name_tv=0x7f090002;
         public static final int title_refresh_img_view=0x7f090003;
         public static final int title_remind_img_view=0x7f090005;
         public static final int title_search_img_view=0x7f090004;
         public static final int tmp=0x7f090009;
+        public static final int user_logo_img=0x7f090018;
+        public static final int wechat_img=0x7f09001f;
+        public static final int weibo_img=0x7f090021;
     }
     public static final class layout {
         public static final int activity_base=0x7f030000;
@@ -81,23 +120,32 @@ public final class R {
         public static final int main=0x7f080000;
     }
     public static final class string {
-        public static final int add_des=0x7f06000a;
+        public static final int add_des=0x7f060010;
         public static final int app_name=0x7f060000;
+        /**  img&img_btn description 
+         */
+        public static final int delete_icon_des=0x7f06000c;
+        public static final int found_text_view=0x7f060008;
         /**      <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string> 
          */
-        public static final int found_text_view=0x7f060001;
-        public static final int login=0x7f060003;
-        /**  img&img_btn description 
-         */
-        public static final int refresh_des=0x7f060007;
-        public static final int register=0x7f060002;
-        public static final int register_hint_input_account=0x7f060004;
-        public static final int register_hint_input_nickname=0x7f060005;
-        public static final int register_hint_input_pass=0x7f060006;
-        public static final int remind_des=0x7f060009;
-        public static final int search_des=0x7f060008;
-        public static final int user_logo_des=0x7f06000b;
+        public static final int login=0x7f060001;
+        public static final int login_account_hint=0x7f060002;
+        public static final int login_forget_pass=0x7f060005;
+        public static final int login_pass_hint=0x7f060003;
+        public static final int login_register=0x7f060006;
+        public static final int login_third_party_title=0x7f060004;
+        public static final int qq_des=0x7f060013;
+        public static final int refresh_des=0x7f06000d;
+        public static final int register=0x7f060007;
+        public static final int register_hint_input_account=0x7f060009;
+        public static final int register_hint_input_nickname=0x7f06000a;
+        public static final int register_hint_input_pass=0x7f06000b;
+        public static final int remind_des=0x7f06000f;
+        public static final int search_des=0x7f06000e;
+        public static final int user_logo_des=0x7f060011;
+        public static final int wechat_des=0x7f060012;
+        public static final int weibo_des=0x7f060014;
     }
     public static final class style {
         /** 
@@ -127,4 +175,52 @@ public final class R {
          */
         public static final int AppTheme=0x7f070001;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a CircleImageView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #CircleImageView_border_color com.ktl.moment:border_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #CircleImageView_border_width com.ktl.moment:border_width}</code></td><td></td></tr>
+           </table>
+           @see #CircleImageView_border_color
+           @see #CircleImageView_border_width
+         */
+        public static final int[] CircleImageView = {
+            0x7f010000, 0x7f010001
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.ktl.moment.R.attr#border_color}
+          attribute's value can be found in the {@link #CircleImageView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.ktl.moment:border_color
+        */
+        public static final int CircleImageView_border_color = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.ktl.moment.R.attr#border_width}
+          attribute's value can be found in the {@link #CircleImageView} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.ktl.moment:border_width
+        */
+        public static final int CircleImageView_border_width = 0;
+    };
 }

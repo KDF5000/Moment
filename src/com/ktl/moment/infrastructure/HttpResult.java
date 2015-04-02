@@ -14,10 +14,10 @@ import com.google.gson.Gson;
 import com.ktl.moment.entity.BaseEntity;
 
 public class HttpResult {
-	private int status;// ÇëÇó·µ»ØÂë
-	private String msg;// ÇëÇó·µ»ØµÄÏûÏ¢
-	private String result;// ×Ö·û´®½á¹û
-	private Map<String, ArrayList<? extends BaseEntity>> mapResultList;// map¼¯ºÏ£¬×Ö¶ÎÖµÊÇ¶ÔÏóÊÇlist
+	private int status;// è¯·æ±‚è¿”å›ç 
+	private String msg;// è¯·æ±‚è¿”å›çš„æ¶ˆæ¯
+	private String result;// å­—ç¬¦ä¸²ç»“æœ
+	private Map<String, ArrayList<? extends BaseEntity>> mapResultList;// mapé›†åˆï¼Œå­—æ®µå€¼æ˜¯å¯¹è±¡æ˜¯list
 
 	public HttpResult(){
 		this.mapResultList = new HashMap<String, ArrayList<? extends BaseEntity>>();
@@ -63,7 +63,7 @@ public class HttpResult {
 	}
 
 	/**
-	 * »ñµÃmapÀïÖ¸¶¨modelÃûµÄÊµÌålist
+	 * è·å¾—mapé‡ŒæŒ‡å®šmodelåçš„å®ä½“list
 	 * 
 	 * @param modelName
 	 * @return ArrayList
@@ -73,7 +73,7 @@ public class HttpResult {
 	}
 
 	/**
-	 * ÉèÖÃ·µ»Ø½á¹û
+	 * è®¾ç½®è¿”å›ç»“æœ
 	 * @param result
 	 * @throws JSONException
 	 */
@@ -91,7 +91,7 @@ public class HttpResult {
 					String modelClassName = "com.ktl.moment.entity."
 							+ modelName;
 					JSONArray modelJsonArray = jsonObject.optJSONArray(jsonKey);
-					// Èç¹ûÊı¾İÊÇ¸öjson¶ÔÏó
+					// å¦‚æœæ•°æ®æ˜¯ä¸ªjsonå¯¹è±¡
 					if (modelJsonArray == null) {
 						JSONObject modelJsonObject = jsonObject
 								.optJSONObject(jsonKey);
@@ -125,7 +125,7 @@ public class HttpResult {
 		}
 	}
 	/**
-	 * json×ª»»Îª¶ÔÏó
+	 * jsonè½¬æ¢ä¸ºå¯¹è±¡
 	 * @param modelClassName
 	 * @param modelJsonObject
 	 * @return
@@ -146,7 +146,7 @@ public class HttpResult {
 		return modelObj;
 	}
 	/**
-	 * »ñµÃÄ£ĞÍÃû
+	 * è·å¾—æ¨¡å‹å
 	 * @param str
 	 * @return
 	 */
@@ -154,7 +154,7 @@ public class HttpResult {
 		if(str.contains("List")){
 			str = str.substring(0,str.indexOf("List"));
 		}
-		//Ê××ÖÄ¸×ª»»Îª´óĞ´
+		//é¦–å­—æ¯è½¬æ¢ä¸ºå¤§å†™
 		if (str != null && str != "") {
 			str = str.replaceFirst(str.substring(0, 1), str.substring(0,1).toUpperCase(Locale.getDefault()));
 		}
