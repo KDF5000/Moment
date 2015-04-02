@@ -3,15 +3,18 @@
     package="com.ktl.moment"
     android:versionCode="1"
     android:versionName="1.0" >
-
+    
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
@@ -26,32 +29,31 @@
             </intent-filter>
         </activity>
         
-        <!-- QQ login -->
-		 <activity
-		       android:name="com.tencent.tauth.AuthActivity"
-		       android:noHistory="true"
-		       android:launchMode="singleTask" >
-		    <intent-filter>
-		           <action android:name="android.intent.action.VIEW" />
-			       <category android:name="android.intent.category.DEFAULT" />
-			       <category android:name="android.intent.category.BROWSABLE" />
-		           <data android:scheme="tencent1104435237" />
-		    </intent-filter>
-		 </activity>
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        <activity 
+            android:name="com.ktl.moment.android.activity.RegisterActivity">
         </activity>
         
         <activity 
             android:name="com.ktl.moment.android.activity.HomeActivity">
         </activity>
         
-        <activity 
-            android:name="com.ktl.moment.android.activity.RegisterActivity">
+        
+         <!-- 必须注册在微博授权，分享微博时候用到 -->
+        <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser" 
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" >
         </activity>
+        <!-- 分享 -->
+        <activity
+			android:name="com.sina.weibo.sdk.demo.WBShareActivity"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" >
+			<intent-filter>
+				<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
     </application>
 
 </manifest>
