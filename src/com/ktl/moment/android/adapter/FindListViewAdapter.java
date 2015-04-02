@@ -1,5 +1,7 @@
 package com.ktl.moment.android.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,26 +11,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.entity.Moment;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FindListViewAdapter extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater mInflater;
-	
-	public FindListViewAdapter(Context context){
-		mInflater = LayoutInflater.from(context);
+	private List<Moment> momentList;// 灵感列表
+	private DisplayImageOptions options;// 图片设置选项
+
+	public FindListViewAdapter(Context context, List<Moment> momentList,
+			DisplayImageOptions options) {
+		this.momentList = momentList;
+		this.context = context;
+		this.mInflater = LayoutInflater.from(context);
+		this.options = options;
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return 10;
+		return momentList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return null;
+		return momentList.get(position);
 	}
 
 	@Override
@@ -40,24 +51,49 @@ public class FindListViewAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		if(convertView==null){
-			convertView = this.mInflater.inflate(R.layout.fragment_find_list_item, null);
+		MomentHolder momentHolder = null;
+		if (convertView == null) {
+			convertView = this.mInflater.inflate(
+					R.layout.fragment_find_list_item, null);
+			momentHolder = new MomentHolder();
+			momentHolder.tittleTv = (TextView) convertView
+					.findViewById(R.id.moment_title);
+			momentHolder.contentTv = (TextView) convertView
+					.findViewById(R.id.moment_content);
+			momentHolder.avatar = (ImageView) convertView
+					.findViewById(R.id.user_avatar);
+			momentHolder.userNameTv = (TextView) convertView
+					.findViewById(R.id.user_name);
+			momentHolder.postTime = (TextView) convertView
+					.findViewById(R.id.post_time);
+			momentHolder.fllowNum = (TextView) convertView
+					.findViewById(R.id.follow_num);
+			momentHolder.praiseNum = (TextView) convertView
+					.findViewById(R.id.praise_num);
+			convertView.setTag(momentHolder);
+		} else {
+			momentHolder = (MomentHolder) convertView.getTag();
 		}
-		TextView tittleTv = (TextView) convertView.findViewById(R.id.moment_title);
-		TextView contentTv = (TextView) convertView.findViewById(R.id.moment_content);
-		TextView avatar = (TextView) convertView.findViewById(R.id.user_avatar);
-		TextView userNameTv = (TextView) convertView.findViewById(R.id.user_name);
-		TextView postTime = (TextView)convertView.findViewById(R.id.post_time);
-		TextView fllowNum = (TextView)convertView.findViewById(R.id.follow_num);
-		TextView praiseNum = (TextView)convertView.findViewById(R.id.praise_num);
-		tittleTv.setText("一款灵感记录类应用");
-		contentTv.setText("这是一款专门记录灵感的软件,用户可以通过文字，图片，声音等多种形式记录灵感");
-		avatar.setBackgroundResource(R.drawable.avatar);
-		userNameTv.setText("习大大");
-		postTime.setText("2小时前");
-		fllowNum.setText("1234");
-		praiseNum.setText("1234");
+		Moment moment = momentList.get(position);
+		momentHolder.tittleTv.setText(moment.getTitle());
+		momentHolder.contentTv.setText(moment.getContent());
+		ImageLoader.getInstance().displayImage(moment.getAvatarUrl(),
+				momentHolder.avatar, options);
+		momentHolder.userNameTv.setText(moment.getAuthorNickName());
+		momentHolder.postTime.setText(moment.getPostTime());
+		momentHolder.fllowNum.setText(moment.getFollowNums() + "");
+		momentHolder.praiseNum.setText(moment.getPraiseNums() + "");
 		return convertView;
+	}
+
+	public static class MomentHolder {
+		TextView tittleTv;// 标题
+		TextView contentTv;// 内容
+		ImageView avatar;// 头像
+		TextView userNameTv;// 用户名
+		TextView postTime;// 发布时间
+		TextView fllowNum;// 关注人数
+		TextView praiseNum;// 点赞人数
 	}
 
 }
