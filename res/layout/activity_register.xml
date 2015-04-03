@@ -18,7 +18,7 @@
            android:id="@+id/user_logo_img"
            android:layout_width="80dp"
            android:layout_height="80dp"
-           android:src="@drawable/user_head"
+           android:src="@drawable/avatar"
            app:border_width="2dp"
            app:border_color="@color/white" />
        

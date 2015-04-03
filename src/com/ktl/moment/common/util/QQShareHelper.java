@@ -2,6 +2,7 @@ package com.ktl.moment.common.util;
 
 import android.app.Activity;
 
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.config.AppConfig;
 import com.tencent.tauth.Tencent;
 
@@ -12,7 +13,7 @@ public class QQShareHelper {
 	
 	public QQShareHelper(Activity activity){
 		this.activity = activity;
-		tencent = Tencent.createInstance(AppConfig.QQ_OPEN_FLAT_APP_ID, activity.getApplicationContext());
+		tencent = Tencent.createInstance(C.ThirdSdk.QQ_OPEN_FLAT_APP_ID, activity.getApplicationContext());
 	}
 	
 	public Tencent getTencent(){

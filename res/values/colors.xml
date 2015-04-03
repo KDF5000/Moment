@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="login_background_color">#e5e5e5</color>
-    <color name="hint_color">#bfbfbf</color>
+    <color name="hint_color">#ffffff</color>
     <color name="account_text_color">#000000</color>
     
     <color name="found_background_color">#00bcd4</color><!-- 发现页面背景色 -->

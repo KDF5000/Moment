@@ -19,15 +19,17 @@
     <string name="register_hint_input_pass">密码（必填）</string>
     
     <!-- img&img_btn description -->
+    <string name="account_des">account_img</string>
+    <string name="pass_des">pass_img</string>
     <string name="delete_icon_des">delete_img</string>
+    <string name="wechat_des">wechat_img</string>
+    <string name="qq_des">qq_img</string>
+    <string name="weibo_des">weibo_img</string>
     
     <string name="refresh_des">refresh_img</string>
     <string name="search_des">search_img</string>
     <string name="remind_des">remind_img</string>
     <string name="add_des">add_img</string>
     <string name="user_logo_des">user_logo</string>
-    <string name="wechat_des">wechat_img</string>
-    <string name="qq_des">qq_img</string>
-    <string name="weibo_des">weibo_img</string>
 
 </resources>
