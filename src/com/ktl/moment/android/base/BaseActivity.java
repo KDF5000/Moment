@@ -172,5 +172,8 @@ public class BaseActivity extends FragmentActivity {
 	    } else { 
 	    	AppManager.getInstance().AppExit(this);
 	    }  
-	}  
+	}
+	protected void showToast(String str){
+		Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+	}
 }

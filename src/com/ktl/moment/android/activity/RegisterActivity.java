@@ -15,8 +15,6 @@ public class RegisterActivity extends BaseActivity {
 	
 	@ViewInject(R.id.register_btn)
 	private Button registerBtn;
-	@ViewInject(R.id.user_logo_img)
-	private ImageView headImg;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -26,7 +24,7 @@ public class RegisterActivity extends BaseActivity {
 		
 		
 		ViewUtils.inject(this);
-		initActivity();
+//		initActivity();
 	}
 	
 	private void initActivity(){
@@ -38,7 +36,7 @@ public class RegisterActivity extends BaseActivity {
 	@OnClick({R.id.register_btn})
 	public void doClick(View v){
 		switch (v.getId()) {
-		case R.id.qq_img:
+		case R.id.register_btn:
 				
 			break;
 		}
