@@ -1,14 +1,18 @@
 /*** 
- * activity�Ļ��࣬����ʵ��activity�Ĺ������֣����繫��UI���㲥...
+ * activity�Ļ��࣬����ʵ��activity�Ĺ������֣����繫��UI���㲥...
  * @author KDF5000
  * @date 2015-3-29
  */
 package com.ktl.moment.android.base;
 
-import com.ktl.moment.R;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -16,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ktl.moment.R;
+import com.ktl.moment.manager.AppManager;
 
 public class BaseActivity extends FragmentActivity {
 	
@@ -37,6 +44,7 @@ public class BaseActivity extends FragmentActivity {
 		
 		findViews();
 		hideAllNavigationInfo();
+		AppManager.getInstance().addActivity(this);
 	}
 	
 	private void findViews(){
@@ -101,4 +109,68 @@ public class BaseActivity extends FragmentActivity {
 			break;
 		}
 	}
+	/**
+	 *  销毁当前界面跳到指定界面 参数为map --- map里类型暂定  根据实际过程修改
+	 * @param classObj
+	 * @param params
+	 */
+	protected void actionStart(Class<?> classObj,Map<String,String> params){
+		Intent intent = new Intent(this,classObj);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Bundle bundle = new Bundle();
+		for(String key : params.keySet()){
+			bundle.putString(key, params.get(key));
+		}
+		intent.putExtra("data", bundle);
+		this.startActivity(intent);
+		this.finish();
+	}
+	/**
+	 * 销毁当前界面跳到指定界面
+	 * @param classObj
+	 */
+	protected void actionStart(Class<?> classObj){
+		Intent intent = new Intent(this,classObj);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		this.startActivity(intent);
+		this.finish();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	    AppManager.getInstance().removeActivity(this);
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if(keyCode == KeyEvent.KEYCODE_BACK){
+			exitBy2Click();
+		}
+		return false;
+	}
+	/** 
+	 * 双击退出函数 
+	 */  
+	private static Boolean isExit = false;  
+	  
+	private void exitBy2Click() {  
+	    Timer tExit = null;  
+	    if (isExit == false) {  
+	        isExit = true; // 准备退出  
+	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();  
+	        tExit = new Timer();  
+	        tExit.schedule(new TimerTask() {  
+	            @Override  
+	            public void run() {  
+	                isExit = false; // 取消退出  
+	            }  
+	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务  
+	  
+	    } else { 
+	    	AppManager.getInstance().AppExit(this);
+	    }  
+	}  
 }

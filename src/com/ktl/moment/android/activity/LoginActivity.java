@@ -360,8 +360,10 @@ public class LoginActivity extends BaseActivity {
                             Toast.LENGTH_LONG).show();
                     
                     ///此处写微博登陆成功逻辑
-                    Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                    startActivity(intent);
+                    //保存登陆成功的用户信息，然后跳转到主页
+                    actionStart(HomeActivity.class);
+//                    Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+//                    startActivity(intent);
                 } else {
                     Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
                 }
