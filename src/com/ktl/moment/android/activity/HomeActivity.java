@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.ktl.moment.R;
@@ -20,7 +21,11 @@ public class HomeActivity extends BaseActivity {
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
 	private String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
-
+	//菜单动态效果
+	protected int preScrollingDirection = 1;
+	protected int scrollingDirection = 1;//1 向下 0：向上
+	protected float touchY;
+	
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -32,7 +37,31 @@ public class HomeActivity extends BaseActivity {
 		fragmentManager = getSupportFragmentManager();//获取fragment的管理器
 		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);//设置默认的界面
 	}
-
+	/**
+	 * 切换菜单状态
+	 * @param event
+	 */
+	public void toggleMenu(MotionEvent event){
+		float currentY = event.getY();
+		switch(event.getAction()){
+		case MotionEvent.ACTION_DOWN:
+			touchY = currentY;
+			break;
+		case MotionEvent.ACTION_MOVE:
+			if(currentY < touchY){//说明在向上滑动
+				scrollingDirection = 0;//
+			}else{
+				scrollingDirection = 1;
+			}
+			if((scrollingDirection!=preScrollingDirection)){
+				customMenu.toggleMenu(800);
+				preScrollingDirection = scrollingDirection;
+			}
+			break;
+		default:
+			break;
+		}
+	}
 	/**
 	 * 初始化view
 	 */

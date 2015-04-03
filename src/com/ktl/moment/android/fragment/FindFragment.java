@@ -5,11 +5,14 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.adapter.FindListViewAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.entity.Moment;
@@ -32,9 +35,24 @@ public class FindFragment extends BaseFragment {
 		getDataFromServer();
 		findListView.setAdapter(new FindListViewAdapter(getActivity(),
 				momentList, getDisplayImageOptions()));
+		initEvent();
 		return view;
 	}
 
+	private void initEvent(){
+		findListView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				HomeActivity homeActivity = (HomeActivity)getActivity();
+				if(homeActivity!=null){
+					homeActivity.toggleMenu(event);
+				}
+				return false;
+			}
+		});
+	}
 	private void getDataFromServer() {
 		// TODO Auto-generated method stub
 		if (momentList == null) {
