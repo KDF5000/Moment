@@ -2,10 +2,10 @@ package com.ktl.moment.entity;
 
 public class User extends BaseEntity {
 	
-	private long userId;//ÓÃ»§id
-	private String mobilephone;//ÓÃ»§ÊÖ»úºÅ
-	private String userName;//ÓÃ»§Ãû
-	private String password;//ÓÃ»§ÃÜÂë
+	private long userId;//ç”¨æˆ·id
+	private String mobilephone;//ç”¨æˆ·æ‰‹æœºå·
+	private String userName;//ç”¨æˆ·å
+	private String password;//ç”¨æˆ·å¯†ç 
 	
 	public long getUserId() {
 		return userId;

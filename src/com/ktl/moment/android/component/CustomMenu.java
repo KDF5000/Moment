@@ -73,7 +73,7 @@ public class CustomMenu extends ViewGroup {
 			for (int i = 0; i < count ; i++) {
 				View childView = getChildAt(i);
 				int cl = 30 + i * cWidth + i*step;
-				int ct = totalHeight - cHeight - 10;
+				int ct = totalHeight - cHeight - 15;
 				childView.layout(cl, ct, cl + cWidth, ct + cHeight);
 			}
 		}

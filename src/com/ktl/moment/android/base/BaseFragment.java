@@ -1,12 +1,15 @@
 package com.ktl.moment.android.base;
 
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 
+import com.ktl.moment.R;
 import com.ktl.moment.android.fragment.DynamicFragment;
 import com.ktl.moment.android.fragment.FindFragment;
 import com.ktl.moment.android.fragment.MeFragment;
 import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.constant.C;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 public class BaseFragment extends Fragment {
 	
@@ -22,5 +25,17 @@ public class BaseFragment extends Fragment {
 			baseFragment = new MeFragment();
 		}
 		return baseFragment;
+	}
+	
+	public  DisplayImageOptions getDisplayImageOptions() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+	        .showImageOnLoading(R.drawable.default_img)
+	        .showImageForEmptyUri(R.drawable.default_img)
+	        .showImageOnFail(R.drawable.default_img)
+	        .cacheOnDisk(true)
+	        .cacheInMemory(true)
+	        .bitmapConfig(Bitmap.Config.RGB_565)
+	        .considerExifParams(true).build();
+		return options;
 	}
 }
