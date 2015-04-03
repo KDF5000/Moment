@@ -1,5 +1,5 @@
 /*** 
- * activity的基类，可以实现activity的公共部分，比如公共UI，广播...
+ * activity锟侥伙拷锟洁，锟斤拷锟斤拷实锟斤拷activity锟侥癸拷锟斤拷锟斤拷锟街ｏ拷锟斤拷锟界公锟斤拷UI锟斤拷锟姐播...
  * @author KDF5000
  * @date 2015-3-29
  */
@@ -100,5 +100,9 @@ public class BaseActivity extends FragmentActivity {
 			Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
 			break;
 		}
+	}
+	
+	protected void showToast(String str){
+		Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
 	}
 }

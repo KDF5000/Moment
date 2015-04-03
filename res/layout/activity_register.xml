@@ -1,113 +1,158 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res/com.ktl.moment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/register_layout"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="18dp"
+	android:layout_marginLeft="12dp"
+	android:layout_marginRight="12dp"
+	android:layout_marginBottom="30dp"
+	android:background="@drawable/login_card"
+	android:gravity="center_horizontal"
+	android:orientation="vertical">
+	
+	<LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_marginTop="26dp"
+	android:layout_marginLeft="56dp"
+	android:layout_marginRight="56dp"
+	android:layout_marginBottom="40dp"
+	android:gravity="center_horizontal"
+	android:orientation="vertical" >
+        
+    <TextView
+        android:id="@+id/register_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/register_account_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="33.3dp"
+        android:orientation="horizontal" >
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:contentDescription="@string/account_des"
+            android:src="@drawable/login_account"/>
+
+        <EditText
+            android:id="@+id/register_account_et"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:background="#0000"
+            android:gravity="left|center"
+            android:hint="@string/login_account_hint"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:singleLine="true"
+            android:textColor="@color/account_text_color"
+            android:textColorHint="@color/hint_color"
+            android:textSize="@dimen/account_text_size" >
+
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/register_delete_account_text_img"
+            android:layout_width="13.3dp"
+            android:layout_height="13.3dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/delete_icon_des"
+            android:src="@drawable/edit_delete"
+            android:visibility="invisible" />
+    </LinearLayout>
+		
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.66dp"
+        android:background="#959595" />
+
+    <LinearLayout
+        android:id="@+id/register_pass_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="26.7dp"
+        android:orientation="horizontal" >
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:contentDescription="@string/pass_des"
+            android:src="@drawable/login_password"/>
+
+        <EditText
+            android:id="@+id/register_pass_et"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:background="#0000"
+            android:gravity="left|center"
+            android:hint="@string/login_pass_hint"
+			android:inputType="textPassword"
+            android:maxLength="16"
+            android:singleLine="true"
+            android:textColor="@color/account_text_color"
+            android:textColorHint="@color/hint_color"
+            android:textSize="@dimen/account_text_size" />
+
+        <ImageView
+            android:id="@+id/register_delete_pass_text_img"
+            android:layout_width="13.3dp"
+            android:layout_height="13.3dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/delete_icon_des"
+            android:src="@drawable/edit_delete"
+            android:visibility="invisible" />
+    </LinearLayout>
+		
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.66dp"
+        android:background="#959595" />
+
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="match_parent"
+        android:layout_height="46.7dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/login_button_shape"
+        android:text="@string/register"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
     
-   <LinearLayout 
-       android:id="@+id/register_content_layout"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="60dp"
-       android:layout_marginLeft="50dp"
-       android:layout_marginRight="50dp"
-       android:layout_centerHorizontal="true"
-       android:orientation="vertical"
-       android:gravity="center">
-
-       <com.ktl.moment.android.component.CircleImageView
-           android:id="@+id/user_logo_img"
-           android:layout_width="80dp"
-           android:layout_height="80dp"
-           android:src="@drawable/avatar"
-           app:border_width="2dp"
-           app:border_color="@color/white" />
-       
-       <TextView 
-           android:id="@+id/register_login_tv"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:text="@string/login"
-           android:textSize="12sp"
-           android:gravity="right"
-           android:textColor="@color/white"/>
-       
-       <LinearLayout 
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:orientation="vertical"
-           android:background="@drawable/register_edit_layout_shape">
-           
-	       <EditText
-	           android:id="@+id/register_account_et"
-	           android:layout_width="fill_parent"
-	           android:layout_height="40dp"
-	           android:layout_marginTop="5dp"
-	           android:hint="@string/register_hint_input_account"
-	           android:textSize="@dimen/account_text_size" />
-	       
-	       <EditText
-	           android:id="@+id/register_nickname_et"
-	           android:layout_width="fill_parent"
-	           android:layout_height="40dp"
-	           android:layout_marginTop="5dp"
-	           android:hint="@string/register_hint_input_nickname"
-	           android:textSize="@dimen/account_text_size" />
-	       
-	       <EditText
-	           android:id="@+id/register_pass_et"
-	           android:layout_width="fill_parent"
-	           android:layout_height="40dp"
-	           android:layout_marginTop="5dp"
-	           android:layout_marginBottom="5dp"
-	           android:hint="@string/register_hint_input_pass"
-	           android:textSize="@dimen/account_text_size" />
-       </LinearLayout>
-       
-       <Button 
-           android:id="@+id/register_btn"
-           android:layout_width="fill_parent"
-           android:layout_height="45dp"
-           android:background="@drawable/register_button_shape"
-           android:layout_marginTop="10dp"
-           android:text="@string/register"
-           android:textSize="@dimen/account_text_size"
-           android:onClick="doClick"
-           android:textColor="@color/white"/>
-       
-       <LinearLayout 
-           android:id="@+id/register_third_party_layout"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="100dp"
-           android:gravity="center">
-           
-           <ImageView 
-               android:id="@+id/wechat_img"
-               android:contentDescription="@string/wechat_des"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginRight="40dp"
-           	   android:onClick="doClick"
-               android:src="@drawable/login_wechat"/>
-           
-           <ImageView 
-               android:id="@+id/qq_img"
-               android:contentDescription="@string/weibo_des"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-           	   android:onClick="doClick"
-               android:src="@drawable/login_qq"/>
-           
-           <ImageView 
-               android:id="@+id/weibo_img"
-               android:contentDescription="@string/qq_des"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="40dp"
-           	   android:onClick="doClick"
-               android:src="@drawable/login_weibo"/>
-       </LinearLayout>
-
-   </LinearLayout>
-
-</RelativeLayout>
+    </LinearLayout>
+    
+   	<LinearLayout 
+   	    android:id="@+id/register_to_login"
+   	    android:layout_width="match_parent"
+   	    android:layout_height="wrap_content"
+   	    android:gravity="center"
+   	    android:layout_marginTop="230dp">
+   	    
+   	    <TextView 
+   	        android:layout_width="wrap_content"
+   	        android:layout_height="wrap_content"
+   	        android:text="@string/register_to_login"
+   	        android:textColor="@color/white"
+   	        android:textSize="18sp"/>
+   	    
+   	    <ImageView 
+   	        android:layout_width="18dp"
+   	        android:layout_height="18dp"
+   	        android:layout_marginLeft="10dp"
+   	        android:src="@drawable/register_next"
+   	        android:contentDescription="@string/register_next_des"/>
+   	</LinearLayout>
+        
+</LinearLayout>

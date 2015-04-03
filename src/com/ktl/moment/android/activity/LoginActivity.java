@@ -18,6 +18,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -91,6 +94,14 @@ public class LoginActivity extends BaseActivity {
 	
 	@ViewInject(R.id.login_register_tv)
 	private TextView loginRegistertv;
+	
+	@ViewInject(R.id.login_layout)
+	private LinearLayout loginLayout;
+	
+	@ViewInject(R.id.register_layout)
+	private LinearLayout registerLayout;
+	
+	private boolean flag = true;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -246,17 +257,56 @@ public class LoginActivity extends BaseActivity {
 	}
 	
 	private void toRegister(){
-		Intent toRegisterIntent = new Intent(LoginActivity.this,RegisterActivity.class);
-		startActivity(toRegisterIntent);
+		final Animation loginOutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.login_out);
+		loginOutAnim.setAnimationListener(new AnimationListener() {
+			
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				// TODO Auto-generated method stub
+				if(flag){
+					loginLayout.setVisibility(View.INVISIBLE);
+					registerLayout.setVisibility(View.VISIBLE);
+					flag = false;
+				}else{
+					loginLayout.setVisibility(View.VISIBLE);
+					registerLayout.setVisibility(View.INVISIBLE);
+					flag = true;
+				}
+				registerLayout.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.register_in));
+			}
+		});
+		loginLayout.startAnimation(loginOutAnim);
 	}
 		
 	/***************************************************************************
 	 * 手机号登陆开始
 	 ***************************************************************************/
 	private void mobileLogin (){
+		String phone = loginAccountEt.getText().toString().trim();
+		String pass = loginPassEt.getText().toString().trim();
+		if(phone.length() == 0){
+			showToast("请输入手机号");
+			return;
+		}else if(phone.length() != 11){
+			showToast("请输入合法的手机号");
+			return;
+		}
+		if(pass.length() == 0){
+			showToast("请输入密码");
+			return;
+		}
 		RequestParams params = new RequestParams();
-		String phone = loginAccountEt.getText().toString();
-		String pass = loginPassEt.getText().toString();
 		Log.i("param", "phone="+phone+",pass="+pass);
 		params.put("mobileNumber", phone);
 		params.put("password", pass);
