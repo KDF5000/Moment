@@ -13,6 +13,7 @@
     <string name="login_register">账号注册</string>
     
     <string name="register">注册</string>
+    <string name="register_next">下一步</string>
     <string name="register_to_login">点此直接登陆</string>
     
     <string name="found_text_view">发现</string>

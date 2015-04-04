@@ -11,6 +11,6 @@ public class ForgetPassActivity extends  Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_forget_pass);
+//		setContentView(R.layout.activity_forget_pass);
 	}
 }

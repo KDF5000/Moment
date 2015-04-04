@@ -82,4 +82,18 @@ public class C {
 	     */
 		public static final String QQ_OPEN_FLAT_APP_ID="1104435237";
 	}
+	
+	
+	/****************************************************************************
+	 * 账户体系相关的常量
+	 * @author HUST_LH
+	 ****************************************************************************/
+	public static final class Account{
+		public static final String FRAGMENT_LOGIN = "loginFragment";
+		public static final String FRAGMENT_FORGET_PASS = "forgetPassFragment";
+		public static final String FRAGMENT_REGISTER = "registerFragment";
+		public static final String FRAGMENT_VERIFY = "verifyFragment";
+		public static final String FRAGMENT_PERFECT_INFO = "perfectInfoFragment";
+		public static final String FRAGMENT_RECOMMEN = "recommenFragment";
+	}
 }

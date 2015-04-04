@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:contentDescription="@string/account_des"
-            android:src="@drawable/login_account"/>
+            android:src="@drawable/phone"/>
 
         <EditText
             android:id="@+id/register_account_et"
@@ -122,12 +122,12 @@
         android:background="#959595" />
 
     <Button
-        android:id="@+id/register_btn"
+        android:id="@+id/register_next_btn"
         android:layout_width="match_parent"
         android:layout_height="46.7dp"
         android:layout_marginTop="25dp"
         android:background="@drawable/login_button_shape"
-        android:text="@string/register"
+        android:text="@string/register_next"
         android:textColor="@color/white"
         android:textSize="20sp" />
     
