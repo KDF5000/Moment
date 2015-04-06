@@ -1,9 +1,4 @@
-/**
- * 登录窗口
- * @author KDF5000
- * @date 2015-3-29
- */
-package com.ktl.moment.android.activity;
+package com.ktl.moment.android.fragment;
 
 import org.json.JSONObject;
 
@@ -12,16 +7,11 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,19 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.base.BaseActivity;
-import com.ktl.moment.common.constant.C;
-import com.ktl.moment.common.util.BitmapUtil;
-import com.ktl.moment.common.util.QQShareHelper;
-import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.utils.net.ApiManager;
-import com.lidroid.xutils.BitmapUtils;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.lidroid.xutils.view.annotation.event.OnFocusChange;
-import com.lidroid.xutils.view.annotation.event.OnTouch;
-import com.loopj.android.http.RequestParams;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -56,12 +33,23 @@ import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
+import com.ktl.moment.android.activity.HomeActivity;
+import com.ktl.moment.android.base.BaseFragment;
+import com.ktl.moment.common.constant.C;
+import com.ktl.moment.common.util.BitmapUtil;
+import com.ktl.moment.common.util.EditTextUtil;
+import com.ktl.moment.common.util.QQShareHelper;
+import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.net.ApiManager;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.lidroid.xutils.view.annotation.event.OnFocusChange;
+import com.loopj.android.http.RequestParams;
 
-public class LoginActivity extends BaseActivity {
-	private static final String TAG = "LoginActivity";
-	@ViewInject(R.id.login_base_layout)
-	private LinearLayout loginBaseLayout;
+public class LoginFragment extends BaseFragment{
 	
+	/********login********/
 	@ViewInject(R.id.login_avatar)
 	private ImageView headImg;
 	
@@ -78,7 +66,7 @@ public class LoginActivity extends BaseActivity {
 	private ImageView loginDeletePassImg;
 	
 	@ViewInject(R.id.login_btn)
-    private Button loginBtn;  //使用第三方库xutils注入
+    private Button loginBtn;
 	
 	@ViewInject(R.id.login_wechat_img)
 	private ImageView wecahtLoginImg;
@@ -98,74 +86,48 @@ public class LoginActivity extends BaseActivity {
 	@ViewInject(R.id.login_layout)
 	private LinearLayout loginLayout;
 	
-	@ViewInject(R.id.register_layout)
-	private LinearLayout registerLayout;
+	public ToRegisterListener toRegisterListener;
+	public ToForgetListener toForgetListener;
 	
-	private boolean flag = true;
+	public interface ToRegisterListener{
+		void onToRegisterClick();
+	}
+	
+	public interface ToForgetListener{
+		void onToForgetClick();
+	}
+
+	/**
+	 * 设置回调接口
+	 * @param toRegisterListener
+	 */
+	public void setToRegisterListener(ToRegisterListener toRegisterListener){
+		this.toRegisterListener = toRegisterListener;
+	}
+	
+	public void setToForgetListener(ToForgetListener toForgetListener){
+		this.toForgetListener = toForgetListener;
+	}
 	
 	@Override
-	protected void onCreate(Bundle arg0) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onCreate(arg0);
-		setContentView(R.layout.activity_login);
-		ViewUtils.inject(this);
+		View view = inflater.inflate(R.layout.fragment_account_login, container, false);
+		ViewUtils.inject(this, view);
 		
-		qqShareHelper = new QQShareHelper(this);
-		
+		init();
+		return view;
+	}
+	
+	public void init(){
+		qqShareHelper = new QQShareHelper(getActivity());
 		registerEditTextListener();
 	}
 	
 	public void registerEditTextListener(){
-		loginAccountEt.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
-				if(loginAccountEt.length() > 0){
-					loginDeleteAccountImg.setVisibility(View.VISIBLE);
-				}else{
-					loginDeleteAccountImg.setVisibility(View.INVISIBLE);
-				}
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-			}
-		});
-		
-		loginPassEt.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
-				if(loginPassEt.length() > 0){
-					loginDeletePassImg.setVisibility(View.VISIBLE);
-				}else{
-					loginDeletePassImg.setVisibility(View.INVISIBLE);
-				}
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		addTextChange(loginAccountEt,loginDeleteAccountImg);
+		addTextChange(loginPassEt,loginDeletePassImg);
 	}
 
 	/**
@@ -173,122 +135,63 @@ public class LoginActivity extends BaseActivity {
 	 * @param v
 	 * @param hasFocus
 	 */
-	@OnFocusChange({R.id.login_account_et,R.id.login_pass_et,R.id.login_delete_account_text_img,
-		R.id.login_delete_pass_text_img})
+	@OnFocusChange({R.id.login_account_et,R.id.login_pass_et,R.id.login_delete_account_text_img,R.id.login_delete_pass_text_img,})
 	public void onFocusChange(View v,boolean hasFocus){
 		switch (v.getId()) {
 		case R.id.login_account_et:
-			if(hasFocus){
-				if(loginAccountEt.length() > 0){
-					loginDeleteAccountImg.setVisibility(View.VISIBLE);
-				}
-			}else{
-				loginDeleteAccountImg.setVisibility(View.INVISIBLE);
-			}
+			focusChange(loginAccountEt,loginDeleteAccountImg,hasFocus);
 			break;
 		case R.id.login_pass_et:
-			if(hasFocus){
-				if(loginPassEt.length() > 0){
-					loginDeletePassImg.setVisibility(View.VISIBLE);
-				}
-			}else{
-				loginDeletePassImg.setVisibility(View.INVISIBLE);
-			}
+			focusChange(loginPassEt,loginDeletePassImg,hasFocus);
+			break;
 		default:
 			break;
 		}
-	}
-	
-	/**
-	 * 监听触摸事件
-	 * @param v
-	 * @param e
-	 * @return
-	 */
-	@OnTouch({R.id.login_base_layout})
-	public boolean onTouch(View v, MotionEvent e){
-		/**
-		 * 隐藏软键盘
-		 */
-		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);  
-		return imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);  
 	}
 	
 	/**
 	 * 监听点击事件
 	 * @param v
 	 */
-	@OnClick({R.id.login_btn,R.id.login_weibo_img,R.id.login_qq_img,R.id.login_delete_account_text_img,
-		R.id.login_delete_pass_text_img,R.id.login_register_tv,R.id.login_forget_pass_tv})
-	public void OnClick(View v){
+	@OnClick({R.id.login_btn,R.id.login_weibo_img,R.id.login_qq_img,R.id.login_delete_account_text_img,R.id.login_delete_pass_text_img,
+		R.id.login_register_tv,R.id.login_forget_pass_tv})
+	public void onClick(View v){
 		switch (v.getId()) {
 		case R.id.login_delete_account_text_img:
-			loginAccountEt.setText("");
+			EditTextUtil.setEditTextEmpty(loginAccountEt);
 			break;
 		case R.id.login_delete_pass_text_img:
-			loginPassEt.setText("");
+			EditTextUtil.setEditTextEmpty(loginPassEt);
 			break;
 		case R.id.login_btn:
-			Toast.makeText(LoginActivity.this, "mobile login", Toast.LENGTH_SHORT).show();
+			toast("mobile login");
 			mobileLogin();
 			break;
 		case R.id.login_weibo_img:
-			Toast.makeText(LoginActivity.this, "weibo login", Toast.LENGTH_SHORT).show();
+			toast("weibo login");
 			weiboLogin();
 			break;
 		case R.id.login_qq_img:
-			Toast.makeText(LoginActivity.this, "qq login", Toast.LENGTH_SHORT).show();
+			toast("qq login");
 			qqLogin();
 			break;
 		case R.id.login_forget_pass_tv:
-			findMyPass();
+//			findMyPass();
 			break;
 		case R.id.login_register_tv:
-			toRegister();
+//			scaleAccountLayout(true);
+			toast("you click me");
+			if(getActivity() instanceof ToRegisterListener){
+				((ToRegisterListener)getActivity()).onToRegisterClick();
+			}
 			break;
 		default:
 			break;
 		}
 	}
 	
-	private void findMyPass(){
-		Intent forgetIntent = new Intent(LoginActivity.this,ForgetPassActivity.class);
-		startActivity(forgetIntent);
-	}
+
 	
-	private void toRegister(){
-		final Animation loginOutAnim = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.login_out);
-		loginOutAnim.setAnimationListener(new AnimationListener() {
-			
-			@Override
-			public void onAnimationStart(Animation animation) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-				// TODO Auto-generated method stub
-			}
-			
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				// TODO Auto-generated method stub
-				if(flag){
-					loginLayout.setVisibility(View.INVISIBLE);
-					registerLayout.setVisibility(View.VISIBLE);
-					flag = false;
-				}else{
-					loginLayout.setVisibility(View.VISIBLE);
-					registerLayout.setVisibility(View.INVISIBLE);
-					flag = true;
-				}
-				registerLayout.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.register_in));
-			}
-		});
-		loginLayout.startAnimation(loginOutAnim);
-	}
-		
 	/***************************************************************************
 	 * 手机号登陆开始
 	 ***************************************************************************/
@@ -296,38 +199,40 @@ public class LoginActivity extends BaseActivity {
 		String phone = loginAccountEt.getText().toString().trim();
 		String pass = loginPassEt.getText().toString().trim();
 		if(phone.length() == 0){
-			showToast("请输入手机号");
+			toast("请输入手机号");
 			return;
 		}else if(phone.length() != 11){
-			showToast("请输入合法的手机号");
+			toast("请输入合法的手机号");
 			return;
 		}
 		if(pass.length() == 0){
-			showToast("请输入密码");
+			toast("请输入密码");
 			return;
 		}
 		RequestParams params = new RequestParams();
 		Log.i("param", "phone="+phone+",pass="+pass);
 		params.put("mobileNumber", phone);
 		params.put("password", pass);
-		ApiManager.getInstance().post(this, C.api.USER_LOGIN,params,new HttpCallBack() {
+		ApiManager.getInstance().post(getActivity().getApplicationContext(), C.api.USER_LOGIN,params,new HttpCallBack() {
 			
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+				Intent intent = new Intent(getActivity(),HomeActivity.class);
 				intent.putExtra("data", (String)res);
 				startActivity(intent);
-				finish();
+				getActivity().finish();
 			}
 			
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-				Toast.makeText(LoginActivity.this, (String)res, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), (String)res, Toast.LENGTH_SHORT).show();
 			}
 		},"User");
 	}
+	
+	
 	/***************************************************************************
 	 * 手机号登陆逻辑结束
 	 ***************************************************************************/
@@ -346,12 +251,11 @@ public class LoginActivity extends BaseActivity {
 	private static final int FLAG_QQ_LOGIN_SUCCESS = 0;
 	
 	private void weiboLogin(){
-		mAuthInfo = new AuthInfo(this, C.ThirdSdk.WEIBO_APP_KEY,
+		mAuthInfo = new AuthInfo(getActivity(), C.ThirdSdk.WEIBO_APP_KEY,
 				C.ThirdSdk.WEIBO_REDIRECT_URL, C.ThirdSdk.WEIBO_SCOPE);
-		mSsoHandler = new SsoHandler(LoginActivity.this, mAuthInfo);
+		mSsoHandler = new SsoHandler(getActivity(), mAuthInfo);
 		mSsoHandler.authorize(new AuthListener());
 		
-		qqShareHelper = new QQShareHelper(this);
 	}
 	/**
      * 微博认证授权回调类。
@@ -367,7 +271,7 @@ public class LoginActivity extends BaseActivity {
             // 从 Bundle 中解析 Token
             mAccessToken = Oauth2AccessToken.parseAccessToken(values);
             if (mAccessToken.isSessionValid()) {
-                mUsersAPI  =  new UsersAPI(LoginActivity.this, C.ThirdSdk.WEIBO_APP_KEY, mAccessToken);
+                mUsersAPI  =  new UsersAPI(getActivity(), C.ThirdSdk.WEIBO_APP_KEY, mAccessToken);
                 long uid = Long.parseLong(mAccessToken.getUid());
                 mUsersAPI.show(uid, mListener);
             } else {
@@ -380,18 +284,18 @@ public class LoginActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(code)) {
                     message = "授权失败" + "\nObtained the code: " + code;
                 }
-                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
             }
         }
 
         @Override
         public void onCancel() {
-            Toast.makeText(LoginActivity.this, "取消授权", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "取消授权", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onWeiboException(WeiboException e) {
-            Toast.makeText(LoginActivity.this, 
+            Toast.makeText(getActivity(), 
                     "Auth exception : " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
@@ -405,17 +309,15 @@ public class LoginActivity extends BaseActivity {
                 // 调用 User#parse 将JSON串解析成User对象
                 User user = User.parse(response);
                 if (user != null) {
-                    Toast.makeText(LoginActivity.this, 
+                    Toast.makeText(getActivity(), 
                             "获取User信息成功，用户ID：" + user.id+"  用户昵称:"+user.name, 
                             Toast.LENGTH_LONG).show();
                     
                     ///此处写微博登陆成功逻辑
                     //保存登陆成功的用户信息，然后跳转到主页
                     actionStart(HomeActivity.class);
-//                    Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-//                    startActivity(intent);
                 } else {
-                    Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -423,7 +325,7 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void onWeiboException(WeiboException e) {
             ErrorInfo info = ErrorInfo.parse(e.getMessage());
-            Toast.makeText(LoginActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), info.toString(), Toast.LENGTH_LONG).show();
         }
     };
 	/***************************************************************************
@@ -431,7 +333,7 @@ public class LoginActivity extends BaseActivity {
 	 **************************************************************************/
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 	    // SSO 授权回调
@@ -481,6 +383,9 @@ public class LoginActivity extends BaseActivity {
 							}
 						}
 					}.start();
+
+					//完成用户头像绘制后跳转至主界面
+					actionStart(HomeActivity.class);
 				}
 				
 				@Override
@@ -488,7 +393,7 @@ public class LoginActivity extends BaseActivity {
 					// TODO Auto-generated method stub
 				}
 			};
-			UserInfo userInfo = new UserInfo(this,qqShareHelper.getTencent().getQQToken());
+			UserInfo userInfo = new UserInfo(getActivity(),qqShareHelper.getTencent().getQQToken());
 			userInfo.getUserInfo(listener);
 		}
 	}
@@ -508,10 +413,10 @@ public class LoginActivity extends BaseActivity {
 				}else if(sex.equals("女")){
 					gender = "1";
 				}
-				Toast.makeText(LoginActivity.this, "nickname="+nickName+",gender="+gender, Toast.LENGTH_SHORT).show();
+				toast("nickname="+nickName+",gender="+gender);
 				
 //				String uri = jsonObject.optString("figureurl_qq_2");
-//				BitmapUtils bitmapUtils = new BitmapUtils(LoginActivity.this);
+//				BitmapUtils bitmapUtils = new BitmapUtils(getActivity());
 //				bitmapUtils.display(headImg, uri);
 			}else{
 				Bitmap bitmap = (Bitmap) msg.obj;
@@ -540,7 +445,7 @@ public class LoginActivity extends BaseActivity {
 	
 	IUiListener qqLoginListener = new BaseUiListener(){
 		protected void doComplete(JSONObject values) {
-			Toast.makeText(LoginActivity.this, "login", Toast.LENGTH_SHORT).show();
+			toast("login");
 			initOpenIdAndToken(values);
 			updateUserInfo();
 		};
@@ -548,9 +453,9 @@ public class LoginActivity extends BaseActivity {
 	
 	private void qqLogin(){
 		if(!qqShareHelper.getTencent().isSessionValid()){
-			qqShareHelper.getTencent().login(this, "all", qqLoginListener);
+			qqShareHelper.getTencent().login(getActivity(), "all", qqLoginListener);
 		}else{
-			qqShareHelper.getTencent().logout(this);
+			qqShareHelper.getTencent().logout(getActivity());
 			updateUserInfo();
 		}
 	}
@@ -578,13 +483,13 @@ public class LoginActivity extends BaseActivity {
 		@Override
 		public void onCancel() {
 			// TODO Auto-generated method stub
-			Toast.makeText(LoginActivity.this, "取消授权", Toast.LENGTH_SHORT).show();
+			toast("取消授权");
 		}
 
 		@Override
 		public void onError(UiError error) {
 			// TODO Auto-generated method stub
-			Toast.makeText(LoginActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
+			toast("授权失败");
 		}
 
 		protected void doComplete(JSONObject values) {
@@ -596,4 +501,5 @@ public class LoginActivity extends BaseActivity {
 	 * **************************************************************************/
 
      
+	
 }
