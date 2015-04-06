@@ -26,7 +26,10 @@ public class BaseFragment extends Fragment {
 		}
 		return baseFragment;
 	}
-	
+	/**
+	 * ImageLoader 设置
+	 * @return DisplayImageOptions
+	 */
 	public  DisplayImageOptions getDisplayImageOptions() {
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
 	        .showImageOnLoading(R.drawable.default_img)
@@ -38,4 +41,5 @@ public class BaseFragment extends Fragment {
 	        .considerExifParams(true).build();
 		return options;
 	}
+	
 }
