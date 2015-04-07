@@ -1,6 +1,7 @@
 package com.ktl.moment.android.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +11,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.base.BaseFragment;
+import com.ktl.moment.android.activity.AccountActivity;
+import com.ktl.moment.android.base.AccountBaseFragment;
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.common.util.EditTextUtil;
+import com.ktl.moment.common.util.VerificationUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.lidroid.xutils.view.annotation.event.OnFocusChange;
 
-public class RegisterFragment extends BaseFragment{
-	
-	@ViewInject(R.id.register_layout)
-	private LinearLayout registerLayout;
+public class RegisterFragment extends AccountBaseFragment{
 	
 	@ViewInject(R.id.register_account_et)
 	private EditText registerAccountEt;
@@ -40,23 +41,25 @@ public class RegisterFragment extends BaseFragment{
 	@ViewInject(R.id.register_to_login)
 	private LinearLayout registerToLoginLayout;
 	
-	public ToLoginListener toLoginListener;
-	public ToIdentifyListener toIdentifyListener;
+	public BackToLoginListener backToLoginListener;
+	public ToVerifyListener toVerifyListener;
 	
-	public interface ToLoginListener{
-		void onToLoginClick();
+	private VerificationUtil verification;
+	
+	public interface BackToLoginListener{
+		void onBackToLoginClick();
 	}
 	
-	public interface ToIdentifyListener{
-		void onToIdentifyClick();
+	public interface ToVerifyListener{
+		void onToVerifyClick();
 	}
 	
-	public void setOnLoginListener(ToLoginListener toLoginListener){
-		this.toLoginListener = toLoginListener;
+	public void setOnBackToLoginListener(BackToLoginListener backToLoginListener){
+		this.backToLoginListener = backToLoginListener;
 	}
 	
-	public void setOnIdentifyListener(ToIdentifyListener toIdentifyListener){
-		this.toIdentifyListener = toIdentifyListener;
+	public void setOnToVerifyListener(ToVerifyListener toVerifyListener){
+		this.toVerifyListener = toVerifyListener;
 	}
 
 	@Override
@@ -105,13 +108,48 @@ public class RegisterFragment extends BaseFragment{
 			EditTextUtil.setEditTextEmpty(registerPassEt);
 			break;
 		case R.id.register_to_login:
-			if(getActivity() instanceof ToLoginListener){
-				((ToLoginListener)getActivity()).onToLoginClick();
+			if(getActivity() instanceof BackToLoginListener){
+				((BackToLoginListener)getActivity()).onBackToLoginClick();
 			}
 			break;
-
+		case R.id.register_next_btn:
+			next();
+			break;
 		default:
 			break;
+		}
+	}
+	
+	public void next(){
+		String phone = registerAccountEt.getText().toString().trim();
+		String pass = registerPassEt.getText().toString().trim();
+		AccountActivity  accountActivity = (AccountActivity)getActivity();
+		if(accountActivity!=null){
+			accountActivity.setRegisterData(phone, pass);
+		}
+		/*参数校验*/
+		if(phone.isEmpty()){
+			toast("请输入手机号");
+			return;
+		}
+		if(phone.length() != 11){
+			toast("请输入合法的手机号");
+			return;
+		}
+		if(pass.isEmpty()){
+			toast("请输入密码");
+			return;
+		}
+		if(C.Account.IS_SEND_VERIFY){
+			Log.i("tag", "here");
+			if(verification == null){
+				verification = new VerificationUtil(getActivity());
+			}
+			Log.i("register_phone", phone);
+			verification.requestVerificationCode(phone);
+		}
+		if(getActivity() instanceof ToVerifyListener){
+			((ToVerifyListener)getActivity()).onToVerifyClick();
 		}
 	}
 		

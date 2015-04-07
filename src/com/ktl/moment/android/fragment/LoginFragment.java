@@ -34,7 +34,7 @@ import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.ktl.moment.android.activity.HomeActivity;
-import com.ktl.moment.android.base.BaseFragment;
+import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.common.util.BitmapUtil;
 import com.ktl.moment.common.util.EditTextUtil;
@@ -47,7 +47,7 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.lidroid.xutils.view.annotation.event.OnFocusChange;
 import com.loopj.android.http.RequestParams;
 
-public class LoginFragment extends BaseFragment{
+public class LoginFragment extends AccountBaseFragment{
 	
 	/********login********/
 	@ViewInject(R.id.login_avatar)
@@ -101,11 +101,11 @@ public class LoginFragment extends BaseFragment{
 	 * 设置回调接口
 	 * @param toRegisterListener
 	 */
-	public void setToRegisterListener(ToRegisterListener toRegisterListener){
+	public void setOnToRegisterListener(ToRegisterListener toRegisterListener){
 		this.toRegisterListener = toRegisterListener;
 	}
 	
-	public void setToForgetListener(ToForgetListener toForgetListener){
+	public void setOnToForgetListener(ToForgetListener toForgetListener){
 		this.toForgetListener = toForgetListener;
 	}
 	
@@ -179,7 +179,6 @@ public class LoginFragment extends BaseFragment{
 //			findMyPass();
 			break;
 		case R.id.login_register_tv:
-//			scaleAccountLayout(true);
 			toast("you click me");
 			if(getActivity() instanceof ToRegisterListener){
 				((ToRegisterListener)getActivity()).onToRegisterClick();
@@ -198,14 +197,14 @@ public class LoginFragment extends BaseFragment{
 	private void mobileLogin (){
 		String phone = loginAccountEt.getText().toString().trim();
 		String pass = loginPassEt.getText().toString().trim();
-		if(phone.length() == 0){
+		if(phone.isEmpty()){
 			toast("请输入手机号");
 			return;
 		}else if(phone.length() != 11){
 			toast("请输入合法的手机号");
 			return;
 		}
-		if(pass.length() == 0){
+		if(pass.isEmpty()){
 			toast("请输入密码");
 			return;
 		}
@@ -213,7 +212,7 @@ public class LoginFragment extends BaseFragment{
 		Log.i("param", "phone="+phone+",pass="+pass);
 		params.put("mobileNumber", phone);
 		params.put("password", pass);
-		ApiManager.getInstance().post(getActivity().getApplicationContext(), C.api.USER_LOGIN,params,new HttpCallBack() {
+		ApiManager.getInstance().post(getActivity(), C.API.USER_LOGIN,params,new HttpCallBack() {
 			
 			@Override
 			public void onSuccess(Object res) {
@@ -227,7 +226,7 @@ public class LoginFragment extends BaseFragment{
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getActivity(), (String)res, Toast.LENGTH_SHORT).show();
+				toast((String)res);
 			}
 		},"User");
 	}
@@ -370,6 +369,7 @@ public class LoginFragment extends BaseFragment{
 					 * 这里为了避免对不安全的UI线程操作引起异常发生,将该线程与handler线程（更新UI需要通知主线程来更新）分开
 					 */
 					new Thread(){
+						@Override
 						public void run() {
 							// TODO Auto-generated method stub
 							JSONObject jsonObject = (JSONObject) response;
@@ -444,6 +444,7 @@ public class LoginFragment extends BaseFragment{
 	}
 	
 	IUiListener qqLoginListener = new BaseUiListener(){
+		@Override
 		protected void doComplete(JSONObject values) {
 			toast("login");
 			initOpenIdAndToken(values);

@@ -16,6 +16,11 @@
     <string name="register_next">下一步</string>
     <string name="register_to_login">点此直接登陆</string>
     
+    <string name="verify">验证</string>
+    <string name="verify_hint">请输入验证码</string>
+    <string name="verify_resend">重发</string>
+    <string name="verify_to_register">返回上一步</string>
+    
     <string name="found_text_view">发现</string>
     
     <!-- img&img_btn description -->

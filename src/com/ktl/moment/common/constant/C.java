@@ -5,16 +5,23 @@ public class C {
 	/****************************************************************************
 	 * api相关常量                                                                                                                                                                                                       *
 	 ****************************************************************************/
-	public static final class api{
+	public static final class API{
 		/**
 		 * url基地址
 		 */
-		private static final String URL_BASE = "http://192.168.56.1/Moment/";
+//		private static final String URL_BASE = "http://192.168.56.1/Moment/";
+		private static final String URL_BASE = "http://192.168.95.1/";
 		
 		/**
 		 * 手机号登录
 		 */
-		public static final String USER_LOGIN = URL_BASE + "login.php";
+//		public static final String USER_LOGIN = URL_BASE + "login.php";
+		public static final String USER_LOGIN = URL_BASE + "index.php";
+		
+		/**
+		 * 用户注册
+		 */
+		public static final String USER_REGISTER = URL_BASE +"";
 	}
 	
 	
@@ -37,9 +44,8 @@ public class C {
 		 */
 		public static final int FRAGMENT_FIND_MENU_ID = 0;
 		public static final int FRAGMENT_DYNAMIC_MENU_ID = 1;
-		public static final int FRAGMENT_ADD_MOMENT = 2;
-		public static final int FRAGMENT_MOMENT_MENU_ID = 3;
-		public static final int FRAGMENT_ME_MENU_ID = 4;
+		public static final int FRAGMENT_MOMENT_MENU_ID = 2;
+		public static final int FRAGMENT_ME_MENU_ID = 3;
 	}
 	/******************************************************************************
 	 * 第三方sdk常量
@@ -90,11 +96,42 @@ public class C {
 	 * @author HUST_LH
 	 ****************************************************************************/
 	public static final class Account{
+		/**
+		 * fragment tags
+		 */
 		public static final String FRAGMENT_LOGIN = "loginFragment";
 		public static final String FRAGMENT_FORGET_PASS = "forgetPassFragment";
 		public static final String FRAGMENT_REGISTER = "registerFragment";
-		public static final String FRAGMENT_VERIFY = "verifyFragment";
+		public static final String FRAGMENT_VERIFY = "identifyFragment";
 		public static final String FRAGMENT_PERFECT_INFO = "perfectInfoFragment";
 		public static final String FRAGMENT_RECOMMEN = "recommenFragment";
+		
+		/**
+		 * fragment move direction flag
+		 */
+		public static final int ANIMATION_FIRST = 0;		//第一次进入login页面
+		public static final int ANIMATION_SCALE = 1;		//login与register页面切换
+		public static final int ANIMATION_MOVE_UP = 2;	//页面上滑
+		public static final int ANIMATION_MOVE_DOWN = 3;	//页面下滑
+		
+		public static final boolean IS_SEND_VERIFY = true;	//是否开启验证码
 	}
+	
+	/**
+	 * 调用云之讯服务发送验证码相关的常量
+	 * @author HUST_LH
+	 *
+	 */
+	public static final class YunZhiXun{
+		
+		public static final String YZX_KRY = "1234567890~!@#$%^&*()Abcdefghijk";
+		public static final String YZX_MD5KEY = "b1871a6961cda7efd5e522cfa31eba30";//根据上述字符串取md5值得到的密钥
+		public static final String YZX_ACCOUNT_SID = "911c24149b30feb611f46b726dd39a48";//开发者主账号
+		public static final String YZX_APP_ID = "4b4b8011d56d4342adb3719522664697";//app id
+		public static final String YZX_APP_NAME = "com.ktl.moment";
+		public static final int YZX_VERIFY_VALID_TIME = 1;//验证码有效时间/minute
+		public static final int YZX_BUSSINESS_TYPE = 1;//验证业务类型，当前智能验证业务参数值为1
+		
+	}
+
 }

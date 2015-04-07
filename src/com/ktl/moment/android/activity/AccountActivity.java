@@ -1,32 +1,35 @@
 package com.ktl.moment.android.activity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.base.BaseActivity;
-import com.ktl.moment.android.base.BaseFragment;
+import com.ktl.moment.android.fragment.VerifyFragment.BackToRegisterListener;
 import com.ktl.moment.android.fragment.LoginFragment.ToForgetListener;
 import com.ktl.moment.android.fragment.LoginFragment.ToRegisterListener;
-import com.ktl.moment.android.fragment.RegisterFragment.ToLoginListener;
+import com.ktl.moment.android.fragment.RegisterFragment.BackToLoginListener;
+import com.ktl.moment.android.fragment.RegisterFragment.ToVerifyListener;
 import com.ktl.moment.common.constant.C;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnTouch;
 
-public class AccountActivity extends BaseActivity implements ToRegisterListener,ToForgetListener,ToLoginListener{
+public class AccountActivity extends BaseActivity implements ToRegisterListener,ToForgetListener,BackToLoginListener,ToVerifyListener,
+	BackToRegisterListener{
 	
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
 	private String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
-	
-	private boolean isLoginFragFirstIn = true;
+	private Map<String, String> registerData;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +39,7 @@ public class AccountActivity extends BaseActivity implements ToRegisterListener,
 		
 		//初始为登陆界面
 		fragmentManager = getSupportFragmentManager();//获取fragment的管理器
-		switchFragmentByTag(C.Account.FRAGMENT_LOGIN);//设置默认的界面
-		isLoginFragFirstIn = false;
+		switchFragmentByTag(C.Account.FRAGMENT_LOGIN,C.Account.ANIMATION_FIRST);//设置默认的界面
 		
 		ViewUtils.inject(this);
 	}
@@ -57,24 +59,41 @@ public class AccountActivity extends BaseActivity implements ToRegisterListener,
 		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);  
 		return imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 	}
+	
+	public boolean hideSoftKeyboard(){
+		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);  
+		return imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+	}
 
 	@Override
 	public void onToRegisterClick() {
 		// TODO Auto-generated method stub
-		Toast.makeText(this, "click listener", Toast.LENGTH_SHORT).show();
-		switchFragmentByTag(C.Account.FRAGMENT_REGISTER);
+		switchFragmentByTag(C.Account.FRAGMENT_REGISTER,C.Account.ANIMATION_SCALE);//login to register
 	}
 
 	@Override
 	public void onToForgetClick() {
 		// TODO Auto-generated method stub
-		switchFragmentByTag(C.Account.FRAGMENT_FORGET_PASS);
+		switchFragmentByTag(C.Account.FRAGMENT_FORGET_PASS,C.Account.ANIMATION_MOVE_UP);//login to forget
 	}
 	
 	@Override
-	public void onToLoginClick() {
+	public void onBackToLoginClick() {
 		// TODO Auto-generated method stub
-		switchFragmentByTag(C.Account.FRAGMENT_LOGIN);
+		switchFragmentByTag(C.Account.FRAGMENT_LOGIN,C.Account.ANIMATION_SCALE);//register back to login
+	}
+
+	@Override
+	public void onToVerifyClick() {
+		// TODO Auto-generated method stub
+//		hideSoftKeyboard();
+		switchFragmentByTag(C.Account.FRAGMENT_VERIFY,C.Account.ANIMATION_MOVE_UP);//register to verify
+	}
+
+	@Override
+	public void onBackToRegisterClick() {
+		// TODO Auto-generated method stub
+		switchFragmentByTag(C.Account.FRAGMENT_REGISTER,C.Account.ANIMATION_MOVE_DOWN);// back to register
 	}
 	
 
@@ -86,13 +105,12 @@ public class AccountActivity extends BaseActivity implements ToRegisterListener,
 	 * 通过tag切换标签
 	 * @param selectedTag
 	 */
-	private void switchFragmentByTag(String selectedTag){
+	private void switchFragmentByTag(String selectedTag, int moveFlag){
 		if(selectedTag == currentFgTag || selectedTag.equals(currentFgTag)){
 			return ;
 		}
 		fragmentTransaction = fragmentManager.beginTransaction();
-//		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);//设置fragment切换时的动画效果
-		fragmentSwitchAnim(selectedTag);
+		fragmentSwitchAnim(moveFlag);
 		if(selectedTag!=null  && !selectedTag.equals("")){
 			detachFragment(getFragmentByTag(currentFgTag));//detach当前的fragment
 		}
@@ -100,6 +118,7 @@ public class AccountActivity extends BaseActivity implements ToRegisterListener,
 		commitTransactions();//提交事务
 		setCurrentTag(selectedTag);//设置当前的tag
 	}
+	
 	/**
 	 * 提交fragment transaction
 	 */
@@ -119,13 +138,10 @@ public class AccountActivity extends BaseActivity implements ToRegisterListener,
 		if(f!=null){
 			if (fragmentTransaction == null) {
 	            fragmentTransaction = fragmentManager.beginTransaction();
-//	            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 	        }
 			if(f.isDetached()){
-				Log.i("tag", "attach");
 				fragmentTransaction.attach(f);
 			}else if(!f.isAdded()){
-				Log.i("tag", "replace");
 				fragmentTransaction.replace(layout, f,tag);
 			}else{
 				//Nothing to do
@@ -153,19 +169,35 @@ public class AccountActivity extends BaseActivity implements ToRegisterListener,
 	private Fragment getFragmentByTag(String tag){
 		Fragment f = fragmentManager.findFragmentByTag(tag);
 		if(f==null){
-			f = BaseFragment.getInstance(tag);
+			f = AccountBaseFragment.getInstance(tag);
 		}
 		return f;
 	}
 	
-	private void fragmentSwitchAnim(String selectedTag){
-		Fragment f = getFragmentByTag(selectedTag);
-		if(isLoginFragFirstIn){
-			return;
-		}
-		if(selectedTag.equals(C.Account.FRAGMENT_LOGIN) || selectedTag.equals(C.Account.FRAGMENT_REGISTER)){
+	private void fragmentSwitchAnim(int moveFlag){
+		switch (moveFlag) {
+		case C.Account.ANIMATION_FIRST:
+			break;
+		case C.Account.ANIMATION_SCALE:
 			fragmentTransaction.setCustomAnimations(R.anim.fragment_account_scale_in, R.anim.fragment_account_scale_out);
+			break;
+		case C.Account.ANIMATION_MOVE_UP:
+			fragmentTransaction.setCustomAnimations(R.anim.fragment_account_up_in, R.anim.fragment_account_up_out);
+			break;
+		case C.Account.ANIMATION_MOVE_DOWN:
+			fragmentTransaction.setCustomAnimations(R.anim.fragment_account_down_in, R.anim.fragment_account_down_out);
+		default:
+			break;
 		}
 	}
 	
+	public void setRegisterData(String phone, String pass){
+		registerData = new HashMap<String, String>();
+		registerData.put("phone", phone);
+		registerData.put("pass", pass);
+	}
+	
+	public Map<String, String> getRegisterData(){
+		return this.registerData;
+	}
 }

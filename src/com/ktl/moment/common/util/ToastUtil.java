@@ -8,11 +8,7 @@ public class ToastUtil {
 	private static Toast toast;
 	private static int duration = Toast.LENGTH_SHORT;
 
-	public static void show(Context context, CharSequence text){
-		show(context,text,duration);
-	}
-
-    public static void show(Context context, CharSequence text, int duration) {
+    public static void show(Context context, CharSequence text) {
         if (toast == null) {
             if (context == null) {
                 return;

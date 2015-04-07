@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:contentDescription="@string/account_des"
-            android:src="@drawable/phone"/>
+            android:src="@drawable/login_phone"/>
 
         <EditText
             android:id="@+id/register_account_et"
@@ -55,7 +55,7 @@
             android:maxLength="11"
             android:singleLine="true"
             android:textColor="@color/account_text_color"
-            android:textColorHint="@color/hint_color"
+            android:textColorHint="@color/account_hint_color"
             android:textSize="@dimen/account_text_size" >
 
             <requestFocus />
@@ -103,7 +103,7 @@
             android:maxLength="16"
             android:singleLine="true"
             android:textColor="@color/account_text_color"
-            android:textColorHint="@color/hint_color"
+            android:textColorHint="@color/account_hint_color"
             android:textSize="@dimen/account_text_size" />
 
         <ImageView

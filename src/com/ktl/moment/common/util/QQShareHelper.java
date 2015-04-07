@@ -3,7 +3,6 @@ package com.ktl.moment.common.util;
 import android.app.Activity;
 
 import com.ktl.moment.common.constant.C;
-import com.ktl.moment.config.AppConfig;
 import com.tencent.tauth.Tencent;
 
 public class QQShareHelper {

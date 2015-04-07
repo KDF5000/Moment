@@ -7,4 +7,8 @@ public class EditTextUtil {
 	public static void setEditTextEmpty(EditText et){
 		et.setText("");
 	}
+	
+	public static void formatPhoneNumEditText(CharSequence string){
+		
+	}
 }
