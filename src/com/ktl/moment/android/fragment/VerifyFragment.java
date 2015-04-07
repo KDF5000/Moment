@@ -14,9 +14,9 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.activity.AccountActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.common.constant.C;
-import com.ktl.moment.common.util.CountDownTimerUtil;
-import com.ktl.moment.common.util.VerificationUtil;
-import com.ktl.moment.common.util.VerificationUtil.ActionStartListener;
+import com.ktl.moment.utils.CountDownTimerUtil;
+import com.ktl.moment.utils.VerificationUtil;
+import com.ktl.moment.utils.VerificationUtil.ActionStartListener;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -88,7 +88,7 @@ public class VerifyFragment extends AccountBaseFragment implements ActionStartLi
 	}
 	
 	private void initDownTimer(){
-		CountDownTimerUtil downTimer = new CountDownTimerUtil(60000*C.YunZhiXun.YZX_VERIFY_VALID_TIME, 1000, verifyResendBtn);
+		CountDownTimerUtil downTimer = new CountDownTimerUtil(60000*C.YunZhiXun.VERIFY_VALID_TIME, 1000, verifyResendBtn);
 		
 		/*on tick*/
 		downTimer.setLeftSymbol("(");
@@ -117,7 +117,6 @@ public class VerifyFragment extends AccountBaseFragment implements ActionStartLi
 	}
 	
 	private void next(){
-		boolean isPassVerify = false;
 		String verifyCode = verifyCodeEt.getText().toString().trim();
 		if(verifyCode.isEmpty()){
 			toast("请输入您收到的短信验证码");

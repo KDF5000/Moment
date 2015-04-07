@@ -1,4 +1,4 @@
-package com.ktl.moment.common.util;
+package com.ktl.moment.utils;
 
 import android.app.Activity;
 import android.os.Handler;
@@ -30,16 +30,22 @@ public class VerificationUtil {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				String sign = "569e0db6d6b35f975428bed86a5f50e8";
-				Log.i("phone", phone);
+//				String sign = "eee5c1086b5614ebd3c079323febd957";
+				StringBuffer sb = new StringBuffer();
+				sb.append(C.YunZhiXun.ACCOUNT_SID);
+				sb.append(C.YunZhiXun.APP_ID);
+				sb.append(phone);
+				sb.append(C.YunZhiXun.MD5KEY);
+				String sign = EncryptUtil.MD5(sb.toString());
+				Log.i("sign", sign);
 				getVerificationCode(phone, sign);
 			}
 		}).start();
 	}
 	
 	private void getVerificationCode(String phone, String sign){
-		VerificationCode.getVerificationCode(activity, sign, C.YunZhiXun.YZX_ACCOUNT_SID, C.YunZhiXun.YZX_APP_ID, 
-				C.YunZhiXun.YZX_APP_NAME, C.YunZhiXun.YZX_VERIFY_VALID_TIME, C.YunZhiXun.YZX_BUSSINESS_TYPE, phone, 
+		VerificationCode.getVerificationCode(activity, sign, C.YunZhiXun.ACCOUNT_SID, C.YunZhiXun.APP_ID, 
+				C.YunZhiXun.APP_NAME, C.YunZhiXun.VERIFY_VALID_TIME, C.YunZhiXun.BUSSINESS_TYPE, phone, 
 				new VerificationCodeListener() {
 					
 					@Override
@@ -56,7 +62,7 @@ public class VerificationUtil {
 	}
 	
 	public void startVerificationCode(String phone, String verifyCode){
-		VerificationCode.doVerificationCode(activity, phone, verifyCode, C.YunZhiXun.YZX_ACCOUNT_SID, C.YunZhiXun.YZX_APP_ID, 
+		VerificationCode.doVerificationCode(activity, phone, verifyCode, C.YunZhiXun.ACCOUNT_SID, C.YunZhiXun.APP_ID, 
 				new VerificationCodeListener() {
 					
 					@Override
