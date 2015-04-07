@@ -10,8 +10,6 @@
         android:layout_height="wrap_content" 
         android:dividerHeight="10dp"
         android:divider="@color/found_background_color"
-        android:scrollbars="none"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:scrollbars="none">
     </ListView>
 </LinearLayout>

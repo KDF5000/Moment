@@ -20,10 +20,6 @@ public class HomeActivity extends BaseActivity {
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
 	private String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
-	//菜单动态效果
-	protected int preScrollingDirection = 1;
-	protected int scrollingDirection = 1;//1 向下 0：向上
-	protected float touchY;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
