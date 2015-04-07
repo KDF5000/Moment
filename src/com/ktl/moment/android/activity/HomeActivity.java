@@ -70,7 +70,7 @@ public class HomeActivity extends BaseActivity {
 				case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
 					tag = C.menu.FRAGMENT_DYNAMIC_TAG;
 					break;
-				case C.menu.FRAGMENT_ADD_MOMENT:
+				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
 					Toast.makeText(HomeActivity.this, "add moment", Toast.LENGTH_SHORT).show();
 					return ;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:

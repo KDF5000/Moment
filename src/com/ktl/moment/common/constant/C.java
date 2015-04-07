@@ -44,8 +44,9 @@ public class C {
 		 */
 		public static final int FRAGMENT_FIND_MENU_ID = 0;
 		public static final int FRAGMENT_DYNAMIC_MENU_ID = 1;
-		public static final int FRAGMENT_MOMENT_MENU_ID = 2;
-		public static final int FRAGMENT_ME_MENU_ID = 3;
+		public static final int FRAGMENT_ADD_MOMENT_MENU_ID = 2;
+		public static final int FRAGMENT_MOMENT_MENU_ID = 3;
+		public static final int FRAGMENT_ME_MENU_ID = 4;
 	}
 	/******************************************************************************
 	 * 第三方sdk常量
