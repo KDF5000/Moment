@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="menu_text" format="string" />
+    <attr name="menu_item_src" format="reference"></attr>
+
+    <declare-styleable name="menu_image_text">
+        <attr name="menu_text" />
+        <attr name="menu_item_src" />
+    </declare-styleable>
+
+</resources>

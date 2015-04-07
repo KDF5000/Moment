@@ -40,18 +40,7 @@ public class FindFragment extends BaseFragment {
 	}
 
 	private void initEvent(){
-		findListView.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				// TODO Auto-generated method stub
-				HomeActivity homeActivity = (HomeActivity)getActivity();
-				if(homeActivity!=null){
-					homeActivity.toggleMenu(event);
-				}
-				return false;
-			}
-		});
+		
 	}
 	private void getDataFromServer() {
 		// TODO Auto-generated method stub

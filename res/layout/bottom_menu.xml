@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ktl.moment.android.component.BottomMenu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:menu="http://schemas.android.com/apk/res/com.ktl.moment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/bottom_menu"
+    android:layout_alignParentBottom="true" >
+
+    <LinearLayout
+        android:id="@+id/menu_main"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/menu_border"
+        android:orientation="horizontal" >
+
+        <com.ktl.moment.android.component.MenuImageText
+            android:id="@+id/menu_find"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            menu:menu_item_src="@drawable/menu_find"
+            menu:menu_text="发现" />
+
+       <com.ktl.moment.android.component.MenuImageText
+            android:id="@+id/menu_foucs"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            menu:menu_item_src="@drawable/menu_focus"
+            menu:menu_text="关注" />
+
+       <com.ktl.moment.android.component.MenuImageText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            menu:menu_item_src="@drawable/focus"
+            menu:menu_text="" />
+
+       <com.ktl.moment.android.component.MenuImageText
+            android:id="@+id/menu_idea"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            menu:menu_item_src="@drawable/menu_idea"
+            menu:menu_text="灵感" />
+
+       <com.ktl.moment.android.component.MenuImageText
+            android:id="@+id/menu_me"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            menu:menu_item_src="@drawable/menu_me"
+            menu:menu_text="我的" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_add"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@drawable/circle"
+            android:scaleType="centerInside"
+            android:src="@drawable/menu_add" />
+    </LinearLayout>
+
+</com.ktl.moment.android.component.BottomMenu>

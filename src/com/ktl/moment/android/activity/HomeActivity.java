@@ -4,20 +4,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.MotionEvent;
-import android.view.View;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.base.BaseFragment;
-import com.ktl.moment.android.component.CustomMenu;
-import com.ktl.moment.android.component.CustomMenu.OnMenuItemClickListener;
+import com.ktl.moment.android.component.BottomMenu;
+import com.ktl.moment.android.component.BottomMenu.OnMenuItemClickListener;
 import com.ktl.moment.common.constant.C;
 
 public class HomeActivity extends BaseActivity {
 	private static final String TAG = "HomeAtivity";
 
-	private CustomMenu customMenu;// 菜单
+	private BottomMenu customMenu;// 菜单
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
 	private String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
@@ -37,31 +36,7 @@ public class HomeActivity extends BaseActivity {
 		fragmentManager = getSupportFragmentManager();//获取fragment的管理器
 		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);//设置默认的界面
 	}
-	/**
-	 * 切换菜单状态
-	 * @param event
-	 */
-	public void toggleMenu(MotionEvent event){
-		float currentY = event.getY();
-		switch(event.getAction()){
-		case MotionEvent.ACTION_DOWN:
-			touchY = currentY;
-			break;
-		case MotionEvent.ACTION_MOVE:
-			if(currentY < touchY){//说明在向上滑动
-				scrollingDirection = 0;//
-			}else{
-				scrollingDirection = 1;
-			}
-			if((scrollingDirection!=preScrollingDirection)){
-				customMenu.toggleMenu(800);
-				preScrollingDirection = scrollingDirection;
-			}
-			break;
-		default:
-			break;
-		}
-	}
+
 	/**
 	 * 初始化view
 	 */
@@ -73,27 +48,31 @@ public class HomeActivity extends BaseActivity {
 		setTitleTvName(R.string.found_text_view);
 		setBaseActivityBgColor(getResources().getColor(
 				R.color.found_background_color));
-		customMenu = (CustomMenu) findViewById(R.id.id_menu);
+		customMenu = (BottomMenu) findViewById(R.id.bottom_menu);
 	}
 	
 	/**
 	 * 初始化一些事件
 	 */
 	private void initEvent() {
+		
 
-		customMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		customMenu.setOnMenuItemClick(new OnMenuItemClickListener() {
 
 			@Override
-			public void OnClick(View v, int pos) {
+			public void OnClick(int id) {
 				// TODO Auto-generated method stub
 				String tag = "";
-				switch (pos) {
+				switch (id) {
 				case C.menu.FRAGMENT_FIND_MENU_ID:
 					tag =  C.menu.FRAGMENT_FIND_TAG;
 					break;
 				case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
 					tag = C.menu.FRAGMENT_DYNAMIC_TAG;
 					break;
+				case C.menu.FRAGMENT_ADD_MOMENT:
+					Toast.makeText(HomeActivity.this, "add moment", Toast.LENGTH_SHORT).show();
+					return ;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:
 					tag = C.menu.FRAGMENT_MOMENT_TAG;
 					break;
@@ -103,6 +82,8 @@ public class HomeActivity extends BaseActivity {
 				}
 				switchMenuByTag(tag);
 			}
+
+			 
 		});
 	}
 	private void setCurrentTag (String tag){
