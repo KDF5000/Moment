@@ -9,8 +9,12 @@ package com.ktl.moment;
 
 public final class R {
     public static final class anim {
-        public static final int fragment_account_scale_in=0x7f040000;
-        public static final int fragment_account_scale_out=0x7f040001;
+        public static final int fragment_account_down_in=0x7f040000;
+        public static final int fragment_account_down_out=0x7f040001;
+        public static final int fragment_account_scale_in=0x7f040002;
+        public static final int fragment_account_scale_out=0x7f040003;
+        public static final int fragment_account_up_in=0x7f040004;
+        public static final int fragment_account_up_out=0x7f040005;
     }
     public static final class attr {
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
@@ -34,18 +38,18 @@ containing a value of this type.
         public static final int border_width=0x7f010000;
     }
     public static final class color {
-        public static final int account_text_color=0x7f080004;
+        public static final int account_hint_color=0x7f080002;
+        public static final int account_text_color=0x7f080003;
         public static final int com_sina_weibo_sdk_blue=0x7f080000;
         public static final int com_sina_weibo_sdk_loginview_text_color=0x7f080001;
-        public static final int found_background_color=0x7f080005;
-        public static final int hint_color=0x7f080003;
-        public static final int login_background_color=0x7f080002;
+        public static final int found_background_color=0x7f080008;
+        public static final int verify_resend_btn_on_finish_color=0x7f080007;
+        public static final int verify_resend_btn_on_tick_color=0x7f080005;
+        public static final int verify_resend_on_finish_text_color=0x7f080006;
+        public static final int verify_resend_on_tick_text_color=0x7f080004;
         /**  发现页面背景色 
          */
-        public static final int register_background_color=0x7f080006;
-        /**  注册页面背景色 
-         */
-        public static final int white=0x7f080007;
+        public static final int white=0x7f080009;
     }
     public static final class dimen {
         public static final int account_text_size=0x7f05000b;
@@ -75,52 +79,51 @@ containing a value of this type.
     }
     public static final class drawable {
         public static final int add=0x7f020000;
-        public static final int avatar=0x7f020001;
-        public static final int com_sina_weibo_sdk_button_blue=0x7f020002;
-        public static final int com_sina_weibo_sdk_button_grey=0x7f020003;
-        public static final int com_sina_weibo_sdk_login_button_with_account_text=0x7f020004;
-        public static final int com_sina_weibo_sdk_login_button_with_frame_logo=0x7f020005;
-        public static final int com_sina_weibo_sdk_login_button_with_original_logo=0x7f020006;
-        public static final int default_img=0x7f020007;
-        public static final int delete_shite=0x7f020008;
-        public static final int edit_delete=0x7f020009;
-        public static final int find_idea_show_shape=0x7f02000a;
-        public static final int find_press=0x7f02000b;
-        public static final int focus=0x7f02000c;
-        public static final int home=0x7f02000d;
-        public static final int ic_com_sina_weibo_sdk_button_blue_focused=0x7f02000e;
-        public static final int ic_com_sina_weibo_sdk_button_blue_normal=0x7f02000f;
-        public static final int ic_com_sina_weibo_sdk_button_blue_pressed=0x7f020010;
-        public static final int ic_com_sina_weibo_sdk_button_grey_focused=0x7f020011;
-        public static final int ic_com_sina_weibo_sdk_button_grey_normal=0x7f020012;
-        public static final int ic_com_sina_weibo_sdk_button_grey_pressed=0x7f020013;
-        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_focused=0x7f020014;
-        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_normal=0x7f020015;
-        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_pressed=0x7f020016;
-        public static final int ic_com_sina_weibo_sdk_login_with_account_text_focused=0x7f020017;
-        public static final int ic_com_sina_weibo_sdk_login_with_account_text_normal=0x7f020018;
-        public static final int ic_com_sina_weibo_sdk_login_with_account_text_pressed=0x7f020019;
-        public static final int ic_com_sina_weibo_sdk_login_with_text=0x7f02001a;
-        public static final int ic_com_sina_weibo_sdk_logo=0x7f02001b;
-        public static final int ic_launcher=0x7f02001c;
-        public static final int inspiration=0x7f02001d;
-        public static final int login_account=0x7f02001e;
-        public static final int login_bg=0x7f02001f;
-        public static final int login_button_shape=0x7f020020;
-        public static final int login_card=0x7f020021;
-        public static final int login_forget=0x7f020022;
-        public static final int login_password=0x7f020023;
-        public static final int login_qq=0x7f020024;
-        public static final int login_wechat=0x7f020025;
-        public static final int login_weibo=0x7f020026;
-        public static final int logo=0x7f020027;
-        public static final int phone=0x7f020028;
-        public static final int refresh=0x7f020029;
-        public static final int register_button_shape=0x7f02002a;
-        public static final int register_edit_layout_shape=0x7f02002b;
-        public static final int register_next=0x7f02002c;
-        public static final int remind=0x7f02002d;
-        public static final int search=0x7f02002e;
+        public static final int com_sina_weibo_sdk_button_blue=0x7f020001;
+        public static final int com_sina_weibo_sdk_button_grey=0x7f020002;
+        public static final int com_sina_weibo_sdk_login_button_with_account_text=0x7f020003;
+        public static final int com_sina_weibo_sdk_login_button_with_frame_logo=0x7f020004;
+        public static final int com_sina_weibo_sdk_login_button_with_original_logo=0x7f020005;
+        public static final int default_img=0x7f020006;
+        public static final int edit_delete=0x7f020007;
+        public static final int find_idea_show_shape=0x7f020008;
+        public static final int find_press=0x7f020009;
+        public static final int focus=0x7f02000a;
+        public static final int home=0x7f02000b;
+        public static final int ic_com_sina_weibo_sdk_button_blue_focused=0x7f02000c;
+        public static final int ic_com_sina_weibo_sdk_button_blue_normal=0x7f02000d;
+        public static final int ic_com_sina_weibo_sdk_button_blue_pressed=0x7f02000e;
+        public static final int ic_com_sina_weibo_sdk_button_grey_focused=0x7f02000f;
+        public static final int ic_com_sina_weibo_sdk_button_grey_normal=0x7f020010;
+        public static final int ic_com_sina_weibo_sdk_button_grey_pressed=0x7f020011;
+        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_focused=0x7f020012;
+        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_normal=0x7f020013;
+        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_pressed=0x7f020014;
+        public static final int ic_com_sina_weibo_sdk_login_with_account_text_focused=0x7f020015;
+        public static final int ic_com_sina_weibo_sdk_login_with_account_text_normal=0x7f020016;
+        public static final int ic_com_sina_weibo_sdk_login_with_account_text_pressed=0x7f020017;
+        public static final int ic_com_sina_weibo_sdk_login_with_text=0x7f020018;
+        public static final int ic_com_sina_weibo_sdk_logo=0x7f020019;
+        public static final int ic_launcher=0x7f02001a;
+        public static final int inspiration=0x7f02001b;
+        public static final int login_account=0x7f02001c;
+        public static final int login_bg=0x7f02001d;
+        public static final int login_button_shape=0x7f02001e;
+        public static final int login_card=0x7f02001f;
+        public static final int login_forget=0x7f020020;
+        public static final int login_password=0x7f020021;
+        public static final int login_phone=0x7f020022;
+        public static final int login_qq=0x7f020023;
+        public static final int login_wechat=0x7f020024;
+        public static final int login_weibo=0x7f020025;
+        public static final int logo=0x7f020026;
+        public static final int refresh=0x7f020027;
+        public static final int register_next=0x7f020028;
+        public static final int remind=0x7f020029;
+        public static final int search=0x7f02002a;
+        public static final int verify_key=0x7f02002b;
+        public static final int verify_resend_btn_on_finish_shape=0x7f02002c;
+        public static final int verify_resend_btn_on_tick_shape=0x7f02002d;
     }
     public static final class id {
         public static final int account_base_layout=0x7f0a0000;
@@ -128,8 +131,8 @@ containing a value of this type.
         public static final int activity_base_content_container=0x7f0a000a;
         public static final int activity_base_layout=0x7f0a0002;
         public static final int activity_base_title_container_layout=0x7f0a0003;
-        public static final int follow_num=0x7f0a002d;
-        public static final int fragment_find_list=0x7f0a0027;
+        public static final int follow_num=0x7f0a0034;
+        public static final int fragment_find_list=0x7f0a002e;
         public static final int home_content_container=0x7f0a000b;
         public static final int id_menu=0x7f0a000c;
         public static final int login_account_et=0x7f0a0011;
@@ -148,10 +151,10 @@ containing a value of this type.
         public static final int login_wechat_img=0x7f0a0017;
         public static final int login_weibo_img=0x7f0a0018;
         public static final int middle_title_tv=0x7f0a0009;
-        public static final int moment_content=0x7f0a0029;
-        public static final int moment_title=0x7f0a0028;
-        public static final int post_time=0x7f0a002c;
-        public static final int praise_num=0x7f0a002e;
+        public static final int moment_content=0x7f0a0030;
+        public static final int moment_title=0x7f0a002f;
+        public static final int post_time=0x7f0a0033;
+        public static final int praise_num=0x7f0a0035;
         public static final int register_account_et=0x7f0a001f;
         public static final int register_account_layout=0x7f0a001e;
         public static final int register_delete_account_text_img=0x7f0a0020;
@@ -162,14 +165,21 @@ containing a value of this type.
         public static final int register_pass_layout=0x7f0a0021;
         public static final int register_to_login=0x7f0a0025;
         public static final int register_tv=0x7f0a001d;
-        public static final int textView1=0x7f0a0026;
+        public static final int textView1=0x7f0a002d;
         public static final int title_add_img_view=0x7f0a0008;
         public static final int title_left_view_name_tv=0x7f0a0004;
         public static final int title_refresh_img_view=0x7f0a0005;
         public static final int title_remind_img_view=0x7f0a0007;
         public static final int title_search_img_view=0x7f0a0006;
-        public static final int user_avatar=0x7f0a002a;
-        public static final int user_name=0x7f0a002b;
+        public static final int user_avatar=0x7f0a0031;
+        public static final int user_name=0x7f0a0032;
+        public static final int verify_account_layout=0x7f0a0028;
+        public static final int verify_code_et=0x7f0a0029;
+        public static final int verify_layout=0x7f0a0026;
+        public static final int verify_next_btn=0x7f0a002b;
+        public static final int verify_resend_btn=0x7f0a002a;
+        public static final int verify_to_register=0x7f0a002c;
+        public static final int verify_tv=0x7f0a0027;
     }
     public static final class layout {
         public static final int activity_account=0x7f030000;
@@ -178,12 +188,13 @@ containing a value of this type.
         public static final int custom_menu=0x7f030003;
         public static final int fragment_account_login=0x7f030004;
         public static final int fragment_account_register=0x7f030005;
-        public static final int fragment_dynamic=0x7f030006;
-        public static final int fragment_find=0x7f030007;
-        public static final int fragment_find_back=0x7f030008;
-        public static final int fragment_find_list_item=0x7f030009;
-        public static final int fragment_me=0x7f03000a;
-        public static final int fragment_monment=0x7f03000b;
+        public static final int fragment_account_verify=0x7f030006;
+        public static final int fragment_dynamic=0x7f030007;
+        public static final int fragment_find=0x7f030008;
+        public static final int fragment_find_back=0x7f030009;
+        public static final int fragment_find_list_item=0x7f03000a;
+        public static final int fragment_me=0x7f03000b;
+        public static final int fragment_monment=0x7f03000c;
     }
     public static final class menu {
         public static final int main=0x7f090000;
@@ -191,14 +202,14 @@ containing a value of this type.
     public static final class string {
         /**  img&img_btn description 
          */
-        public static final int account_des=0x7f06000e;
-        public static final int add_des=0x7f060018;
+        public static final int account_des=0x7f060012;
+        public static final int add_des=0x7f06001c;
         public static final int app_name=0x7f060003;
         public static final int com_sina_weibo_sdk_login=0x7f060001;
         public static final int com_sina_weibo_sdk_login_with_weibo_account=0x7f060000;
         public static final int com_sina_weibo_sdk_logout=0x7f060002;
-        public static final int delete_icon_des=0x7f060010;
-        public static final int found_text_view=0x7f06000d;
+        public static final int delete_icon_des=0x7f060014;
+        public static final int found_text_view=0x7f060011;
         /**      <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string> 
          */
@@ -208,18 +219,22 @@ containing a value of this type.
         public static final int login_pass_hint=0x7f060006;
         public static final int login_register=0x7f060009;
         public static final int login_third_party_title=0x7f060007;
-        public static final int pass_des=0x7f06000f;
-        public static final int qq_des=0x7f060012;
-        public static final int refresh_des=0x7f060015;
+        public static final int pass_des=0x7f060013;
+        public static final int qq_des=0x7f060016;
+        public static final int refresh_des=0x7f060019;
         public static final int register=0x7f06000a;
         public static final int register_next=0x7f06000b;
-        public static final int register_next_des=0x7f060014;
+        public static final int register_next_des=0x7f060018;
         public static final int register_to_login=0x7f06000c;
-        public static final int remind_des=0x7f060017;
-        public static final int search_des=0x7f060016;
-        public static final int user_logo_des=0x7f060019;
-        public static final int wechat_des=0x7f060011;
-        public static final int weibo_des=0x7f060013;
+        public static final int remind_des=0x7f06001b;
+        public static final int search_des=0x7f06001a;
+        public static final int user_logo_des=0x7f06001d;
+        public static final int verify=0x7f06000d;
+        public static final int verify_hint=0x7f06000e;
+        public static final int verify_resend=0x7f06000f;
+        public static final int verify_to_register=0x7f060010;
+        public static final int wechat_des=0x7f060015;
+        public static final int weibo_des=0x7f060017;
     }
     public static final class style {
         /** 

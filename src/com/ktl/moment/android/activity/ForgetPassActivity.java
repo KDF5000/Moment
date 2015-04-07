@@ -1,7 +1,5 @@
 package com.ktl.moment.android.activity;
 
-import com.ktl.moment.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 

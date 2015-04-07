@@ -1,5 +1,5 @@
 /**
- * API get,post·â×°
+ * API get,postå°è£…
  * @author KDF5000 
  * @date 2015-03-29
  */
@@ -21,14 +21,14 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class ApiManager {
-	private static final int STATUS_OK =  200;//ÇëÇó³É¹¦¶áµÄ×´Ì¬Âë
-	private static ApiManager apiManager = null;// apiManagerÊµÀı
+	private static final int STATUS_OK =  200;//è¯·æ±‚æˆåŠŸå¤ºçš„çŠ¶æ€ç 
+	private static ApiManager apiManager = null;// apiManagerå®ä¾‹
 
 	public ApiManager() {
 	}
 
 	/**
-	 * »ñÈ¡apiManagerµÄÊµÀı
+	 * è·å–apiManagerçš„å®ä¾‹
 	 * 
 	 * @return ApiManager
 	 */
@@ -42,18 +42,18 @@ public class ApiManager {
 	}
 
 	/**
-	 * postÇëÇó
+	 * postè¯·æ±‚
 	 * 
 	 * @param context
-	 *            ÉÏÏÂÎÄ
+	 *            ä¸Šä¸‹æ–‡
 	 * @param url
-	 *            ÇëÇóurl
+	 *            è¯·æ±‚url
 	 * @param params
-	 *            ÇëÇó²ÎÊı
+	 *            è¯·æ±‚å‚æ•°
 	 * @param modelName
-	 *            ·µ»ØÊµÌåµÄÃû×Ö
+	 *            è¿”å›å®ä½“çš„åå­—
 	 * @param callBack
-	 *            ÇëÇó³É¹¦µÄ»Øµ÷Àà
+	 *            è¯·æ±‚æˆåŠŸçš„å›è°ƒç±»
 	 */
 	public void post(Context context, String url, RequestParams params,final HttpCallBack callBack,
 			final String ... modelNameList) {
@@ -63,7 +63,7 @@ public class ApiManager {
 			public void onSuccess(int statusCode, Header[] headers,
 					byte[] responseBody) {
 				// TODO Auto-generated method stub
-				// ³É¹¦ĞèÒª½âÎö·µ»ØµÄÊı¾İ
+				// æˆåŠŸéœ€è¦è§£æè¿”å›çš„æ•°æ®
 				handleHttpResponse(responseBody,callBack,modelNameList);
 			}
 
@@ -76,18 +76,18 @@ public class ApiManager {
 		});
 	}
 	/**
-	 * postÇëÇó
+	 * postè¯·æ±‚
 	 * 
 	 * @param context
-	 *            ÉÏÏÂÎÄ
+	 *            ä¸Šä¸‹æ–‡
 	 * @param url
-	 *            ÇëÇóurl
+	 *            è¯·æ±‚url
 	 * @param params
-	 *            ÇëÇó²ÎÊı
+	 *            è¯·æ±‚å‚æ•°
 	 * @param modelName
-	 *            ·µ»ØÊµÌåµÄÃû×Ö
+	 *            è¿”å›å®ä½“çš„åå­—
 	 * @param callBack
-	 *            ÇëÇó³É¹¦µÄ»Øµ÷Àà
+	 *            è¯·æ±‚æˆåŠŸçš„å›è°ƒç±»
 	 */
 	public void get(Context context, String url, RequestParams params,
 			final HttpCallBack callBack,final String ... modelNameList) {
@@ -97,7 +97,7 @@ public class ApiManager {
 			public void onSuccess(int statusCode, Header[] headers,
 					byte[] responseBody) {
 				// TODO Auto-generated method stub
-				// ³É¹¦ĞèÒª½âÎö·µ»ØµÄÊı¾İ
+				// æˆåŠŸéœ€è¦è§£æè¿”å›çš„æ•°æ®
 				handleHttpResponse(responseBody,callBack,modelNameList);
 			}
 
@@ -143,18 +143,18 @@ public class ApiManager {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			callBack.onFailure("JSON½âÎö³öÏÖÒì³£");
+			callBack.onFailure("JSONè§£æå‡ºç°å¼‚å¸¸");
 		}
 	}
 	/**
-	 * È¡ÏûÇëÇó
+	 * å–æ¶ˆè¯·æ±‚
 	 * @param context
 	 */
 	public void cancelRequest(Context context){
 		HttpManager.cancelRequest(context);
 	}
 	/*
-	 * È¡ÏûËùÓĞµÄÇëÇó
+	 * å–æ¶ˆæ‰€æœ‰çš„è¯·æ±‚
 	 */
 	public void cancelAllRequest(){
 		HttpManager.cancelAllRequest();
