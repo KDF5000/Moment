@@ -9,10 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.AccountActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
+import com.ktl.moment.android.fragment.LoginFragment.OnCloseLoginListener;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.utils.EditTextUtil;
 import com.ktl.moment.utils.VerificationUtil;
@@ -39,27 +41,25 @@ public class RegisterFragment extends AccountBaseFragment{
 	private Button registerNextbtn;
 	
 	@ViewInject(R.id.register_to_login)
-	private LinearLayout registerToLoginLayout;
+	private TextView registerToLogin;
 	
-	public BackToLoginListener backToLoginListener;
-	public ToVerifyListener toVerifyListener;
+	@ViewInject(R.id.register_close)
+	private ImageView registerClose;
 	
 	private VerificationUtil verification;
 	
-	public interface BackToLoginListener{
-		void onBackToLoginClick();
+	public OnCloseRegisterListener onCloseRegisterListener;
+	
+	public interface OnCloseRegisterListener{
+		void closeRegisterClick();
 	}
 	
-	public interface ToVerifyListener{
-		void onToVerifyClick();
+	public void OnCloseRegisterListener(OnCloseRegisterListener onCloseRegisterListener){
+		this.onCloseRegisterListener = onCloseRegisterListener;
 	}
 	
-	public void setOnBackToLoginListener(BackToLoginListener backToLoginListener){
-		this.backToLoginListener = backToLoginListener;
-	}
-	
-	public void setOnToVerifyListener(ToVerifyListener toVerifyListener){
-		this.toVerifyListener = toVerifyListener;
+	public interface OnBackToLoginListener{
+		void backToLoginClick();
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class RegisterFragment extends AccountBaseFragment{
 	 * @param v
 	 * @param hasFocus
 	 */
-	@OnFocusChange({R.id.register_account_et,R.id.register_pass_et,R.id.register_delete_account_text_img,R.id.register_delete_pass_text_img,})
+	@OnFocusChange({R.id.register_account_et,R.id.register_pass_et,R.id.register_delete_account_text_img,R.id.register_delete_pass_text_img})
 	public void onFocusChange(View v,boolean hasFocus){
 		switch (v.getId()) {
 		case R.id.register_account_et:
@@ -98,7 +98,8 @@ public class RegisterFragment extends AccountBaseFragment{
 		}
 	}
 	
-	@OnClick({R.id.register_delete_account_text_img,R.id.register_delete_pass_text_img,R.id.register_next_btn,R.id.register_to_login})
+	@OnClick({R.id.register_delete_account_text_img,R.id.register_delete_pass_text_img,R.id.register_next_btn,R.id.register_to_login,
+		R.id.register_close,R.id.register_next_btn})
 	public void onClick(View v){
 		switch (v.getId()) {
 		case R.id.register_delete_account_text_img:
@@ -108,12 +109,17 @@ public class RegisterFragment extends AccountBaseFragment{
 			EditTextUtil.setEditTextEmpty(registerPassEt);
 			break;
 		case R.id.register_to_login:
-			if(getActivity() instanceof BackToLoginListener){
-				((BackToLoginListener)getActivity()).onBackToLoginClick();
+			if(getActivity() instanceof OnBackToLoginListener){
+				((OnBackToLoginListener)getActivity()).backToLoginClick();
 			}
 			break;
 		case R.id.register_next_btn:
 			next();
+			break;
+		case R.id.register_close:
+			if(getActivity() instanceof OnCloseRegisterListener){
+				((OnCloseRegisterListener)getActivity()).closeRegisterClick();
+			}
 			break;
 		default:
 			break;
@@ -147,9 +153,6 @@ public class RegisterFragment extends AccountBaseFragment{
 			}
 			Log.i("register_phone", phone);
 			verification.requestVerificationCode(phone);
-		}
-		if(getActivity() instanceof ToVerifyListener){
-			((ToVerifyListener)getActivity()).onToVerifyClick();
 		}
 	}
 		

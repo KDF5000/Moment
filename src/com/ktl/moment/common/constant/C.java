@@ -100,6 +100,7 @@ public class C {
 		/**
 		 * fragment tags
 		 */
+		public static final String FRAGMENT_START = "startFragment";
 		public static final String FRAGMENT_LOGIN = "loginFragment";
 		public static final String FRAGMENT_FORGET_PASS = "forgetPassFragment";
 		public static final String FRAGMENT_REGISTER = "registerFragment";
@@ -110,12 +111,12 @@ public class C {
 		/**
 		 * fragment move direction flag
 		 */
-		public static final int ANIMATION_FIRST = 0;		//第一次进入login页面
-		public static final int ANIMATION_SCALE = 1;		//login与register页面切换
-		public static final int ANIMATION_MOVE_UP = 2;	//页面上滑
-		public static final int ANIMATION_MOVE_DOWN = 3;	//页面下滑
+		public static final int ANIMATION_NO_ANIM = 0;		//第一次进入login页面
+		public static final int ANIMATION_ALPHA_IN = 1;		//第一次进入login页面
+		public static final int ANIMATION_MOVE_LEFT = 2;	//页面上滑
+		public static final int ANIMATION_MOVE_RIGHT = 3;	//页面下滑
 		
-		public static final boolean IS_SEND_VERIFY = true;	//是否开启验证码
+		public static final boolean IS_SEND_VERIFY = false;	//是否开启验证码
 	}
 	
 	/**

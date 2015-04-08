@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle" >
-    <corners android:radius="5dp"/>
-    <solid android:color="#0bbaf4"/>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_window_focused="false">
+		<shape android:shape="rectangle" >
+		    <corners android:radius="1dp"/>
+			<solid android:color="@color/register_and_login_btn_color"/>
+		</shape>
+    </item>
+	<item android:state_pressed="true">
+		<shape android:shape="rectangle" >
+		    <corners android:radius="1dp"/>
+			<solid android:color="#ac00b5bc"/>
+		</shape>
+	</item>
 
-</shape>
+</selector>

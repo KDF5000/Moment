@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.fragment.LoginFragment;
 import com.ktl.moment.android.fragment.RegisterFragment;
+import com.ktl.moment.android.fragment.StartFragment;
 import com.ktl.moment.android.fragment.VerifyFragment;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.utils.EditTextUtil;
@@ -22,7 +23,9 @@ public class AccountBaseFragment extends Fragment {
 	
 	public static Fragment getInstance(String fragmentName){
 		AccountBaseFragment baseFragment = null;
-		if(fragmentName.equals(C.Account.FRAGMENT_LOGIN)){
+		if(fragmentName.equals(C.Account.FRAGMENT_START)){
+			baseFragment = new StartFragment();
+		}else if(fragmentName.equals(C.Account.FRAGMENT_LOGIN)){
 			baseFragment = new LoginFragment();
 		}else if(fragmentName.equals(C.Account.FRAGMENT_REGISTER)){
 			baseFragment = new RegisterFragment();
