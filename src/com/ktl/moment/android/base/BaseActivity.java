@@ -27,10 +27,7 @@ import com.ktl.moment.manager.AppManager;
 public class BaseActivity extends FragmentActivity {
 	
 	protected TextView titleNameTv;
-	protected ImageView refreshImg;
-	protected ImageView searchImg;
-	protected ImageView remindImg;
-	protected ImageView addImg;
+	protected ImageView setImg;
 	protected RelativeLayout baseTitleReLayout;
 	protected LinearLayout baseActivityLayout;
 	protected FrameLayout contentLayout;
@@ -49,10 +46,7 @@ public class BaseActivity extends FragmentActivity {
 	
 	private void findViews(){
 		titleNameTv = (TextView) findViewById(R.id.title_left_view_name_tv);
-		refreshImg = (ImageView) findViewById(R.id.title_refresh_img_view);
-		searchImg = (ImageView) findViewById(R.id.title_search_img_view);
-		remindImg = (ImageView) findViewById(R.id.title_remind_img_view);
-		addImg = (ImageView) findViewById(R.id.title_add_img_view);
+		setImg = (ImageView) findViewById(R.id.title_add_img_view);
 		baseTitleReLayout = (RelativeLayout) findViewById(R.id.activity_base_title_container_layout);
 		baseActivityLayout = (LinearLayout) findViewById(R.id.activity_base_layout);
 		contentLayout = (FrameLayout) findViewById(R.id.activity_base_content_container);
@@ -68,16 +62,10 @@ public class BaseActivity extends FragmentActivity {
 	protected void setHomeTitleVisible(boolean isVisible){
 		if(isVisible){
 			titleNameTv.setVisibility(View.VISIBLE);
-			refreshImg.setVisibility(View.VISIBLE);
-			searchImg.setVisibility(View.VISIBLE);
-			remindImg.setVisibility(View.VISIBLE);
-			addImg.setVisibility(View.VISIBLE);
+			setImg.setVisibility(View.VISIBLE);
 		}else{
 			titleNameTv.setVisibility(View.GONE);
-			refreshImg.setVisibility(View.GONE);
-			searchImg.setVisibility(View.GONE);
-			remindImg.setVisibility(View.GONE);
-			addImg.setVisibility(View.GONE);
+			setImg.setVisibility(View.GONE);
 		}
 	}
 	
@@ -99,16 +87,11 @@ public class BaseActivity extends FragmentActivity {
 	
 	protected void setBaseActivityBgColor(int resColorId){
 		baseTitleReLayout.setBackgroundColor(resColorId);
-		baseActivityLayout.setBackgroundColor(resColorId);
+	}
+	protected void setBaseContainerBgColor(int resId){
+		contentLayout.setBackgroundColor(resId);
 	}
 	
-	public void doClick(View v){
-		switch (v.getId()) {
-		case R.id.title_refresh_img_view:
-			Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-			break;
-		}
-	}
 	/**
 	 *  销毁当前界面跳到指定界面 参数为map --- map里类型暂定  根据实际过程修改
 	 * @param classObj

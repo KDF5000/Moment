@@ -4,43 +4,95 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.adapter.FindListViewAdapter;
 import com.ktl.moment.android.base.BaseFragment;
+import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
+import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
+import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
+import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
 import com.ktl.moment.entity.Moment;
 
 public class FindFragment extends BaseFragment {
 	@SuppressWarnings("unused")
 	private static final String TAG = "FindFragment";
 
-	private ListView findListView;
+	private ZrcListView findListView;
 	private List<Moment> momentList;// 灵感列表
 
+	private Handler handler;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_find, container, false);
-		findListView = (ListView) view.findViewById(R.id.fragment_find_list);
+		findListView = (ZrcListView) view.findViewById(R.id.fragment_find_list);
 		momentList = new ArrayList<Moment>();
+		initView();
 		// 从服务端获取数据
 		getDataFromServer();
+		
 		findListView.setAdapter(new FindListViewAdapter(getActivity(),
 				momentList, getDisplayImageOptions()));
 		initEvent();
 		return view;
 	}
 
+	private void initView(){
+		// 设置下拉刷新的样式（可选，但如果没有Header则无法下拉刷新）
+        SimpleHeader header = new SimpleHeader(getActivity());
+        header.setTextColor(0xff0066aa);
+        header.setCircleColor(0xff33bbee);
+        findListView.setHeadable(header);
+
+        // 设置加载更多的样式（可选）
+        SimpleFooter footer = new SimpleFooter(getActivity());
+        footer.setCircleColor(0xff33bbee);
+        findListView.setFootable(footer);
+
+        // 设置列表项出现动画（可选）
+        findListView.setItemAnimForTopIn(R.anim.zrc_topitem_in);
+        findListView.setItemAnimForBottomIn(R.anim.zrc_bottomitem_in);
+	}
 	private void initEvent(){
-		
+		handler = new Handler();
+		 // 下拉刷新事件回调（可选）
+        findListView.setOnRefreshStartListener(new OnStartListener() {
+            @Override
+            public void onStart() {
+                //刷新开始
+            	handler.postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						findListView.setRefreshSuccess();
+						findListView.startLoadMore();//允许加载更多
+					}
+				}, 2*1000);
+            }
+        });
+
+        // 加载更多事件回调（可选）
+        findListView.setOnLoadMoreStartListener(new OnStartListener() {
+            @Override
+            public void onStart() {
+                //加载更多
+            	 handler.postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						findListView.setLoadMoreSuccess();
+					}
+				}, 2*1000);
+            }
+        });
 	}
 	private void getDataFromServer() {
 		// TODO Auto-generated method stub

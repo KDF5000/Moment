@@ -19,33 +19,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/title_left_view_name_text_size"/>
         
-        <ImageView
-            android:id="@+id/title_refresh_img_view"
-            android:contentDescription="@string/refresh_des"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/title_left_view_name_tv"
-            android:layout_marginLeft="5dp"
-            android:onClick="doClick"
-            android:src="@drawable/refresh"/>
-        
-        <ImageView
-            android:id="@+id/title_search_img_view"
-            android:contentDescription="@string/search_des"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/title_remind_img_view"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/search"/>
-        
-        <ImageView 
-            android:id="@+id/title_remind_img_view"
-            android:contentDescription="@string/remind_des"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/title_add_img_view"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/remind"/>
         
         <ImageView 
             android:id="@+id/title_add_img_view"

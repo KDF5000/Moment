@@ -14,6 +14,7 @@
     <color name="verify_resend_btn_on_finish_color">#ffffff</color>
     
     <color name="found_background_color">#ffbcd4</color><!-- 发现页面背景色 -->
-    
+    <color name="main_title_color">#41aaf2</color>
+    <color name="main_content_container_color">#eeeeee</color>
     <color name="white">#ffffff</color>
 </resources>
