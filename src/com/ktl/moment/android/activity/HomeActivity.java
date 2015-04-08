@@ -19,18 +19,18 @@ public class HomeActivity extends BaseActivity {
 	private BottomMenu customMenu;// 菜单
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
-	private String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
-	
+	private String currentFgTag = "";// 一定要和需要默认显示的fragment 不一样
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
 		initView();
 		initEvent();
-		
-		//初始为发现界面
-		fragmentManager = getSupportFragmentManager();//获取fragment的管理器
-		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);//设置默认的界面
+
+		// 初始为发现界面
+		fragmentManager = getSupportFragmentManager();// 获取fragment的管理器
+		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);// 设置默认的界面
 	}
 
 	/**
@@ -42,16 +42,17 @@ public class HomeActivity extends BaseActivity {
 
 		setHomeTitleVisible(true);
 		setTitleTvName(R.string.found_text_view);
-		setBaseActivityBgColor(getResources().getColor(
-				R.color.found_background_color));
+		setBaseActivityBgColor(getResources()
+				.getColor(R.color.main_title_color));//设置title颜色
+		setBaseContainerBgColor(getResources().getColor(
+				R.color.main_content_container_color));//设置内容区域颜色
 		customMenu = (BottomMenu) findViewById(R.id.bottom_menu);
 	}
-	
+
 	/**
 	 * 初始化一些事件
 	 */
 	private void initEvent() {
-		
 
 		customMenu.setOnMenuItemClick(new OnMenuItemClickListener() {
 
@@ -61,14 +62,15 @@ public class HomeActivity extends BaseActivity {
 				String tag = "";
 				switch (id) {
 				case C.menu.FRAGMENT_FIND_MENU_ID:
-					tag =  C.menu.FRAGMENT_FIND_TAG;
+					tag = C.menu.FRAGMENT_FIND_TAG;
 					break;
 				case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
 					tag = C.menu.FRAGMENT_DYNAMIC_TAG;
 					break;
 				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
-					Toast.makeText(HomeActivity.this, "add moment", Toast.LENGTH_SHORT).show();
-					return ;
+					Toast.makeText(HomeActivity.this, "add moment",
+							Toast.LENGTH_SHORT).show();
+					return;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:
 					tag = C.menu.FRAGMENT_MOMENT_TAG;
 					break;
@@ -79,80 +81,93 @@ public class HomeActivity extends BaseActivity {
 				switchMenuByTag(tag);
 			}
 
-			 
 		});
 	}
-	private void setCurrentTag (String tag){
+
+	private void setCurrentTag(String tag) {
 		this.currentFgTag = tag;
 	}
+
 	/**
 	 * 通过tag切换标签
+	 * 
 	 * @param selectedTag
 	 */
-	private void switchMenuByTag(String selectedTag){
-		if(selectedTag == currentFgTag || selectedTag.equals(currentFgTag)){
-			return ;
+	private void switchMenuByTag(String selectedTag) {
+		if (selectedTag == currentFgTag || selectedTag.equals(currentFgTag)) {
+			return;
 		}
 		fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);//
-		if(selectedTag!=null  && !selectedTag.equals("")){
-			detachFragment(getFragmentByTag(currentFgTag));//detach当前的fragment
+		fragmentTransaction
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);//
+		if (selectedTag != null && !selectedTag.equals("")) {
+			detachFragment(getFragmentByTag(currentFgTag));// detach当前的fragment
 		}
-		attachFragment(R.id.home_content_container,getFragmentByTag(selectedTag),selectedTag);
-		commitTransactions();//提交事务
-		setCurrentTag(selectedTag);//设置当前的tag
+		attachFragment(R.id.home_content_container,
+				getFragmentByTag(selectedTag), selectedTag);
+		commitTransactions();// 提交事务
+		setCurrentTag(selectedTag);// 设置当前的tag
 	}
+
 	/**
 	 * 提交fragmenttransaction
 	 */
-	private void commitTransactions(){
+	private void commitTransactions() {
 		if (fragmentTransaction != null && !fragmentTransaction.isEmpty()) {
-		    fragmentTransaction.commitAllowingStateLoss();
-		    fragmentTransaction = null;
+			fragmentTransaction.commitAllowingStateLoss();
+			fragmentTransaction = null;
 		}
 	}
+
 	/**
 	 * attach fragment
+	 * 
 	 * @param layout
 	 * @param f
 	 * @param tag
 	 */
-	private void attachFragment(int layout,Fragment f,String tag){
-		if(f!=null){
+	private void attachFragment(int layout, Fragment f, String tag) {
+		if (f != null) {
 			if (fragmentTransaction == null) {
-	            fragmentTransaction = fragmentManager.beginTransaction();
-	            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-	        }
-			if(f.isDetached()){
+				fragmentTransaction = fragmentManager.beginTransaction();
+				fragmentTransaction
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			}
+			if (f.isDetached()) {
 				fragmentTransaction.attach(f);
-			}else if(!f.isAdded()){
-				fragmentTransaction.add(layout, f,tag);
-			}else{
-				//Nothing to do
+			} else if (!f.isAdded()) {
+				fragmentTransaction.add(layout, f, tag);
+			} else {
+				// Nothing to do
 			}
 		}
 	}
+
 	/**
 	 * detach fragment
+	 * 
 	 * @param f
 	 */
-	private void detachFragment(Fragment f){
-		if(f!=null && !f.isDetached()){
+	private void detachFragment(Fragment f) {
+		if (f != null && !f.isDetached()) {
 			if (fragmentTransaction == null) {
-	            fragmentTransaction = fragmentManager.beginTransaction();
-	            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-	        }
+				fragmentTransaction = fragmentManager.beginTransaction();
+				fragmentTransaction
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			}
 			fragmentTransaction.detach(f);
 		}
 	}
+
 	/**
 	 * 通过标签获取fragment
+	 * 
 	 * @param tag
 	 * @return
 	 */
-	private Fragment getFragmentByTag(String tag){
+	private Fragment getFragmentByTag(String tag) {
 		Fragment f = fragmentManager.findFragmentByTag(tag);
-		if(f==null){
+		if (f == null) {
 			f = BaseFragment.getInstance(tag);
 		}
 		return f;

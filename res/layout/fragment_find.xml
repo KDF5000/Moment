@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:dividerHeight="10dp"
-        android:divider="@color/found_background_color"
+        android:divider="@color/main_content_container_color"
         android:scrollbars="none">
     </ListView>
 </LinearLayout>
