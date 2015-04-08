@@ -1,4 +1,4 @@
-package com.ktl.moment.common.util;
+package com.ktl.moment.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -20,10 +20,6 @@ public class HomeActivity extends BaseActivity {
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
 	private String currentFgTag = "";//一定要和需要默认显示的fragment 不一样
-	//菜单动态效果
-	protected int preScrollingDirection = 1;
-	protected int scrollingDirection = 1;//1 向下 0：向上
-	protected float touchY;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -70,7 +66,7 @@ public class HomeActivity extends BaseActivity {
 				case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
 					tag = C.menu.FRAGMENT_DYNAMIC_TAG;
 					break;
-				case C.menu.FRAGMENT_ADD_MOMENT:
+				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
 					Toast.makeText(HomeActivity.this, "add moment", Toast.LENGTH_SHORT).show();
 					return ;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:

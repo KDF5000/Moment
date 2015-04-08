@@ -14,8 +14,8 @@ import com.ktl.moment.android.fragment.LoginFragment;
 import com.ktl.moment.android.fragment.RegisterFragment;
 import com.ktl.moment.android.fragment.VerifyFragment;
 import com.ktl.moment.common.constant.C;
-import com.ktl.moment.common.util.EditTextUtil;
-import com.ktl.moment.common.util.ToastUtil;
+import com.ktl.moment.utils.EditTextUtil;
+import com.ktl.moment.utils.ToastUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 public class AccountBaseFragment extends Fragment {
