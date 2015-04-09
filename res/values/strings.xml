@@ -10,6 +10,9 @@
     <string name="login_pass_hint">请输入您的密码</string>
     <string name="login_forget_pass">忘记密码</string>
     
+    <string name="dialog_is_loading">正在加载</string>
+    <string name="dialog_suffix">…</string>
+    
     <string name="register">注册</string>
     <string name="register_next">下一步</string>
     <string name="register_next_to_verify">点击下一步进行短信验证,也可以</string>
@@ -21,8 +24,8 @@
     <string name="profile_nickname">请输入您的昵称</string>
     <string name="profile_place">请选择您所在的地区</string>
     <string name="profile_sex">选择您的性别:</string>
-    <string name="profile_sex_male">男</string>
-    <string name="profile_sex_famale">女</string>
+    <string name="profile_sex_male">男  </string>
+    <string name="profile_sex_famale">女  </string>
     <string name="peofile_complete">完成注册</string>
     
     <string name="found_text_view">发现</string>

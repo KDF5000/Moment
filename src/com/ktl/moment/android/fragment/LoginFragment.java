@@ -1,6 +1,8 @@
 package com.ktl.moment.android.fragment;
 
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +17,9 @@ import android.widget.TextView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
+import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.EditTextUtil;
 import com.ktl.moment.utils.net.ApiManager;
@@ -183,8 +187,9 @@ public class LoginFragment extends AccountBaseFragment{
 				return;
 			}
 		}
+		final LoadingDialog dialog = new LoadingDialog(getActivity());
+		dialog.show();
 		RequestParams params = new RequestParams();
-		Log.i("param", "phone="+phone+",pass="+pass);
 		params.put("mobileNumber", phone);
 		params.put("password", pass);
 		ApiManager.getInstance().post(getActivity(), C.API.USER_LOGIN,params,new HttpCallBack() {
@@ -192,8 +197,12 @@ public class LoginFragment extends AccountBaseFragment{
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
+				dialog.dismiss();
+                @SuppressWarnings("unchecked")
+				List <User> user= (List<User>)res;
+                Log.i("user_phone", user.get(0).getMobilephone());
 				Intent intent = new Intent(getActivity(),HomeActivity.class);
-				intent.putExtra("data", (String)res);
+				intent.putExtra("data", user.get(0).getUserId());
 				startActivity(intent);
 				getActivity().finish();
 			}
@@ -201,6 +210,7 @@ public class LoginFragment extends AccountBaseFragment{
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
+				dialog.dismiss();
 				toast((String)res);
 			}
 		},"User");

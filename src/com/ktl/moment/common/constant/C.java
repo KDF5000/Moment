@@ -9,8 +9,8 @@ public class C {
 		/**
 		 * url基地址
 		 */
-//		private static final String URL_BASE = "http://192.168.56.1/Moment/";
 		private static final String URL_BASE = "http://192.168.95.1/";
+//		private static final String URL_BASE = "http://192.168.249.1/";
 		
 		/**
 		 * 手机号登录
