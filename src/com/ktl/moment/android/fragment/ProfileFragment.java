@@ -1,5 +1,6 @@
 package com.ktl.moment.android.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.TestActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
+import com.ktl.moment.android.component.wheel.HoloWheelActivity;
 import com.ktl.moment.utils.ToastUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -104,7 +108,9 @@ public class ProfileFragment extends AccountBaseFragment{
 			
 			break;
 		case R.id.profile_place_tv:
-			
+			Intent intent = new Intent(getActivity(),
+					HoloWheelActivity.class);
+			startActivityForResult(intent, 1);
 			break;
 			
 		case R.id.profile_complete_btn:
@@ -112,6 +118,22 @@ public class ProfileFragment extends AccountBaseFragment{
 			break;
 		default:
 			break;
+		}
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if(data!=null){
+			switch(requestCode){
+			case 1:
+				String province = data.getStringExtra("provinceText");
+				String city = data.getStringExtra("cityText");
+				profilePlaceTv.setText(province+" "+ city);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
