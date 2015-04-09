@@ -10,8 +10,8 @@
          android:layout_width="30dp"
          android:layout_height="30dp"
          android:layout_gravity="center_horizontal"
-         android:src="@drawable/menu_find"
-         android:layout_marginTop="10dp"/>
+         android:src="@drawable/menu_find_press"
+         android:layout_marginTop="6dp"/>
 
     <TextView
         android:id="@+id/menu_item_text"

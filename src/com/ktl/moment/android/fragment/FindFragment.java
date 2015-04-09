@@ -71,7 +71,7 @@ public class FindFragment extends BaseFragment {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						findListView.setRefreshSuccess();
+						findListView.setRefreshSuccess("");
 						findListView.startLoadMore();//允许加载更多
 					}
 				}, 2*1000);

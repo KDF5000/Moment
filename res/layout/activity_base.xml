@@ -20,15 +20,6 @@
             android:textSize="@dimen/title_left_view_name_text_size"/>
         
         
-        <ImageView 
-            android:id="@+id/title_add_img_view"
-            android:contentDescription="@string/add_des"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/add"/>
-            
         <TextView 
             android:id="@+id/middle_title_tv"
             android:layout_width="wrap_content"

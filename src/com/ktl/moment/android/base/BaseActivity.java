@@ -27,7 +27,6 @@ import com.ktl.moment.manager.AppManager;
 public class BaseActivity extends FragmentActivity {
 	
 	protected TextView titleNameTv;
-	protected ImageView setImg;
 	protected RelativeLayout baseTitleReLayout;
 	protected LinearLayout baseActivityLayout;
 	protected FrameLayout contentLayout;
@@ -46,7 +45,6 @@ public class BaseActivity extends FragmentActivity {
 	
 	private void findViews(){
 		titleNameTv = (TextView) findViewById(R.id.title_left_view_name_tv);
-		setImg = (ImageView) findViewById(R.id.title_add_img_view);
 		baseTitleReLayout = (RelativeLayout) findViewById(R.id.activity_base_title_container_layout);
 		baseActivityLayout = (LinearLayout) findViewById(R.id.activity_base_layout);
 		contentLayout = (FrameLayout) findViewById(R.id.activity_base_content_container);
@@ -62,10 +60,8 @@ public class BaseActivity extends FragmentActivity {
 	protected void setHomeTitleVisible(boolean isVisible){
 		if(isVisible){
 			titleNameTv.setVisibility(View.VISIBLE);
-			setImg.setVisibility(View.VISIBLE);
 		}else{
 			titleNameTv.setVisibility(View.GONE);
-			setImg.setVisibility(View.GONE);
 		}
 	}
 	

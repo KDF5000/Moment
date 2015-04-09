@@ -15,6 +15,7 @@ public class MenuImageText extends LinearLayout {
 	private Context mContext;
 	private ImageView itemImage;// 菜单选项的图片
 	private TextView textView; // 菜单文字
+	private TypedArray mAttr;
 
 	public MenuImageText(Context context) {
 		this(context, null);
@@ -34,11 +35,14 @@ public class MenuImageText extends LinearLayout {
 		itemImage = (ImageView) findViewById(R.id.menu_item_image);
 		textView = (TextView) findViewById(R.id.menu_item_text);
 
-		TypedArray attr = context.getTheme().obtainStyledAttributes(attrs,
+		mAttr = context.getTheme().obtainStyledAttributes(attrs,
 				R.styleable.menu_image_text, defStyle, 0);
-		textView.setText(attr.getString(R.styleable.menu_image_text_menu_text));
-		itemImage.setImageDrawable(attr
-				.getDrawable(R.styleable.menu_image_text_menu_item_src));
+		textView.setText(mAttr.getString(R.styleable.menu_image_text_menu_text));
+		textView.setTextColor(mAttr.getColor(
+				R.styleable.menu_image_text_menu_item_text_unchecked_color, 0));
+		itemImage
+				.setImageDrawable(mAttr
+						.getDrawable(R.styleable.menu_image_text_menu_item_unchecked_src));
 	}
 
 	/**
@@ -46,14 +50,24 @@ public class MenuImageText extends LinearLayout {
 	 */
 	public void setChecked() {
 		if (itemImage != null && textView != null) {
-			
+			itemImage.setImageDrawable(mAttr
+							.getDrawable(R.styleable.menu_image_text_menu_item_checked_src));
+			textView.setTextColor(mAttr.getColor(
+							R.styleable.menu_image_text_menu_item_text_checked_color,
+							0));
 		}
 	}
+
 	/**
 	 * 设置未被选中状态
 	 */
-	public void setUnCheck(){
+	public void setUnCheck() {
 		if (itemImage != null && textView != null) {
+			itemImage.setImageDrawable(mAttr
+							.getDrawable(R.styleable.menu_image_text_menu_item_unchecked_src));
+			textView.setTextColor(mAttr.getColor(
+					R.styleable.menu_image_text_menu_item_text_unchecked_color,
+					0));
 		}
 	}
 }
