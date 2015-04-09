@@ -69,7 +69,15 @@
         <activity 
             android:name="com.ktl.moment.android.activity.HomeActivity">
         </activity>
-        
+        <!-- 测试activity  -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.TestActivity">
+        </activity>
+        <!-- 地区选择activity  -->
+        <activity 
+            android:name="com.ktl.moment.android.component.wheel.HoloWheelActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
