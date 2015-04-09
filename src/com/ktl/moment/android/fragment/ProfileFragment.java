@@ -1,7 +1,13 @@
 package com.ktl.moment.android.fragment;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +17,13 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.CameraSelectActivity;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
+import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.android.component.wheel.HoloWheelActivity;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.utils.EditTextUtil;
@@ -31,7 +40,7 @@ public class ProfileFragment extends AccountBaseFragment{
 	private ImageView verifyBack;
 	
 	@ViewInject(R.id.profile_photo)
-	private ImageView profilePhoto;
+	private CircleImageView profilePhoto;
 	
 	@ViewInject(R.id.profile_nickname_et)
 	private EditText profileNicknameEt;
@@ -108,7 +117,7 @@ public class ProfileFragment extends AccountBaseFragment{
 		}
 	}
 	
-	@OnClick({R.id.profile_back,R.id.profile_delete_nickname_text_img,R.id.profile_place_tv,R.id.profile_complete_btn})
+	@OnClick({R.id.profile_back,R.id.profile_photo,R.id.profile_delete_nickname_text_img,R.id.profile_place_tv,R.id.profile_complete_btn})
 	public void onClick(View v){
 		switch (v.getId()) {
 		case R.id.profile_back:
@@ -116,12 +125,16 @@ public class ProfileFragment extends AccountBaseFragment{
 				((OnBackToVerifyListener)getActivity()).backToVerifyClick();
 			}
 			break;
+		case R.id.profile_photo:
+			Intent cameraIntent = new Intent(getActivity(),CameraSelectActivity.class);
+			startActivityForResult(cameraIntent,C.ActivityRequest.REQUEST_SELECT_CAMERA_ACTIVITY);
+			break;
 		case R.id.profile_delete_nickname_text_img:
 			EditTextUtil.setEditTextEmpty(profileNicknameEt);
 			break;
 		case R.id.profile_place_tv:
 			Intent intent = new Intent(getActivity(),HoloWheelActivity.class);
-			startActivityForResult(intent, 1);
+			startActivityForResult(intent, C.ActivityRequest.QEQUEST_SELECT_CITY_ACTIVITY);
 			break;
 		case R.id.profile_complete_btn:
 			complete();
@@ -152,16 +165,25 @@ public class ProfileFragment extends AccountBaseFragment{
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-		if(data!=null){
-			switch(requestCode){
-				case 1:
-					String province = data.getStringExtra("provinceText");
-					String city = data.getStringExtra("cityText");
-					profilePlaceTv.setText(province+" "+ city);
-					break;
-				default:
+		switch(requestCode){
+			case C.ActivityRequest.QEQUEST_SELECT_CITY_ACTIVITY:
+				String province = data.getStringExtra("provinceText");
+				String city = data.getStringExtra("cityText");
+				profilePlaceTv.setText(province+" "+ city);
 				break;
-			}
+			case C.ActivityRequest.REQUEST_SELECT_CAMERA_ACTIVITY:
+				Uri cropUri  =  data.getParcelableExtra("cropPicUri");
+				try {
+					Bitmap bmp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), cropUri);
+					profilePhoto.setImageBitmap(bmp);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			break;
 		}
 	}
 }

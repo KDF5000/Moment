@@ -78,6 +78,11 @@
             android:name="com.ktl.moment.android.component.wheel.HoloWheelActivity"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
         </activity>
+        <!-- 拍照还是从相册选择图片 -->
+         <activity
+            android:name="com.ktl.moment.android.activity.CameraSelectActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

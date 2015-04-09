@@ -128,5 +128,15 @@ public class C {
 		public static final int BUSSINESS_TYPE = 1;//验证业务类型，当前智能验证业务参数值为1
 		
 	}
+	/**
+	 * Activity 跳转的request code
+	 */
+	public static final class ActivityRequest{
+		public static final int REQUEST_SELECT_CAMERA_ACTIVITY = 1;//请求选择拍照还是从相册获取图片方式
+		public static final int QEQUEST_CAMERA_ACTION = 2;//请求调用系统相机
+		public static final int REQUEST_PICK_ALBUM_ACTION = 3;//从相册选择
+		public static final int REQUEST_PICTURE_CROP_ACTION = 4;//裁剪图片
+		public static final int QEQUEST_SELECT_CITY_ACTIVITY = 5;//选择所在城市
+	}
 
 }
