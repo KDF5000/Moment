@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.fragment.LoginFragment;
+import com.ktl.moment.android.fragment.ProfileFragment;
 import com.ktl.moment.android.fragment.RegisterFragment;
 import com.ktl.moment.android.fragment.StartFragment;
 import com.ktl.moment.android.fragment.VerifyFragment;
@@ -31,6 +32,8 @@ public class AccountBaseFragment extends Fragment {
 			baseFragment = new RegisterFragment();
 		}else if(fragmentName.equals(C.Account.FRAGMENT_VERIFY)){
 			baseFragment = new VerifyFragment();
+		}else if(fragmentName.equals(C.Account.FRAGMENT_PROFILE)){
+			baseFragment = new ProfileFragment();
 		}
 		return baseFragment;
 	}

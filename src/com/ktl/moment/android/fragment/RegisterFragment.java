@@ -8,13 +8,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.AccountActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
-import com.ktl.moment.android.fragment.LoginFragment.OnCloseLoginListener;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.utils.EditTextUtil;
 import com.ktl.moment.utils.VerificationUtil;
@@ -49,6 +47,8 @@ public class RegisterFragment extends AccountBaseFragment{
 	private VerificationUtil verification;
 	
 	public OnCloseRegisterListener onCloseRegisterListener;
+	public OnBackToLoginListener onBackToLoginListener;
+	public OnNextListener onNextListener;
 	
 	public interface OnCloseRegisterListener{
 		void closeRegisterClick();
@@ -60,6 +60,18 @@ public class RegisterFragment extends AccountBaseFragment{
 	
 	public interface OnBackToLoginListener{
 		void backToLoginClick();
+	}
+	
+	public void setOnBackToLoginListener(OnBackToLoginListener onBackToLoginListener){
+		this.onBackToLoginListener = onBackToLoginListener;
+	}
+	
+	public interface OnNextListener{
+		void nextToVerifyClick();
+	}
+	
+	public void setOnNextListener(OnNextListener onNextListener){
+		this.onNextListener = onNextListener;
 	}
 
 	@Override
@@ -129,10 +141,6 @@ public class RegisterFragment extends AccountBaseFragment{
 	public void next(){
 		String phone = registerAccountEt.getText().toString().trim();
 		String pass = registerPassEt.getText().toString().trim();
-		AccountActivity  accountActivity = (AccountActivity)getActivity();
-		if(accountActivity!=null){
-			accountActivity.setRegisterData(phone, pass);
-		}
 		/*参数校验*/
 		if(phone.isEmpty()){
 			toast("请输入手机号");
@@ -146,6 +154,10 @@ public class RegisterFragment extends AccountBaseFragment{
 			toast("请输入密码");
 			return;
 		}
+		AccountActivity  accountActivity = (AccountActivity)getActivity();
+		if(accountActivity!=null){
+			accountActivity.setRegisterData(phone, pass);
+		}
 		if(C.Account.IS_SEND_VERIFY){
 			Log.i("tag", "here");
 			if(verification == null){
@@ -153,6 +165,9 @@ public class RegisterFragment extends AccountBaseFragment{
 			}
 			Log.i("register_phone", phone);
 			verification.requestVerificationCode(phone);
+		}
+		if(getActivity() instanceof OnNextListener){
+			((OnNextListener)getActivity()).nextToVerifyClick();
 		}
 	}
 		

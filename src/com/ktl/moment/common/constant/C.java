@@ -105,16 +105,8 @@ public class C {
 		public static final String FRAGMENT_FORGET_PASS = "forgetPassFragment";
 		public static final String FRAGMENT_REGISTER = "registerFragment";
 		public static final String FRAGMENT_VERIFY = "identifyFragment";
-		public static final String FRAGMENT_PERFECT_INFO = "perfectInfoFragment";
+		public static final String FRAGMENT_PROFILE = "perfectInfoFragment";
 		public static final String FRAGMENT_RECOMMEN = "recommenFragment";
-		
-		/**
-		 * fragment move direction flag
-		 */
-		public static final int ANIMATION_NO_ANIM = 0;		//第一次进入login页面
-		public static final int ANIMATION_ALPHA_IN = 1;		//第一次进入login页面
-		public static final int ANIMATION_MOVE_LEFT = 2;	//页面上滑
-		public static final int ANIMATION_MOVE_RIGHT = 3;	//页面下滑
 		
 		public static final boolean IS_SEND_VERIFY = false;	//是否开启验证码
 	}
