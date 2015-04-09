@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.AccountActivity;
@@ -32,20 +32,29 @@ public class VerifyFragment extends AccountBaseFragment implements ActionStartLi
 	@ViewInject(R.id.verify_next_btn)
 	private Button verifyNextbtn;
 	
-	@ViewInject(R.id.verify_to_register)
-	private LinearLayout verifyToRegister;
+	@ViewInject(R.id.verify_back)
+	private ImageView verifyBack;
 	
-	public BackToRegisterListener backToRegisterListener;
+	public OnBackToRegisterListener onBackToRegisterListener;
+	public OnNextToProfileListener onNextToProfileListener;
 	
 	private VerificationUtil verification;
 	private Map<String,String> registerData;
 	
-	public interface BackToRegisterListener{
+	public interface OnBackToRegisterListener{
 		void onBackToRegisterClick();
 	}
 	
-	public void setOnBackToRegisterListener(BackToRegisterListener backToRegisterListener){
-		this.backToRegisterListener = backToRegisterListener;
+	public void setOnBackToRegisterListener(OnBackToRegisterListener onBackToRegisterListener){
+		this.onBackToRegisterListener = onBackToRegisterListener;
+	}
+	
+	public interface OnNextToProfileListener{
+		void nextToProfileClick();
+	}
+	
+	public void setOnNextToProfileListener(OnNextToProfileListener onNextToProfileListener){
+		this.onNextToProfileListener = onNextToProfileListener;
 	}
 	
 	
@@ -69,7 +78,7 @@ public class VerifyFragment extends AccountBaseFragment implements ActionStartLi
 		}
 	}
 	
-	@OnClick({R.id.verify_resend_btn,R.id.verify_next_btn,R.id.verify_to_register})
+	@OnClick({R.id.verify_resend_btn,R.id.verify_next_btn,R.id.verify_back})
 	public void onClick(View v){
 		switch (v.getId()) {
 		case R.id.verify_resend_btn:
@@ -78,9 +87,9 @@ public class VerifyFragment extends AccountBaseFragment implements ActionStartLi
 		case R.id.verify_next_btn:
 			next();
 			break;
-		case R.id.verify_to_register:
-			if(getActivity() instanceof BackToRegisterListener){
-				((BackToRegisterListener)getActivity()).onBackToRegisterClick();
+		case R.id.verify_back:
+			if(getActivity() instanceof OnBackToRegisterListener){
+				((OnBackToRegisterListener)getActivity()).onBackToRegisterClick();
 			}
 		default:
 			break;
@@ -128,6 +137,10 @@ public class VerifyFragment extends AccountBaseFragment implements ActionStartLi
 			}
 			verification.startVerificationCode(registerData.get("phone"), verifyCode);
 			verification.setActionStartListener(this);
+		}else{
+			if(getActivity() instanceof OnNextToProfileListener){
+				((OnNextToProfileListener)getActivity()).nextToProfileClick();
+			}
 		}
 	}
 

@@ -18,6 +18,8 @@ public final class R {
         public static final int right_out=0x7f040006;
         public static final int white_content_move_down=0x7f040007;
         public static final int words_move_up=0x7f040008;
+        public static final int zrc_bottomitem_in=0x7f040009;
+        public static final int zrc_topitem_in=0x7f04000a;
     }
     public static final class attr {
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
@@ -53,23 +55,20 @@ containing a value of this type.
         public static final int menu_text=0x7f010002;
     }
     public static final class color {
-        /**  old layout colors 
-         */
         public static final int account_hint_color=0x7f080005;
         public static final int account_start_bg_color=0x7f080002;
         public static final int account_text_color=0x7f080006;
         public static final int com_sina_weibo_sdk_blue=0x7f080000;
         public static final int com_sina_weibo_sdk_loginview_text_color=0x7f080001;
-        public static final int found_background_color=0x7f08000b;
+        public static final int main_content_container_color=0x7f08000c;
+        public static final int main_title_color=0x7f08000b;
         public static final int register_and_login_btn_color=0x7f080004;
         public static final int register_to_login_color=0x7f080003;
         public static final int verify_resend_btn_on_finish_color=0x7f08000a;
         public static final int verify_resend_btn_on_tick_color=0x7f080008;
         public static final int verify_resend_on_finish_text_color=0x7f080009;
         public static final int verify_resend_on_tick_text_color=0x7f080007;
-        /**  发现页面背景色 
-         */
-        public static final int white=0x7f08000c;
+        public static final int white=0x7f08000d;
     }
     public static final class dimen {
         public static final int account_text_size=0x7f05000b;
@@ -99,196 +98,188 @@ containing a value of this type.
     }
     public static final class drawable {
         public static final int add=0x7f020000;
-        public static final int btn_shape=0x7f020001;
-        public static final int circle=0x7f020002;
-        public static final int close=0x7f020003;
-        public static final int com_sina_weibo_sdk_button_blue=0x7f020004;
-        public static final int com_sina_weibo_sdk_button_grey=0x7f020005;
-        public static final int com_sina_weibo_sdk_login_button_with_account_text=0x7f020006;
-        public static final int com_sina_weibo_sdk_login_button_with_frame_logo=0x7f020007;
-        public static final int com_sina_weibo_sdk_login_button_with_original_logo=0x7f020008;
-        public static final int default_img=0x7f020009;
-        public static final int edit_delete=0x7f02000a;
-        public static final int find_idea_show_shape=0x7f02000b;
-        public static final int find_press=0x7f02000c;
-        public static final int focus=0x7f02000d;
-        public static final int home=0x7f02000e;
-        public static final int ic_com_sina_weibo_sdk_button_blue_focused=0x7f02000f;
-        public static final int ic_com_sina_weibo_sdk_button_blue_normal=0x7f020010;
-        public static final int ic_com_sina_weibo_sdk_button_blue_pressed=0x7f020011;
-        public static final int ic_com_sina_weibo_sdk_button_grey_focused=0x7f020012;
-        public static final int ic_com_sina_weibo_sdk_button_grey_normal=0x7f020013;
-        public static final int ic_com_sina_weibo_sdk_button_grey_pressed=0x7f020014;
-        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_focused=0x7f020015;
-        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_normal=0x7f020016;
-        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_pressed=0x7f020017;
-        public static final int ic_com_sina_weibo_sdk_login_with_account_text_focused=0x7f020018;
-        public static final int ic_com_sina_weibo_sdk_login_with_account_text_normal=0x7f020019;
-        public static final int ic_com_sina_weibo_sdk_login_with_account_text_pressed=0x7f02001a;
-        public static final int ic_com_sina_weibo_sdk_login_with_text=0x7f02001b;
-        public static final int ic_com_sina_weibo_sdk_logo=0x7f02001c;
-        public static final int ic_launcher=0x7f02001d;
-        public static final int inspiration=0x7f02001e;
-        public static final int login_account=0x7f02001f;
-        public static final int login_bg=0x7f020020;
-        public static final int login_button_shape=0x7f020021;
-        public static final int login_card=0x7f020022;
-        public static final int login_forget=0x7f020023;
-        public static final int login_password=0x7f020024;
-        public static final int login_phone=0x7f020025;
-        public static final int logo=0x7f020026;
-        public static final int menu_add=0x7f020027;
-        public static final int menu_border=0x7f020028;
-        public static final int menu_find=0x7f020029;
-        public static final int menu_focus=0x7f02002a;
-        public static final int menu_idea=0x7f02002b;
-        public static final int menu_me=0x7f02002c;
-        public static final int phone=0x7f02002d;
+        public static final int back=0x7f020001;
+        public static final int btn_shape=0x7f020002;
+        public static final int circle=0x7f020003;
+        public static final int close=0x7f020004;
+        public static final int com_sina_weibo_sdk_button_blue=0x7f020005;
+        public static final int com_sina_weibo_sdk_button_grey=0x7f020006;
+        public static final int com_sina_weibo_sdk_login_button_with_account_text=0x7f020007;
+        public static final int com_sina_weibo_sdk_login_button_with_frame_logo=0x7f020008;
+        public static final int com_sina_weibo_sdk_login_button_with_original_logo=0x7f020009;
+        public static final int default_img=0x7f02000a;
+        public static final int edit_delete=0x7f02000b;
+        public static final int find_idea_show_shape=0x7f02000c;
+        public static final int ic_com_sina_weibo_sdk_button_blue_focused=0x7f02000d;
+        public static final int ic_com_sina_weibo_sdk_button_blue_normal=0x7f02000e;
+        public static final int ic_com_sina_weibo_sdk_button_blue_pressed=0x7f02000f;
+        public static final int ic_com_sina_weibo_sdk_button_grey_focused=0x7f020010;
+        public static final int ic_com_sina_weibo_sdk_button_grey_normal=0x7f020011;
+        public static final int ic_com_sina_weibo_sdk_button_grey_pressed=0x7f020012;
+        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_focused=0x7f020013;
+        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_normal=0x7f020014;
+        public static final int ic_com_sina_weibo_sdk_login_button_with_frame_logo_pressed=0x7f020015;
+        public static final int ic_com_sina_weibo_sdk_login_with_account_text_focused=0x7f020016;
+        public static final int ic_com_sina_weibo_sdk_login_with_account_text_normal=0x7f020017;
+        public static final int ic_com_sina_weibo_sdk_login_with_account_text_pressed=0x7f020018;
+        public static final int ic_com_sina_weibo_sdk_login_with_text=0x7f020019;
+        public static final int ic_com_sina_weibo_sdk_logo=0x7f02001a;
+        public static final int ic_launcher=0x7f02001b;
+        public static final int login_account=0x7f02001c;
+        public static final int login_button_shape=0x7f02001d;
+        public static final int login_forget=0x7f02001e;
+        public static final int login_password=0x7f02001f;
+        public static final int login_phone=0x7f020020;
+        public static final int logo=0x7f020021;
+        public static final int menu_add=0x7f020022;
+        public static final int menu_border=0x7f020023;
+        public static final int menu_find=0x7f020024;
+        public static final int menu_focus=0x7f020025;
+        public static final int menu_idea=0x7f020026;
+        public static final int menu_me=0x7f020027;
+        public static final int phone=0x7f020028;
+        public static final int profile_choice1=0x7f020029;
+        public static final int profile_choice2=0x7f02002a;
+        public static final int profile_nickname=0x7f02002b;
+        public static final int profile_photo=0x7f02002c;
+        public static final int profile_place=0x7f02002d;
         public static final int qq=0x7f02002e;
-        public static final int refresh=0x7f02002f;
-        public static final int register_button_shape=0x7f020030;
-        public static final int register_edit_layout_shape=0x7f020031;
-        public static final int register_next=0x7f020032;
-        public static final int remind=0x7f020033;
-        public static final int search=0x7f020034;
-        public static final int start_bg=0x7f020035;
-        public static final int start_lamp=0x7f020036;
-        public static final int start_white=0x7f020037;
-        public static final int start_words=0x7f020038;
-        public static final int verify_key=0x7f020039;
-        public static final int verify_resend_btn_on_finish_shape=0x7f02003a;
-        public static final int verify_resend_btn_on_tick_shape=0x7f02003b;
-        public static final int wechat=0x7f02003c;
-        public static final int weibo=0x7f02003d;
+        public static final int radio_style=0x7f02002f;
+        public static final int register_edit_layout_shape=0x7f020030;
+        public static final int start_bg=0x7f020031;
+        public static final int start_lamp=0x7f020032;
+        public static final int start_white=0x7f020033;
+        public static final int start_words=0x7f020034;
+        public static final int verify_key=0x7f020035;
+        public static final int verify_resend_btn_on_finish_shape=0x7f020036;
+        public static final int verify_resend_btn_on_tick_shape=0x7f020037;
+        public static final int wechat=0x7f020038;
+        public static final int weibo=0x7f020039;
     }
     public static final class id {
         public static final int account_base_layout=0x7f0a0000;
         public static final int account_content_cantainer=0x7f0a0001;
-        public static final int activity_base_content_container=0x7f0a000a;
+        public static final int activity_base_content_container=0x7f0a0007;
         public static final int activity_base_layout=0x7f0a0002;
         public static final int activity_base_title_container_layout=0x7f0a0003;
-        public static final int bottom_menu=0x7f0a000c;
-        public static final int follow_num=0x7f0a003d;
-        public static final int fragment_find_list=0x7f0a0037;
-        public static final int home_content_container=0x7f0a000b;
-        public static final int id_menu=0x7f0a0013;
-        public static final int login_account_et=0x7f0a0016;
-        public static final int login_account_layout=0x7f0a0015;
-        public static final int login_btn=0x7f0a001b;
-        public static final int login_close=0x7f0a0014;
-        public static final int login_delete_account_text_img=0x7f0a0017;
-        public static final int login_delete_pass_text_img=0x7f0a001a;
-        public static final int login_forget_pass_tv=0x7f0a001c;
-        public static final int login_pass_et=0x7f0a0019;
-        public static final int login_pass_layout=0x7f0a0018;
-        public static final int login_register_tv=0x7f0a001d;
-        public static final int menu_add=0x7f0a0012;
-        public static final int menu_find=0x7f0a000e;
-        public static final int menu_foucs=0x7f0a000f;
-        public static final int menu_idea=0x7f0a0010;
-        public static final int menu_item_image=0x7f0a003f;
-        public static final int menu_item_text=0x7f0a0040;
-        public static final int menu_main=0x7f0a000d;
-        public static final int menu_me=0x7f0a0011;
-        public static final int middle_title_tv=0x7f0a0009;
-        public static final int moment_content=0x7f0a0039;
-        public static final int moment_title=0x7f0a0038;
-        public static final int post_time=0x7f0a003c;
-        public static final int praise_num=0x7f0a003e;
-        public static final int register_account_et=0x7f0a0020;
-        public static final int register_account_layout=0x7f0a001f;
-        public static final int register_close=0x7f0a001e;
+        public static final int bottom_menu=0x7f0a0009;
+        public static final int follow_num=0x7f0a0038;
+        public static final int fragment_find_list=0x7f0a0032;
+        public static final int home_content_container=0x7f0a0008;
+        public static final int login_account_et=0x7f0a0012;
+        public static final int login_account_layout=0x7f0a0011;
+        public static final int login_btn=0x7f0a0017;
+        public static final int login_close=0x7f0a0010;
+        public static final int login_delete_account_text_img=0x7f0a0013;
+        public static final int login_delete_pass_text_img=0x7f0a0016;
+        public static final int login_forget_pass_tv=0x7f0a0018;
+        public static final int login_pass_et=0x7f0a0015;
+        public static final int login_pass_layout=0x7f0a0014;
+        public static final int login_register_tv=0x7f0a0019;
+        public static final int menu_add=0x7f0a000f;
+        public static final int menu_find=0x7f0a000b;
+        public static final int menu_foucs=0x7f0a000c;
+        public static final int menu_idea=0x7f0a000d;
+        public static final int menu_item_image=0x7f0a003a;
+        public static final int menu_item_text=0x7f0a003b;
+        public static final int menu_main=0x7f0a000a;
+        public static final int menu_me=0x7f0a000e;
+        public static final int middle_title_tv=0x7f0a0006;
+        public static final int moment_content=0x7f0a0034;
+        public static final int moment_title=0x7f0a0033;
+        public static final int post_time=0x7f0a0037;
+        public static final int praise_num=0x7f0a0039;
+        public static final int radioFemale=0x7f0a001d;
+        public static final int radioMale=0x7f0a001c;
+        public static final int register_account_et=0x7f0a001b;
+        public static final int register_account_layout=0x7f0a0020;
+        public static final int register_close=0x7f0a001f;
         public static final int register_delete_account_text_img=0x7f0a0021;
         public static final int register_delete_pass_text_img=0x7f0a0023;
-        public static final int register_next_btn=0x7f0a0024;
+        public static final int register_next_btn=0x7f0a001e;
         public static final int register_pass_et=0x7f0a0022;
-        public static final int register_to_login=0x7f0a0025;
-        public static final int start_login=0x7f0a002a;
-        public static final int start_lump=0x7f0a0026;
-        public static final int start_qq_img=0x7f0a002e;
-        public static final int start_register=0x7f0a002b;
-        public static final int start_wechat_img=0x7f0a002c;
-        public static final int start_weibo_img=0x7f0a002d;
-        public static final int start_white_content_layout=0x7f0a0028;
-        public static final int start_white_layout=0x7f0a0029;
-        public static final int start_word=0x7f0a0027;
-        public static final int textView1=0x7f0a0036;
-        public static final int title_add_img_view=0x7f0a0008;
+        public static final int register_to_login=0x7f0a0024;
+        public static final int start_login=0x7f0a0029;
+        public static final int start_lump=0x7f0a0025;
+        public static final int start_qq_img=0x7f0a002d;
+        public static final int start_register=0x7f0a002a;
+        public static final int start_wechat_img=0x7f0a002b;
+        public static final int start_weibo_img=0x7f0a002c;
+        public static final int start_white_content_layout=0x7f0a0027;
+        public static final int start_white_layout=0x7f0a0028;
+        public static final int start_word=0x7f0a0026;
+        public static final int textView1=0x7f0a0031;
+        public static final int title_add_img_view=0x7f0a0005;
         public static final int title_left_view_name_tv=0x7f0a0004;
-        public static final int title_refresh_img_view=0x7f0a0005;
-        public static final int title_remind_img_view=0x7f0a0007;
-        public static final int title_search_img_view=0x7f0a0006;
-        public static final int user_avatar=0x7f0a003a;
-        public static final int user_name=0x7f0a003b;
-        public static final int verify_account_layout=0x7f0a0031;
-        public static final int verify_code_et=0x7f0a0032;
-        public static final int verify_layout=0x7f0a002f;
-        public static final int verify_next_btn=0x7f0a0034;
-        public static final int verify_resend_btn=0x7f0a0033;
-        public static final int verify_to_register=0x7f0a0035;
-        public static final int verify_tv=0x7f0a0030;
+        public static final int user_avatar=0x7f0a0035;
+        public static final int user_name=0x7f0a0036;
+        public static final int verify_back=0x7f0a001a;
+        public static final int verify_code_et=0x7f0a002e;
+        public static final int verify_next_btn=0x7f0a0030;
+        public static final int verify_resend_btn=0x7f0a002f;
     }
     public static final class layout {
         public static final int activity_account=0x7f030000;
         public static final int activity_base=0x7f030001;
         public static final int activity_home=0x7f030002;
         public static final int bottom_menu=0x7f030003;
-        public static final int custom_menu=0x7f030004;
-        public static final int fragment_account_login=0x7f030005;
+        public static final int fragment_account_login=0x7f030004;
+        public static final int fragment_account_profile=0x7f030005;
         public static final int fragment_account_register=0x7f030006;
         public static final int fragment_account_start=0x7f030007;
         public static final int fragment_account_verify=0x7f030008;
         public static final int fragment_dynamic=0x7f030009;
         public static final int fragment_find=0x7f03000a;
-        public static final int fragment_find_back=0x7f03000b;
-        public static final int fragment_find_list_item=0x7f03000c;
-        public static final int fragment_me=0x7f03000d;
-        public static final int fragment_monment=0x7f03000e;
-        public static final int menu_item_img_text=0x7f03000f;
+        public static final int fragment_find_list_item=0x7f03000b;
+        public static final int fragment_me=0x7f03000c;
+        public static final int fragment_monment=0x7f03000d;
+        public static final int menu_item_img_text=0x7f03000e;
     }
     public static final class menu {
         public static final int main=0x7f090000;
     }
     public static final class string {
         public static final int accept_agreement=0x7f060006;
-        public static final int account_des=0x7f060019;
-        public static final int add_des=0x7f060021;
+        public static final int account_des=0x7f06001a;
+        public static final int add_des=0x7f060025;
         public static final int app_name=0x7f060003;
-        public static final int close_des=0x7f06001d;
+        public static final int back_des=0x7f06001f;
+        public static final int close_des=0x7f06001e;
         public static final int com_sina_weibo_sdk_login=0x7f060001;
         public static final int com_sina_weibo_sdk_login_with_weibo_account=0x7f060000;
         public static final int com_sina_weibo_sdk_logout=0x7f060002;
-        public static final int delete_icon_des=0x7f06001b;
-        public static final int found_text_view=0x7f060013;
+        public static final int delete_icon_des=0x7f06001c;
+        public static final int found_text_view=0x7f060014;
+        public static final int key_des=0x7f060020;
         public static final int login=0x7f060004;
-        /**  old 
-         */
         public static final int login_account_hint=0x7f060007;
-        public static final int login_forget_pass=0x7f06000a;
+        public static final int login_forget_pass=0x7f060009;
         public static final int login_pass_hint=0x7f060008;
-        public static final int login_third_party_title=0x7f060009;
-        public static final int pass_des=0x7f06001a;
-        public static final int qq_des=0x7f060017;
-        public static final int refresh_des=0x7f06001e;
-        public static final int register=0x7f06000b;
-        public static final int register_next=0x7f06000c;
-        public static final int register_next_des=0x7f06001c;
-        public static final int register_next_to_verify=0x7f06000d;
-        public static final int register_to_login=0x7f06000e;
-        public static final int remind_des=0x7f060020;
-        public static final int search_des=0x7f06001f;
+        public static final int pass_des=0x7f06001b;
+        public static final int peofile_complete=0x7f060013;
+        public static final int profile_nickname_des=0x7f060022;
+        public static final int profile_photo_des=0x7f060021;
+        public static final int profile_place_des=0x7f060023;
+        public static final int profile_sex=0x7f060010;
+        public static final int profile_sex_des=0x7f060024;
+        public static final int profile_sex_famale=0x7f060012;
+        public static final int profile_sex_male=0x7f060011;
+        public static final int qq_des=0x7f060018;
+        public static final int register=0x7f06000a;
+        public static final int register_next=0x7f06000b;
+        public static final int register_next_des=0x7f06001d;
+        public static final int register_next_to_verify=0x7f06000c;
+        public static final int register_to_login=0x7f06000d;
         /**  img&img_btn description 
          */
-        public static final int start_lump=0x7f060014;
-        public static final int start_words=0x7f060015;
+        public static final int start_lump=0x7f060015;
+        public static final int start_words=0x7f060016;
         public static final int strat_third_party_title=0x7f060005;
-        public static final int user_logo_des=0x7f060022;
-        public static final int verify=0x7f06000f;
-        public static final int verify_hint=0x7f060010;
-        public static final int verify_resend=0x7f060011;
-        public static final int verify_to_register=0x7f060012;
-        public static final int wechat_des=0x7f060016;
-        public static final int weibo_des=0x7f060018;
+        public static final int user_logo_des=0x7f060026;
+        public static final int verify_hint=0x7f06000e;
+        public static final int verify_resend=0x7f06000f;
+        public static final int wechat_des=0x7f060017;
+        public static final int weibo_des=0x7f060019;
     }
     public static final class style {
         /** 
@@ -378,6 +369,223 @@ containing a value of this type.
           @attr name com.ktl.moment:border_width
         */
         public static final int CircleImageView_border_width = 0;
+        /** Attributes that can be used with a ListView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #ListView_android_divider android:divider}</code></td><td> Drawable or color to draw between list items.</td></tr>
+           <tr><td><code>{@link #ListView_android_dividerHeight android:dividerHeight}</code></td><td> Height of the divider.</td></tr>
+           <tr><td><code>{@link #ListView_android_entries android:entries}</code></td><td> Reference to an array resource that will populate the ListView.</td></tr>
+           <tr><td><code>{@link #ListView_android_footerDividersEnabled android:footerDividersEnabled}</code></td><td> When set to false, the ListView will not draw the divider before each footer view.</td></tr>
+           <tr><td><code>{@link #ListView_android_headerDividersEnabled android:headerDividersEnabled}</code></td><td> When set to false, the ListView will not draw the divider after each header view.</td></tr>
+           <tr><td><code>{@link #ListView_android_overScrollFooter android:overScrollFooter}</code></td><td> Drawable to draw below list content.</td></tr>
+           <tr><td><code>{@link #ListView_android_overScrollHeader android:overScrollHeader}</code></td><td> Drawable to draw above list content.</td></tr>
+           </table>
+           @see #ListView_android_divider
+           @see #ListView_android_dividerHeight
+           @see #ListView_android_entries
+           @see #ListView_android_footerDividersEnabled
+           @see #ListView_android_headerDividersEnabled
+           @see #ListView_android_overScrollFooter
+           @see #ListView_android_overScrollHeader
+         */
+        public static final int[] ListView = {
+            0x010100b2, 0x01010129, 0x0101012a, 0x0101022e,
+            0x0101022f, 0x010102c2, 0x010102c3
+        };
+        /**
+          <p>
+          @attr description
+           Drawable or color to draw between list items. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#divider}.
+          @attr name android:divider
+        */
+        public static final int ListView_android_divider = 1;
+        /**
+          <p>
+          @attr description
+           Height of the divider. Will use the intrinsic height of the divider if this
+             is not specified. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#dividerHeight}.
+          @attr name android:dividerHeight
+        */
+        public static final int ListView_android_dividerHeight = 2;
+        /**
+          <p>
+          @attr description
+           Reference to an array resource that will populate the ListView.  For static content,
+             this is simpler than populating the ListView programmatically. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#entries}.
+          @attr name android:entries
+        */
+        public static final int ListView_android_entries = 0;
+        /**
+          <p>
+          @attr description
+           When set to false, the ListView will not draw the divider before each footer view.
+             The default value is true. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#footerDividersEnabled}.
+          @attr name android:footerDividersEnabled
+        */
+        public static final int ListView_android_footerDividersEnabled = 4;
+        /**
+          <p>
+          @attr description
+           When set to false, the ListView will not draw the divider after each header view.
+             The default value is true. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#headerDividersEnabled}.
+          @attr name android:headerDividersEnabled
+        */
+        public static final int ListView_android_headerDividersEnabled = 3;
+        /**
+          <p>
+          @attr description
+           Drawable to draw below list content. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#overScrollFooter}.
+          @attr name android:overScrollFooter
+        */
+        public static final int ListView_android_overScrollFooter = 6;
+        /**
+          <p>
+          @attr description
+           Drawable to draw above list content. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#overScrollHeader}.
+          @attr name android:overScrollHeader
+        */
+        public static final int ListView_android_overScrollHeader = 5;
+        /** Attributes that can be used with a ZrcAbsListView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #ZrcAbsListView_android_cacheColorHint android:cacheColorHint}</code></td><td> Indicates that this list will always be drawn on top of solid, single-color
+             opaque background.</td></tr>
+           <tr><td><code>{@link #ZrcAbsListView_android_choiceMode android:choiceMode}</code></td><td> Defines the choice behavior for the view.</td></tr>
+           <tr><td><code>{@link #ZrcAbsListView_android_drawSelectorOnTop android:drawSelectorOnTop}</code></td><td> When set to true, the selector will be drawn over the selected item.</td></tr>
+           <tr><td><code>{@link #ZrcAbsListView_android_listSelector android:listSelector}</code></td><td> Drawable used to indicate the currently selected item in the list.</td></tr>
+           <tr><td><code>{@link #ZrcAbsListView_android_scrollingCache android:scrollingCache}</code></td><td> When set to true, the list uses a drawing cache during scrolling.</td></tr>
+           <tr><td><code>{@link #ZrcAbsListView_android_smoothScrollbar android:smoothScrollbar}</code></td><td> When set to true, the list will use a more refined calculation
+             method based on the pixels height of the items visible on screen.</td></tr>
+           <tr><td><code>{@link #ZrcAbsListView_android_stackFromBottom android:stackFromBottom}</code></td><td> Used by ListView and GridView to stack their content from the bottom.</td></tr>
+           <tr><td><code>{@link #ZrcAbsListView_android_transcriptMode android:transcriptMode}</code></td><td> Sets the transcript mode for the list.</td></tr>
+           </table>
+           @see #ZrcAbsListView_android_cacheColorHint
+           @see #ZrcAbsListView_android_choiceMode
+           @see #ZrcAbsListView_android_drawSelectorOnTop
+           @see #ZrcAbsListView_android_listSelector
+           @see #ZrcAbsListView_android_scrollingCache
+           @see #ZrcAbsListView_android_smoothScrollbar
+           @see #ZrcAbsListView_android_stackFromBottom
+           @see #ZrcAbsListView_android_transcriptMode
+         */
+        public static final int[] ZrcAbsListView = {
+            0x010100fb, 0x010100fc, 0x010100fd, 0x010100fe,
+            0x01010100, 0x01010101, 0x0101012b, 0x01010231
+        };
+        /**
+          <p>
+          @attr description
+           Indicates that this list will always be drawn on top of solid, single-color
+             opaque background. This allows the list to optimize drawing. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#cacheColorHint}.
+          @attr name android:cacheColorHint
+        */
+        public static final int ZrcAbsListView_android_cacheColorHint = 5;
+        /**
+          <p>
+          @attr description
+           Defines the choice behavior for the view. By default, lists do not have
+             any choice behavior. By setting the choiceMode to singleChoice, the list
+             allows up to one item to be in a chosen state. By setting the choiceMode to
+             multipleChoice, the list allows any number of items to be chosen.
+             Finally, by setting the choiceMode to multipleChoiceModal the list allows
+             any number of items to be chosen in a special selection mode.
+             The application will supply a
+             {@link android.widget.AbsListView.MultiChoiceModeListener} using
+             {@link android.widget.AbsListView#setMultiChoiceModeListener} to control the
+             selection mode. This uses the {@link android.view.ActionMode} API. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#choiceMode}.
+          @attr name android:choiceMode
+        */
+        public static final int ZrcAbsListView_android_choiceMode = 6;
+        /**
+          <p>
+          @attr description
+           When set to true, the selector will be drawn over the selected item.
+             Otherwise the selector is drawn behind the selected item. The default
+             value is false. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#drawSelectorOnTop}.
+          @attr name android:drawSelectorOnTop
+        */
+        public static final int ZrcAbsListView_android_drawSelectorOnTop = 1;
+        /**
+          <p>
+          @attr description
+           Drawable used to indicate the currently selected item in the list. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#listSelector}.
+          @attr name android:listSelector
+        */
+        public static final int ZrcAbsListView_android_listSelector = 0;
+        /**
+          <p>
+          @attr description
+           When set to true, the list uses a drawing cache during scrolling.
+             This makes the rendering faster but uses more memory. The default
+             value is true. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#scrollingCache}.
+          @attr name android:scrollingCache
+        */
+        public static final int ZrcAbsListView_android_scrollingCache = 3;
+        /**
+          <p>
+          @attr description
+           When set to true, the list will use a more refined calculation
+             method based on the pixels height of the items visible on screen. This
+             property is set to true by default but should be set to false if your adapter
+             will display items of varying heights. When this property is set to true and
+             your adapter displays items of varying heights, the scrollbar thumb will
+             change size as the user scrolls through the list. When set to fale, the list
+             will use only the number of items in the adapter and the number of items visible
+             on screen to determine the scrollbar's properties. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#smoothScrollbar}.
+          @attr name android:smoothScrollbar
+        */
+        public static final int ZrcAbsListView_android_smoothScrollbar = 7;
+        /**
+          <p>
+          @attr description
+           Used by ListView and GridView to stack their content from the bottom. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#stackFromBottom}.
+          @attr name android:stackFromBottom
+        */
+        public static final int ZrcAbsListView_android_stackFromBottom = 2;
+        /**
+          <p>
+          @attr description
+           Sets the transcript mode for the list. In transcript mode, the list
+             scrolls to the bottom to make new items visible when they are added. 
+          <p>This corresponds to the global attribute
+          resource symbol {@link android.R.attr#transcriptMode}.
+          @attr name android:transcriptMode
+        */
+        public static final int ZrcAbsListView_android_transcriptMode = 4;
         /** Attributes that can be used with a menu_image_text.
            <p>Includes the following attributes:</p>
            <table>

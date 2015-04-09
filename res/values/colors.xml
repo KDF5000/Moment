@@ -4,7 +4,6 @@
     <color name="register_to_login_color">#5dd2f9</color>
     <color name="register_and_login_btn_color">#ac28d1e7</color>
     
-    <!-- old layout colors -->
     <color name="account_hint_color">#ffffff</color>
     <color name="account_text_color">#000000</color>
     
@@ -13,7 +12,6 @@
     <color name="verify_resend_on_finish_text_color">#8db67d</color>
     <color name="verify_resend_btn_on_finish_color">#ffffff</color>
     
-    <color name="found_background_color">#ffbcd4</color><!-- 发现页面背景色 -->
     <color name="main_title_color">#41aaf2</color>
     <color name="main_content_container_color">#eeeeee</color>
     <color name="white">#ffffff</color>

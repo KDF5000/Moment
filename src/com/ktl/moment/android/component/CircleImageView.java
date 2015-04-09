@@ -257,10 +257,10 @@ public class CircleImageView extends ImageView {
         mShaderMatrix.set(null);
 
         if (mBitmapWidth * mDrawableRect.height() > mDrawableRect.width() * mBitmapHeight) {
-            scale = mDrawableRect.height() / (float) mBitmapHeight;
+            scale = mDrawableRect.height() / mBitmapHeight;
             dx = (mDrawableRect.width() - mBitmapWidth * scale) * 0.5f;
         } else {
-            scale = mDrawableRect.width() / (float) mBitmapWidth;
+            scale = mDrawableRect.width() / mBitmapWidth;
             dy = (mDrawableRect.height() - mBitmapHeight * scale) * 0.5f;
         }
 

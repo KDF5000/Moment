@@ -41,7 +41,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:orientation="vertical"
-            menu:menu_item_src="@drawable/focus"
+            menu:menu_item_src="@drawable/menu_focus"
             menu:menu_text="" />
 
        <com.ktl.moment.android.component.MenuImageText
