@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
+import com.ktl.moment.android.component.wheel.HoloWheelActivity;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.utils.EditTextUtil;
 import com.ktl.moment.utils.ToastUtil;
@@ -119,9 +120,9 @@ public class ProfileFragment extends AccountBaseFragment{
 			EditTextUtil.setEditTextEmpty(profileNicknameEt);
 			break;
 		case R.id.profile_place_tv:
-			
+			Intent intent = new Intent(getActivity(),HoloWheelActivity.class);
+			startActivityForResult(intent, 1);
 			break;
-			
 		case R.id.profile_complete_btn:
 			complete();
 			break;
@@ -146,5 +147,21 @@ public class ProfileFragment extends AccountBaseFragment{
 		Intent intent = new Intent(getActivity(),HomeActivity.class);
 		startActivity(intent);
 		getActivity().finish();
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if(data!=null){
+			switch(requestCode){
+				case 1:
+					String province = data.getStringExtra("provinceText");
+					String city = data.getStringExtra("cityText");
+					profilePlaceTv.setText(province+" "+ city);
+					break;
+				default:
+				break;
+			}
+		}
 	}
 }
