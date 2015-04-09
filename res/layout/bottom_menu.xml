@@ -22,7 +22,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:orientation="vertical"
-            menu:menu_item_src="@drawable/menu_find"
+            menu:menu_item_unchecked_src="@drawable/menu_find"
+            menu:menu_item_checked_src="@drawable/menu_find_press"
+            menu:menu_item_text_unchecked_color="@color/menu_text_uncheked"
+            menu:menu_item_text_checked_color="@color/menu_text_checked"
             menu:menu_text="发现" />
 
        <com.ktl.moment.android.component.MenuImageText
@@ -32,7 +35,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:orientation="vertical"
-            menu:menu_item_src="@drawable/menu_focus"
+            menu:menu_item_unchecked_src="@drawable/menu_focus"
+            menu:menu_item_checked_src="@drawable/menu_focus_press"
+            menu:menu_item_text_unchecked_color="@color/menu_text_uncheked"
+            menu:menu_item_text_checked_color="@color/menu_text_checked"
             menu:menu_text="关注" />
 
        <com.ktl.moment.android.component.MenuImageText
@@ -41,7 +47,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:orientation="vertical"
-            menu:menu_item_src="@drawable/menu_focus"
+            menu:menu_item_unchecked_src="@drawable/menu_focus"
+            menu:menu_item_checked_src="@drawable/menu_focus_press"
+           menu:menu_item_text_unchecked_color="@color/menu_text_uncheked"
+            menu:menu_item_text_checked_color="@color/menu_text_checked"
             menu:menu_text="" />
 
        <com.ktl.moment.android.component.MenuImageText
@@ -51,7 +60,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:orientation="vertical"
-            menu:menu_item_src="@drawable/menu_idea"
+            menu:menu_item_unchecked_src="@drawable/menu_idea"
+            menu:menu_item_checked_src="@drawable/menu_idea_press"
+           menu:menu_item_text_unchecked_color="@color/menu_text_uncheked"
+            menu:menu_item_text_checked_color="@color/menu_text_checked"
             menu:menu_text="灵感" />
 
        <com.ktl.moment.android.component.MenuImageText
@@ -61,7 +73,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:orientation="vertical"
-            menu:menu_item_src="@drawable/menu_me"
+            menu:menu_item_unchecked_src="@drawable/menu_me"
+            menu:menu_item_checked_src="@drawable/menu_me_press"
+            menu:menu_item_text_unchecked_color="@color/menu_text_uncheked"
+            menu:menu_item_text_checked_color="@color/menu_text_checked"
             menu:menu_text="我的" />
     </LinearLayout>
 

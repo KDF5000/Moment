@@ -2,11 +2,16 @@
 <resources>
 
     <attr name="menu_text" format="string" />
-    <attr name="menu_item_src" format="reference"></attr>
-
+    <attr name="menu_item_unchecked_src" format="reference"></attr>
+    <attr name="menu_item_checked_src" format="reference"></attr>
+    <attr name="menu_item_text_unchecked_color" format="color"></attr>
+    <attr name="menu_item_text_checked_color" format="color"></attr>
     <declare-styleable name="menu_image_text">
         <attr name="menu_text" />
-        <attr name="menu_item_src" />
+        <attr name="menu_item_unchecked_src" />
+        <attr name="menu_item_checked_src" />
+        <attr name="menu_item_text_unchecked_color" ></attr>
+        <attr name="menu_item_text_checked_color" ></attr>
     </declare-styleable>
 
 </resources>
