@@ -127,9 +127,11 @@ public class VerifyFragment extends AccountBaseFragment implements ActionStartLi
 	
 	private void next(){
 		String verifyCode = verifyCodeEt.getText().toString().trim();
-		if(verifyCode.isEmpty()){
-			toast("请输入您收到的短信验证码");
-			return;
+		if(C.Account.IS_CHECK_INPUT){
+			if(verifyCode.isEmpty()){
+				toast("请输入您收到的短信验证码");
+				return;
+			}
 		}
 		if(C.Account.IS_SEND_VERIFY){
 			if(verification == null){

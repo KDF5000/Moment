@@ -1,5 +1,6 @@
 package com.ktl.moment.android.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
+import com.ktl.moment.common.constant.C;
+import com.ktl.moment.utils.EditTextUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -51,7 +55,16 @@ public class ProfileFragment extends AccountBaseFragment{
 	
 	private int sex;//0:male,1:female
 	
+	public OnBackToVerifyListener onBackToVerifyListener;
 
+	public interface OnBackToVerifyListener{
+		void backToVerifyClick();
+	}
+	
+	public void setOnBackToVerifyListener(OnBackToVerifyListener onBackToVerifyListener){
+		this.onBackToVerifyListener = onBackToVerifyListener;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -98,20 +111,40 @@ public class ProfileFragment extends AccountBaseFragment{
 	public void onClick(View v){
 		switch (v.getId()) {
 		case R.id.profile_back:
-			
+			if(getActivity() instanceof OnBackToVerifyListener){
+				((OnBackToVerifyListener)getActivity()).backToVerifyClick();
+			}
 			break;
 		case R.id.profile_delete_nickname_text_img:
-			
+			EditTextUtil.setEditTextEmpty(profileNicknameEt);
 			break;
 		case R.id.profile_place_tv:
 			
 			break;
 			
 		case R.id.profile_complete_btn:
-			
+			complete();
 			break;
 		default:
 			break;
 		}
+	}
+	
+	public void complete(){
+		String nickname = profileNicknameEt.getText().toString().trim();
+		String place = profilePlaceTv.getText().toString().trim();
+		if(C.Account.IS_CHECK_INPUT){
+			if(nickname.isEmpty()){
+				ToastUtil.show(getActivity(), "请输入昵称");
+				return;
+			}
+			if(place.isEmpty()){
+				ToastUtil.show(getActivity(), "请选择地址");
+				return;
+			}
+		}
+		Intent intent = new Intent(getActivity(),HomeActivity.class);
+		startActivity(intent);
+		getActivity().finish();
 	}
 }

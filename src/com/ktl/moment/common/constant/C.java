@@ -108,6 +108,7 @@ public class C {
 		public static final String FRAGMENT_PROFILE = "perfectInfoFragment";
 		public static final String FRAGMENT_RECOMMEN = "recommenFragment";
 		
+		public static final boolean IS_CHECK_INPUT = false;//是否对输入框等控件做空值检测
 		public static final boolean IS_SEND_VERIFY = false;	//是否开启验证码
 	}
 	

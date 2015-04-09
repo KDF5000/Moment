@@ -170,16 +170,18 @@ public class LoginFragment extends AccountBaseFragment{
 	private void mobileLogin (){
 		String phone = loginAccountEt.getText().toString().trim();
 		String pass = loginPassEt.getText().toString().trim();
-		if(phone.isEmpty()){
-			toast("请输入手机号");
-			return;
-		}else if(phone.length() != 11){
-			toast("请输入合法的手机号");
-			return;
-		}
-		if(pass.isEmpty()){
-			toast("请输入密码");
-			return;
+		if(C.Account.IS_CHECK_INPUT){
+			if(phone.isEmpty()){
+				toast("请输入手机号");
+				return;
+			}else if(phone.length() != 11){
+				toast("请输入合法的手机号");
+				return;
+			}
+			if(pass.isEmpty()){
+				toast("请输入密码");
+				return;
+			}
 		}
 		RequestParams params = new RequestParams();
 		Log.i("param", "phone="+phone+",pass="+pass);

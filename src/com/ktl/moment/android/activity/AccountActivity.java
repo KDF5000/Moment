@@ -18,6 +18,7 @@ import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.fragment.LoginFragment.OnCloseLoginListener;
 import com.ktl.moment.android.fragment.LoginFragment.OnForgetListener;
 import com.ktl.moment.android.fragment.LoginFragment.OnLoginToRegisterListener;
+import com.ktl.moment.android.fragment.ProfileFragment.OnBackToVerifyListener;
 import com.ktl.moment.android.fragment.RegisterFragment.OnBackToLoginListener;
 import com.ktl.moment.android.fragment.RegisterFragment.OnCloseRegisterListener;
 import com.ktl.moment.android.fragment.RegisterFragment.OnNextListener;
@@ -30,7 +31,8 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnTouch;
 
 public class AccountActivity extends BaseActivity implements OnLoginListener,OnLoginToRegisterListener,OnForgetListener,OnCloseLoginListener,
-	OnRegisterListener,OnCloseRegisterListener,OnBackToLoginListener,OnNextListener,OnBackToRegisterListener,OnNextToProfileListener{
+	OnRegisterListener,OnCloseRegisterListener,OnBackToLoginListener,OnNextListener,OnBackToRegisterListener,OnNextToProfileListener,
+	OnBackToVerifyListener{
 	
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
@@ -285,6 +287,13 @@ public class AccountActivity extends BaseActivity implements OnLoginListener,OnL
 	public void nextToProfileClick() {
 		// TODO Auto-generated method stub
 		switchFragmentByTag(C.Account.FRAGMENT_PROFILE, ANIMATION_MOVE_LEFT);
+	}
+
+
+	@Override
+	public void backToVerifyClick() {
+		// TODO Auto-generated method stub
+		switchFragmentByTag(C.Account.FRAGMENT_VERIFY, ANIMATION_MOVE_RIGHT);
 	}
 
 }

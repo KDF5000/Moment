@@ -52,10 +52,11 @@
                 android:background="#0000"
                 android:gravity="left|center"
                 android:hint="@string/profile_nickname"
-                android:inputType="phone"
                 android:maxLength="11"
                 android:singleLine="true"
-                android:textColor="@color/account_text_color">
+                android:textColor="@color/account_text_color"
+                android:textColorHint="@color/account_hint_color"
+                android:textSize="@dimen/account_text_size" >
 
                 <requestFocus />
             </EditText>
@@ -101,7 +102,8 @@
                 android:maxLength="11"
                 android:singleLine="true"
                 android:textColor="@color/account_text_color"
-                android:textColorHint="@color/account_hint_color" >
+                android:textColorHint="@color/account_hint_color"
+                android:textSize="@dimen/account_text_size" >
 
             </TextView>
         </LinearLayout>
