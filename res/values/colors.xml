@@ -12,6 +12,9 @@
     
     <color name="bocop_dialog_bg">#77000000</color>
     
+    <!-- ripple component-->
+    <color name="rippelColor">#0099CC</color>
+    
     <color name="main_title_color">#41aaf2</color>
     <color name="main_content_container_color">#eeeeee</color>
     <color name="white">#ffffff</color>

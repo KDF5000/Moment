@@ -1,0 +1,112 @@
+<com.ktl.moment.android.component.ResizeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ktl.moment"
+    android:id="@+id/editor_base_content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/editor_edit_area"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#0000"
+        android:gravity="left|top"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#afafaf" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/editor_edit_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="@string/editor_complete"
+            android:textColor="#41aaf2"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/editor_gallery_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/editor_gallery_des"
+                android:src="@drawable/editor_gellary_enable_selector" />
+
+            <ImageView
+                android:id="@+id/editor_record_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/editor_record_des"
+                android:src="@drawable/editor_record_unable_selector" />
+
+            <ImageView
+                android:id="@+id/editor_keyboard_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/editor_keyboard_des"
+                android:src="@drawable/editor_keyboard_enable_selector" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#afafaf" />
+
+    <RelativeLayout
+        android:id="@+id/editor_tool_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone" >
+
+        <!--
+             <ImageView
+            android:id="@+id/gallery_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/editor_login_qq"
+            android:visibility="gone" />-->
+
+        <com.ktl.moment.android.component.RippleBackground
+            android:id="@+id/editor_wave_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:rb_color="#71bff5"
+            app:rb_duration="3000"
+            app:rb_radius="32dp"
+            app:rb_rippleAmount="4"
+            app:rb_scale="6" >
+
+            <ImageView
+                android:id="@+id/editor_record_big_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/editor_record_big_des"
+                android:src="@drawable/editor_record_big" />
+        </com.ktl.moment.android.component.RippleBackground>
+    </RelativeLayout>
+
+</com.ktl.moment.android.component.ResizeLayout>

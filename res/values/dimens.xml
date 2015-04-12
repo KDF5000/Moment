@@ -8,5 +8,9 @@
     <dimen name="title_left_view_name_text_size">16sp</dimen>
     
     <dimen name="account_text_size">16sp</dimen>
+    
+    <!-- ripple component need -->
+    <dimen name="rippleStrokeWidth">2dp</dimen>
+    <dimen name="rippleRadius">64dp</dimen>
 
 </resources>

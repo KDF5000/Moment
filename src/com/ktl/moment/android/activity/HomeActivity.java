@@ -1,10 +1,10 @@
 package com.ktl.moment.android.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
@@ -68,8 +68,8 @@ public class HomeActivity extends BaseActivity {
 					tag = C.menu.FRAGMENT_DYNAMIC_TAG;
 					break;
 				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
-					Toast.makeText(HomeActivity.this, "add moment",
-							Toast.LENGTH_SHORT).show();
+					Intent editorIntent = new Intent(HomeActivity.this, EditorActivity.class);
+					startActivity(editorIntent);
 					return;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:
 					tag = C.menu.FRAGMENT_MOMENT_TAG;

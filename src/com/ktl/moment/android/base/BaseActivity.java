@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,11 +32,13 @@ public class BaseActivity extends FragmentActivity {
 	protected LinearLayout baseActivityLayout;
 	protected FrameLayout contentLayout;
 	protected TextView middleTitleTv;
+	protected ImageView titleBackImg;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
+//		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		setContentView(R.layout.activity_base);
 		
 		findViews();
@@ -50,11 +53,13 @@ public class BaseActivity extends FragmentActivity {
 		contentLayout = (FrameLayout) findViewById(R.id.activity_base_content_container);
 		
 		middleTitleTv = (TextView) findViewById(R.id.middle_title_tv);
+		titleBackImg = (ImageView) findViewById(R.id.title_back_img);
 	}
 
 	private void hideAllNavigationInfo(){
 		setHomeTitleVisible(false);
 		setMiddleTitleVisible(false);
+		setTitleBackImgVisible(false);
 	}
 	
 	protected void setHomeTitleVisible(boolean isVisible){
@@ -70,6 +75,14 @@ public class BaseActivity extends FragmentActivity {
 			middleTitleTv.setVisibility(View.VISIBLE);
 		}else{
 			middleTitleTv.setVisibility(View.GONE);
+		}
+	}
+	
+	protected void setTitleBackImgVisible(boolean isVisible){
+		if(isVisible){
+			titleBackImg.setVisibility(View.VISIBLE);
+		}else{
+			titleBackImg.setVisibility(View.GONE);
 		}
 	}
 	
