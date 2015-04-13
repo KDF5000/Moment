@@ -4,12 +4,28 @@ public class Moment extends BaseEntity{
 	private long momentId;//灵感id
 	private String title;//标题
 	private String content;//内容
+	private String momentImg;//灵感内部的图片
 	private String postTime;//发布时间
 	private int followNums;//关注的用户个数
 	private int praiseNums;//点赞的用户个数
+	private int commentsNum;//评论数
 	private long authorId;//发表人的id
 	private String authorNickName;//作者昵称
 	private String avatarUrl;//头像路径
+	
+	public String getMomentImg() {
+		return momentImg;
+	}
+	public void setMomentImg(String momentImg) {
+		this.momentImg = momentImg;
+	}
+	public int getCommentsNum() {
+		return commentsNum;
+	}
+	public void setCommentsNum(int commentsNum) {
+		this.commentsNum = commentsNum;
+	}
+	
 	public long getMomentId() {
 		return momentId;
 	}

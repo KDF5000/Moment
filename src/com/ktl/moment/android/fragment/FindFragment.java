@@ -108,6 +108,8 @@ public class FindFragment extends BaseFragment {
 			moment.setFollowNums(1234);
 			moment.setMomentId(1000);
 			moment.setPraiseNums(1232);
+			moment.setCommentsNum(100);
+			moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			moment.setAvatarUrl("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			moment.setPostTime("2小时前");
 			momentList.add(moment);
