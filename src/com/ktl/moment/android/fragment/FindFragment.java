@@ -62,6 +62,7 @@ public class FindFragment extends BaseFragment {
 	private void initEvent(){
 		handler = new Handler();
 		 // 下拉刷新事件回调（可选）
+		findListView.startLoadMore();//允许加载更多
         findListView.setOnRefreshStartListener(new OnStartListener() {
             @Override
             public void onStart() {
@@ -72,7 +73,6 @@ public class FindFragment extends BaseFragment {
 					public void run() {
 						// TODO Auto-generated method stub
 						findListView.setRefreshSuccess("");
-						findListView.startLoadMore();//允许加载更多
 					}
 				}, 2*1000);
             }
@@ -104,10 +104,12 @@ public class FindFragment extends BaseFragment {
 			moment.setTitle("不再懊悔 App 自动生成器");
 			moment.setContent("隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App");
 			moment.setAuthorNickName("KDF5000");
-			moment.setAuthorId(1000);
+			moment.setAuthorId(1000+i);
 			moment.setFollowNums(1234);
 			moment.setMomentId(1000);
 			moment.setPraiseNums(1232);
+			moment.setCommentsNum(100);
+			moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			moment.setAvatarUrl("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			moment.setPostTime("2小时前");
 			momentList.add(moment);

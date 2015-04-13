@@ -40,7 +40,8 @@ public class RichEditText extends EditText {
 	 */
 	public void addImage(Bitmap bitmap,String filePath) {
 		Log.i("imgpath", filePath);
-		String pathTag = "<momentimg src=\"" + filePath + "\"/>";
+//		String pathTag = "<momentimg src=\"" + filePath + "\"/>";
+		String pathTag = "<img src=\"" + filePath + "\"/>";
 		SpannableString spanString = new SpannableString(pathTag);
 		ImageSpan imgSpan = new ImageSpan(mContext, bitmap);
 		spanString.setSpan(imgSpan, 0, pathTag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
