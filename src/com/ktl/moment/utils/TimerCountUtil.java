@@ -146,4 +146,20 @@ public class TimerCountUtil extends Activity {
 		Log.i("line", "----------------------------------------------");
 	}
 	
+	/**
+	 * 删除录音(需要清零计时器)
+	 */
+	public void clearTimerCount(){
+		isThreadStop = true;
+		isNewStart = true;
+		//由于线程已终止，所以这里需要显式发送消息给handler更新UI
+		time = 0;
+		Message msg = new Message();
+		msg.what = 1;
+		msg.arg1 = time;
+		handler.sendMessage(msg);
+		Log.i("thread tag--------->", "clear");
+		Log.i("thread_tag", "isNewStart = true;isThreadStop = true;");
+		Log.i("line", "----------------------------------------------");
+	}
 }
