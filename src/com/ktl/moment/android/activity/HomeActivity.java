@@ -12,6 +12,7 @@ import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.BottomMenu;
 import com.ktl.moment.android.component.BottomMenu.OnMenuItemClickListener;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.utils.FileUtil;
 
 public class HomeActivity extends BaseActivity {
 	private static final String TAG = "HomeAtivity";
@@ -27,6 +28,8 @@ public class HomeActivity extends BaseActivity {
 		super.onCreate(arg0);
 		initView();
 		initEvent();
+
+		FileUtil.createDir("moment/");//在磁盘上创建应用文件夹
 
 		// 初始为发现界面
 		fragmentManager = getSupportFragmentManager();// 获取fragment的管理器

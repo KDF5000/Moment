@@ -7,6 +7,11 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 
+/**
+ * 录音计时工具类
+ * @author HUST_LH
+ *
+ */
 public class TimerCountUtil extends Activity {
 
 	private int time = 0;

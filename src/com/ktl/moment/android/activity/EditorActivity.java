@@ -9,10 +9,13 @@ import com.ktl.moment.android.component.ResizeLayout;
 import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
 import com.ktl.moment.android.component.RippleBackground;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.utils.FileUtil;
+import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.TimerCountUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+
 import java.util.Map;
 
 import android.annotation.SuppressLint;
@@ -39,6 +42,7 @@ import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
 import com.ktl.moment.qiniu.QiniuTask;
 import com.ktl.moment.utils.RichEditUtils;
+
 import android.widget.TextView;
 
 /**
@@ -108,7 +112,8 @@ public class EditorActivity extends BaseActivity{
 	private static final int RESIZE_LAYOUT = 1;
 	
 	private boolean flag = false;	//控制何时显示下方tools
-	private boolean recordFlag = false;		//标识是否在录音中
+	private boolean isPause = true;		//标识录音是否暂停,true=暂停中,false=录音中
+	private boolean hasPause = false;	//标识录音中是否暂停过
 	
 	private InputHandler inputHandler = new InputHandler();
 
@@ -143,6 +148,8 @@ public class EditorActivity extends BaseActivity{
 		getLayoutInflater().inflate(R.layout.activity_editor, contentLayout, true);
 		
 		init();
+		FileUtil.createDir("moment/record");
+		
 		setTitleBackImgVisible(true);
 		setBaseActivityBgColor(getResources().getColor(R.color.main_title_color));
 		appHeight = getAppHeight();
@@ -309,11 +316,13 @@ public class EditorActivity extends BaseActivity{
 		
 		//开始计时
 		TimerCountUtil.getInstance().startTimerCount();
+		//开始录音
+		RecordUtil.getInstance().start();
 		
 		editorRecordPause.setImageResource(R.drawable.editor_record_pause);
 		ripple.startRippleAnimation();
 		
-		recordFlag = true;
+		isPause = false;
 	}
 	
 	public void gallery(){
@@ -341,10 +350,11 @@ public class EditorActivity extends BaseActivity{
 			recordLayout.setVisibility(View.VISIBLE);
 
 			TimerCountUtil.getInstance().startTimerCount();
+			RecordUtil.getInstance().start();
 			
 			editorRecordPause.setImageResource(R.drawable.editor_record_pause);
 			ripple.startRippleAnimation();
-			recordFlag = true;
+			isPause = false;
 			
 		}else{
 			recordPause();
@@ -354,30 +364,36 @@ public class EditorActivity extends BaseActivity{
 	public void recordDelete(){
 		//清零计时器
 		TimerCountUtil.getInstance().clearTimerCount();
+		//清除暂存的录音文件
+		RecordUtil.getInstance().delete(isPause);
 		
 		editorRecordPause.setImageResource(R.drawable.editor_record_start);
+		
 		ripple.stopRippleAnimation();
-		recordFlag = false;
+		isPause = true;
 	}
 	
 	public void recordPause(){
-		if(recordFlag){
+		if(!isPause){//录音中
 			editorRecordPause.setImageResource(R.drawable.editor_record_start);
 			
 			//暂停计时
 			TimerCountUtil.getInstance().pauseTimerCount();
+			RecordUtil.getInstance().pause(isPause);
 			
 			ripple.stopRippleAnimation();
 			
-			recordFlag = false;
-		}else{
+			hasPause = true;
+			isPause = true;
+		}else{//已暂停
 			editorRecordPause.setImageResource(R.drawable.editor_record_pause);
 			
 			//继续计时
 			TimerCountUtil.getInstance().restartTimerCount();
+			RecordUtil.getInstance().pause(isPause);
 			
 			ripple.startRippleAnimation();
-			recordFlag = true;
+			isPause = false;
 		}
 	}
 	
@@ -387,9 +403,10 @@ public class EditorActivity extends BaseActivity{
 
 		//终止计时
 		TimerCountUtil.getInstance().stopTimerCount();
+		RecordUtil.getInstance().complete(hasPause, isPause);
 		
 		ripple.stopRippleAnimation();
-		recordFlag = false;
+		isPause = true;
 	}
 	
 	public void complete(){
