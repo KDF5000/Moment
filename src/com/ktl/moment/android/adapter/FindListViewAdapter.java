@@ -3,14 +3,17 @@ package com.ktl.moment.android.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.UserPageActivity;
 import com.ktl.moment.entity.Moment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -76,7 +79,7 @@ public class FindListViewAdapter extends BaseAdapter {
 		} else {
 			momentHolder = (MomentHolder) convertView.getTag();
 		}
-		Moment moment = momentList.get(position);
+		final Moment moment = momentList.get(position);
 		momentHolder.tittleTv.setText(moment.getTitle());
 		momentHolder.contentTv.setText(moment.getContent());
 		ImageLoader.getInstance().displayImage(moment.getAvatarUrl(),
@@ -88,6 +91,16 @@ public class FindListViewAdapter extends BaseAdapter {
 		momentHolder.followNum.setText(moment.getFollowNums() + "");
 		momentHolder.praiseNum.setText(moment.getPraiseNums() + "");
 		momentHolder.commentNum.setText(moment.getCommentsNum()+"");
+		momentHolder.avatar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(context,UserPageActivity.class);
+				intent.putExtra("userId", moment.getAuthorId());
+				context.startActivity(intent);
+			}
+		});
 		return convertView;
 	}
 

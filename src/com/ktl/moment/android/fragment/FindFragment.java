@@ -104,7 +104,7 @@ public class FindFragment extends BaseFragment {
 			moment.setTitle("不再懊悔 App 自动生成器");
 			moment.setContent("隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App");
 			moment.setAuthorNickName("KDF5000");
-			moment.setAuthorId(1000);
+			moment.setAuthorId(1000+i);
 			moment.setFollowNums(1234);
 			moment.setMomentId(1000);
 			moment.setPraiseNums(1232);
