@@ -316,7 +316,12 @@ public class EditorActivity extends BaseActivity{
 	}
 	
 	public void recordDelete(){
-		TimerCountUtil.getInstance().stopTimerCount();
+		//清零计时器
+		TimerCountUtil.getInstance().clearTimerCount();
+		
+		editorRecordPause.setImageResource(R.drawable.editor_record_start);
+		ripple.stopRippleAnimation();
+		recordFlag = false;
 	}
 	
 	public void recordPause(){
