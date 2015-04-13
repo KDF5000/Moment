@@ -59,5 +59,8 @@
     <string name="editor_gallery_des">gallery</string>
     <string name="editor_record_des">record</string>
     <string name="editor_keyboard_des">keyboard</string>
+    <string name="editor_record_delete_des">record_delete</string>
+    <string name="editor_record_pause_des">record_pause</string>
+    <string name="editor_record_over_des">record_over</string>
 
 </resources>
