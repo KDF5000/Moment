@@ -158,5 +158,8 @@ public class TimerCountUtil extends Activity {
 		msg.what = 1;
 		msg.arg1 = time;
 		handler.sendMessage(msg);
+		Log.i("thread tag--------->", "clear");
+		Log.i("thread_tag", "isNewStart = true;isThreadStop = true;");
+		Log.i("line", "----------------------------------------------");
 	}
 }

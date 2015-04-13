@@ -34,20 +34,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.ktl.moment.R;
-import com.ktl.moment.android.base.BaseActivity;
-import com.ktl.moment.android.component.ResizeLayout;
-import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
 import com.ktl.moment.android.component.RichEditText;
-import com.ktl.moment.android.component.RippleBackground;
-import com.ktl.moment.common.constant.C;
 import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
 import com.ktl.moment.qiniu.QiniuTask;
 import com.ktl.moment.utils.RichEditUtils;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
 import android.widget.TextView;
 
 /**
@@ -159,6 +150,9 @@ public class EditorActivity extends BaseActivity{
 	
 	private void init(){
 		ViewUtils.inject(this);
+
+		//初始化时设置录音计时器显示的TextView，否则在需要时再设置会报NPE
+		TimerCountUtil.getInstance().setTextView(editorRecordTimeTv);
 		
 		baseContent.setOnResizeListener(new OnResizeListener() {
 			@Override
@@ -289,6 +283,8 @@ public class EditorActivity extends BaseActivity{
 			recordDelete();
 			break;
 		case R.id.editor_record_big_img:
+			recordBig();
+			break;
 		case R.id.editor_record_pause:
 			recordPause();
 			break;
@@ -313,7 +309,6 @@ public class EditorActivity extends BaseActivity{
 		
 		//开始计时
 		TimerCountUtil.getInstance().startTimerCount();
-		TimerCountUtil.getInstance().setTextView(editorRecordTimeTv);
 		
 		editorRecordPause.setImageResource(R.drawable.editor_record_pause);
 		ripple.startRippleAnimation();
@@ -337,6 +332,23 @@ public class EditorActivity extends BaseActivity{
 	public void keyboard(){
 		showTools(R.id.editor_keyboard_img);
 		ripple.setVisibility(View.GONE);
+	}
+	
+	public void recordBig (){
+		
+		if(recordLayout.getVisibility() == View.GONE){
+			toolsLayout.setVisibility(View.GONE);
+			recordLayout.setVisibility(View.VISIBLE);
+
+			TimerCountUtil.getInstance().startTimerCount();
+			
+			editorRecordPause.setImageResource(R.drawable.editor_record_pause);
+			ripple.startRippleAnimation();
+			recordFlag = true;
+			
+		}else{
+			recordPause();
+		}
 	}
  
 	public void recordDelete(){
@@ -377,6 +389,7 @@ public class EditorActivity extends BaseActivity{
 		TimerCountUtil.getInstance().stopTimerCount();
 		
 		ripple.stopRippleAnimation();
+		recordFlag = false;
 	}
 	
 	public void complete(){
