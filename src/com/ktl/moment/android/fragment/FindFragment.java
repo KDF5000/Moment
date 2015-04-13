@@ -62,6 +62,7 @@ public class FindFragment extends BaseFragment {
 	private void initEvent(){
 		handler = new Handler();
 		 // 下拉刷新事件回调（可选）
+		findListView.startLoadMore();//允许加载更多
         findListView.setOnRefreshStartListener(new OnStartListener() {
             @Override
             public void onStart() {
@@ -72,7 +73,6 @@ public class FindFragment extends BaseFragment {
 					public void run() {
 						// TODO Auto-generated method stub
 						findListView.setRefreshSuccess("");
-						findListView.startLoadMore();//允许加载更多
 					}
 				}, 2*1000);
             }
