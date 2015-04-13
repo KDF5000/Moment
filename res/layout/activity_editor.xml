@@ -22,8 +22,9 @@
         android:background="#afafaf" />
 
     <LinearLayout
+        android:id="@+id/tools_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal" >
 
         <TextView
@@ -39,7 +40,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
@@ -69,6 +70,58 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/record_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/editor_record_des"
+            android:src="@drawable/editor_record_enable" />
+
+        <ImageView
+            android:id="@+id/editor_record_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/editor_record_delete_des"
+            android:src="@drawable/editor_record_delete_enable" />
+
+        <TextView
+            android:id="@+id/editor_record_time_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:textColor="#41aaf2"
+            android:textSize="24sp"
+            android:text="00:00" />
+
+        <ImageView
+            android:id="@+id/editor_record_pause"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/editor_record_pause_des"
+            android:src="@drawable/editor_record_start" />
+
+        <ImageView
+            android:id="@+id/editor_record_over"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/editor_record_over_des"
+            android:src="@drawable/editor_record_over_enable" />
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -86,7 +139,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/editor_login_qq"
-            android:visibility="gone" />-->
+            android:visibility="gone" />
+        -->
 
         <com.ktl.moment.android.component.RippleBackground
             android:id="@+id/editor_wave_content"

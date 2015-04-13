@@ -2,6 +2,17 @@ package com.ktl.moment.android.activity;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
+
+import com.ktl.moment.R;
+import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.ResizeLayout;
+import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
+import com.ktl.moment.android.component.RippleBackground;
+import com.ktl.moment.common.constant.C;
+import com.ktl.moment.utils.TimerCountUtil;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
@@ -37,6 +48,7 @@ import com.ktl.moment.utils.RichEditUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import android.widget.TextView;
 
 /**
  * 灵感编辑
@@ -45,6 +57,8 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
  */
 @SuppressLint("HandlerLeak")
 public class EditorActivity extends BaseActivity{
+	@ViewInject(R.id.tools_layout)
+	private LinearLayout toolsLayout;
 
 	@ViewInject(R.id.editor_record_img)
 	private ImageView recordImg;
@@ -70,21 +84,40 @@ public class EditorActivity extends BaseActivity{
 	@ViewInject(R.id.editor_wave_content)
 	private RippleBackground ripple;
 	
+	//录音时需要显示的控件
+	
+	@ViewInject(R.id.record_layout)
+	private LinearLayout recordLayout;
+	
+	@ViewInject(R.id.editor_record_delete)
+	private ImageView editorRecordDeleteImg;
+	
+	@ViewInject(R.id.editor_record_time_view)
+	private TextView editorRecordTimeTv;
+	
+	@ViewInject(R.id.editor_record_pause)
+	private ImageView editorRecordPause;
+	
+	@ViewInject(R.id.editor_record_over)
+	private ImageView editorRecordOver;
+	
 	//父类控件
 	@ViewInject(R.id.title_back_img)
 	private ImageView titleBackImg;
+	
 	@ViewInject(R.id.activity_base_title_container_layout)
 	private RelativeLayout baseTitleContainer;
 
 	private int appHeight;
 	private int baseLayoutHeight;
 
+	private int currentStatus;
 	private static final int SHOW_TOOLS = 1;
 	private static final int SHOW_KEY_BOARD = 2;
 	private static final int RESIZE_LAYOUT = 1;
-	private int currentStatus;
 	
-	private boolean flag = false;
+	private boolean flag = false;	//控制何时显示下方tools
+	private boolean recordFlag = false;		//标识是否在录音中
 	
 	private InputHandler inputHandler = new InputHandler();
 
@@ -183,7 +216,7 @@ public class EditorActivity extends BaseActivity{
 	 * 系统软键盘与工具栏的切换显示
 	 */
 	private void showTools(int id) {
-		if (id == R.id.editor_keyboard_img) {
+		if (id == R.id.editor_keyboard_img || id == R.id.editor_gallery_img) {
 			keyboardImg.setImageResource(R.drawable.editor_keyboard_enable_selector);
 			flag = false;
 			if (currentStatus == SHOW_TOOLS && editText.hasFocus()) {//&& contentLayout.getVisibility() == View.VISIBLE
@@ -225,7 +258,7 @@ public class EditorActivity extends BaseActivity{
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 						LinearLayout.LayoutParams.MATCH_PARENT, appHeight
 								- baseLayoutHeight - baseTitleContainer.getHeight());
-				Log.i("height", appHeight+"-"+ baseLayoutHeight+"-"+baseTitleContainer.getHeight());
+//				Log.i("height", appHeight+"-"+ baseLayoutHeight+"-"+baseTitleContainer.getHeight());
 				toolContent.setLayoutParams(params);
 				toolContent.setVisibility(View.VISIBLE);
 			} else {
@@ -235,7 +268,7 @@ public class EditorActivity extends BaseActivity{
 	}
 
 	@OnClick({R.id.editor_gallery_img,R.id.editor_record_img,R.id.editor_keyboard_img,R.id.editor_edit_complete,R.id.editor_record_big_img,
-		R.id.title_back_img})
+		R.id.title_back_img,R.id.editor_record_delete,R.id.editor_record_pause,R.id.editor_record_over})
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -250,12 +283,21 @@ public class EditorActivity extends BaseActivity{
 			break;
 		case R.id.editor_edit_complete:
 			saveContent();
+			complete();
+			break;
+		case R.id.editor_record_delete:
+			recordDelete();
 			break;
 		case R.id.editor_record_big_img:
-			
+		case R.id.editor_record_pause:
+			recordPause();
+			break;
+		case R.id.editor_record_over:
+			recordOver();
 			break;
 		case R.id.title_back_img:
 			actionStart(HomeActivity.class);
+			TimerCountUtil.getInstance().stopTimerCount();
 			break;
 		default:
 			break;
@@ -265,7 +307,18 @@ public class EditorActivity extends BaseActivity{
 	public void record(){
 		showTools(R.id.editor_record_img);
 		ripple.setVisibility(View.VISIBLE);
+		
+		toolsLayout.setVisibility(View.GONE);
+		recordLayout.setVisibility(View.VISIBLE);
+		
+		//开始计时
+		TimerCountUtil.getInstance().startTimerCount();
+		TimerCountUtil.getInstance().setTextView(editorRecordTimeTv);
+		
+		editorRecordPause.setImageResource(R.drawable.editor_record_pause);
 		ripple.startRippleAnimation();
+		
+		recordFlag = true;
 	}
 	
 	public void gallery(){
@@ -284,6 +337,45 @@ public class EditorActivity extends BaseActivity{
 	public void keyboard(){
 		showTools(R.id.editor_keyboard_img);
 		ripple.setVisibility(View.GONE);
+	}
+ 
+	public void recordDelete(){
+		TimerCountUtil.getInstance().stopTimerCount();
+	}
+	
+	public void recordPause(){
+		if(recordFlag){
+			editorRecordPause.setImageResource(R.drawable.editor_record_start);
+			
+			//暂停计时
+			TimerCountUtil.getInstance().pauseTimerCount();
+			
+			ripple.stopRippleAnimation();
+			
+			recordFlag = false;
+		}else{
+			editorRecordPause.setImageResource(R.drawable.editor_record_pause);
+			
+			//继续计时
+			TimerCountUtil.getInstance().restartTimerCount();
+			
+			ripple.startRippleAnimation();
+			recordFlag = true;
+		}
+	}
+	
+	public void recordOver(){
+		toolsLayout.setVisibility(View.VISIBLE);
+		recordLayout.setVisibility(View.GONE);
+
+		//终止计时
+		TimerCountUtil.getInstance().stopTimerCount();
+		
+		ripple.stopRippleAnimation();
+	}
+	
+	public void complete(){
+		
 	}
 	private void saveContent(){
 		Map<String,String> imgMap =  RichEditUtils.extractImg(editText.getText().toString());
