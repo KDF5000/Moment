@@ -11,7 +11,8 @@ public class RichEditUtils {
 	public static Map<String,String> extractImg(String content){
 		//通过七牛sdk将文本里含有的图片上传，获取七牛的图片外链
 		//<momentimg\s+src="([\w/\\]+)"\s*/>
-		String str ="<momentimg src=\"(/[\\w/\\/.]+)\"\\s*/>";
+//		String str ="<momentimg src=\"(/[\\w/\\/.]+)\"\\s*/>";
+		String str ="<img src=\"(/[\\w/\\/.]+)\"\\s*/>";
 		Pattern pattern = Pattern.compile(str);
 		Matcher matcher = pattern.matcher(content);
 //	    String res = "";

@@ -7,6 +7,7 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.component.ResizeLayout;
 import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
+import com.ktl.moment.android.component.RichEditText;
 import com.ktl.moment.android.component.RippleBackground;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.utils.TimerCountUtil;
@@ -34,20 +35,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.ktl.moment.R;
-import com.ktl.moment.android.base.BaseActivity;
-import com.ktl.moment.android.component.ResizeLayout;
-import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
-import com.ktl.moment.android.component.RichEditText;
-import com.ktl.moment.android.component.RippleBackground;
-import com.ktl.moment.common.constant.C;
 import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
 import com.ktl.moment.qiniu.QiniuTask;
 import com.ktl.moment.utils.RichEditUtils;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
 import android.widget.TextView;
 
 /**
@@ -283,7 +274,6 @@ public class EditorActivity extends BaseActivity{
 			break;
 		case R.id.editor_edit_complete:
 			saveContent();
-			complete();
 			break;
 		case R.id.editor_record_delete:
 			recordDelete();
@@ -374,10 +364,12 @@ public class EditorActivity extends BaseActivity{
 		ripple.stopRippleAnimation();
 	}
 	
-	public void complete(){
-		
-	}
 	private void saveContent(){
+		//没有网络的话保存到本地
+//		Intent intent = new Intent(EditorActivity.this,TestActivity.class);
+//		intent.putExtra("data", editText.getText().toString());
+//		startActivity(intent);
+		//有网的情况下直接上传
 		Map<String,String> imgMap =  RichEditUtils.extractImg(editText.getText().toString());
 		TaskManager manager = new TaskManager();
 		manager.setTaskCallBack(new TaskCallback() {
@@ -399,6 +391,9 @@ public class EditorActivity extends BaseActivity{
 				}
 				//上传到服务器
 				Toast.makeText(EditorActivity.this, content, Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(EditorActivity.this,TestActivity.class);
+				intent.putExtra("data",content);
+				startActivity(intent);
 			}
 		});
 		for (Map.Entry<String, String> entry : imgMap.entrySet()) {
