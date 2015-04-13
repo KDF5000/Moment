@@ -11,7 +11,10 @@ public class C {
 		 */
 		private static final String URL_BASE = "http://192.168.95.1/";
 //		private static final String URL_BASE = "http://192.168.249.1/";
-		
+		/**
+		 * 七牛基地址
+		 */
+		public static final String QINIU_BASE_URL = "http://7xigjm.com1.z0.glb.clouddn.com/";
 		/**
 		 * 手机号登录
 		 */
