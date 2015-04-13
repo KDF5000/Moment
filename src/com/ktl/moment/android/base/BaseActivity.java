@@ -10,7 +10,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -164,5 +167,26 @@ public class BaseActivity extends FragmentActivity {
 	    } else { 
 	    	AppManager.getInstance().AppExit(this);
 	    }  
+	}
+	
+	/**
+	 * 获取指定uri的本地绝对路径
+	 * @param uri
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	protected String getAbsoluteImagePath(Uri uri) {
+		// can post image
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = managedQuery(uri, proj, // Which columns to return
+				null, // WHERE clause; which rows to return (all rows)
+				null, // WHERE clause selection arguments (none)
+				null); // Order-by clause (ascending by name)
+
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+
+		return cursor.getString(column_index);
 	}
 }

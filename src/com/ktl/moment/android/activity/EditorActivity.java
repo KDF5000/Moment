@@ -1,5 +1,6 @@
 package com.ktl.moment.android.activity;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 
 import com.ktl.moment.R;
@@ -12,10 +13,15 @@ import com.ktl.moment.utils.TimerCountUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import java.util.Map;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,10 +29,25 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import com.ktl.moment.R;
+import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.ResizeLayout;
+import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
+import com.ktl.moment.android.component.RichEditText;
+import com.ktl.moment.android.component.RippleBackground;
+import com.ktl.moment.common.constant.C;
+import com.ktl.moment.manager.TaskManager;
+import com.ktl.moment.manager.TaskManager.TaskCallback;
+import com.ktl.moment.qiniu.QiniuTask;
+import com.ktl.moment.utils.RichEditUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import android.widget.TextView;
 
 /**
@@ -52,7 +73,7 @@ public class EditorActivity extends BaseActivity{
 	private ImageView recordBigImg;
 	
 	@ViewInject(R.id.editor_edit_area)
-	private EditText editText;
+	private RichEditText editText;
 
 	@ViewInject(R.id.editor_tool_content)
 	private RelativeLayout toolContent;
@@ -261,6 +282,7 @@ public class EditorActivity extends BaseActivity{
 			keyboard();
 			break;
 		case R.id.editor_edit_complete:
+			saveContent();
 			complete();
 			break;
 		case R.id.editor_record_delete:
@@ -304,9 +326,11 @@ public class EditorActivity extends BaseActivity{
 		ripple.setVisibility(View.GONE);
 
 		//调用系统图库
-		Intent getImg = new Intent(Intent.ACTION_GET_CONTENT);
-		getImg.addCategory(Intent.CATEGORY_OPENABLE);
-		getImg.setType("image/*");
+//		Intent getImg = new Intent(Intent.ACTION_GET_CONTENT);
+//		getImg.addCategory(Intent.CATEGORY_OPENABLE);
+//		getImg.setType("image/*");
+		Intent getImg = new Intent(Intent.ACTION_PICK,
+				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		startActivityForResult(getImg, C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION);
 	}
 	
@@ -314,7 +338,7 @@ public class EditorActivity extends BaseActivity{
 		showTools(R.id.editor_keyboard_img);
 		ripple.setVisibility(View.GONE);
 	}
-	
+ 
 	public void recordDelete(){
 		//清零计时器
 		TimerCountUtil.getInstance().clearTimerCount();
@@ -357,5 +381,62 @@ public class EditorActivity extends BaseActivity{
 	
 	public void complete(){
 		
+	}
+	private void saveContent(){
+		Map<String,String> imgMap =  RichEditUtils.extractImg(editText.getText().toString());
+		TaskManager manager = new TaskManager();
+		manager.setTaskCallBack(new TaskCallback() {
+			
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				Toast.makeText(EditorActivity.this,msg, Toast.LENGTH_SHORT).show();
+			}
+			
+			@Override
+			public void onComplete(Map<String, String> resMap) {
+				// TODO Auto-generated method stub
+				String content = editText.getText().toString();
+				for(Map.Entry<String, String> entry:resMap.entrySet()){
+					Log.i("URL", "-->"+entry.getKey()+"="+entry.getValue());
+					//替换et内容
+					content = content.replaceAll(entry.getKey(), "<img src=\""+C.API.QINIU_BASE_URL + entry.getValue()+"\"/>");
+				}
+				//上传到服务器
+				Toast.makeText(EditorActivity.this, content, Toast.LENGTH_SHORT).show();
+			}
+		});
+		for (Map.Entry<String, String> entry : imgMap.entrySet()) {
+			QiniuTask  task = new QiniuTask(EditorActivity.this, manager);
+			task.setKey(entry.getKey());
+			task.setLocalPath(entry.getValue());
+			manager.addTask(task);
+		}
+		manager.startTask();
+	}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			ContentResolver resolver = getContentResolver();
+			Bitmap originalBitmap = null;
+			//添加图片
+			if (requestCode == C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION) {
+				Uri originalUri = data.getData();
+				try {
+					originalBitmap = BitmapFactory.decodeStream(resolver
+							.openInputStream(originalUri));
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (originalBitmap != null) {
+					editText.addImage(originalBitmap,getAbsoluteImagePath(originalUri));
+				} else {
+					Toast.makeText(this, "获取图片失败", Toast.LENGTH_LONG).show();
+				}
+			}
+		}
 	}
 }

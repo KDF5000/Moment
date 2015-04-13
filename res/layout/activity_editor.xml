@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <EditText
+    <com.ktl.moment.android.component.RichEditText
         android:id="@+id/editor_edit_area"
         android:layout_width="match_parent"
         android:layout_height="0dp"
