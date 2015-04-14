@@ -145,5 +145,11 @@ public class C {
 		public static final int REQUEST_PICTURE_CROP_ACTION = 4;//裁剪图片
 		public static final int QEQUEST_SELECT_CITY_ACTIVITY = 5;//选择所在城市
 	}
-
+	/**
+	 * 文件类型 声音 图片
+	 */
+	public static final class FileType{
+		public static final String IMAGE_TYPE = "img_";
+		public static final String AUDIO_TYPE = "audio_";
+	}
 }
