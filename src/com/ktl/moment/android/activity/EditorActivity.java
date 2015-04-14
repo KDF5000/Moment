@@ -38,7 +38,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.ktl.moment.android.component.RichEditText;
 import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
 import com.ktl.moment.qiniu.QiniuTask;
@@ -149,7 +148,7 @@ public class EditorActivity extends BaseActivity{
 		getLayoutInflater().inflate(R.layout.activity_editor, contentLayout, true);
 		
 		init();
-		FileUtil.createDir("moment/record");
+		FileUtil.createDir("record");
 		
 		setTitleBackImgVisible(true);
 		setBaseActivityBgColor(getResources().getColor(R.color.main_title_color));

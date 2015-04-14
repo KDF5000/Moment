@@ -29,7 +29,7 @@ public class HomeActivity extends BaseActivity {
 		initView();
 		initEvent();
 
-		FileUtil.createDir("moment/");//在磁盘上创建应用文件夹
+		FileUtil.createAppRootDir();//在磁盘上创建应用文件夹
 
 		// 初始为发现界面
 		fragmentManager = getSupportFragmentManager();// 获取fragment的管理器
