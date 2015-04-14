@@ -1,8 +1,6 @@
 package com.ktl.moment.android.component;
 
 
-import com.ktl.moment.R;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,6 +9,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import com.ktl.moment.R;
 
 public class BottomMenu extends RelativeLayout implements OnClickListener {
 

@@ -1,7 +1,5 @@
 package com.ktl.moment.android.component;
 
-import com.ktl.moment.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -9,6 +7,8 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.ktl.moment.R;
 
 public class MenuImageText extends LinearLayout {
 

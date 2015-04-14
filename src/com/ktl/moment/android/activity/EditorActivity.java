@@ -32,6 +32,7 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -257,7 +258,7 @@ public class EditorActivity extends BaseActivity{
 		if (toolContent != null) {
 			if (isShow && flag) {
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.MATCH_PARENT, appHeight
+						LayoutParams.MATCH_PARENT, appHeight
 								- baseLayoutHeight - baseTitleContainer.getHeight());
 //				Log.i("height", appHeight+"-"+ baseLayoutHeight+"-"+baseTitleContainer.getHeight());
 				toolContent.setLayoutParams(params);

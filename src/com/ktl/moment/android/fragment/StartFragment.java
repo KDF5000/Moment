@@ -4,7 +4,10 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +22,16 @@ import android.widget.Toast;
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
+import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.QQShareHelper;
 import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.loopj.android.http.RequestParams;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -172,7 +179,8 @@ public class StartFragment extends AccountBaseFragment{
 	private UsersAPI mUsersAPI; 
 
 	private QQShareHelper qqShareHelper;
-	private static final int FLAG_QQ_LOGIN_SUCCESS = 0;
+	private static final int FLAG_GET_QQ_USER_INFO_COMPLETE = 0;
+	private static final int FLAG_QQ_LOGIN = 1;
 	
 	private void weiboLogin(){
 		mAuthInfo = new AuthInfo(getActivity(), C.ThirdSdk.WEIBO_APP_KEY,
@@ -273,7 +281,7 @@ public class StartFragment extends AccountBaseFragment{
 	/**
 	 * 获取用户qq信息
 	 */
-	private void updateUserInfo(){
+	private void getQQUserInfo(){
 		if(qqShareHelper.getTencent() != null && qqShareHelper.getTencent().isSessionValid()){
 			IUiListener listener = new IUiListener() {
 				
@@ -287,10 +295,10 @@ public class StartFragment extends AccountBaseFragment{
 				public void onComplete(final Object response) {
 					// TODO Auto-generated method stub
 					//UI改版后这里没有任何回调数据，所以直接进行页面跳转，后续如果需要上传需要的数据，直接完善此块注释代码即可
-//					Message msg = new Message();
-//					msg.obj = response;
-//					msg.what = 0;
-//					handler.sendMessage(msg);
+					Message msg = new Message();
+					msg.obj = response;
+					msg.what = FLAG_GET_QQ_USER_INFO_COMPLETE;
+					handler.sendMessage(msg);
 //					/**
 //					 * 这里为了避免对不安全的UI线程操作引起异常发生,将该线程与handler线程（更新UI需要通知主线程来更新）分开
 //					 */
@@ -299,19 +307,16 @@ public class StartFragment extends AccountBaseFragment{
 //						public void run() {
 //							// TODO Auto-generated method stub
 //							JSONObject jsonObject = (JSONObject) response;
-//							if(jsonObject.has("figureurl")){
-//								Bitmap bitmap = null;
-//								bitmap = BitmapUtil.getBitmapFromNet(jsonObject.optString("figureurl_qq_2"));
-//								Message msg = new Message();
-//								msg.obj = bitmap;
-//								msg.what = 1;
-//								handler.sendMessage(msg);
-//							}
+////							if(jsonObject.has("figureurl")){
+////								Bitmap bitmap = null;
+////								bitmap = BitmapUtil.getBitmapFromNet(jsonObject.optString("figureurl_qq_2"));
+////								Message msg = new Message();
+////								msg.obj = bitmap;
+////								msg.what = 1;
+////								handler.sendMessage(msg);
+////							}
 //						}
 //					}.start();
-
-					//完成用户头像绘制后跳转至主界面
-					actionStart(HomeActivity.class);
 				}
 				
 				@Override
@@ -324,32 +329,51 @@ public class StartFragment extends AccountBaseFragment{
 		}
 	}
 	
-//	Handler handler = new Handler(){
-//
-//		@Override
-//		public void handleMessage(Message msg) {
-//			// TODO Auto-generated method stub
-//			if(msg.what == 0){
-//				JSONObject jsonObject = (JSONObject) msg.obj;
-//				String nickName = jsonObject.optString("nickname");
-//				String gender = "2";
-//				String sex = jsonObject.optString("gender");
-//				if(sex.equals("男")){
-//					gender = "0";
-//				}else if(sex.equals("女")){
-//					gender = "1";
-//				}
-//				toast("nickname="+nickName+",gender="+gender);
-//				
-////				String uri = jsonObject.optString("figureurl_qq_2");
-////				BitmapUtils bitmapUtils = new BitmapUtils(getActivity());
-////				bitmapUtils.display(headImg, uri);
-//			}else{
-////				Bitmap bitmap = (Bitmap) msg.obj;
-////				headImg.setImageBitmap(bitmap);
-//			}
-//		}
-//	};
+	Handler handler = new Handler(){
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			if(msg.what == FLAG_GET_QQ_USER_INFO_COMPLETE){
+				final JSONObject jsonObject = (JSONObject) msg.obj;
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						String nickName = jsonObject.optString("nickname");
+						int gender = 1;
+						String sex = jsonObject.optString("gender");
+						if(sex.equals("男")){
+							gender = 1;
+						}else if(sex.equals("女")){
+							gender = 0;
+						}
+						String avatarUrl = jsonObject.optString("figureurl_qq_2");
+						String openId = "qq" + qqShareHelper.getTencent().getOpenId();
+						int loginType = 1;	//用于区分第三方登陆方式
+						
+						RequestParams params = new RequestParams();
+						params.put("identifier", openId);
+						params.put("logintype", loginType);
+						params.put("nickName", nickName);
+						params.put("userAvatar", avatarUrl);
+						params.put("sex", gender);
+						
+						Message msg = new Message();
+						msg.obj = params;
+						msg.what = FLAG_QQ_LOGIN;
+						handler.sendMessage(msg);
+					}
+				}).start();
+				
+			}else if(msg.what == FLAG_QQ_LOGIN){
+				RequestParams params = (RequestParams) msg.obj;
+				Log.i("tag", params+"");
+				thirdPartyLogin(params);
+			}
+		}
+	};
 	
 	/**
 	 * 获取用户授权登陆token
@@ -374,7 +398,7 @@ public class StartFragment extends AccountBaseFragment{
 		protected void doComplete(JSONObject values) {
 			toast("login");
 			initOpenIdAndToken(values);
-			updateUserInfo();
+			getQQUserInfo();
 		};
 	};
 	
@@ -383,7 +407,7 @@ public class StartFragment extends AccountBaseFragment{
 			qqShareHelper.getTencent().login(getActivity(), "all", qqLoginListener);
 		}else{
 			qqShareHelper.getTencent().logout(getActivity());
-			updateUserInfo();
+			getQQUserInfo();
 		}
 	}
 	
@@ -427,5 +451,32 @@ public class StartFragment extends AccountBaseFragment{
 	 * QQ Login End
 	 * **************************************************************************/
 
+	/**
+	 * 第三方登陆请求
+	 * @param params
+	 */
+	public void thirdPartyLogin(RequestParams params){
+		final LoadingDialog dialog = new LoadingDialog(getActivity());
+		dialog.show();
+		ApiManager.getInstance().post(getActivity(), C.API.USER_THIRD_PARTY_LOGIN, params, new HttpCallBack() {
+			
+			@Override
+			public void onSuccess(Object res) {
+				// TODO Auto-generated method stub
+				/**
+				 * 登陆成功跳转
+				 */
+				actionStart(HomeActivity.class);
+				dialog.dismiss();
+			}
+			
+			@Override
+			public void onFailure(Object res) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+				ToastUtil.show(getActivity(),(String)res);
+			}
+		}, "User");
+	}
      
 }

@@ -27,6 +27,7 @@ import com.ktl.moment.android.fragment.StartFragment.OnRegisterListener;
 import com.ktl.moment.android.fragment.VerifyFragment.OnBackToRegisterListener;
 import com.ktl.moment.android.fragment.VerifyFragment.OnNextToProfileListener;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.utils.FileUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnTouch;
 
@@ -52,6 +53,8 @@ public class AccountActivity extends BaseActivity implements OnLoginListener,OnL
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_account);
+
+		FileUtil.createAppRootDir();//在磁盘上创建应用文件夹
 		
 		//初始为登陆界面
 		fragmentManager = getSupportFragmentManager();//获取fragment的管理器

@@ -12,6 +12,7 @@ import org.apache.http.Header;
 import org.json.JSONException;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ktl.moment.entity.BaseEntity;
 import com.ktl.moment.infrastructure.HttpCallBack;
@@ -118,6 +119,7 @@ public class ApiManager {
 			return ;
 		}
 		String response = new String(responseBody);
+		Log.i("http response", response);
 		try {
 			HttpResult httpResult = AppUtil.getHttpResult(response);
 			if(STATUS_OK != httpResult.getStatus()){

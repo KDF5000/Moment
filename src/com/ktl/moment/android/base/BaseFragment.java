@@ -2,6 +2,7 @@ package com.ktl.moment.android.base;
 
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
+
 import com.ktl.moment.R;
 import com.ktl.moment.android.fragment.DynamicFragment;
 import com.ktl.moment.android.fragment.FindFragment;

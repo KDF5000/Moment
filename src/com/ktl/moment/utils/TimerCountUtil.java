@@ -23,6 +23,7 @@ public class TimerCountUtil extends Activity {
 
 	@SuppressLint("HandlerLeak")
 	final Handler handler = new Handler() {
+		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:

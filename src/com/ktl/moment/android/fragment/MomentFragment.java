@@ -1,12 +1,12 @@
 package com.ktl.moment.android.fragment;
 
-import com.ktl.moment.R;
-import com.ktl.moment.android.base.BaseFragment;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ktl.moment.R;
+import com.ktl.moment.android.base.BaseFragment;
 
 public class MomentFragment extends BaseFragment {
 	private static final String TAG = "MomentFragment";

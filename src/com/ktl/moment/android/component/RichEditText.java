@@ -3,8 +3,8 @@ package com.ktl.moment.android.component;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -44,7 +44,7 @@ public class RichEditText extends EditText {
 		String pathTag = "<img src=\"" + filePath + "\"/>";
 		SpannableString spanString = new SpannableString(pathTag);
 		ImageSpan imgSpan = new ImageSpan(mContext, bitmap);
-		spanString.setSpan(imgSpan, 0, pathTag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		spanString.setSpan(imgSpan, 0, pathTag.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 		
 		Editable editable = this.getText();		//获取edittext内容
 		int start = this.getSelectionStart();		//设置欲添加的位置
