@@ -90,8 +90,13 @@
             android:name="com.ktl.moment.android.activity.EditorActivity"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <!-- 用户详情页 -->
         <activity 
             android:name="com.ktl.moment.android.activity.UserPageActivity">
+        </activity>
+        <!-- 灵感详情页 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.MomentDetailActivity">
         </activity>
     </application>
 

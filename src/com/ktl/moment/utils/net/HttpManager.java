@@ -1,5 +1,5 @@
 /**
- * Http¹ÜÀíÀà
+ * Httpç®¡ç†ç±»
  * @author KDF5000
  * @date 2015-03-29
  */
@@ -15,10 +15,10 @@ public class HttpManager {
 	private static AsyncHttpClient client = new AsyncHttpClient();
 	
 	static{
-		client.setTimeout(11000);//ÉèÖÃ³¬Ê±Á¬½ÓÎª10s
+		client.setTimeout(11000);//è®¾ç½®è¶…æ—¶è¿æ¥ä¸º10s
 	}
 	/**
-	 * getÇëÇó
+	 * getè¯·æ±‚
 	 * @param context
 	 * @param url
 	 * @param params
@@ -29,7 +29,7 @@ public class HttpManager {
 		client.get(context, url, params, responseHandler);
 	}
 	/**
-	 * postÇëÇó
+	 * postè¯·æ±‚
 	 * @param context
 	 * @param url
 	 * @param params
@@ -40,14 +40,14 @@ public class HttpManager {
 		client.post(context, url, params, responseHandler);
 	}
 	/**
-	 * È¡ÏûÇëÇó
+	 * å–æ¶ˆè¯·æ±‚
 	 * @param context
 	 */
 	public static void cancelRequest(Context context){
 		client.cancelRequests(context, true);
 	}
 	/**
-	 * È¡ÏûËùÓĞµÄÇëÇó
+	 * å–æ¶ˆæ‰€æœ‰çš„è¯·æ±‚
 	 */
 	public static void cancelAllRequest(){
 		client.cancelAllRequests(true);

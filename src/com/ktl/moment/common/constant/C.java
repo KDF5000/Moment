@@ -29,6 +29,10 @@ public class C {
 		 * 用户注册
 		 */
 		public static final String USER_REGISTER = URL_BASE + "MomentService/UserInfoService/Registration";
+		/**
+		 * 获取七牛token
+		 */
+		public static final String GET_QINIU_TOKEN = "http://mymoment.sinaapp.com/qiniu_token.php";
 	}
 	
 	
@@ -145,5 +149,11 @@ public class C {
 		public static final int REQUEST_PICTURE_CROP_ACTION = 4;//裁剪图片
 		public static final int QEQUEST_SELECT_CITY_ACTIVITY = 5;//选择所在城市
 	}
-
+	/**
+	 * 文件类型 声音 图片
+	 */
+	public static final class FileType{
+		public static final String IMAGE_TYPE = "img_";
+		public static final String AUDIO_TYPE = "audio_";
+	}
 }
