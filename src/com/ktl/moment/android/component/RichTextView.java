@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.text.Html;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.widget.TextView;
 
 public class RichTextView extends TextView {
@@ -72,8 +73,15 @@ public class RichTextView extends TextView {
 				// 获取本地文件返回Drawable
 				drawable = Drawable.createFromPath(source);
 				// 设置图片边界
-				drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-						drawable.getIntrinsicHeight());
+				//获取控件的左右padding
+				int paddingLeft = getPaddingLeft();
+				int paddingRight = getPaddingRight();
+				int drawableWidth = drawable.getIntrinsicWidth();
+				int drawableHeight = drawable.getIntrinsicHeight();
+				DisplayMetrics dm = getResources().getDisplayMetrics();
+				int showWidth = dm.widthPixels -(paddingLeft+paddingRight);
+				int showHeight = (int) (((float)showWidth/(float)drawableWidth) * drawableHeight);
+				drawable.setBounds(0, 0,showWidth ,showHeight);
 				return drawable;
 			} else {
 				// 启动新线程下载
@@ -81,9 +89,15 @@ public class RichTextView extends TextView {
 				if (new File(filePath).exists()) {
 					// 获取本地文件返回Drawable
 					drawable = Drawable.createFromPath(filePath);
-					// 设置图片边界
-					drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-							drawable.getIntrinsicHeight());
+					//获取控件的左右padding
+					int paddingLeft = getPaddingLeft();
+					int paddingRight = getPaddingRight();
+					int drawableWidth = drawable.getIntrinsicWidth();
+					int drawableHeight = drawable.getIntrinsicHeight();
+					DisplayMetrics dm = getResources().getDisplayMetrics();
+					int showWidth = dm.widthPixels -(paddingLeft+paddingRight);
+					int showHeight = (int) (((float)showWidth/(float)drawableWidth) * drawableHeight);
+					drawable.setBounds(0, 0,showWidth ,showHeight);
 					return drawable;
 				} else {
 					ImageManager manager = ImageManager.getInstance();
