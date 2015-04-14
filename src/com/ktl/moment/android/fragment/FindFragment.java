@@ -99,8 +99,8 @@ public class FindFragment extends BaseFragment {
 		if (momentList == null) {
 			momentList = new ArrayList<Moment>();
 		}
-		Moment moment = new Moment();
 		for (int i = 0; i < 10; i++) {
+			Moment moment = new Moment();
 			moment.setTitle("不再懊悔 App 自动生成器");
 			moment.setContent("隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App");
 			moment.setAuthorNickName("KDF5000");
