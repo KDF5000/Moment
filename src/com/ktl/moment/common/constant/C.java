@@ -25,6 +25,10 @@ public class C {
 		 * 用户注册
 		 */
 		public static final String USER_REGISTER = URL_BASE +"";
+		/**
+		 * 获取七牛token
+		 */
+		public static final String GET_QINIU_TOKEN = "http://mymoment.sinaapp.com/qiniu_token.php";
 	}
 	
 	

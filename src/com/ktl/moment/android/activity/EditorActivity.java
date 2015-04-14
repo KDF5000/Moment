@@ -2,21 +2,7 @@ package com.ktl.moment.android.activity;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
-
-import com.ktl.moment.R;
-import com.ktl.moment.android.base.BaseActivity;
-import com.ktl.moment.android.component.ResizeLayout;
-import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
-import com.ktl.moment.android.component.RichEditText;
-import com.ktl.moment.android.component.RippleBackground;
-import com.ktl.moment.common.constant.C;
-import com.ktl.moment.utils.FileUtil;
-import com.ktl.moment.utils.RecordUtil;
-import com.ktl.moment.utils.TimerCountUtil;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
-
+import java.util.ArrayList;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
@@ -36,71 +22,88 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ktl.moment.R;
+import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.ResizeLayout;
+import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
 import com.ktl.moment.android.component.RichEditText;
+import com.ktl.moment.android.component.RippleBackground;
+import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.BaseEntity;
+import com.ktl.moment.entity.QiniuToken;
+import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
 import com.ktl.moment.qiniu.QiniuTask;
+import com.ktl.moment.utils.BasicInfoUtil;
+import com.ktl.moment.utils.FileUtil;
+import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
-
-import android.widget.TextView;
+import com.ktl.moment.utils.TimerCountUtil;
+import com.ktl.moment.utils.net.ApiManager;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 /**
  * 灵感编辑
+ * 
  * @author HUST_LH
- *
+ * 
  */
 @SuppressLint("HandlerLeak")
-public class EditorActivity extends BaseActivity{
+public class EditorActivity extends BaseActivity {
 	@ViewInject(R.id.tools_layout)
 	private LinearLayout toolsLayout;
 
 	@ViewInject(R.id.editor_record_img)
 	private ImageView recordImg;
-	
+
 	@ViewInject(R.id.editor_gallery_img)
 	private ImageView galleryImg;
-	
+
 	@ViewInject(R.id.editor_keyboard_img)
 	private ImageView keyboardImg;
 
 	@ViewInject(R.id.editor_record_big_img)
 	private ImageView recordBigImg;
-	
+
 	@ViewInject(R.id.editor_edit_area)
 	private RichEditText editText;
 
 	@ViewInject(R.id.editor_tool_content)
 	private RelativeLayout toolContent;
-	
+
 	@ViewInject(R.id.editor_base_content)
 	private ResizeLayout baseContent;
-	
+
 	@ViewInject(R.id.editor_wave_content)
 	private RippleBackground ripple;
-	
-	//录音时需要显示的控件
-	
+
+	// 录音时需要显示的控件
+
 	@ViewInject(R.id.record_layout)
 	private LinearLayout recordLayout;
-	
+
 	@ViewInject(R.id.editor_record_delete)
 	private ImageView editorRecordDeleteImg;
-	
+
 	@ViewInject(R.id.editor_record_time_view)
 	private TextView editorRecordTimeTv;
-	
+
 	@ViewInject(R.id.editor_record_pause)
 	private ImageView editorRecordPause;
-	
+
 	@ViewInject(R.id.editor_record_over)
 	private ImageView editorRecordOver;
-	
-	//父类控件
+
+	// 父类控件
 	@ViewInject(R.id.title_back_img)
 	private ImageView titleBackImg;
-	
+
 	@ViewInject(R.id.activity_base_title_container_layout)
 	private RelativeLayout baseTitleContainer;
 
@@ -111,11 +114,11 @@ public class EditorActivity extends BaseActivity{
 	private static final int SHOW_TOOLS = 1;
 	private static final int SHOW_KEY_BOARD = 2;
 	private static final int RESIZE_LAYOUT = 1;
-	
-	private boolean flag = false;	//控制何时显示下方tools
-	private boolean isPause = true;		//标识录音是否暂停,true=暂停中,false=录音中
-	private boolean hasPause = false;	//标识录音中是否暂停过
-	
+
+	private boolean flag = false; // 控制何时显示下方tools
+	private boolean isPause = true; // 标识录音是否暂停,true=暂停中,false=录音中
+	private boolean hasPause = false; // 标识录音中是否暂停过
+
 	private InputHandler inputHandler = new InputHandler();
 
 	private class InputHandler extends Handler {
@@ -141,27 +144,28 @@ public class EditorActivity extends BaseActivity{
 		}
 	}
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		getLayoutInflater().inflate(R.layout.activity_editor, contentLayout, true);
-		
+		getLayoutInflater().inflate(R.layout.activity_editor, contentLayout,
+				true);
+
 		init();
 		FileUtil.createDir("moment/record");
-		
+
 		setTitleBackImgVisible(true);
-		setBaseActivityBgColor(getResources().getColor(R.color.main_title_color));
+		setBaseActivityBgColor(getResources()
+				.getColor(R.color.main_title_color));
 		appHeight = getAppHeight();
 	}
-	
-	private void init(){
+
+	private void init() {
 		ViewUtils.inject(this);
 
-		//初始化时设置录音计时器显示的TextView，否则在需要时再设置会报NPE
+		// 初始化时设置录音计时器显示的TextView，否则在需要时再设置会报NPE
 		TimerCountUtil.getInstance().setTextView(editorRecordTimeTv);
-		
+
 		baseContent.setOnResizeListener(new OnResizeListener() {
 			@Override
 			public void OnResize(int w, int h, int oldw, int oldh) {
@@ -177,10 +181,10 @@ public class EditorActivity extends BaseActivity{
 			}
 		});
 	}
-	
+
 	/**
-	 * 获取应用显示区域高度。。。
-	 * PS:该方法放到工具类使用会报NPE	，怀疑是没有传入activity所致，没有深究
+	 * 获取应用显示区域高度。。。 PS:该方法放到工具类使用会报NPE ，怀疑是没有传入activity所致，没有深究
+	 * 
 	 * @return
 	 */
 	public int getAppHeight() {
@@ -212,22 +216,26 @@ public class EditorActivity extends BaseActivity{
 		 */
 		return ds.heightPixels - top;
 	}
-	
 
 	/**
 	 * 系统软键盘与工具栏的切换显示
 	 */
 	private void showTools(int id) {
 		if (id == R.id.editor_keyboard_img || id == R.id.editor_gallery_img) {
-			keyboardImg.setImageResource(R.drawable.editor_keyboard_enable_selector);
+			keyboardImg
+					.setImageResource(R.drawable.editor_keyboard_enable_selector);
 			flag = false;
-			if (currentStatus == SHOW_TOOLS && editText.hasFocus()) {//&& contentLayout.getVisibility() == View.VISIBLE
+			if (currentStatus == SHOW_TOOLS && editText.hasFocus()) {// &&
+																		// contentLayout.getVisibility()
+																		// ==
+																		// View.VISIBLE
 				showSoftKeyBoard();
 			} else {
 				setToolsVisible(false);
 			}
 		} else {
-			keyboardImg.setImageResource(R.drawable.editor_keyboard_unable_selector);
+			keyboardImg
+					.setImageResource(R.drawable.editor_keyboard_unable_selector);
 			flag = true;
 			if (currentStatus == SHOW_KEY_BOARD) {
 				showSoftKeyBoard();
@@ -236,9 +244,11 @@ public class EditorActivity extends BaseActivity{
 			}
 		}
 		if (id == R.id.editor_record_img) {
-			recordImg.setImageResource(R.drawable.editor_record_enable_selector);
+			recordImg
+					.setImageResource(R.drawable.editor_record_enable_selector);
 		} else {
-			recordImg.setImageResource(R.drawable.editor_record_unable_selector);
+			recordImg
+					.setImageResource(R.drawable.editor_record_unable_selector);
 		}
 	}
 
@@ -252,6 +262,7 @@ public class EditorActivity extends BaseActivity{
 
 	/**
 	 * 显示下方的tool content
+	 * 
 	 * @param isShow
 	 */
 	private void setToolsVisible(boolean isShow) {
@@ -259,8 +270,10 @@ public class EditorActivity extends BaseActivity{
 			if (isShow && flag) {
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 						LinearLayout.LayoutParams.MATCH_PARENT, appHeight
-								- baseLayoutHeight - baseTitleContainer.getHeight());
-//				Log.i("height", appHeight+"-"+ baseLayoutHeight+"-"+baseTitleContainer.getHeight());
+								- baseLayoutHeight
+								- baseTitleContainer.getHeight());
+				// Log.i("height", appHeight+"-"+
+				// baseLayoutHeight+"-"+baseTitleContainer.getHeight());
 				toolContent.setLayoutParams(params);
 				toolContent.setVisibility(View.VISIBLE);
 			} else {
@@ -269,8 +282,11 @@ public class EditorActivity extends BaseActivity{
 		}
 	}
 
-	@OnClick({R.id.editor_gallery_img,R.id.editor_record_img,R.id.editor_keyboard_img,R.id.editor_edit_complete,R.id.editor_record_big_img,
-		R.id.title_back_img,R.id.editor_record_delete,R.id.editor_record_pause,R.id.editor_record_over})
+	@OnClick({ R.id.editor_gallery_img, R.id.editor_record_img,
+			R.id.editor_keyboard_img, R.id.editor_edit_complete,
+			R.id.editor_record_big_img, R.id.title_back_img,
+			R.id.editor_record_delete, R.id.editor_record_pause,
+			R.id.editor_record_over })
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -306,149 +322,186 @@ public class EditorActivity extends BaseActivity{
 			break;
 		}
 	}
-	
-	public void record(){
+
+	public void record() {
 		showTools(R.id.editor_record_img);
 		ripple.setVisibility(View.VISIBLE);
-		
+
 		toolsLayout.setVisibility(View.GONE);
 		recordLayout.setVisibility(View.VISIBLE);
-		
-		//开始计时
+
+		// 开始计时
 		TimerCountUtil.getInstance().startTimerCount();
-		//开始录音
+		// 开始录音
 		RecordUtil.getInstance().start();
-		
+
 		editorRecordPause.setImageResource(R.drawable.editor_record_pause);
 		ripple.startRippleAnimation();
-		
+
 		isPause = false;
 	}
-	
-	public void gallery(){
+
+	public void gallery() {
 		showTools(R.id.editor_gallery_img);
 		ripple.setVisibility(View.GONE);
 
-		//调用系统图库
-//		Intent getImg = new Intent(Intent.ACTION_GET_CONTENT);
-//		getImg.addCategory(Intent.CATEGORY_OPENABLE);
-//		getImg.setType("image/*");
+		// 调用系统图库
+		// Intent getImg = new Intent(Intent.ACTION_GET_CONTENT);
+		// getImg.addCategory(Intent.CATEGORY_OPENABLE);
+		// getImg.setType("image/*");
 		Intent getImg = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		startActivityForResult(getImg, C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION);
+		startActivityForResult(getImg,
+				C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION);
 	}
-	
-	public void keyboard(){
+
+	public void keyboard() {
 		showTools(R.id.editor_keyboard_img);
 		ripple.setVisibility(View.GONE);
 	}
-	
-	public void recordBig (){
-		
-		if(recordLayout.getVisibility() == View.GONE){
+
+	public void recordBig() {
+
+		if (recordLayout.getVisibility() == View.GONE) {
 			toolsLayout.setVisibility(View.GONE);
 			recordLayout.setVisibility(View.VISIBLE);
 
 			TimerCountUtil.getInstance().startTimerCount();
 			RecordUtil.getInstance().start();
-			
+
 			editorRecordPause.setImageResource(R.drawable.editor_record_pause);
 			ripple.startRippleAnimation();
 			isPause = false;
-			
-		}else{
+
+		} else {
 			recordPause();
 		}
 	}
- 
-	public void recordDelete(){
-		//清零计时器
+
+	public void recordDelete() {
+		// 清零计时器
 		TimerCountUtil.getInstance().clearTimerCount();
-		//清除暂存的录音文件
+		// 清除暂存的录音文件
 		RecordUtil.getInstance().delete(isPause);
-		
+
 		editorRecordPause.setImageResource(R.drawable.editor_record_start);
-		
+
 		ripple.stopRippleAnimation();
 		isPause = true;
 	}
-	
-	public void recordPause(){
-		if(!isPause){//录音中
+
+	public void recordPause() {
+		if (!isPause) {// 录音中
 			editorRecordPause.setImageResource(R.drawable.editor_record_start);
-			
-			//暂停计时
+
+			// 暂停计时
 			TimerCountUtil.getInstance().pauseTimerCount();
 			RecordUtil.getInstance().pause(isPause);
-			
+
 			ripple.stopRippleAnimation();
-			
+
 			hasPause = true;
 			isPause = true;
-		}else{//已暂停
+		} else {// 已暂停
 			editorRecordPause.setImageResource(R.drawable.editor_record_pause);
-			
-			//继续计时
+
+			// 继续计时
 			TimerCountUtil.getInstance().restartTimerCount();
 			RecordUtil.getInstance().pause(isPause);
-			
+
 			ripple.startRippleAnimation();
 			isPause = false;
 		}
 	}
-	
-	public void recordOver(){
+
+	public void recordOver() {
 		toolsLayout.setVisibility(View.VISIBLE);
 		recordLayout.setVisibility(View.GONE);
 
-		//终止计时
+		// 终止计时
 		TimerCountUtil.getInstance().stopTimerCount();
 		RecordUtil.getInstance().complete(hasPause, isPause);
-		
+
 		ripple.stopRippleAnimation();
 		isPause = true;
 	}
-	
-	private void saveContent(){
-		//没有网络的话保存到本地
-//		Intent intent = new Intent(EditorActivity.this,TestActivity.class);
-//		intent.putExtra("data", editText.getText().toString());
-//		startActivity(intent);
-		//有网的情况下直接上传
-		Map<String,String> imgMap =  RichEditUtils.extractImg(editText.getText().toString());
+
+	private void saveContent() {
+		// 没有网络的话保存到本地
+		BasicInfoUtil basicInfoUtil = BasicInfoUtil.getInstance(this);
+		if (basicInfoUtil.isNetworkConnected()) {// 有网
+			// 获取token
+			ApiManager.getInstance().get(this, C.API.GET_QINIU_TOKEN, null,
+					new HttpCallBack() {
+
+						@Override
+						public void onSuccess(Object res) {
+							// TODO Auto-generated method stub
+							@SuppressWarnings("unchecked")
+							ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) res;
+							String token = TokenList.get(0).getToken();
+							uploadFilte2Qiniu(token);
+						}
+
+						@Override
+						public void onFailure(Object res) {
+							// TODO Auto-generated method stub
+							Toast.makeText(EditorActivity.this, (String) res,
+									Toast.LENGTH_SHORT).show();
+						}
+					}, "QiniuToken");
+		} else {
+			// 保存到本地
+		}
+	}
+
+	/**
+	 * 上传文件到七牛
+	 */
+	private void uploadFilte2Qiniu(String token) {
+		Map<String, String> imgMap = RichEditUtils.extractImg(editText
+				.getText().toString());
 		TaskManager manager = new TaskManager();
 		manager.setTaskCallBack(new TaskCallback() {
-			
+
 			@Override
 			public void onError(String msg) {
 				// TODO Auto-generated method stub
-				Toast.makeText(EditorActivity.this,msg, Toast.LENGTH_SHORT).show();
+				Toast.makeText(EditorActivity.this, msg, Toast.LENGTH_SHORT)
+						.show();
 			}
-			
+
 			@Override
 			public void onComplete(Map<String, String> resMap) {
 				// TODO Auto-generated method stub
 				String content = editText.getText().toString();
-				for(Map.Entry<String, String> entry:resMap.entrySet()){
-					Log.i("URL", "-->"+entry.getKey()+"="+entry.getValue());
-					//替换et内容
-					content = content.replaceAll(entry.getKey(), "<img src=\""+C.API.QINIU_BASE_URL + entry.getValue()+"\"/>");
+				for (Map.Entry<String, String> entry : resMap.entrySet()) {
+					Log.i("URL",
+							"-->" + entry.getKey() + "=" + entry.getValue());
+					// 替换et内容
+					content = content.replaceAll(entry.getKey(), "<img src=\""
+							+ C.API.QINIU_BASE_URL + entry.getValue() + "\"/>");
 				}
-				//上传到服务器
-				Toast.makeText(EditorActivity.this, content, Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent(EditorActivity.this,TestActivity.class);
-				intent.putExtra("data",content);
+				// 上传到服务器
+				Toast.makeText(EditorActivity.this, content, Toast.LENGTH_SHORT)
+						.show();
+
+				Intent intent = new Intent(EditorActivity.this,
+						TestActivity.class);
+				intent.putExtra("data", content);
 				startActivity(intent);
 			}
 		});
 		for (Map.Entry<String, String> entry : imgMap.entrySet()) {
-			QiniuTask  task = new QiniuTask(EditorActivity.this, manager);
+			QiniuTask task = new QiniuTask(EditorActivity.this, manager);
+			task.setToken(token);
 			task.setKey(entry.getKey());
 			task.setLocalPath(entry.getValue());
 			manager.addTask(task);
 		}
 		manager.startTask();
 	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
@@ -456,7 +509,7 @@ public class EditorActivity extends BaseActivity{
 		if (resultCode == RESULT_OK) {
 			ContentResolver resolver = getContentResolver();
 			Bitmap originalBitmap = null;
-			//添加图片
+			// 添加图片
 			if (requestCode == C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION) {
 				Uri originalUri = data.getData();
 				try {
@@ -467,7 +520,8 @@ public class EditorActivity extends BaseActivity{
 					e.printStackTrace();
 				}
 				if (originalBitmap != null) {
-					editText.addImage(originalBitmap,getAbsoluteImagePath(originalUri));
+					editText.addImage(originalBitmap,
+							getAbsoluteImagePath(originalUri));
 				} else {
 					Toast.makeText(this, "获取图片失败", Toast.LENGTH_LONG).show();
 				}
