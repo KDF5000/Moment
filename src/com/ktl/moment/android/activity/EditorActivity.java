@@ -152,8 +152,8 @@ public class EditorActivity extends BaseActivity {
 				true);
 
 		init();
-		FileUtil.createDir("moment/record");
-
+		FileUtil.createDir("record");
+		
 		setTitleBackImgVisible(true);
 		setBaseActivityBgColor(getResources()
 				.getColor(R.color.main_title_color));

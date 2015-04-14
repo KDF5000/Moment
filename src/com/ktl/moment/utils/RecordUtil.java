@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 
 /**
@@ -29,6 +30,8 @@ public class RecordUtil{
 	 * 录音存放目录
 	 */
 	private File recordDir;
+
+//	private File recordDir = FileUtil.getDir("moment/record");
 	private MediaRecorder mediaRecord;
 	
 	/**
@@ -52,7 +55,7 @@ public class RecordUtil{
 	}
 	
 	private RecordUtil(){
-		
+		recordDir = FileUtil.getDir("record");
 	}
 	
 	/*********************************外部接口start**************************************/
@@ -112,6 +115,16 @@ public class RecordUtil{
 			deleteTmpRecordList(recordList, true);
 		}
 	}
+	
+	/**
+	 * 播放、暂停、停止录音
+	 * @param recordName	录音文件名称
+	 * @param status 0：开始播放，1：暂停播放，2：停止播放
+	 */
+	public void play(String recordName, int status){
+		String recordPath = recordDir.getPath() + recordName;
+		playRecord(recordPath, status);
+	}
 
 
 	/*********************************外部接口end**************************************/
@@ -135,7 +148,6 @@ public class RecordUtil{
 		 * 取系统当前时间，以系统当前时间为录音文件名称
 		 */
 		String file1Time = getTime();
-		recordDir = FileUtil.getDir("moment/record");
 		/**
 		 * 创建音频文件
 		 */
@@ -315,6 +327,40 @@ public class RecordUtil{
 		}
 		if(isDeleteLastRecord){
 			recordAudioFile.delete();
+		}
+	}
+	
+	private void playRecord(String recordPath, int status){
+		MediaPlayer player = new MediaPlayer();
+		try {
+			player.setDataSource(recordPath);
+			player.prepare();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		switch (status) {
+		case 0:	//播放
+			player.start();
+			break;
+		case 1:
+			player.pause();
+			break;
+		case 2:
+			player.stop();
+			player.release();
+			player = null;
+		default:
+			break;
 		}
 	}
 }
