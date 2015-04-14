@@ -90,6 +90,9 @@
             android:name="com.ktl.moment.android.activity.EditorActivity"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <activity 
+            android:name="com.ktl.moment.android.activity.UserPageActivity">
+        </activity>
     </application>
 
 </manifest>
