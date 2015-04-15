@@ -3,10 +3,12 @@ package com.ktl.moment.android.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.CommentListViewAdapter;
@@ -14,6 +16,7 @@ import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.entity.Comment;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 public class MomentDetailActivity extends BaseActivity {
 
@@ -29,6 +32,9 @@ public class MomentDetailActivity extends BaseActivity {
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
+		Intent intent = getIntent();
+		long momentId = intent.getLongExtra("momentId", 0);
+		Toast.makeText(this, momentId + "", Toast.LENGTH_SHORT).show();
 		initData();
 		initView();
 	}
@@ -53,13 +59,14 @@ public class MomentDetailActivity extends BaseActivity {
 
 	private void initView() {
 		this.mInflater = getLayoutInflater();
-		
-		this.mInflater.inflate(R.layout.activity_moment_detail,
-				contentLayout, true);
-		headerView = this.mInflater.inflate(R.layout.moment_detail_listview_header, null);
+
+		this.mInflater.inflate(R.layout.activity_moment_detail, contentLayout,
+				true);
+		headerView = this.mInflater.inflate(
+				R.layout.moment_detail_listview_header, null);
 		ViewUtils.inject(this);
 		commentsListView.addHeaderView(headerView);
-		
+
 		setMiddleTitleVisible(true);
 		setTitleBackImgVisible(true);
 		setBaseActivityBgColor(getResources()
@@ -69,5 +76,14 @@ public class MomentDetailActivity extends BaseActivity {
 		commentsListView.setAdapter(new CommentListViewAdapter(this,
 				commentList, getDisplayImageOptions()));
 
+	}
+
+	@OnClick({ R.id.title_back_img })
+	private void OnClick(View v) {
+		switch (v.getId()) {
+		case R.id.title_back_img:
+			finish();
+			break;
+		}
 	}
 }

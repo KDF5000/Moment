@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="2015-4-7"
-                    android:textColor="#dcdcdc"
+                    android:textColor="#a0a0a0"
                     android:textSize="8sp" />
             </LinearLayout>
 
@@ -84,6 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:textColor="#a0a0a0"
                 android:text="APP、灵感记录"
                 android:textSize="10sp" />
         </LinearLayout>

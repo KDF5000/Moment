@@ -1,49 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_base_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <RelativeLayout
         android:id="@+id/activity_base_title_container_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/activity_base_title_container_height"
-        android:gravity="center_vertical">
-        
-        <ImageView 
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_base_title_container_height">
+
+        <ImageView
             android:id="@+id/title_back_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/back"
-            android:layout_marginLeft="20dp"/>
-        
-        <TextView 
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/back" />
+
+        <TextView
             android:id="@+id/title_left_view_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:textColor="@color/white"
-            android:textSize="@dimen/title_left_view_name_text_size"/>
-        
-        
-        <TextView 
+            android:textSize="@dimen/title_left_view_name_text_size" />
+
+        <TextView
             android:id="@+id/middle_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:layout_centerInParent="true"
+            android:layout_centerInParent="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/account_text_size"/>
-	        
+            android:textSize="@dimen/account_text_size" />
     </RelativeLayout>
-    
-     <FrameLayout 
-         android:id="@+id/activity_base_content_container"
-         android:layout_width="match_parent"
-         android:layout_height="0dp"
-         android:layout_weight="1">
-         
-     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/activity_base_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </FrameLayout>
 
 </LinearLayout>
