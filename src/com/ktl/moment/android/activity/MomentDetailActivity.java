@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
@@ -23,6 +26,32 @@ public class MomentDetailActivity extends BaseActivity {
 	private static final String TAG = "MomentDetailActivity";
 	@ViewInject(R.id.moment_comment_lv)
 	private ListView commentsListView;
+
+	/************** headerview *********************/
+	@ViewInject(R.id.moment_title)
+	private TextView momentTitle;// 标题
+
+	@ViewInject(R.id.moment_detail_user_avatar)
+	private ImageView momentUserAvatar;// 用户头像
+
+	@ViewInject(R.id.moment_user_nickname)
+	private TextView momentUserName;// 用户名
+
+	@ViewInject(R.id.moment_post_time)
+	private TextView momentPostTime;// 灵感发布时间
+
+	@ViewInject(R.id.focus_author_icon)
+	private ImageView focusAuthor;
+
+	@ViewInject(R.id.moment_content)
+	private TextView momentContent;// 灵感内容
+
+	@ViewInject(R.id.moment_label_tv)
+	private TextView momentLabel;// 灵感标签
+
+	@ViewInject(R.id.moment_comment_num)
+	private TextView commentsNum;// 灵感评论数
+	/******************** end *********************/
 
 	private LayoutInflater mInflater;
 	private View headerView;
@@ -45,7 +74,7 @@ public class MomentDetailActivity extends BaseActivity {
 		}
 		for (int i = 0; i < 10; i++) {
 			Comment comment = new Comment();
-			comment.setCommentFromUserAvatar("");
+			comment.setCommentFromUserAvatar("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			comment.setCommentFromUserId(100 + i);
 			comment.setCommentFromUserName("Luis");
 			comment.setCommentTime("3分钟前");
@@ -65,7 +94,8 @@ public class MomentDetailActivity extends BaseActivity {
 		headerView = this.mInflater.inflate(
 				R.layout.moment_detail_listview_header, null);
 		ViewUtils.inject(this);
-		commentsListView.addHeaderView(headerView);
+		ViewUtils.inject(this, headerView);
+		commentsListView.addHeaderView(headerView,null,false);
 
 		setMiddleTitleVisible(true);
 		setTitleBackImgVisible(true);
@@ -78,11 +108,14 @@ public class MomentDetailActivity extends BaseActivity {
 
 	}
 
-	@OnClick({ R.id.title_back_img })
+	@OnClick({ R.id.title_back_img,R.id.focus_author_icon })
 	private void OnClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back_img:
 			finish();
+			break;
+		case R.id.focus_author_icon:
+			Toast.makeText(this, "关注", Toast.LENGTH_SHORT).show();
 			break;
 		}
 	}
