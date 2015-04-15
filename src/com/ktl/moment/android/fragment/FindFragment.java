@@ -36,7 +36,6 @@ public class FindFragment extends BaseFragment {
 		initView();
 		// 从服务端获取数据
 		getDataFromServer();
-		
 		findListView.setAdapter(new FindListViewAdapter(getActivity(),
 				momentList, getDisplayImageOptions()));
 		initEvent();
