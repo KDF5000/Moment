@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.lidroid.xutils.ViewUtils;
@@ -157,7 +156,7 @@ public class HoloWheelActivity extends Activity {
             Intent data=new Intent();
             data.putExtra("provinceText", provinceText);
             data.putExtra("cityText", cityText);
-            HoloWheelActivity.this.setResult(AREA, data);
+            HoloWheelActivity.this.setResult(Activity.RESULT_OK, data);
             finish();
             break;
             

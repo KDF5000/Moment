@@ -2,6 +2,8 @@ package com.ktl.moment.android.fragment;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,22 +20,26 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.AccountActivity;
 import com.ktl.moment.android.activity.CameraSelectActivity;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.component.CircleImageView;
+import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.android.component.wheel.HoloWheelActivity;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.EditTextUtil;
 import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.lidroid.xutils.view.annotation.event.OnFocusChange;
 import com.lidroid.xutils.view.annotation.event.OnRadioGroupCheckedChange;
+import com.loopj.android.http.RequestParams;
 
 public class ProfileFragment extends AccountBaseFragment {
 
@@ -111,12 +117,12 @@ public class ProfileFragment extends AccountBaseFragment {
 		case R.id.profile_radio_male:
 			ToastUtil
 					.show(getActivity(), profileRadioMale.getText().toString());
-			sex = 0;
+			sex = 1;
 			break;
 		case R.id.profile_radio_female:
 			ToastUtil.show(getActivity(), profileRadioFamale.getText()
 					.toString());
-			sex = 1;
+			sex = 0;
 		default:
 			break;
 		}
@@ -167,9 +173,42 @@ public class ProfileFragment extends AccountBaseFragment {
 				return;
 			}
 		}
-		Intent intent = new Intent(getActivity(), HomeActivity.class);
-		startActivity(intent);
-		getActivity().finish();
+		
+		Map<String,String> registerData = new HashMap<String, String>();
+		AccountActivity  accountActivity = (AccountActivity)getActivity();
+		if(accountActivity!=null){
+			registerData = accountActivity.getRegisterData();
+		}
+		
+		final LoadingDialog dialog = new LoadingDialog(getActivity());
+		dialog.show();
+		
+		RequestParams params = new RequestParams();
+		params.put("mobilePhone", registerData.get("phone"));
+		params.put("password", registerData.get("pass"));
+		params.put("nickName", nickname);
+		params.put("area", place);
+		params.put("sex", sex);
+		params.put("userAvatar", "");//后面完善
+		ApiManager.getInstance().post(getActivity(), C.API.USER_REGISTER, params, new HttpCallBack() {
+			
+			@Override
+			public void onSuccess(Object res) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+				ToastUtil.show(getActivity(), "注册成功");
+				Intent intent = new Intent(getActivity(), HomeActivity.class);
+				startActivity(intent);
+				getActivity().finish();
+			}
+			
+			@Override
+			public void onFailure(Object res) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+				ToastUtil.show(getActivity(), (String)res);
+			}
+		}, "User");
 	}
 
 	@Override

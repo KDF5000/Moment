@@ -1,7 +1,5 @@
 package com.ktl.moment.android.component;
 
-import com.ktl.moment.R;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
@@ -11,6 +9,8 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.ktl.moment.R;
 
 public class LoadingDialog extends Dialog{
 	
@@ -27,6 +27,7 @@ public class LoadingDialog extends Dialog{
 	private Handler handler = new Handler(){
 		private int num = 0;
 
+		@Override
 		public void handleMessage(Message msg){
 			if(msg.what == CHANGE_TITLE_WHAT){
 				StringBuilder builder = new StringBuilder();

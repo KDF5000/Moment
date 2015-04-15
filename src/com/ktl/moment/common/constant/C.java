@@ -3,14 +3,14 @@ package com.ktl.moment.common.constant;
 public class C {
 	
 	/****************************************************************************
-	 * api相关常量                                                                                                                                                                                                       *
+	 * api相关常量                                                                                                                              *
 	 ****************************************************************************/
 	public static final class API{
 		/**
 		 * url基地址
 		 */
-		private static final String URL_BASE = "http://192.168.95.1/";
-//		private static final String URL_BASE = "http://192.168.249.1/";
+//		private static final String URL_BASE = "http://192.168.95.1/";
+		private static final String URL_BASE = "http://222.20.57.33:8080/";
 		/**
 		 * 七牛基地址
 		 */
@@ -18,13 +18,17 @@ public class C {
 		/**
 		 * 手机号登录
 		 */
-//		public static final String USER_LOGIN = URL_BASE + "login.php";
-		public static final String USER_LOGIN = URL_BASE + "index.php";
+		public static final String USER_LOGIN = URL_BASE + "MomentService/UserInfoService/SignIn/login";
+		
+		/**
+		 * 第三方登陆
+		 */
+		public static final String USER_THIRD_PARTY_LOGIN = URL_BASE + "MomentService/UserInfoService/SignIn/thirdparty/login";
 		
 		/**
 		 * 用户注册
 		 */
-		public static final String USER_REGISTER = URL_BASE +"";
+		public static final String USER_REGISTER = URL_BASE + "MomentService/UserInfoService/Registration";
 		/**
 		 * 获取七牛token
 		 */
@@ -115,7 +119,7 @@ public class C {
 		public static final String FRAGMENT_PROFILE = "perfectInfoFragment";
 		public static final String FRAGMENT_RECOMMEN = "recommenFragment";
 		
-		public static final boolean IS_CHECK_INPUT = false;//是否对输入框等控件做空值检测
+		public static final boolean IS_CHECK_INPUT = true;//是否对输入框等控件做空值检测
 		public static final boolean IS_SEND_VERIFY = false;	//是否开启验证码
 	}
 	

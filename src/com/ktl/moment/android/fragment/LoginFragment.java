@@ -190,7 +190,7 @@ public class LoginFragment extends AccountBaseFragment{
 		final LoadingDialog dialog = new LoadingDialog(getActivity());
 		dialog.show();
 		RequestParams params = new RequestParams();
-		params.put("mobileNumber", phone);
+		params.put("mobilePhone", phone);
 		params.put("password", pass);
 		ApiManager.getInstance().post(getActivity(), C.API.USER_LOGIN,params,new HttpCallBack() {
 			
@@ -200,7 +200,7 @@ public class LoginFragment extends AccountBaseFragment{
 				dialog.dismiss();
                 @SuppressWarnings("unchecked")
 				List <User> user= (List<User>)res;
-                Log.i("user_phone", user.get(0).getMobilephone());
+                Log.i("user_phone", user.get(0).getMobilePhone());
 				Intent intent = new Intent(getActivity(),HomeActivity.class);
 				intent.putExtra("data", user.get(0).getUserId());
 				startActivity(intent);
