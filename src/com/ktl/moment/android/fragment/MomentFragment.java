@@ -3,12 +3,17 @@ package com.ktl.moment.android.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.MomentDialogActivity;
 import com.ktl.moment.android.adapter.MomentPlaAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.etsy.StaggeredGridView;
@@ -21,7 +26,16 @@ public class MomentFragment extends BaseFragment {
 	private StaggeredGridView staggeredGridView;
 	private List<Moment> momentList;
 	private MomentPlaAdapter momentPlaAdapter;
+	private OperateCallback opCallback;
 	
+	private static final int REAUEST_CODE_OPEN = 1000;
+	private static final int REAUEST_CODE_LABEL = 1001;
+	private static final int REQUEST_CODE_DELETE = 1002;
+	
+	public interface OperateCallback {
+		public void OnSelected(int type,int position);
+		public void OnError(String msg);
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -29,20 +43,36 @@ public class MomentFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.fragment_moment, container, false);
 		staggeredGridView = (StaggeredGridView) view.findViewById(R.id.moment_pla_list);
 		
+		opCallback = new OperateCallback() {
+			
+			@Override
+			public void OnSelected(int type, int position) {
+				// TODO Auto-generated method stub
+				Intent dialogIntent = new Intent(getActivity(), MomentDialogActivity.class);
+				startActivityForResult(dialogIntent, REAUEST_CODE_OPEN);
+			}
+			
+			@Override
+			public void OnError(String msg) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		
 		momentList = new ArrayList<Moment>();
-		getData();
-		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList, getDisplayImageOptions());
+		momentList = getData();
+		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList, getDisplayImageOptions(),opCallback);
+		momentPlaAdapter.notifyDataSetChanged();
 		staggeredGridView.setAdapter(momentPlaAdapter);
 		
 		return view;
 	}
 	
-	private void getData(){
-		if(momentList == null){
-			momentList = new ArrayList<Moment>();
-		}
+	private List<Moment> getData(){
+		List<Moment> list = new ArrayList<Moment>();
 		for(int i=0;i<10;i++){
 			Moment moment = new Moment();
+			moment.setMomentId(i);
 			moment.setPostTime("4月10日");
 			if(i%3 == 0){
 				moment.setPublic(1);
@@ -59,7 +89,36 @@ public class MomentFragment extends BaseFragment {
 			}else{
 				moment.setMomentImg("");
 			}
-			momentList.add(moment);
+			list.add(moment);
+		}
+		return list;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode==Activity.RESULT_OK){
+			switch (requestCode) {
+			case REAUEST_CODE_OPEN:
+				boolean isOpen = data.getBooleanExtra("isOpen", false);
+				int positiomn = data.getIntExtra("position", 0);
+				if(isOpen){
+					Log.i("tag", positiomn+","+isOpen);
+					momentList.get(positiomn).setPublic(1);
+				}
+				break;
+			case REAUEST_CODE_LABEL:
+				
+				break;
+			case REQUEST_CODE_DELETE:
+				
+				break;
+			default:
+				break;
+			}
 		}
 	}
+	
+	
 }

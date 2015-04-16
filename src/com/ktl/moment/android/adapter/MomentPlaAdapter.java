@@ -1,12 +1,15 @@
 package com.ktl.moment.android.adapter;
 
+import java.io.Serializable;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -14,10 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.MomentDialogActivity;
+import com.ktl.moment.android.fragment.MomentFragment.OperateCallback;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.utils.ToastUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MomentPlaAdapter extends BaseAdapter{
 	
@@ -25,12 +29,13 @@ public class MomentPlaAdapter extends BaseAdapter{
 	private LayoutInflater layoutInflater;
 	private List<Moment> momentList;
 	private DisplayImageOptions options;
+	private OperateCallback mOpCallback;
 	
-	public MomentPlaAdapter(Context context, List<Moment> momentList, DisplayImageOptions options){
+	public MomentPlaAdapter(Context context, List<Moment> momentList, DisplayImageOptions options,OperateCallback opCallBack){
 		this.context = context;
 		this.momentList = momentList;
 		this.options = options;
-		
+		this.mOpCallback = opCallBack;
 		this.layoutInflater = LayoutInflater.from(context);
 	}
 
@@ -76,9 +81,8 @@ public class MomentPlaAdapter extends BaseAdapter{
 			momentHolder = (MomentPlaHolder) convertView.getTag();
 		}
 		
-		Moment moment = momentList.get(position);
+		final Moment moment = momentList.get(position);
 		momentHolder.createDate.setText(moment.getPostTime());
-		Log.i("position"+position, "isCollect="+moment.getIsCollect()+",isPublic="+moment.getIsPublic()+",imgUrl="+moment.getMomentImg());
 		if (moment.getIsCollect() == 1) {
 			momentHolder.collectImg.setImageResource(R.drawable.collect);
 			momentHolder.publicText.setText("");
@@ -88,7 +92,6 @@ public class MomentPlaAdapter extends BaseAdapter{
 			momentHolder.publicText.setText("公开");
 			momentHolder.publicText.setTextColor(context.getResources()
 					.getColor(R.color.moment_etsy_public_color));
-			Log.i("text name", momentHolder.publicText.getText().toString());
 		}
 		
 		if(!moment.getMomentImg().isEmpty()){
@@ -110,9 +113,21 @@ public class MomentPlaAdapter extends BaseAdapter{
 //				Intent intent = new Intent();
 //				intent.putExtra("momentId", moment.getMomentId());
 //				context.startActivity(intent);
-				ToastUtil.show(context, "you click me");
+				ToastUtil.show(context, moment.getMomentId()+"");
 			}
 		});
+		final int currentPosition = position;
+		momentHolder.momentItemLayout.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(context, "you click me for a long time");
+				mOpCallback.OnSelected(0, currentPosition);
+				return true;
+			}
+		});
+		
 		return convertView;
 	}
 	
@@ -128,5 +143,6 @@ public class MomentPlaAdapter extends BaseAdapter{
 		LinearLayout momentItemLayout;
 		
 	}
+	
 	
 }

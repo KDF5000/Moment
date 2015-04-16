@@ -98,6 +98,10 @@
         <activity 
             android:name="com.ktl.moment.android.activity.MomentDetailActivity">
         </activity>
+        <!-- 长按灵感弹出选项dialog -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.MomentDialogActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"></activity>
     </application>
 
 </manifest>
