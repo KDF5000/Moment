@@ -20,6 +20,7 @@ import com.ktl.moment.entity.Comment;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MomentDetailActivity extends BaseActivity {
 
@@ -95,7 +96,7 @@ public class MomentDetailActivity extends BaseActivity {
 				R.layout.moment_detail_listview_header, null);
 		ViewUtils.inject(this);
 		ViewUtils.inject(this, headerView);
-		commentsListView.addHeaderView(headerView,null,false);
+		commentsListView.addHeaderView(headerView, null, false);
 
 		setMiddleTitleVisible(true);
 		setTitleBackImgVisible(true);
@@ -105,10 +106,13 @@ public class MomentDetailActivity extends BaseActivity {
 
 		commentsListView.setAdapter(new CommentListViewAdapter(this,
 				commentList, getDisplayImageOptions()));
-
+		
+		ImageLoader.getInstance().displayImage(
+				"http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg",
+				momentUserAvatar, getDisplayImageOptions());
 	}
 
-	@OnClick({ R.id.title_back_img,R.id.focus_author_icon })
+	@OnClick({ R.id.title_back_img, R.id.focus_author_icon })
 	private void OnClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back_img:
