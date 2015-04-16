@@ -56,10 +56,9 @@ public class MomentPlaAdapter extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		MomentPlaHolder momentHolder = null;
-		if(convertView == null){
-			convertView = this.layoutInflater.inflate(R.layout.fragment_moment_etsy_list_item, null);
-//			convertView = layoutInflater.inflate(R.layout.fragment_moment_pla_list_item, parent, false);
+		MomentPlaHolder momentHolder;
+//		if(convertView == null){
+			convertView = this.layoutInflater.inflate(R.layout.fragment_moment_etsy_list_item, null,false);
 			momentHolder = new MomentPlaHolder();
 			momentHolder.createDate = (TextView) convertView.findViewById(R.id.moment_create_date);
 			momentHolder.publicText = (TextView) convertView.findViewById(R.id.moment_is_public);
@@ -72,10 +71,9 @@ public class MomentPlaAdapter extends BaseAdapter{
 			momentHolder.momentItemLayout = (LinearLayout) convertView.findViewById(R.id.moment_item_layout);
 			
 			convertView.setTag(momentHolder);
-		}else{
-			momentHolder = (MomentPlaHolder) convertView.getTag();
-		}
-		
+//		}else{
+//			momentHolder = (MomentPlaHolder) convertView.getTag();
+//		}
 		Moment moment = momentList.get(position);
 		momentHolder.createDate.setText(moment.getPostTime());
 		Log.i("position"+position, "isCollect="+moment.getIsCollect()+",isPublic="+moment.getIsPublic()+",imgUrl="+moment.getMomentImg());
@@ -90,9 +88,8 @@ public class MomentPlaAdapter extends BaseAdapter{
 					.getColor(R.color.moment_etsy_public_color));
 			Log.i("text name", momentHolder.publicText.getText().toString());
 		}
-		
 		if(!moment.getMomentImg().isEmpty()){
-//			ImageLoader.getInstance().displayImage(moment.getMomentImg(), momentHolder.articleImg, options);
+			ImageLoader.getInstance().displayImage(moment.getMomentImg(), momentHolder.articleImg, options);
 		}
 		momentHolder.articleTitle.setText(moment.getTitle());
 		momentHolder.articleContent.setText(moment.getContent());
@@ -107,16 +104,13 @@ public class MomentPlaAdapter extends BaseAdapter{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-//				Intent intent = new Intent();
-//				intent.putExtra("momentId", moment.getMomentId());
-//				context.startActivity(intent);
 				ToastUtil.show(context, "you click me");
 			}
 		});
 		return convertView;
 	}
 	
-	private class MomentPlaHolder{
+	static class MomentPlaHolder{
 		TextView createDate;
 		TextView publicText;
 		ImageView collectImg;
@@ -126,7 +120,6 @@ public class MomentPlaAdapter extends BaseAdapter{
 		ImageView label;
 		TextView labelText;
 		LinearLayout momentItemLayout;
-		
 	}
 	
 }

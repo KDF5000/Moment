@@ -2,6 +2,7 @@ package com.ktl.moment.android.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,7 +42,7 @@ public class MomentFragment extends BaseFragment {
 		if(momentList == null){
 			momentList = new ArrayList<Moment>();
 		}
-		for(int i=0;i<10;i++){
+		for(int i=0;i<100;i++){
 			Moment moment = new Moment();
 			moment.setPostTime("4月10日");
 			if(i%3 == 0){
@@ -51,8 +52,8 @@ public class MomentFragment extends BaseFragment {
 				moment.setCollect(1);
 			}
 			moment.setTitle(i+"不再懊悔 App 自动生成器");
-			String content = "隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App。隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App";
-			moment.setContent(content.substring(0, 20*i));
+			String content = "隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说";
+			moment.setContent(content);
 			moment.setLabel("创意、果蔬");
 			if(i%2 == 1){
 				moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
