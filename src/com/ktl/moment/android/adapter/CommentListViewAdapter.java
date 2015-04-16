@@ -57,12 +57,6 @@ public class CommentListViewAdapter extends BaseAdapter {
 			convertView = this.mInflater.inflate(R.layout.comment_lv_item, null);
 			holder = new CommentHolder();
 			ViewUtils.inject(holder, convertView);
-//			holder.userAvatar = (ImageView) convertView.findViewById(R.id.comment_user_avatar);
-//			holder.userFromName = (TextView) convertView.findViewById(R.id.comment_from_username);
-//			holder.commentTime = (TextView) convertView.findViewById(R.id.comment_post_time);
-//			holder.praiseNum = (TextView) convertView.findViewById(R.id.comment_praise_num);
-//			holder.userToName = (TextView) convertView.findViewById(R.id.comment_to_username);
-//			holder.content = (TextView) convertView.findViewById(R.id.comment_content);
 			convertView.setTag(holder);
 		}else{
 			holder = (CommentHolder) convertView.getTag();
