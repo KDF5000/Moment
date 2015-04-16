@@ -18,6 +18,7 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,7 +33,6 @@ import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
 import com.ktl.moment.android.component.RichEditText;
 import com.ktl.moment.android.component.RippleBackground;
 import com.ktl.moment.common.constant.C;
-import com.ktl.moment.entity.BaseEntity;
 import com.ktl.moment.entity.QiniuToken;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.manager.TaskManager;
@@ -269,7 +269,7 @@ public class EditorActivity extends BaseActivity {
 		if (toolContent != null) {
 			if (isShow && flag) {
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.MATCH_PARENT, appHeight
+						LayoutParams.MATCH_PARENT, appHeight
 								- baseLayoutHeight
 								- baseTitleContainer.getHeight());
 				// Log.i("height", appHeight+"-"+

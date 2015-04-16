@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:pla="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="55dp" xmlns:app="http://schemas.android.com/apk/res/com.ktl.moment">
+
+<!--     <com.ktl.moment.android.component.pla.lib.MultiColumnListView 
+        android:id="@+id/moment_pla_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingRight="7dp"
+        android:paddingLeft="7dp"
+        android:background="#eeeeee"
+        pla:plaLandscapeColumnNumber="2">
+     
+    </com.ktl.moment.android.component.pla.lib.MultiColumnListView> -->
+
+    <com.ktl.moment.android.component.etsy.StaggeredGridView 
+        android:id="@+id/moment_pla_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eeeeee"
+        app:column_count_portrait="2"
+        app:item_margin="10dp">
+        
+    </com.ktl.moment.android.component.etsy.StaggeredGridView>
+</LinearLayout>

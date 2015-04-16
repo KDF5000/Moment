@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -56,7 +56,7 @@ public class RichEditText extends EditText {
 		Bitmap newBitmap = zoomImage(bitmap, zoomWidth,zoomHeight);
 		ImageSpan imgSpan = new ImageSpan(mContext, newBitmap);
 		spanString.setSpan(imgSpan, 0, pathTag.length(),
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 		Editable editable = this.getText(); // 获取edittext内容
 		int start = this.getSelectionStart(); // 设置欲添加的位置
 		editable.insert(start, spanString); // 设置spanString要添加的位置

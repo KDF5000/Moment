@@ -15,9 +15,16 @@
     <!-- ripple component-->
     <color name="rippelColor">#0099CC</color>
     
+    <!-- 大众色系 -->
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    
     <color name="main_title_color">#41aaf2</color>
     <color name="main_content_container_color">#eeeeee</color>
-    <color name="white">#ffffff</color>
     <color name="menu_text_checked">#5dd2f9</color>
     <color name="menu_text_uncheked">#676666</color>
+    
+    <!-- moment页面PLA布局中的字体颜色，包括：日期、是否公开、标签 -->
+    <color name="moment_etsy_text_color">#a0a0a0</color>
+    <color name="moment_etsy_public_color">#41aaf2</color>
 </resources>
