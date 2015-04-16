@@ -98,6 +98,9 @@
         <activity 
             android:name="com.ktl.moment.android.activity.MomentDetailActivity">
         </activity>
+         <activity 
+            android:name="com.ktl.moment.android.activity.MainActivity">
+        </activity>
     </application>
 
 </manifest>
