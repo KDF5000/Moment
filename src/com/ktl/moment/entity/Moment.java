@@ -1,6 +1,6 @@
 package com.ktl.moment.entity;
 
-public class Moment extends BaseEntity{
+public class Moment{
 	private long momentId;//灵感id
 	private String title;//标题
 	private String content;//内容
@@ -13,6 +13,28 @@ public class Moment extends BaseEntity{
 	private String authorNickName;//作者昵称
 	private String avatarUrl;//头像路径
 	
+	private int isPublic;//是否公开	0：不公开，1：公开
+	private int isCollect;//是否收藏		0：不是收藏，1：收藏
+	private String label;//灵感标签
+	
+	public int getIsPublic() {
+		return isPublic;
+	}
+	public void setPublic(int isPublic) {
+		this.isPublic = isPublic;
+	}
+	public int getIsCollect() {
+		return isCollect;
+	}
+	public void setCollect(int isCollect) {
+		this.isCollect = isCollect;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
 	public String getMomentImg() {
 		return momentImg;
 	}

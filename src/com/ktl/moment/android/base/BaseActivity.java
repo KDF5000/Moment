@@ -6,24 +6,18 @@
 package com.ktl.moment.android.base;
 
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.FragmentActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.ktl.moment.R;
 import com.ktl.moment.manager.AppManager;
 

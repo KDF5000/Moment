@@ -30,7 +30,8 @@
     
     <string name="found_text_view">发现</string>
     <string name="moment_detail_text_view">详情</string>
-    <string name="editor_complete">完成</string>
+    <string name="editor_complete">完成</string> 
+    
     
     <!-- img&img_btn description -->
     <string name="start_lump">lump</string>
