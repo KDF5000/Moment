@@ -118,6 +118,7 @@ public class EditorActivity extends BaseActivity {
 	private boolean flag = false; // 控制何时显示下方tools
 	private boolean isPause = true; // 标识录音是否暂停,true=暂停中,false=录音中
 	private boolean hasPause = false; // 标识录音中是否暂停过
+	private boolean isOpen = false;//表示是否公开灵感
 
 	private InputHandler inputHandler = new InputHandler();
 
@@ -154,9 +155,6 @@ public class EditorActivity extends BaseActivity {
 		init();
 		FileUtil.createDir("record");
 		
-		setTitleBackImgVisible(true);
-		setBaseActivityBgColor(getResources()
-				.getColor(R.color.main_title_color));
 		appHeight = getAppHeight();
 	}
 
@@ -180,6 +178,17 @@ public class EditorActivity extends BaseActivity {
 				inputHandler.sendMessage(msg);
 			}
 		});
+
+		setTitleBackImgVisible(true);
+		setTitleRightImgVisible(true);
+		setTitleBackImg(R.drawable.editor_title_return);
+		if(isOpen){
+			setTitleRightImg(R.drawable.editor_open_enable);
+		}else{
+			setTitleRightImg(R.drawable.editor_open_unable);
+		}
+		setBaseActivityBgColor(getResources()
+				.getColor(R.color.editor_main_color));
 	}
 
 	/**

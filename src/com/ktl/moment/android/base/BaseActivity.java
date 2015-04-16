@@ -33,6 +33,7 @@ public class BaseActivity extends FragmentActivity {
 	protected FrameLayout contentLayout;
 	protected TextView middleTitleTv;
 	protected ImageView titleBackImg;
+	protected ImageView titleRightImg;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -54,12 +55,15 @@ public class BaseActivity extends FragmentActivity {
 
 		middleTitleTv = (TextView) findViewById(R.id.middle_title_tv);
 		titleBackImg = (ImageView) findViewById(R.id.title_back_img);
+		
+		titleRightImg = (ImageView) findViewById(R.id.title_right_img);
 	}
 
 	private void hideAllNavigationInfo() {
 		setHomeTitleVisible(false);
 		setMiddleTitleVisible(false);
 		setTitleBackImgVisible(false);
+		setTitleRightImgVisible(false);
 	}
 
 	protected void setHomeTitleVisible(boolean isVisible) {
@@ -85,6 +89,14 @@ public class BaseActivity extends FragmentActivity {
 			titleBackImg.setVisibility(View.GONE);
 		}
 	}
+	
+	protected void setTitleRightImgVisible(boolean isVisible){
+		if(isVisible){
+			titleRightImg.setVisibility(View.VISIBLE);
+		}else{
+			titleRightImg.setVisibility(View.GONE);
+		}
+	}
 
 	protected void setTitleTvName(int resStringId) {
 		titleNameTv.setText(resStringId);
@@ -100,6 +112,14 @@ public class BaseActivity extends FragmentActivity {
 
 	protected void setBaseContainerBgColor(int resId) {
 		contentLayout.setBackgroundColor(resId);
+	}
+	
+	protected void setTitleBackImg(int resId){
+		titleBackImg.setImageResource(resId);
+	}
+	
+	protected void setTitleRightImg(int resId){
+		titleRightImg.setImageResource(resId);
 	}
 
 	/**
