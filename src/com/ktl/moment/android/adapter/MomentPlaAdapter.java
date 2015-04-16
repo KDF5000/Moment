@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.fragment.MomentFragment.OperateCallback;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.utils.ToastUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -25,11 +27,13 @@ public class MomentPlaAdapter extends BaseAdapter{
 	private LayoutInflater layoutInflater;
 	private List<Moment> momentList;
 	private DisplayImageOptions options;
+	private OperateCallback operateCallback;
 	
-	public MomentPlaAdapter(Context context, List<Moment> momentList, DisplayImageOptions options){
+	public MomentPlaAdapter(Context context, List<Moment> momentList, DisplayImageOptions options, OperateCallback operateCallback){
 		this.context = context;
 		this.momentList = momentList;
 		this.options = options;
+		this.operateCallback = operateCallback;
 		
 		this.layoutInflater = LayoutInflater.from(context);
 	}
@@ -105,6 +109,18 @@ public class MomentPlaAdapter extends BaseAdapter{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				ToastUtil.show(context, "you click me");
+			}
+		});
+		
+		final int currentPosition = position;
+		momentHolder.momentItemLayout.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(context, "you click me for a long time");
+				operateCallback.OnSelected(0, currentPosition);
+				return true;
 			}
 		});
 		return convertView;
