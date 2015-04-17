@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="25dp"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <com.ktl.moment.android.component.listview.arc.widget.ZrcListView
-        android:id="@+id/fragment_find_list"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/main_content_container_color"
-        android:dividerHeight="10dp"
-        android:scrollbars="none" >
-    </com.ktl.moment.android.component.listview.arc.widget.ZrcListView>
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="find" />
+
+    </LinearLayout>
+    
+
+</ScrollView>

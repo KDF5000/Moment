@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.fragment.DynamicFragment;
 import com.ktl.moment.android.fragment.FindFragment;
+import com.ktl.moment.android.fragment.DynamicFragment;
 import com.ktl.moment.android.fragment.MeFragment;
 import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.constant.C;

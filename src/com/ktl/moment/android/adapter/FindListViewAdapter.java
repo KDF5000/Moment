@@ -57,7 +57,7 @@ public class FindListViewAdapter extends BaseAdapter {
 		MomentHolder momentHolder = null;
 		if (convertView == null) {
 			convertView = this.mInflater.inflate(
-					R.layout.fragment_find_list_item, null);
+					R.layout.fragment_dynamic_list_item, null);
 			momentHolder = new MomentHolder();
 			momentHolder.tittleTv = (TextView) convertView
 					.findViewById(R.id.moment_title);

@@ -14,6 +14,9 @@ public class AppManager {
 	public static List<Activity> activityCollector;
 	public static AppManager instance;
 	
+	private AppManager(){
+	}
+	
 	/**
 	 * 获取实例
 	 * @return
