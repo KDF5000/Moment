@@ -155,6 +155,9 @@ public class EditorActivity extends BaseActivity {
 	private static final int PLAY_STOP = 2;
 	private boolean isPlaying = false; // 是否播放中
 
+	private static final int REQUEST_CODE = 1000;
+	private boolean isConfirmDelete; // 录音播放栏删除音频的标识
+
 	private InputHandler inputHandler = new InputHandler();
 
 	private class InputHandler extends Handler {
@@ -372,9 +375,17 @@ public class EditorActivity extends BaseActivity {
 		case R.id.editor_play_start:
 			playerPause();
 			break;
-		case R.id.editor_play_delete:
-			playerDelete();
+		case R.id.editor_play_delete: {
+			// 弹出dialog
+			Intent intent = new Intent(this, EditorDialogActivity.class);
+			startActivityForResult(intent, REQUEST_CODE);
+
+			// 先暂停音频播放
+			RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
+			TimerCountUtil.getInstance().stopTimerCount();
+			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
 			break;
+		}
 		default:
 			break;
 		}
@@ -513,18 +524,18 @@ public class EditorActivity extends BaseActivity {
 	public void recordOver() {
 		toolsLayout.setVisibility(View.VISIBLE);
 		recordLayout.setVisibility(View.GONE);
-		
+
 		RecordUtil.getInstance().complete(hasPause, isPause);
 
-//		// 终止计时
+		// // 终止计时
 		TimerCountUtil.getInstance().stopTimerCount();
-//		//计时器清零
+		// //计时器清零
 		TimerCountUtil.getInstance().clearTimerCount();
 
 		ripple.stopRippleAnimation();
 		isPause = true;
 
-		//完成录音后获取音频文件的路径
+		// 完成录音后获取音频文件的路径
 		recordAudioPath = RecordUtil.getInstance().getRecordPath();
 
 		if (recordAudioPath != null) {
@@ -586,30 +597,30 @@ public class EditorActivity extends BaseActivity {
 	 * 从磁盘删除录音文件
 	 */
 	public void playerDelete() {
-		//先暂停音频播放
-		RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
-		TimerCountUtil.getInstance().stopTimerCount();
 		isPlaying = false;
-		boolean isDelete = FileUtil.deleteFile(recordAudioPath);
-		if (isDelete) {
-			ToastUtil.show(this, "录音文件删除成功");
-			TimerCountUtil.getInstance().clearTimerCount();
-			
-			//删除录音后关闭音频播放栏
-			toolsLayout.setVisibility(View.VISIBLE);
-			Animation animLeftIn = AnimationUtils.loadAnimation(this,
-					R.anim.left_in);
-			toolsLayout.setAnimation(animLeftIn);
 
-			Animation animRightOut = AnimationUtils.loadAnimation(this,
-					R.anim.right_out);
-			audioPlayLayout.setAnimation(animRightOut);
-			audioPlayLayout.setVisibility(View.GONE);
-			
-			//隐藏小喇叭图标
-			editorRecordAudio.setVisibility(View.GONE);
-		} else {
-			ToastUtil.show(this, "录音文件删除失败");
+		if (isConfirmDelete) {
+			boolean isDelete = FileUtil.deleteFile(recordAudioPath);
+			if (isDelete) {
+				ToastUtil.show(this, "录音文件删除成功");
+				TimerCountUtil.getInstance().clearTimerCount();
+
+				// 删除录音后关闭音频播放栏
+				toolsLayout.setVisibility(View.VISIBLE);
+				Animation animLeftIn = AnimationUtils.loadAnimation(this,
+						R.anim.left_in);
+				toolsLayout.setAnimation(animLeftIn);
+
+				Animation animRightOut = AnimationUtils.loadAnimation(this,
+						R.anim.right_out);
+				audioPlayLayout.setAnimation(animRightOut);
+				audioPlayLayout.setVisibility(View.GONE);
+
+				// 隐藏小喇叭图标
+				editorRecordAudio.setVisibility(View.GONE);
+			} else {
+				ToastUtil.show(this, "录音文件删除失败");
+			}
 		}
 	}
 
@@ -713,10 +724,16 @@ public class EditorActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
-			ContentResolver resolver = getContentResolver();
-			Bitmap originalBitmap = null;
-			// 添加图片
-			if (requestCode == C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION) {
+			switch (requestCode) {
+			case REQUEST_CODE:
+				// 确认删除录音
+				isConfirmDelete = data.getBooleanExtra("isDelete", false);
+				playerDelete();
+				break;
+			case C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION: {
+				// 添加图片
+				ContentResolver resolver = getContentResolver();
+				Bitmap originalBitmap = null;
 				Uri originalUri = data.getData();
 				try {
 					originalBitmap = BitmapFactory.decodeStream(resolver
@@ -731,6 +748,10 @@ public class EditorActivity extends BaseActivity {
 				} else {
 					Toast.makeText(this, "获取图片失败", Toast.LENGTH_LONG).show();
 				}
+				break;
+			}
+			default:
+				break;
 			}
 		}
 	}
