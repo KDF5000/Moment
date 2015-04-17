@@ -17,12 +17,12 @@
         <com.ktl.moment.android.component.CircleImageView
             android:id="@+id/me_user_avatar"
             android:layout_width="83dp"
-            android:layout_height="83dp"/>
+            android:layout_height="83dp" />
 
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/me_user_avatar"
             android:orientation="vertical" >
 
@@ -92,7 +92,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="#ffffff"
+        android:background="@drawable/me_menu_item_bg"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
@@ -117,7 +118,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:background="#ffffff"
+        android:background="@drawable/me_menu_item_bg"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
@@ -142,7 +144,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="#ffffff"
+        android:background="@drawable/me_menu_item_bg"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
@@ -189,7 +192,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:background="#ffffff"
+        android:background="@drawable/me_menu_item_bg"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
@@ -236,7 +240,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="#ffffff"
+        android:background="@drawable/me_menu_item_bg"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
