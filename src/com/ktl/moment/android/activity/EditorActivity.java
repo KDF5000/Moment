@@ -19,10 +19,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,7 @@ import com.ktl.moment.utils.FileUtil;
 import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
 import com.ktl.moment.utils.TimerCountUtil;
+import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -100,6 +104,31 @@ public class EditorActivity extends BaseActivity {
 	@ViewInject(R.id.editor_record_over)
 	private ImageView editorRecordOver;
 
+	// 播放录音时需要的组件
+	@ViewInject(R.id.editor_record_audio)
+	private ImageView editorRecordAudio;
+
+	@ViewInject(R.id.audio_play_layout)
+	private LinearLayout audioPlayLayout;
+
+	@ViewInject(R.id.editor_play_delete)
+	private ImageView editorPlayDeleteImg;
+
+	@ViewInject(R.id.editor_play_seekbar)
+	private SeekBar editorPlaySeekbar;
+
+	@ViewInject(R.id.editor_play_start)
+	private ImageView editorPlayStartImg;
+
+	@ViewInject(R.id.editor_play_status)
+	private TextView editorPlayStatusTv;
+
+	@ViewInject(R.id.editor_play_time)
+	private TextView editorPlayTimeTv;
+
+	@ViewInject(R.id.editor_play_close)
+	private ImageView editorPlayCloseImg;
+
 	// 父类控件
 	@ViewInject(R.id.title_back_img)
 	private ImageView titleBackImg;
@@ -118,7 +147,13 @@ public class EditorActivity extends BaseActivity {
 	private boolean flag = false; // 控制何时显示下方tools
 	private boolean isPause = true; // 标识录音是否暂停,true=暂停中,false=录音中
 	private boolean hasPause = false; // 标识录音中是否暂停过
-	private boolean isOpen = false;//表示是否公开灵感
+	private boolean isOpen = false;// 表示是否公开灵感
+
+	private String recordAudioPath = null;
+	private static final int PLAY_START = 0;
+	private static final int PLAY_PAUSE = 1;
+	private static final int PLAY_STOP = 2;
+	private boolean isPlaying = false; // 是否播放中
 
 	private InputHandler inputHandler = new InputHandler();
 
@@ -154,15 +189,12 @@ public class EditorActivity extends BaseActivity {
 
 		init();
 		FileUtil.createDir("record");
-		
+
 		appHeight = getAppHeight();
 	}
 
 	private void init() {
 		ViewUtils.inject(this);
-
-		// 初始化时设置录音计时器显示的TextView，否则在需要时再设置会报NPE
-		TimerCountUtil.getInstance().setTextView(editorRecordTimeTv);
 
 		baseContent.setOnResizeListener(new OnResizeListener() {
 			@Override
@@ -182,13 +214,13 @@ public class EditorActivity extends BaseActivity {
 		setTitleBackImgVisible(true);
 		setTitleRightImgVisible(true);
 		setTitleBackImg(R.drawable.editor_title_return);
-		if(isOpen){
+		if (isOpen) {
 			setTitleRightImg(R.drawable.editor_open_enable);
-		}else{
+		} else {
 			setTitleRightImg(R.drawable.editor_open_unable);
 		}
-		setBaseActivityBgColor(getResources()
-				.getColor(R.color.editor_main_color));
+		setBaseActivityBgColor(getResources().getColor(
+				R.color.editor_main_color));
 	}
 
 	/**
@@ -278,8 +310,7 @@ public class EditorActivity extends BaseActivity {
 		if (toolContent != null) {
 			if (isShow && flag) {
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-						LayoutParams.MATCH_PARENT, appHeight
-								- baseLayoutHeight
+						LayoutParams.MATCH_PARENT, appHeight - baseLayoutHeight
 								- baseTitleContainer.getHeight());
 				// Log.i("height", appHeight+"-"+
 				// baseLayoutHeight+"-"+baseTitleContainer.getHeight());
@@ -295,7 +326,9 @@ public class EditorActivity extends BaseActivity {
 			R.id.editor_keyboard_img, R.id.editor_edit_complete,
 			R.id.editor_record_big_img, R.id.title_back_img,
 			R.id.editor_record_delete, R.id.editor_record_pause,
-			R.id.editor_record_over })
+			R.id.editor_record_over, R.id.editor_record_audio,
+			R.id.editor_play_close, R.id.editor_play_start,
+			R.id.title_right_img, R.id.editor_play_delete })
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -327,11 +360,42 @@ public class EditorActivity extends BaseActivity {
 			actionStart(HomeActivity.class);
 			TimerCountUtil.getInstance().stopTimerCount();
 			break;
+		case R.id.title_right_img:
+			setOpen();
+			break;
+		case R.id.editor_record_audio:
+			player();
+			break;
+		case R.id.editor_play_close:
+			closePlayer();
+			break;
+		case R.id.editor_play_start:
+			playerPause();
+			break;
+		case R.id.editor_play_delete:
+			playerDelete();
+			break;
 		default:
 			break;
 		}
 	}
 
+	/**
+	 * 设置灵感是否公开
+	 */
+	public void setOpen() {
+		if (isOpen) {
+			setTitleRightImg(R.drawable.editor_open_enable);
+			isOpen = false;
+		} else {
+			setTitleRightImg(R.drawable.editor_open_unable);
+			isOpen = true;
+		}
+	}
+
+	/**
+	 * 工具栏录音图标相应的逻辑
+	 */
 	public void record() {
 		showTools(R.id.editor_record_img);
 		ripple.setVisibility(View.VISIBLE);
@@ -340,6 +404,8 @@ public class EditorActivity extends BaseActivity {
 		recordLayout.setVisibility(View.VISIBLE);
 
 		// 开始计时
+
+		TimerCountUtil.getInstance().setTextView(editorRecordTimeTv);
 		TimerCountUtil.getInstance().startTimerCount();
 		// 开始录音
 		RecordUtil.getInstance().start();
@@ -350,6 +416,9 @@ public class EditorActivity extends BaseActivity {
 		isPause = false;
 	}
 
+	/**
+	 * 工具栏添加图片的逻辑
+	 */
 	public void gallery() {
 		showTools(R.id.editor_gallery_img);
 		ripple.setVisibility(View.GONE);
@@ -364,17 +433,25 @@ public class EditorActivity extends BaseActivity {
 				C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION);
 	}
 
+	/**
+	 * 工具栏键盘图标
+	 */
 	public void keyboard() {
 		showTools(R.id.editor_keyboard_img);
 		ripple.setVisibility(View.GONE);
 	}
 
+	/**
+	 * 工具栏下方区域的录音机图标
+	 */
 	public void recordBig() {
 
 		if (recordLayout.getVisibility() == View.GONE) {
 			toolsLayout.setVisibility(View.GONE);
 			recordLayout.setVisibility(View.VISIBLE);
 
+			Log.i("tag", "big");
+			TimerCountUtil.getInstance().setTextView(editorRecordTimeTv);
 			TimerCountUtil.getInstance().startTimerCount();
 			RecordUtil.getInstance().start();
 
@@ -383,10 +460,14 @@ public class EditorActivity extends BaseActivity {
 			isPause = false;
 
 		} else {
+			Log.i("tag", "small");
 			recordPause();
 		}
 	}
 
+	/**
+	 * 录音时删除录音
+	 */
 	public void recordDelete() {
 		// 清零计时器
 		TimerCountUtil.getInstance().clearTimerCount();
@@ -399,6 +480,9 @@ public class EditorActivity extends BaseActivity {
 		isPause = true;
 	}
 
+	/**
+	 * 录音暂停
+	 */
 	public void recordPause() {
 		if (!isPause) {// 录音中
 			editorRecordPause.setImageResource(R.drawable.editor_record_start);
@@ -423,16 +507,129 @@ public class EditorActivity extends BaseActivity {
 		}
 	}
 
+	/**
+	 * 录音结束
+	 */
 	public void recordOver() {
 		toolsLayout.setVisibility(View.VISIBLE);
 		recordLayout.setVisibility(View.GONE);
-
-		// 终止计时
-		TimerCountUtil.getInstance().stopTimerCount();
+		
 		RecordUtil.getInstance().complete(hasPause, isPause);
+
+//		// 终止计时
+		TimerCountUtil.getInstance().stopTimerCount();
+//		//计时器清零
+		TimerCountUtil.getInstance().clearTimerCount();
 
 		ripple.stopRippleAnimation();
 		isPause = true;
+
+		//完成录音后获取音频文件的路径
+		recordAudioPath = RecordUtil.getInstance().getRecordPath();
+
+		if (recordAudioPath != null) {
+			editorRecordAudio.setVisibility(View.VISIBLE);
+		}
+	}
+
+	/**
+	 * 进入录音播放栏,同时播放录音
+	 */
+	public void player() {
+		Animation animLeftOut = AnimationUtils.loadAnimation(this,
+				R.anim.left_out);
+		toolsLayout.setAnimation(animLeftOut);
+		toolsLayout.setVisibility(View.GONE);
+
+		audioPlayLayout.setVisibility(View.VISIBLE);
+		Animation animRightIn = AnimationUtils.loadAnimation(this,
+				R.anim.right_in);
+		audioPlayLayout.setAnimation(animRightIn);
+
+		ToastUtil.show(this, recordAudioPath);
+		// 没有播放，那就开始播放
+		if (!isPlaying) {
+			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
+
+			int duration = RecordUtil.getInstance().play(recordAudioPath,
+					PLAY_START);
+			String recordTime = TimerCountUtil.getInstance().turnInt2Time(
+					duration / 1000);
+			editorPlayTimeTv.setText(recordTime);
+
+			TimerCountUtil.getInstance().setTextView(editorPlayStatusTv);
+			TimerCountUtil.getInstance().startTimerCount();
+			isPlaying = true;
+		}
+
+	}
+
+	/**
+	 * 暂停音频播放
+	 */
+	public void playerPause() {
+		// 播放中
+		if (isPlaying) {
+			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
+			RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
+			TimerCountUtil.getInstance().pauseTimerCount();
+			isPlaying = false;
+		} else {
+			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
+			RecordUtil.getInstance().play(recordAudioPath, PLAY_START);
+			TimerCountUtil.getInstance().restartTimerCount();
+			isPlaying = true;
+		}
+	}
+
+	/**
+	 * 从磁盘删除录音文件
+	 */
+	public void playerDelete() {
+		//先暂停音频播放
+		RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
+		TimerCountUtil.getInstance().stopTimerCount();
+		isPlaying = false;
+		boolean isDelete = FileUtil.deleteFile(recordAudioPath);
+		if (isDelete) {
+			ToastUtil.show(this, "录音文件删除成功");
+			TimerCountUtil.getInstance().clearTimerCount();
+			
+			//删除录音后关闭音频播放栏
+			toolsLayout.setVisibility(View.VISIBLE);
+			Animation animLeftIn = AnimationUtils.loadAnimation(this,
+					R.anim.left_in);
+			toolsLayout.setAnimation(animLeftIn);
+
+			Animation animRightOut = AnimationUtils.loadAnimation(this,
+					R.anim.right_out);
+			audioPlayLayout.setAnimation(animRightOut);
+			audioPlayLayout.setVisibility(View.GONE);
+			
+			//隐藏小喇叭图标
+			editorRecordAudio.setVisibility(View.GONE);
+		} else {
+			ToastUtil.show(this, "录音文件删除失败");
+		}
+	}
+
+	/**
+	 * 关闭录音播放栏
+	 */
+	public void closePlayer() {
+		toolsLayout.setVisibility(View.VISIBLE);
+		Animation animLeftIn = AnimationUtils.loadAnimation(this,
+				R.anim.left_in);
+		toolsLayout.setAnimation(animLeftIn);
+
+		Animation animRightOut = AnimationUtils.loadAnimation(this,
+				R.anim.right_out);
+		audioPlayLayout.setAnimation(animRightOut);
+		audioPlayLayout.setVisibility(View.GONE);
+
+		RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
+		TimerCountUtil.getInstance().stopTimerCount();
+		isPlaying = false;
 	}
 
 	private void saveContent() {
