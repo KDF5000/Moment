@@ -104,10 +104,11 @@ public class MomentFragment extends BaseFragment {
 			switch (requestCode) {
 			case REAUEST_CODE_OPEN:
 				boolean isOpen = data.getBooleanExtra("isOpen", false);
-				int positiomn = data.getIntExtra("position", 0);
+				int position = data.getIntExtra("position", 0);
 				if(isOpen){
-					Log.i("tag", positiomn+","+isOpen);
-					momentList.get(positiomn).setPublic(1);
+					Log.i("tag", position+","+isOpen);
+					momentList.get(position).setPublic(1);
+					momentPlaAdapter.notifyDataSetChanged();
 				}
 				break;
 			case REAUEST_CODE_LABEL:

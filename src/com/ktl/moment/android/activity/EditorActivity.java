@@ -224,6 +224,7 @@ public class EditorActivity extends BaseActivity {
 		}
 		setBaseActivityBgColor(getResources().getColor(
 				R.color.editor_main_color));
+
 	}
 
 	/**
@@ -265,14 +266,13 @@ public class EditorActivity extends BaseActivity {
 	 * 系统软键盘与工具栏的切换显示
 	 */
 	private void showTools(int id) {
-		if (id == R.id.editor_keyboard_img || id == R.id.editor_gallery_img) {
+		if (id == R.id.editor_keyboard_img || id == R.id.editor_gallery_img
+				|| id == R.id.editor_record_over) {
 			keyboardImg
 					.setImageResource(R.drawable.editor_keyboard_enable_selector);
 			flag = false;
-			if (currentStatus == SHOW_TOOLS && editText.hasFocus()) {// &&
-																		// contentLayout.getVisibility()
-																		// ==
-																		// View.VISIBLE
+			// if (currentStatus == SHOW_TOOLS && editText.hasFocus()) {
+			if (currentStatus == SHOW_TOOLS) {
 				showSoftKeyBoard();
 			} else {
 				setToolsVisible(false);
@@ -382,8 +382,8 @@ public class EditorActivity extends BaseActivity {
 
 			// 先暂停音频播放
 			RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
-			TimerCountUtil.getInstance().stopTimerCount();
-			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
+			pauseSeekBar();
+			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
 			break;
 		}
 		default:
@@ -522,6 +522,7 @@ public class EditorActivity extends BaseActivity {
 	 * 录音结束
 	 */
 	public void recordOver() {
+		showTools(R.id.editor_record_over);
 		toolsLayout.setVisibility(View.VISIBLE);
 		recordLayout.setVisibility(View.GONE);
 
@@ -557,7 +558,9 @@ public class EditorActivity extends BaseActivity {
 				R.anim.right_in);
 		audioPlayLayout.setAnimation(animRightIn);
 
-		ToastUtil.show(this, recordAudioPath);
+		// 设置seekbar不可以被拖动
+		editorPlaySeekbar.setEnabled(false);
+
 		// 没有播放，那就开始播放
 		if (!isPlaying) {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
@@ -565,11 +568,11 @@ public class EditorActivity extends BaseActivity {
 			int duration = RecordUtil.getInstance().play(recordAudioPath,
 					PLAY_START);
 			String recordTime = TimerCountUtil.getInstance().turnInt2Time(
-					duration / 1000);
+					duration / 1000 + 1);
+			startSeekBar(duration / 1000);
 			editorPlayTimeTv.setText(recordTime);
 
 			TimerCountUtil.getInstance().setTextView(editorPlayStatusTv);
-			TimerCountUtil.getInstance().startTimerCount();
 			isPlaying = true;
 		}
 
@@ -583,12 +586,13 @@ public class EditorActivity extends BaseActivity {
 		if (isPlaying) {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
 			RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
-			TimerCountUtil.getInstance().pauseTimerCount();
+			pauseSeekBar();
 			isPlaying = false;
 		} else {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
-			RecordUtil.getInstance().play(recordAudioPath, PLAY_START);
-			TimerCountUtil.getInstance().restartTimerCount();
+			int duration = RecordUtil.getInstance().play(recordAudioPath,
+					PLAY_START);
+			restartSeekBar(duration / 1000);
 			isPlaying = true;
 		}
 	}
@@ -602,6 +606,9 @@ public class EditorActivity extends BaseActivity {
 		if (isConfirmDelete) {
 			boolean isDelete = FileUtil.deleteFile(recordAudioPath);
 			if (isDelete) {
+				// 调出系统软键盘
+				showSoftKeyBoard();
+
 				ToastUtil.show(this, "录音文件删除成功");
 				TimerCountUtil.getInstance().clearTimerCount();
 
@@ -638,8 +645,6 @@ public class EditorActivity extends BaseActivity {
 		audioPlayLayout.setAnimation(animRightOut);
 		audioPlayLayout.setVisibility(View.GONE);
 
-		RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
-		TimerCountUtil.getInstance().stopTimerCount();
 		isPlaying = false;
 	}
 
@@ -754,5 +759,118 @@ public class EditorActivity extends BaseActivity {
 				break;
 			}
 		}
+	}
+
+	/*********************************************
+	 * SeekBar status control *
+	 *********************************************/
+	private boolean isSeekBarPause; // seekbar是否暂停
+	private boolean isNewStart; // 是否是从头开始播放
+	private int startProgress = 0;
+
+	final Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1: {
+				editorPlayStartImg
+						.setImageResource(R.drawable.editor_record_start);
+
+				toolsLayout.setVisibility(View.VISIBLE);
+				Animation animLeftIn = AnimationUtils.loadAnimation(
+						EditorActivity.this, R.anim.left_in);
+				toolsLayout.setAnimation(animLeftIn);
+
+				Animation animRightOut = AnimationUtils.loadAnimation(
+						EditorActivity.this, R.anim.right_out);
+				audioPlayLayout.setAnimation(animRightOut);
+				audioPlayLayout.setVisibility(View.GONE);
+				break;
+			}
+			}
+			super.handleMessage(msg);
+		};
+	};
+
+	public class SeekBarThread extends Thread {
+
+		private int maxProgress; // seekbar的最大值，这里为播放音频文件的时长
+
+		public SeekBarThread(int maxProgress) {
+			this.maxProgress = maxProgress;
+
+			editorPlaySeekbar.setMax(maxProgress * 20);
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			int endProgress = maxProgress * 20;
+			if (isNewStart) {
+				startProgress = 0;
+			}
+			editorPlaySeekbar.setProgress(startProgress);
+			while (startProgress <= endProgress && !isSeekBarPause) {
+				editorPlaySeekbar.setProgress(startProgress++);
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (editorPlaySeekbar.getProgress() == endProgress) {
+				stopSeekBar();
+				Message msg = new Message();
+				msg.what = 1;
+				handler.sendMessage(msg);
+			}
+		}
+	}
+
+	/**
+	 * 开始seekbar动画
+	 * 
+	 * @param maxProgress
+	 */
+	public void startSeekBar(int maxProgress) {
+		isSeekBarPause = false;
+		isNewStart = true;
+		SeekBarThread seekThread = new SeekBarThread(maxProgress);
+		seekThread.start();
+		TimerCountUtil.getInstance().startTimerCount();
+	}
+
+	/**
+	 * 暂停seekbar动画
+	 */
+	public void pauseSeekBar() {
+		isSeekBarPause = true;
+		isNewStart = false;
+		TimerCountUtil.getInstance().pauseTimerCount();
+	}
+
+	/**
+	 * 继续seekbar动画
+	 * 
+	 * @param maxProgress
+	 */
+	public void restartSeekBar(int maxProgress) {
+		isSeekBarPause = false;
+		isNewStart = false;
+		SeekBarThread seekThread = new SeekBarThread(maxProgress);
+		seekThread.start();
+		TimerCountUtil.getInstance().restartTimerCount();
+	}
+
+	/**
+	 * 停止seekbar
+	 */
+	public void stopSeekBar() {
+		isSeekBarPause = true;
+		isNewStart = true;
+		isPlaying = false;
+		
+		TimerCountUtil.getInstance().stopTimerCount();
+		TimerCountUtil.getInstance().clearTimerCount();
 	}
 }
