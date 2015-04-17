@@ -50,6 +50,7 @@ public class MomentFragment extends BaseFragment {
 			public void OnSelected(int type, int position) {
 				// TODO Auto-generated method stub
 				Intent dialogIntent = new Intent(getActivity(), MomentDialogActivity.class);
+				dialogIntent.putExtra("position", position);
 				startActivityForResult(dialogIntent, REAUEST_CODE_OPEN);
 			}
 			

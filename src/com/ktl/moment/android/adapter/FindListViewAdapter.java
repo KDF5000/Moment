@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
@@ -75,6 +76,7 @@ public class FindListViewAdapter extends BaseAdapter {
 			momentHolder.praiseNum = (TextView) convertView
 					.findViewById(R.id.praise_num);
 			momentHolder.commentNum = (TextView) convertView.findViewById(R.id.comments_num);
+			momentHolder.praiseArea = (LinearLayout) convertView.findViewById(R.id.praise_area);
 			convertView.setTag(momentHolder);
 		} else {
 			momentHolder = (MomentHolder) convertView.getTag();
@@ -101,6 +103,18 @@ public class FindListViewAdapter extends BaseAdapter {
 				context.startActivity(intent);
 			}
 		});
+		momentHolder.praiseArea.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				int num = moment.getPraiseNums();
+				moment.setPraiseNums(++num);
+				notifyDataSetChanged();
+				//可以在这里向服务器请求，也可以设置一个回调或者消息 给fragment 让他发送请求
+				
+			}
+		});
 		return convertView;
 	}
 
@@ -114,6 +128,7 @@ public class FindListViewAdapter extends BaseAdapter {
 		TextView followNum;// 关注人数
 		TextView praiseNum;// 点赞人数
 		TextView commentNum;//评论人数
+		LinearLayout praiseArea;//点赞区域
 	}
 
 }
