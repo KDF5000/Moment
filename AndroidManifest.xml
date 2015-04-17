@@ -101,7 +101,13 @@
         <!-- 长按灵感弹出选项dialog -->
         <activity 
             android:name="com.ktl.moment.android.activity.MomentDialogActivity"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"></activity>
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
+        </activity>
+        <!-- 播放录音点击删除弹出dialog -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.EditorDialogActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
