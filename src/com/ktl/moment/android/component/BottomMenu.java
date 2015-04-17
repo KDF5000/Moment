@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.ktl.moment.R;
+import com.ktl.moment.common.constant.C;
 
 public class BottomMenu extends RelativeLayout implements OnClickListener {
 
@@ -53,7 +54,6 @@ public class BottomMenu extends RelativeLayout implements OnClickListener {
 		menuItemMap.put(R.id.menu_me, meItem);
 		
 		setItemOnClickListener();
-		setDefaultCheckedMenu(R.id.menu_find);
 		super.onFinishInflate();
 	}
 	/**
@@ -108,19 +108,19 @@ public class BottomMenu extends RelativeLayout implements OnClickListener {
 		int position = -1;
 		switch(id){
 		case R.id.menu_find:
-			position = 0;//换成常量
+			position = C.menu.FRAGMENT_FIND_MENU_ID;//换成常量
 			break;
 		case R.id.menu_foucs:
-			position = 1;
+			position = C.menu.FRAGMENT_DYNAMIC_MENU_ID;
 			break;
 		case R.id.menu_add:
-			position = 2;
+			position = C.menu.FRAGMENT_ADD_MOMENT_MENU_ID;
 			break;
 		case R.id.menu_idea:
-			position = 3;
+			position = C.menu.FRAGMENT_MOMENT_MENU_ID;
 			break;
 		case R.id.menu_me:
-			position = 4;
+			position = C.menu.FRAGMENT_ME_MENU_ID;
 			break;
 		}
 		return position;

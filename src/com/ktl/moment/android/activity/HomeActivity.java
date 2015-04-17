@@ -47,6 +47,7 @@ public class HomeActivity extends BaseActivity {
 		setBaseContainerBgColor(getResources().getColor(
 				R.color.main_content_container_color));//设置内容区域颜色
 		customMenu = (BottomMenu) findViewById(R.id.bottom_menu);
+		customMenu.setDefaultCheckedMenu(R.id.menu_foucs);
 	}
 
 	/**

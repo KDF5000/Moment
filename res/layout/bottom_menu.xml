@@ -15,20 +15,7 @@
         android:background="@drawable/menu_border"
         android:orientation="horizontal" >
 
-        <com.ktl.moment.android.component.MenuImageText
-            android:id="@+id/menu_find"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            menu:menu_item_unchecked_src="@drawable/menu_find"
-            menu:menu_item_checked_src="@drawable/menu_find_press"
-            menu:menu_item_text_unchecked_color="@color/menu_text_uncheked"
-            menu:menu_item_text_checked_color="@color/menu_text_checked"
-            menu:menu_text="发现" />
-
-       <com.ktl.moment.android.component.MenuImageText
+      <com.ktl.moment.android.component.MenuImageText
             android:id="@+id/menu_foucs"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -40,7 +27,20 @@
             menu:menu_item_text_unchecked_color="@color/menu_text_uncheked"
             menu:menu_item_text_checked_color="@color/menu_text_checked"
             menu:menu_text="关注" />
-
+       
+	  <com.ktl.moment.android.component.MenuImageText
+            android:id="@+id/menu_find"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            menu:menu_item_unchecked_src="@drawable/menu_find"
+            menu:menu_item_checked_src="@drawable/menu_find_press"
+            menu:menu_item_text_unchecked_color="@color/menu_text_uncheked"
+            menu:menu_item_text_checked_color="@color/menu_text_checked"
+            menu:menu_text="发现" />
+	  
        <com.ktl.moment.android.component.MenuImageText
             android:layout_width="0dp"
             android:layout_height="match_parent"

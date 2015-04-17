@@ -19,6 +19,8 @@ public class ImageManager {
 	private ImgLoadCallback mImgLoadCallback;
 	private static ImageManager instance = null;
 
+	private ImageManager(){
+	}
 	/**
 	 * 获取一个实例
 	 * 
