@@ -73,7 +73,7 @@ public class MomentFragment extends BaseFragment {
 		if(momentList == null){
 			momentList = new ArrayList<Moment>();
 		}
-		for(int i=0;i<100;i++){
+		for(int i=0;i<20;i++){
 			Moment moment = new Moment();
 			moment.setMomentId(i);
 			moment.setPostTime("4月10日");
@@ -90,7 +90,7 @@ public class MomentFragment extends BaseFragment {
 			if(i%2 == 1){
 				moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			}else{
-				moment.setMomentImg("");
+				moment.setMomentImg(null);
 			}
 			momentList.add(moment);
 		}
