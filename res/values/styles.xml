@@ -25,6 +25,7 @@
         <item name="android:windowAnimationStyle">@+android:style/Animation.Dialog</item>
     </style>
 
+    <!-- 播放录音的进度条 -->
     <style name="editor_player_seekbar" parent="@android:style/Widget.SeekBar">
         <item name="android:maxHeight">1dp</item>
         <item name="android:indeterminateOnly">false</item>

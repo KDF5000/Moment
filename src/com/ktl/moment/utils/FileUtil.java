@@ -88,4 +88,18 @@ public class FileUtil {
 		File dirFile = new File(wholePath);
 		return dirFile;
 	}
+	
+	/**
+	 * 删除指定路径的文件
+	 * @param path
+	 * @return
+	 */
+	public static boolean deleteFile(String path){
+		boolean isDelete = false;
+		File file = new File(path);
+		if(file.exists()){
+			isDelete = file.delete();
+		}
+		return isDelete;
+	}
 }

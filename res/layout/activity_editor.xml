@@ -56,7 +56,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginRight="12dp"
             android:src="@drawable/editor_audio3"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </RelativeLayout>
 
     <TextView
@@ -119,7 +119,7 @@
         android:layout_height="40dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <ImageView
             android:layout_width="0dp"
@@ -171,7 +171,7 @@
         android:layout_height="40dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/editor_play_delete"
@@ -188,11 +188,11 @@
             android:orientation="vertical" >
 
             <SeekBar
-                android:id="@+id/editor_play_progressbar"
+                android:id="@+id/editor_play_seekbar"
                 style="@style/editor_player_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="8dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -200,7 +200,7 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/editor_play_stat"
+                    android:id="@+id/editor_play_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
