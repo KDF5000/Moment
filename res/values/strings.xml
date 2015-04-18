@@ -28,7 +28,10 @@
     <string name="profile_sex_famale">女  </string>
     <string name="peofile_complete">完成注册</string>
     
+    <string name="attention_text_view">关注</string>
     <string name="found_text_view">发现</string>
+    <string name="moment_text_view">灵感</string>
+    <string name="me_text_view">我的</string>
     <string name="moment_detail_text_view">详情</string>
     <string name="editor_complete">完成</string> 
     

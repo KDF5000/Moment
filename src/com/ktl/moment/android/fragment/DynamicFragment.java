@@ -129,6 +129,7 @@ public class DynamicFragment extends BaseFragment {
 			moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			moment.setAvatarUrl("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			moment.setPostTime("2小时前");
+			moment.setIsFocused(0);
 			momentList.add(moment);
 		}
 	}

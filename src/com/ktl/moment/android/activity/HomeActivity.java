@@ -41,13 +41,14 @@ public class HomeActivity extends BaseActivity {
 				.inflate(R.layout.activity_home, contentLayout, true);
 
 		setHomeTitleVisible(true);
-		setTitleTvName(R.string.found_text_view);
+		setTitleTvName(R.string.attention_text_view);
 		setBaseActivityBgColor(getResources()
 				.getColor(R.color.main_title_color));//设置title颜色
 		setBaseContainerBgColor(getResources().getColor(
 				R.color.main_content_container_color));//设置内容区域颜色
 		customMenu = (BottomMenu) findViewById(R.id.bottom_menu);
 		customMenu.setDefaultCheckedMenu(R.id.menu_foucs);
+		
 	}
 
 	/**
@@ -64,9 +65,13 @@ public class HomeActivity extends BaseActivity {
 				switch (id) {
 				case C.menu.FRAGMENT_FIND_MENU_ID:
 					tag = C.menu.FRAGMENT_FIND_TAG;
+					setTitleTvNameEmpty();
+					setMiddleFindTabVisible(true);
 					break;
 				case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
 					tag = C.menu.FRAGMENT_DYNAMIC_TAG;
+					setTitleTvName(R.string.attention_text_view);
+					setMiddleFindTabVisible(false);
 					break;
 				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
 					Intent editorIntent = new Intent(HomeActivity.this, EditorActivity.class);
@@ -74,9 +79,13 @@ public class HomeActivity extends BaseActivity {
 					return;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:
 					tag = C.menu.FRAGMENT_MOMENT_TAG;
+					setTitleTvName(R.string.moment_text_view);
+					setMiddleFindTabVisible(false);
 					break;
 				case C.menu.FRAGMENT_ME_MENU_ID:
 					tag = C.menu.FRAGMENT_ME_TAG;
+					setTitleTvName(R.string.me_text_view);
+					setMiddleFindTabVisible(false);
 					break;
 				}
 				switchMenuByTag(tag);
@@ -173,4 +182,5 @@ public class HomeActivity extends BaseActivity {
 		}
 		return f;
 	}
+
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="register_to_login_color">#5dd2f9</color>
-    <color name="register_and_login_btn_color">#ac28d1e7</color>
+    <color name="register_and_login_btn_color">#28d1e7</color>
     
     <color name="account_text_color">#ffffff</color>
     

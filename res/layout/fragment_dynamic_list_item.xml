@@ -103,7 +103,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/focus_author" />
+            android:src="@drawable/focus_author_press"
+            android:rotation="45" />
     </RelativeLayout>
 
     <View

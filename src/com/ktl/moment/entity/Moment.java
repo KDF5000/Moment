@@ -16,7 +16,14 @@ public class Moment{
 	private int isPublic;//是否公开	0：不公开，1：公开
 	private int isCollect;//是否收藏		0：不是收藏，1：收藏
 	private String label;//灵感标签
+	private int isFocused;//是否被关注	0:未被关注，1：关注
 	
+	public int getIsFocused() {
+		return isFocused;
+	}
+	public void setIsFocused(int isFocused) {
+		this.isFocused = isFocused;
+	}
 	public int getIsPublic() {
 		return isPublic;
 	}

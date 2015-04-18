@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +35,10 @@ public class BaseActivity extends FragmentActivity {
 	protected TextView middleTitleTv;
 	protected ImageView titleBackImg;
 	protected ImageView titleRightImg;
+
+	public LinearLayout titleFindTab;
+	public TextView titleMiddleRecommend;
+	public TextView titleMiddleChannel;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -55,8 +60,13 @@ public class BaseActivity extends FragmentActivity {
 
 		middleTitleTv = (TextView) findViewById(R.id.middle_title_tv);
 		titleBackImg = (ImageView) findViewById(R.id.title_back_img);
-		
+
 		titleRightImg = (ImageView) findViewById(R.id.title_right_img);
+
+		titleFindTab = (LinearLayout) findViewById(R.id.title_find_tab);
+		titleMiddleChannel = (TextView) findViewById(R.id.title_middle_channel);
+		titleMiddleRecommend = (TextView) findViewById(R.id.title_middle_recommend);
+
 	}
 
 	private void hideAllNavigationInfo() {
@@ -64,6 +74,7 @@ public class BaseActivity extends FragmentActivity {
 		setMiddleTitleVisible(false);
 		setTitleBackImgVisible(false);
 		setTitleRightImgVisible(false);
+		setMiddleFindTabVisible(false);
 	}
 
 	protected void setHomeTitleVisible(boolean isVisible) {
@@ -89,17 +100,29 @@ public class BaseActivity extends FragmentActivity {
 			titleBackImg.setVisibility(View.GONE);
 		}
 	}
-	
-	protected void setTitleRightImgVisible(boolean isVisible){
-		if(isVisible){
+
+	protected void setTitleRightImgVisible(boolean isVisible) {
+		if (isVisible) {
 			titleRightImg.setVisibility(View.VISIBLE);
-		}else{
+		} else {
 			titleRightImg.setVisibility(View.GONE);
+		}
+	}
+
+	protected void setMiddleFindTabVisible(boolean isVisible) {
+		if (isVisible) {
+			titleFindTab.setVisibility(View.VISIBLE);
+		} else {
+			titleFindTab.setVisibility(View.GONE);
 		}
 	}
 
 	protected void setTitleTvName(int resStringId) {
 		titleNameTv.setText(resStringId);
+	}
+
+	protected void setTitleTvNameEmpty() {
+		titleNameTv.setText("");
 	}
 
 	protected void setMiddleTitleName(int resStringId) {
@@ -113,12 +136,12 @@ public class BaseActivity extends FragmentActivity {
 	protected void setBaseContainerBgColor(int resId) {
 		contentLayout.setBackgroundColor(resId);
 	}
-	
-	protected void setTitleBackImg(int resId){
+
+	protected void setTitleBackImg(int resId) {
 		titleBackImg.setImageResource(resId);
 	}
-	
-	protected void setTitleRightImg(int resId){
+
+	protected void setTitleRightImg(int resId) {
 		titleRightImg.setImageResource(resId);
 	}
 
@@ -174,8 +197,7 @@ public class BaseActivity extends FragmentActivity {
 				null, // WHERE clause selection arguments (none)
 				null); // Order-by clause (ascending by name)
 
-		int column_index = cursor
-				.getColumnIndexOrThrow(MediaColumns.DATA);
+		int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
 		cursor.moveToFirst();
 
 		return cursor.getString(column_index);
