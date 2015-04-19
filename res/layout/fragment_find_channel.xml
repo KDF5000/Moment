@@ -2,11 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp" >
     
     <TextView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="channel"/>
+        android:text="长按频道进行移动排序"
+        android:textSize="12sp"
+        android:textColor="#959595"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"/>
+
+    <com.ktl.moment.android.component.DraggableGridViewPager
+        android:id="@+id/find_channel_drag_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.ktl.moment.android.component.DraggableGridViewPager>
 
 </LinearLayout>

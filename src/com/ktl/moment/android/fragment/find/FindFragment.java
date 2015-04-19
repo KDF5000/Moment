@@ -34,7 +34,6 @@ public class FindFragment extends BaseFragment {
 		ViewUtils.inject(this, view);
 
 		titleFindTabClick();
-
 		initViewPager();
 
 		return view;
