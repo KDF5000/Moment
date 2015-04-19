@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -129,6 +130,7 @@ public class EditorActivity extends BaseActivity {
 	@ViewInject(R.id.editor_play_close)
 	private ImageView editorPlayCloseImg;
 
+	private AnimationDrawable animationDrawable;
 	// 父类控件
 	@ViewInject(R.id.title_back_img)
 	private ImageView titleBackImg;
@@ -560,6 +562,10 @@ public class EditorActivity extends BaseActivity {
 
 		// 设置seekbar不可以被拖动
 		editorPlaySeekbar.setEnabled(false);
+		
+		editorRecordAudio.setImageResource(R.drawable.audio_frame_anim);
+		animationDrawable = (AnimationDrawable) editorRecordAudio.getDrawable();
+		animationDrawable.start();
 
 		// 没有播放，那就开始播放
 		if (!isPlaying) {
@@ -587,12 +593,14 @@ public class EditorActivity extends BaseActivity {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
 			RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
 			pauseSeekBar();
+			animationDrawable.stop();
 			isPlaying = false;
 		} else {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
 			int duration = RecordUtil.getInstance().play(recordAudioPath,
 					PLAY_START);
 			restartSeekBar(duration / 1000);
+			animationDrawable.start();
 			isPlaying = true;
 		}
 	}
@@ -624,6 +632,7 @@ public class EditorActivity extends BaseActivity {
 				audioPlayLayout.setVisibility(View.GONE);
 
 				// 隐藏小喇叭图标
+				editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 				editorRecordAudio.setVisibility(View.GONE);
 			} else {
 				ToastUtil.show(this, "录音文件删除失败");
@@ -644,6 +653,8 @@ public class EditorActivity extends BaseActivity {
 				R.anim.right_out);
 		audioPlayLayout.setAnimation(animRightOut);
 		audioPlayLayout.setVisibility(View.GONE);
+		
+		editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 
 		isPlaying = false;
 	}
@@ -784,6 +795,8 @@ public class EditorActivity extends BaseActivity {
 						EditorActivity.this, R.anim.right_out);
 				audioPlayLayout.setAnimation(animRightOut);
 				audioPlayLayout.setVisibility(View.GONE);
+				
+				editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 				break;
 			}
 			}
