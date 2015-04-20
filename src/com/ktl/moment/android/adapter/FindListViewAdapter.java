@@ -85,6 +85,8 @@ public class FindListViewAdapter extends BaseAdapter {
 					.findViewById(R.id.praise_area);
 			momentHolder.focusAuthorImg = (ImageView) convertView
 					.findViewById(R.id.focus_author);
+			momentHolder.labelTv = (TextView) convertView
+					.findViewById(R.id.label_tv);
 			convertView.setTag(momentHolder);
 		} else {
 			momentHolder = (MomentHolder) convertView.getTag();
@@ -98,9 +100,10 @@ public class FindListViewAdapter extends BaseAdapter {
 				momentHolder.momentImg, options);
 		momentHolder.userNameTv.setText(moment.getAuthorNickName());
 		momentHolder.postTime.setText(moment.getPostTime());
-		momentHolder.followNum.setText(moment.getFollowNums() + "");
-		momentHolder.praiseNum.setText(moment.getPraiseNums() + "");
-		momentHolder.commentNum.setText(moment.getCommentsNum() + "");
+		momentHolder.followNum.setText(moment.getFollowNum() + "");
+		momentHolder.praiseNum.setText(moment.getPraiseNum() + "");
+		momentHolder.commentNum.setText(moment.getCommentNum() + "");
+		momentHolder.labelTv.setText(moment.getLabel());
 
 		momentHolder.avatar.setOnClickListener(new OnClickListener() {
 
@@ -118,8 +121,8 @@ public class FindListViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				int num = moment.getPraiseNums();
-				moment.setPraiseNums(++num);
+				int num = moment.getPraiseNum();
+				moment.setPraiseNum(++num);
 				notifyDataSetChanged();
 				// 可以在这里向服务器请求，也可以设置一个回调或者消息 给fragment 让他发送请求
 
@@ -130,24 +133,25 @@ public class FindListViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Animation anim = AnimationUtils.loadAnimation(context, R.anim.focus_img_anim);
+				Animation anim = AnimationUtils.loadAnimation(context,
+						R.anim.focus_img_anim);
 				momentHolder.focusAuthorImg.startAnimation(anim);
-				if(moment.getIsFocused() == 0){
+				if (moment.getIsFocused() == 0) {
 					momentHolder.focusAuthorImg.setRotation(0);
 					anim.setAnimationListener(new AnimationListener() {
-						
+
 						@Override
 						public void onAnimationStart(Animation animation) {
 							// TODO Auto-generated method stub
-							
+
 						}
-						
+
 						@Override
 						public void onAnimationRepeat(Animation animation) {
 							// TODO Auto-generated method stub
-							
+
 						}
-						
+
 						@Override
 						public void onAnimationEnd(Animation animation) {
 							// TODO Auto-generated method stub
@@ -156,22 +160,22 @@ public class FindListViewAdapter extends BaseAdapter {
 							moment.setIsFocused(1);
 						}
 					});
-				}else{
+				} else {
 					momentHolder.focusAuthorImg.setRotation(45);
 					anim.setAnimationListener(new AnimationListener() {
-						
+
 						@Override
 						public void onAnimationStart(Animation animation) {
 							// TODO Auto-generated method stub
-							
+
 						}
-						
+
 						@Override
 						public void onAnimationRepeat(Animation animation) {
 							// TODO Auto-generated method stub
-							
+
 						}
-						
+
 						@Override
 						public void onAnimationEnd(Animation animation) {
 							// TODO Auto-generated method stub
@@ -199,6 +203,7 @@ public class FindListViewAdapter extends BaseAdapter {
 		TextView followNum;// 收藏人数
 		TextView praiseNum;// 点赞人数
 		TextView commentNum;// 评论人数
+		TextView labelTv;// 灵感标签
 		LinearLayout praiseArea;// 点赞区域
 	}
 

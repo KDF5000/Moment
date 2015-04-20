@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +20,22 @@ import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnItemClickListener;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
+import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.net.ApiManager;
+import com.loopj.android.http.RequestParams;
 
 public class DynamicFragment extends BaseFragment {
-	@SuppressWarnings("unused")
-	private static final String TAG = "FindFragment";
+	private static final String TAG = "dynamicFragment";
 
 	private ZrcListView findListView;
 	private List<Moment> momentList;// 灵感列表
 
 	private Handler handler;
+	private int pageSize = 1;
+	private int pageNum = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +46,8 @@ public class DynamicFragment extends BaseFragment {
 		momentList = new ArrayList<Moment>();
 		initView();
 		// 从服务端获取数据
-		getDataFromServer();
+		getData();
+//		getDataFromServer();
 		findListView.setAdapter(new FindListViewAdapter(getActivity(),
 				momentList, getDisplayImageOptions()));
 		initEvent();
@@ -71,6 +79,9 @@ public class DynamicFragment extends BaseFragment {
 			@Override
 			public void onStart() {
 				// 刷新开始
+				pageNum = 0;
+				getData();
+				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -87,6 +98,9 @@ public class DynamicFragment extends BaseFragment {
 			@Override
 			public void onStart() {
 				// 加载更多
+				pageNum++;
+				getData();
+				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -111,26 +125,54 @@ public class DynamicFragment extends BaseFragment {
 		});
 	}
 
-	private void getDataFromServer() {
-		// TODO Auto-generated method stub
+//	private void getDataFromServer() {
+//		// TODO Auto-generated method stub
+//		if (momentList == null) {
+//			momentList = new ArrayList<Moment>();
+//		}
+//		for (int i = 0; i < 1; i++) {
+//			Moment moment = new Moment();
+//			moment.setTitle("不再懊悔 App 自动生成器");
+//			moment.setContent("隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App");
+//			moment.setAuthorNickName("KDF5000");
+//			moment.setAuthorId(1000 + i);
+//			moment.setFollowNum(1234);
+//			moment.setMomentId(1000+i);
+//			moment.setPraiseNum(1232);
+//			moment.setCommentNum(100);
+//			moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
+//			moment.setAvatarUrl("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
+//			moment.setPostTime("2小时前");
+//			moment.setIsFocused(0);
+//			momentList.add(moment);
+//		}
+//	}
+	
+	private void getData(){
 		if (momentList == null) {
 			momentList = new ArrayList<Moment>();
 		}
-		for (int i = 0; i < 10; i++) {
-			Moment moment = new Moment();
-			moment.setTitle("不再懊悔 App 自动生成器");
-			moment.setContent("隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App");
-			moment.setAuthorNickName("KDF5000");
-			moment.setAuthorId(1000 + i);
-			moment.setFollowNums(1234);
-			moment.setMomentId(1000+i);
-			moment.setPraiseNums(1232);
-			moment.setCommentsNum(100);
-			moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
-			moment.setAvatarUrl("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
-			moment.setPostTime("2小时前");
-			moment.setIsFocused(0);
-			momentList.add(moment);
-		}
+		RequestParams params = new RequestParams();
+		params.put("page", pageNum);
+		params.put("pageSize", pageSize);
+		params.put("userId", 123);//暂时写死，这个id由登陆时服务端下发，客户端全程留存
+		ApiManager.getInstance().post(getActivity(), C.API.GET_FOCUS_LIST, params, new HttpCallBack() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onSuccess(Object res) {
+				// TODO Auto-generated method stub
+				List <Moment> moment = (List<Moment>) res;
+				for(int i=0;i<moment.size();i++){
+					momentList.add(moment.get(i));
+				}
+			}
+			
+			@Override
+			public void onFailure(Object res) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(getActivity(), (String)res);
+			}
+		}, "Moment");
 	}
 }

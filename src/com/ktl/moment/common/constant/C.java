@@ -33,6 +33,11 @@ public class C {
 		 * 获取七牛token
 		 */
 		public static final String GET_QINIU_TOKEN = "http://mymoment.sinaapp.com/qiniu_token.php";
+		/**
+		 * 获取七牛token
+		 */
+//		public static final String GET_FOCUS_LIST = "http://192.168.249.1/list.php";
+		public static final String GET_FOCUS_LIST = "http://192.168.95.1/list.php";
 	}
 	
 	
