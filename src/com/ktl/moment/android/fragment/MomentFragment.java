@@ -2,7 +2,6 @@ package com.ktl.moment.android.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Toast;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.MomentDialogActivity;
@@ -20,24 +24,20 @@ import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.etsy.StaggeredGridView;
 import com.ktl.moment.entity.Moment;
 
-public class MomentFragment extends BaseFragment {
+public class MomentFragment extends BaseFragment implements OnScrollListener,
+		OnItemClickListener, OnItemLongClickListener {
 
 	private static final String TAG = "MomentFragment";
 
 	private StaggeredGridView staggeredGridView;
 	private List<Moment> momentList;
 	private MomentPlaAdapter momentPlaAdapter;
-	private OperateCallback opCallback;
 
 	private static final int REAUEST_CODE_OPEN = 1000;
 	private static final int REAUEST_CODE_LABEL = 1001;
 	private static final int REQUEST_CODE_DELETE = 1002;
 
-	public interface OperateCallback {
-		public void OnSelected(int type, int position);
-
-		public void OnError(String msg);
-	}
+	private boolean mHasRequestedMore = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,35 +48,16 @@ public class MomentFragment extends BaseFragment {
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.moment_pla_list);
 
-		opCallback = new OperateCallback() {
-
-			@Override
-			public void OnSelected(int type, int position) {
-				// TODO Auto-generated method stub
-				Intent dialogIntent = new Intent(getActivity(),
-						MomentDialogActivity.class);
-				dialogIntent.putExtra("position", position);
-				if(momentList.get(position).getIsPublic() == 1){
-					dialogIntent.putExtra("isPublic", 1);
-				}else{
-					dialogIntent.putExtra("isPublic", 0);
-				}
-				startActivityForResult(dialogIntent, REAUEST_CODE_OPEN);
-			}
-
-			@Override
-			public void OnError(String msg) {
-				// TODO Auto-generated method stub
-
-			}
-		};
-
 		momentList = new ArrayList<Moment>();
 		getData();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
-				getDisplayImageOptions(), opCallback);
+				getDisplayImageOptions());
 		momentPlaAdapter.notifyDataSetChanged();
 		staggeredGridView.setAdapter(momentPlaAdapter);
+
+		staggeredGridView.setOnScrollListener(this);
+		staggeredGridView.setOnItemClickListener(this);
+		staggeredGridView.setOnItemLongClickListener(this);
 
 		return view;
 	}
@@ -121,9 +102,9 @@ public class MomentFragment extends BaseFragment {
 				boolean isOpen = data.getBooleanExtra("isClick", false);
 				int position = data.getIntExtra("position", 0);
 				if (isOpen) {
-					if(momentList.get(position).getIsPublic() == 1){
+					if (momentList.get(position).getIsPublic() == 1) {
 						momentList.get(position).setPublic(0);
-					}else{
+					} else {
 						momentList.get(position).setPublic(1);
 					}
 					momentPlaAdapter.notifyDataSetChanged();
@@ -141,5 +122,66 @@ public class MomentFragment extends BaseFragment {
 			}
 		}
 	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "click item");
+		Toast.makeText(getActivity(), "Item Clicked: " + position,
+				Toast.LENGTH_SHORT).show();
+
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+		Log.d(TAG, "onScroll firstVisibleItem:" + firstVisibleItem
+				+ " visibleItemCount:" + visibleItemCount + " totalItemCount:"
+				+ totalItemCount);
+		if (!mHasRequestedMore) {
+			int lastInScreen = firstVisibleItem + visibleItemCount;
+			if (lastInScreen >= totalItemCount) {
+				Log.d(TAG, "onScroll lastInScreen - so load more");
+				mHasRequestedMore = true;
+				// onLoadMoreItems();
+			}
+		}
+	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			int position, long id) {
+		// TODO Auto-generated method stub
+		Intent dialogIntent = new Intent(getActivity(),
+				MomentDialogActivity.class);
+		dialogIntent.putExtra("position", position);
+		if (momentList.get(position).getIsPublic() == 1) {
+			dialogIntent.putExtra("isPublic", 1);
+		} else {
+			dialogIntent.putExtra("isPublic", 0);
+		}
+		startActivityForResult(dialogIntent, REAUEST_CODE_OPEN);
+		return true;
+	}
+
+	// private void onLoadMoreItems() {
+	// // final ArrayList<String> sampleData = SampleData.generateSampleData();
+	// for (String data : sampleData) {
+	// momentPlaAdapter.add(data);
+	// }
+	// // stash all the data in our backing store
+	// momentList.addAll(sampleData);
+	// // notify the adapter that we can update now
+	// momentPlaAdapter.notifyDataSetChanged();
+	// mHasRequestedMore = false;
+	// }
 
 }

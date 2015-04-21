@@ -3,4 +3,4 @@ project.properties
 gen/
 *.class
 *.dex
-
+uml/

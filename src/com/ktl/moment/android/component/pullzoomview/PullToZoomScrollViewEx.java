@@ -37,7 +37,8 @@ public class PullToZoomScrollViewEx extends PullToZoomBase<ScrollView> {
     private ScalingRunnable mScalingRunnable;
 
     private static final Interpolator sInterpolator = new Interpolator() {
-        public float getInterpolation(float paramAnonymousFloat) {
+        @Override
+		public float getInterpolation(float paramAnonymousFloat) {
             float f = paramAnonymousFloat - 1.0F;
             return 1.0F + f * (f * (f * (f * f)));
         }
@@ -227,7 +228,8 @@ public class PullToZoomScrollViewEx extends PullToZoomBase<ScrollView> {
         }
     }
 
-    protected void onLayout(boolean paramBoolean, int paramInt1, int paramInt2,
+    @Override
+	protected void onLayout(boolean paramBoolean, int paramInt1, int paramInt2,
                             int paramInt3, int paramInt4) {
         super.onLayout(paramBoolean, paramInt1, paramInt2, paramInt3, paramInt4);
         Log.d(TAG, "onLayout --> ");
@@ -253,12 +255,13 @@ public class PullToZoomScrollViewEx extends PullToZoomBase<ScrollView> {
             return mIsFinished;
         }
 
-        public void run() {
+        @Override
+		public void run() {
             if (mZoomView != null) {
                 float f2;
                 ViewGroup.LayoutParams localLayoutParams;
                 if ((!mIsFinished) && (mScale > 1.0D)) {
-                    float f1 = ((float) SystemClock.currentThreadTimeMillis() - (float) mStartTime) / (float) mDuration;
+                    float f1 = ((float) SystemClock.currentThreadTimeMillis() - (float) mStartTime) / mDuration;
                     f2 = mScale - (mScale - 1.0F) * PullToZoomScrollViewEx.sInterpolator.getInterpolation(f1);
                     localLayoutParams = mHeaderContainer.getLayoutParams();
                     Log.d(TAG, "ScalingRunnable --> f2 = " + f2);

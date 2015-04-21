@@ -78,6 +78,7 @@ public class DraggableGridViewPager extends ViewGroup {
 	private static final int CLOSE_ENOUGH = 2; // dp
 
 	private static final Interpolator sInterpolator = new Interpolator() {
+		@Override
 		public float getInterpolation(float t) {
 			t -= 1.0f;
 			return t * t * t * t * t + 1.0f;
@@ -171,6 +172,7 @@ public class DraggableGridViewPager extends ViewGroup {
 	private OnRearrangeListener mOnRearrangeListener;
 
 	private final Runnable mEndScrollRunnable = new Runnable() {
+		@Override
 		public void run() {
 			setScrollState(SCROLL_STATE_IDLE);
 		}

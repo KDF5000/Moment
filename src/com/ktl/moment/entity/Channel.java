@@ -6,9 +6,11 @@ public class Channel extends BaseEntity{
 	public int channelImgResId;	//频道对应的图片url
 	
 	
+	@Override
 	public long getId() {
 		return id;
 	}
+	@Override
 	public void setId(long id) {
 		this.id = id;
 	}

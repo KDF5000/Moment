@@ -218,7 +218,7 @@ public class EditorActivity extends BaseActivity {
 
 		setTitleBackImgVisible(true);
 		setTitleRightImgVisible(true);
-		setTitleBackImg(R.drawable.editor_title_return);
+		setTitleBackImg(R.drawable.title_return_black);
 		if (isOpen) {
 			setTitleRightImg(R.drawable.editor_open_enable);
 		} else {
@@ -780,6 +780,7 @@ public class EditorActivity extends BaseActivity {
 	private int startProgress = 0;
 
 	final Handler handler = new Handler() {
+		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1: {

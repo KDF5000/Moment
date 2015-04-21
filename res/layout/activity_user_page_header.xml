@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/title_return" />
+            android:src="@drawable/title_return_white" />
 
         <ImageView
             android:id="@+id/userpage_more_iv"
