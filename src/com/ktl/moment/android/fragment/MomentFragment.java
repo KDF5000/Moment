@@ -172,16 +172,16 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		return true;
 	}
 
-	// private void onLoadMoreItems() {
-	// // final ArrayList<String> sampleData = SampleData.generateSampleData();
-	// for (String data : sampleData) {
-	// momentPlaAdapter.add(data);
-	// }
-	// // stash all the data in our backing store
-	// momentList.addAll(sampleData);
-	// // notify the adapter that we can update now
-	// momentPlaAdapter.notifyDataSetChanged();
-	// mHasRequestedMore = false;
-	// }
+//	private void onLoadMoreItems() {
+//		// final ArrayList<String> sampleData = SampleData.generateSampleData();
+//		for (String data : sampleData) {
+//			momentPlaAdapter.add(data);
+//		}
+//		// stash all the data in our backing store
+//		momentList.addAll(sampleData);
+//		// notify the adapter that we can update now
+//		momentPlaAdapter.notifyDataSetChanged();
+//		mHasRequestedMore = false;
+//	}
 
 }

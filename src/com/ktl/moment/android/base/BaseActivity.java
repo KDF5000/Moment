@@ -34,6 +34,7 @@ public class BaseActivity extends FragmentActivity {
 	protected TextView middleTitleTv;
 	protected ImageView titleBackImg;
 	protected ImageView titleRightImg;
+	protected TextView titleRightTv;
 
 	public LinearLayout titleFindTab;
 	public TextView titleMiddleRecommend;
@@ -61,6 +62,7 @@ public class BaseActivity extends FragmentActivity {
 		titleBackImg = (ImageView) findViewById(R.id.title_back_img);
 
 		titleRightImg = (ImageView) findViewById(R.id.title_right_img);
+		titleRightTv = (TextView) findViewById(R.id.title_right_tv);
 
 		titleFindTab = (LinearLayout) findViewById(R.id.title_find_tab);
 		titleMiddleChannel = (TextView) findViewById(R.id.title_middle_channel);
@@ -74,6 +76,7 @@ public class BaseActivity extends FragmentActivity {
 		setTitleBackImgVisible(false);
 		setTitleRightImgVisible(false);
 		setMiddleFindTabVisible(false);
+		setTitleRightTvVisible(false);
 	}
 
 	protected void setHomeTitleVisible(boolean isVisible) {
@@ -105,6 +108,14 @@ public class BaseActivity extends FragmentActivity {
 			titleRightImg.setVisibility(View.VISIBLE);
 		} else {
 			titleRightImg.setVisibility(View.GONE);
+		}
+	}
+
+	protected void setTitleRightTvVisible(boolean isVisible) {
+		if (isVisible) {
+			titleRightTv.setVisibility(View.VISIBLE);
+		} else {
+			titleRightTv.setVisibility(View.GONE);
 		}
 	}
 
@@ -142,6 +153,10 @@ public class BaseActivity extends FragmentActivity {
 
 	protected void setTitleRightImg(int resId) {
 		titleRightImg.setImageResource(resId);
+	}
+
+	protected void setTitleRightTv(int resId) {
+		titleRightTv.setText(resId);
 	}
 
 	/**

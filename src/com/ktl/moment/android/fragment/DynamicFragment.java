@@ -163,9 +163,7 @@ public class DynamicFragment extends BaseFragment {
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
 				List <Moment> moment = (List<Moment>) res;
-				for(int i=0;i<moment.size();i++){
-					momentList.add(moment.get(i));
-				}
+				momentList.addAll(moment);
 			}
 			
 			@Override

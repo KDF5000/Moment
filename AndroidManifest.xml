@@ -108,6 +108,10 @@
             android:name="com.ktl.moment.android.activity.EditorDialogActivity"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
         </activity>
+        <!-- 个人设置页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.SettingActivity">
+        </activity>
     </application>
 
 </manifest>
