@@ -94,13 +94,13 @@ public class FindListViewAdapter extends BaseAdapter {
 		final Moment moment = momentList.get(position);
 		momentHolder.tittleTv.setText(moment.getTitle());
 		momentHolder.contentTv.setText(moment.getContent());
-		ImageLoader.getInstance().displayImage(moment.getAvatarUrl(),
+		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
 				momentHolder.avatar, options);
 		ImageLoader.getInstance().displayImage(moment.getMomentImg(),
 				momentHolder.momentImg, options);
-		momentHolder.userNameTv.setText(moment.getAuthorNickName());
+		momentHolder.userNameTv.setText(moment.getAuthorName());
 		momentHolder.postTime.setText(moment.getPostTime());
-		momentHolder.followNum.setText(moment.getFollowNum() + "");
+		momentHolder.followNum.setText(moment.getCollectNum() + "");
 		momentHolder.praiseNum.setText(moment.getPraiseNum() + "");
 		momentHolder.commentNum.setText(moment.getCommentNum() + "");
 		momentHolder.labelTv.setText(moment.getLabel());

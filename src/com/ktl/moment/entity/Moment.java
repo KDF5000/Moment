@@ -5,17 +5,18 @@ public class Moment extends BaseEntity{
 	private String title;//标题
 	private String content;//内容
 	private String momentImg;//灵感内部的图片
+	private String label;//灵感标签
 	private String postTime;//发布时间
-	private int followNum;//关注的用户个数
+	private int collectNum;//关注的用户个数
 	private int praiseNum;//点赞的用户个数
 	private int commentNum;//评论数
 	private long authorId;//发表人的id
-	private String authorNickName;//作者昵称
-	private String avatarUrl;//头像路径
+	private String authorName;//作者昵称
+	private String userAvatar;//头像路径
+	private String audioUrl;//音频文件存储路径
 	
 	private int isPublic;//是否公开	0：不公开，1：公开
 	private int isCollect;//是否收藏		0：不是收藏，1：收藏
-	private String label;//灵感标签
 	private int isFocused;//作者是否被关注	0:未被关注，1：关注
 	
 	public int getIsFocused() {
@@ -78,12 +79,6 @@ public class Moment extends BaseEntity{
 	public void setPostTime(String postTime) {
 		this.postTime = postTime;
 	}
-	public int getFollowNum() {
-		return followNum;
-	}
-	public void setFollowNum(int followNum) {
-		this.followNum = followNum;
-	}
 	public int getPraiseNum() {
 		return praiseNum;
 	}
@@ -96,17 +91,29 @@ public class Moment extends BaseEntity{
 	public void setAuthorId(long authorId) {
 		this.authorId = authorId;
 	}
-	public String getAuthorNickName() {
-		return authorNickName;
+	public int getCollectNum() {
+		return collectNum;
 	}
-	public void setAuthorNickName(String authorNickName) {
-		this.authorNickName = authorNickName;
+	public void setCollectNum(int collectNum) {
+		this.collectNum = collectNum;
 	}
-	public String getAvatarUrl() {
-		return avatarUrl;
+	public String getAuthorName() {
+		return authorName;
 	}
-	public void setAvatarUrl(String avatarUrl) {
-		this.avatarUrl = avatarUrl;
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+	public String getUserAvatar() {
+		return userAvatar;
+	}
+	public void setUserAvatar(String userAvatar) {
+		this.userAvatar = userAvatar;
+	}
+	public String getAudioUrl() {
+		return audioUrl;
+	}
+	public void setAudioUrl(String audioUrl) {
+		this.audioUrl = audioUrl;
 	}
 	
 	

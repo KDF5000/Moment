@@ -36,6 +36,7 @@ public class DynamicFragment extends BaseFragment {
 	private Handler handler;
 	private int pageSize = 1;
 	private int pageNum = 0;
+	private FindListViewAdapter findListViewAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,10 +47,8 @@ public class DynamicFragment extends BaseFragment {
 		momentList = new ArrayList<Moment>();
 		initView();
 		// 从服务端获取数据
-		getData();
-//		getDataFromServer();
-		findListView.setAdapter(new FindListViewAdapter(getActivity(),
-				momentList, getDisplayImageOptions()));
+		getDataFromServer();
+		findListView.setAdapter(findListViewAdapter);
 		initEvent();
 		return view;
 	}
@@ -80,7 +79,8 @@ public class DynamicFragment extends BaseFragment {
 			public void onStart() {
 				// 刷新开始
 				pageNum = 0;
-				getData();
+				getDataFromServer();
+				findListViewAdapter.notifyDataSetChanged();
 				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
@@ -99,7 +99,7 @@ public class DynamicFragment extends BaseFragment {
 			public void onStart() {
 				// 加载更多
 				pageNum++;
-				getData();
+				getDataFromServer();
 				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
@@ -124,36 +124,16 @@ public class DynamicFragment extends BaseFragment {
 			}
 		});
 	}
-
-//	private void getDataFromServer() {
-//		// TODO Auto-generated method stub
-//		if (momentList == null) {
-//			momentList = new ArrayList<Moment>();
-//		}
-//		for (int i = 0; i < 1; i++) {
-//			Moment moment = new Moment();
-//			moment.setTitle("不再懊悔 App 自动生成器");
-//			moment.setContent("隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App");
-//			moment.setAuthorNickName("KDF5000");
-//			moment.setAuthorId(1000 + i);
-//			moment.setFollowNum(1234);
-//			moment.setMomentId(1000+i);
-//			moment.setPraiseNum(1232);
-//			moment.setCommentNum(100);
-//			moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
-//			moment.setAvatarUrl("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
-//			moment.setPostTime("2小时前");
-//			moment.setIsFocused(0);
-//			momentList.add(moment);
-//		}
-//	}
 	
-	private void getData(){
+	private void getDataFromServer(){
 		if (momentList == null) {
 			momentList = new ArrayList<Moment>();
 		}
+		if(findListViewAdapter == null){
+			findListViewAdapter = new FindListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
+		}
 		RequestParams params = new RequestParams();
-		params.put("page", pageNum);
+		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", 123);//暂时写死，这个id由登陆时服务端下发，客户端全程留存
 		ApiManager.getInstance().post(getActivity(), C.API.GET_FOCUS_LIST, params, new HttpCallBack() {
@@ -164,6 +144,7 @@ public class DynamicFragment extends BaseFragment {
 				// TODO Auto-generated method stub
 				List <Moment> moment = (List<Moment>) res;
 				momentList.addAll(moment);
+				findListViewAdapter.notifyDataSetChanged();
 			}
 			
 			@Override
