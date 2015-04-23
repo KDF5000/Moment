@@ -10,7 +10,7 @@ public class C {
 		 * url基地址
 		 */
 //		private static final String URL_BASE = "http://192.168.95.1/";
-		private static final String URL_BASE = "http://222.20.57.33:8080/";
+		private static final String URL_BASE = "http://115.156.249.34:8080/";
 		/**
 		 * 七牛基地址
 		 */
@@ -160,5 +160,17 @@ public class C {
 	public static final class FileType{
 		public static final String IMAGE_TYPE = "img_";
 		public static final String AUDIO_TYPE = "audio_";
+	}
+	
+	/**
+	 * SharedPreferences key
+	 * @author HUST_LH
+	 *
+	 */
+	public static final class SPKey{
+		public static final String SPK_IS_LOGIN = "login";	//记录账号是否退出了登陆,文件中用true/false表示
+		public static final String SPK_SINGUP_ACCOUNT = "signup_account";	//记录注册账号，文件中记录注册方式名称。eg：phone/qq/weibo/wechat
+		public static final String SPK_IS_PUSH = "push";	//是否开启推送  true：是，false：否
+		public static final String SPK_IS_SAVE_DATA = "save_data";	//是否开启省流量模式  true：是，false：否
 	}
 }

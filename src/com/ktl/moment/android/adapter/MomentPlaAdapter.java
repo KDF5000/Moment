@@ -93,7 +93,7 @@ public class MomentPlaAdapter extends BaseAdapter {
 		} else {
 			momentHolder.collectImg.setVisibility(View.GONE);
 			momentHolder.publicText.setVisibility(View.VISIBLE);
-			if (moment.getIsPublic() == 1) {
+			if (moment.getIsOpen() == 1) {
 				momentHolder.publicText.setText("公开");
 				momentHolder.publicText.setTextColor(this.context.getResources().getColor(
 								R.color.moment_etsy_public_color));

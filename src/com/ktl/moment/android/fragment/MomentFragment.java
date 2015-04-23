@@ -74,7 +74,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			moment.setMomentId(i);
 			moment.setPostTime("4月10日");
 			if (i % 3 == 0) {
-				moment.setPublic(1);
+				moment.setIsOpen(1);
 			}
 			if (i % 4 == 0) {
 				moment.setCollect(1);
@@ -102,10 +102,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				boolean isOpen = data.getBooleanExtra("isClick", false);
 				int position = data.getIntExtra("position", 0);
 				if (isOpen) {
-					if (momentList.get(position).getIsPublic() == 1) {
-						momentList.get(position).setPublic(0);
+					if (momentList.get(position).getIsOpen() == 1) {
+						momentList.get(position).setIsOpen(0);
 					} else {
-						momentList.get(position).setPublic(1);
+						momentList.get(position).setIsOpen(1);
 					}
 					momentPlaAdapter.notifyDataSetChanged();
 				}
@@ -163,7 +163,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		Intent dialogIntent = new Intent(getActivity(),
 				MomentDialogActivity.class);
 		dialogIntent.putExtra("position", position);
-		if (momentList.get(position).getIsPublic() == 1) {
+		if (momentList.get(position).getIsOpen() == 1) {
 			dialogIntent.putExtra("isPublic", 1);
 		} else {
 			dialogIntent.putExtra("isPublic", 0);

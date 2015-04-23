@@ -88,6 +88,13 @@ public class RecordUtil{
 	}
 	
 	/**
+	 * 停止录音
+	 */
+	public void stop(){
+		stopRecord();
+	}
+	
+	/**
 	 * 完成录音
 	 * @param hasPaused	录音中是否暂停过
 	 * @param isPause	当前录音状态是否是暂停

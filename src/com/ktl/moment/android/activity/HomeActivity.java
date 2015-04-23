@@ -12,6 +12,7 @@ import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.BottomMenu;
 import com.ktl.moment.android.component.BottomMenu.OnMenuItemClickListener;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 
 public class HomeActivity extends BaseActivity {
 	private static final String TAG = "HomeAtivity";
@@ -49,6 +50,7 @@ public class HomeActivity extends BaseActivity {
 		customMenu = (BottomMenu) findViewById(R.id.bottom_menu);
 		customMenu.setDefaultCheckedMenu(R.id.menu_foucs);
 		
+		SharedPreferencesUtil.initSharedPreferences(getApplicationContext());//临时
 	}
 
 	/**

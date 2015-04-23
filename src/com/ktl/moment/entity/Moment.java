@@ -15,7 +15,7 @@ public class Moment extends BaseEntity{
 	private String userAvatar;//头像路径
 	private String audioUrl;//音频文件存储路径
 	
-	private int isPublic;//是否公开	0：不公开，1：公开
+	private int isOpen;//是否公开	0：不公开，1：公开
 	private int isCollect;//是否收藏		0：不是收藏，1：收藏
 	private int isFocused;//作者是否被关注	0:未被关注，1：关注
 	
@@ -25,11 +25,11 @@ public class Moment extends BaseEntity{
 	public void setIsFocused(int isFocused) {
 		this.isFocused = isFocused;
 	}
-	public int getIsPublic() {
-		return isPublic;
+	public int getIsOpen() {
+		return isOpen;
 	}
-	public void setPublic(int isPublic) {
-		this.isPublic = isPublic;
+	public void setIsOpen(int isOpen) {
+		this.isOpen = isOpen;
 	}
 	public int getIsCollect() {
 		return isCollect;

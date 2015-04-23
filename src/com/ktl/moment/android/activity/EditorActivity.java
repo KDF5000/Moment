@@ -486,6 +486,7 @@ public class EditorActivity extends BaseActivity {
 		TimerCountUtil.getInstance().clearTimerCount();
 		// 清除暂存的录音文件
 		RecordUtil.getInstance().delete(isPause);
+		RecordUtil.getInstance().stop();
 
 		editorRecordPause.setImageResource(R.drawable.editor_record_start);
 
