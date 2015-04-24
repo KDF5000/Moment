@@ -3,6 +3,7 @@ package com.ktl.moment.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
@@ -56,7 +57,12 @@ public class SerializableUtil {
 		// 然后将得到的字符数据装载到ObjectOutputStream
 		ObjectOutputStream oos = new ObjectOutputStream(baos);
 		// writeObject 方法负责写入特定类的对象的状态，以便相应的readObject可以还原它
-		oos.writeObject(obj);
+		try {
+			oos.writeObject(obj);
+		} catch (NotSerializableException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		// 用Base64将字节文件转换成Base64编码，并以String形式保存
 		String listString = new String(Base64.encode(baos.toByteArray(),
 				Base64.DEFAULT));

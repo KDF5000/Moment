@@ -50,7 +50,6 @@ public class HomeActivity extends BaseActivity {
 		customMenu = (BottomMenu) findViewById(R.id.bottom_menu);
 		customMenu.setDefaultCheckedMenu(R.id.menu_foucs);
 		
-		SharedPreferencesUtil.initSharedPreferences(getApplicationContext());//临时
 	}
 
 	/**
