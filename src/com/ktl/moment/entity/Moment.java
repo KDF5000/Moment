@@ -11,7 +11,7 @@ public class Moment extends BaseEntity{
 	private String momentImg;//灵感内部的图片
 	private String label;//灵感标签
 	private String postTime;//发布时间
-	private int collectNum;//关注的用户个数
+	private int watchNum;//关注的用户个数
 	private int praiseNum;//点赞的用户个数
 	private int commentNum;//评论数
 	private long authorId;//发表人的id
@@ -23,7 +23,14 @@ public class Moment extends BaseEntity{
 	private int isCutCollect;//是否剪藏		0：不是剪藏，1：剪藏
 	private int isFocused;//作者是否被关注	0:未被关注，1：关注
 	private int isWatched;//灵感是否被围观		0：没有围观，1：围观
+	private int isPraised;//是否赞过灵感		0：没有赞过，1：赞过
 
+	public int getIsPraised() {
+		return isPraised;
+	}
+	public void setIsPraised(int isPraised) {
+		this.isPraised = isPraised;
+	}
 	public int getIsWatched() {
 		return isWatched;
 	}
@@ -102,11 +109,11 @@ public class Moment extends BaseEntity{
 	public void setAuthorId(long authorId) {
 		this.authorId = authorId;
 	}
-	public int getCollectNum() {
-		return collectNum;
+	public int getWatchNum() {
+		return watchNum;
 	}
-	public void setCollectNum(int collectNum) {
-		this.collectNum = collectNum;
+	public void setWatchtNum(int watchNum) {
+		this.watchNum = watchNum;
 	}
 	public String getAuthorName() {
 		return authorName;

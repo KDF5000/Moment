@@ -47,6 +47,14 @@ public class C {
 		 * 关注/取消关注 作者
 		 */
 		public static final String FOCUS_AUTHOR = "http://192.168.95.1/addFocus.php";
+		/**
+		 * 点赞/取消点赞
+		 */
+		public static final String PRAISE_MOMENT = "http://192.168.95.1/addFocus.php";
+		/**
+		 * 围观/取消围观
+		 */
+		public static final String WATCH_MOMENT = "http://192.168.95.1/addFocus.php";
 	}
 	
 	
@@ -133,7 +141,7 @@ public class C {
 		public static final String FRAGMENT_PROFILE = "perfectInfoFragment";
 		public static final String FRAGMENT_RECOMMEN = "recommenFragment";
 		
-		public static final boolean IS_CHECK_INPUT = true;//是否对输入框等控件做空值检测
+		public static final boolean IS_CHECK_INPUT = false;//是否对输入框等控件做空值检测
 		public static final boolean IS_SEND_VERIFY = false;	//是否开启验证码
 	}
 	

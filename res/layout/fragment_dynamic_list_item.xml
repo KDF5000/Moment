@@ -109,9 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:rotation="45"
-            android:src="@drawable/focus_author_press" />
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
     <View
@@ -137,11 +135,13 @@
             android:gravity="center_horizontal" >
 
             <ImageView
+                android:id="@+id/share_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/share" />
 
             <TextView
+                android:id="@+id/share_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
@@ -159,28 +159,30 @@
             android:background="#dcdcdc" />
 
         <LinearLayout
-            android:id="@+id/collect_area"
+            android:id="@+id/watch_area"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal" >
 
             <ImageView
+                android:id="@+id/watch_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/collection" />
+                android:src="@drawable/watch" />
 
             <TextView
+                android:id="@+id/watch_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:gravity="center"
-                android:text="收藏"
+                android:text="围观"
                 android:textColor="#a0a0a0"
                 android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/follow_num"
+                android:id="@+id/watch_num"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"
@@ -244,11 +246,13 @@
             android:gravity="center_horizontal" >
 
             <ImageView
+                android:id="@+id/praise_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/like" />
 
             <TextView
+                android:id="@+id/praise_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"

@@ -44,6 +44,8 @@ public class ShareActivity extends Activity {
 		switch (v.getId()) {
 		case R.id.share_blank_content:
 		case R.id.share_cancle:
+			Animation anim = AnimationUtils.loadAnimation(this, R.anim.share_card_out);
+			shareContent.setAnimation(anim);
 			finish();
 			break;
 		default:
