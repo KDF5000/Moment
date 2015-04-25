@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp" >
+
+        <TextView
+            android:id="@+id/moment_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="让食客去看到每道菜背后的那个人"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp" >
+
+            <com.ktl.moment.android.component.CircleImageView
+                android:id="@+id/moment_detail_user_avatar"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:src="@drawable/ic_launcher" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/moment_detail_user_avatar"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/moment_user_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="幸运的我"
+                    android:textColor="#41aaf2"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/moment_post_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="2015-4-7"
+                    android:textColor="#a0a0a0"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/focus_author_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/focus_author" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/moment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:lineSpacingMultiplier="1.5"
+            android:text="在中国，厨师的大部分都在后台，我们遇到我们喜欢的菜，往往很少知道是谁做给我们的。但每道菜上升到一定层面的时候，它不仅仅是温饱，而能呈现出食物背后那个人的心意是什么。作为国际的趋势来讲，国外厨师的地位很高，人们欣赏食物也是从一个厨师开始的。所以，我一直希望能用一种方式把厨师推到前台。简单而言，我想做一款为顶级厨师提供死人定制服务的app"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="14dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/label" />
+
+            <TextView
+                android:id="@+id/moment_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="APP、灵感记录"
+                android:textColor="#a0a0a0"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="4dp"
+        android:background="#dcdcdc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal" >
+
+        <View
+            android:layout_width="3dp"
+            android:layout_height="20dp"
+            android:background="#2fa3f2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:text="评论"
+            android:textColor="#a0a0a0"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/moment_comment_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="（13）"
+            android:textColor="#a0a0a0"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+</LinearLayout>

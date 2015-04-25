@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="register_to_login_color">#5dd2f9</color>
+    <color name="register_and_login_btn_color">#28d1e7</color>
+    
+    <color name="account_text_color">#ffffff</color>
+    
+    <color name="verify_resend_on_tick_text_color">#ffffff</color>
+    <color name="verify_resend_btn_on_tick_color">#b4cfaa</color>
+    <color name="verify_resend_on_finish_text_color">#8db67d</color>
+    <color name="verify_resend_btn_on_finish_color">#ffffff</color>
+    
+    <color name="bocop_dialog_bg">#77000000</color>
+    
+    <!-- ripple component-->
+    <color name="rippelColor">#0099CC</color>
+    
+    <!-- 大众色系 -->
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    
+    <color name="main_title_color">#41aaf2</color>
+    <color name="main_content_container_color">#eeeeee</color>
+    <color name="menu_text_checked">#5dd2f9</color>
+    <color name="menu_text_uncheked">#676666</color>
+    
+    <!-- moment页面瀑布流中的字体颜色，包括：日期、是否公开、标签 -->
+    <color name="moment_etsy_text_color">#a0a0a0</color>
+    <color name="moment_etsy_public_color">#41aaf2</color>
+    
+    <color name="editor_main_color">#f5f5f5</color>
+    
+    <!-- activity透明色 -->
+    <color name="transparent">#a0000000</color>
+</resources>

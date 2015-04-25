@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Moment</string>
+    
+    <string name="login">登录</string>
+    <string name="strat_third_party_title">您也可以使用以下账号快速登陆</string>
+    <string name="accept_agreement">登陆或注册表示同意用户协议</string>
+    <string name="login_account_hint">请输入您的手机号</string>
+    <string name="login_pass_hint">请输入您的密码</string>
+    <string name="login_forget_pass">忘记密码</string>
+    
+    <string name="dialog_is_loading">正在加载</string>
+    <string name="dialog_suffix">…</string>
+    
+    <string name="register">注册</string>
+    <string name="register_next">下一步</string>
+    <string name="register_next_to_verify">点击下一步进行短信验证,也可以</string>
+    <string name="register_to_login">直接登陆</string>
+    
+    <string name="verify_hint">请输入验证码</string>
+    <string name="verify_resend">重发</string>
+    
+    <string name="profile_nickname">请输入您的昵称</string>
+    <string name="profile_place">请选择您所在的地区</string>
+    <string name="profile_sex">选择您的性别:</string>
+    <string name="profile_sex_male">男  </string>
+    <string name="profile_sex_famale">女  </string>
+    <string name="peofile_complete">完成注册</string>
+    
+    <string name="attention_text_view">关注</string>
+    <string name="found_text_view">发现</string>
+    <string name="moment_text_view">灵感</string>
+    <string name="me_text_view">我的</string>
+    <string name="moment_detail_text_view">详情</string>
+    <string name="editor_complete">完成</string> 
+    
+    <string name="setting_title">设置</string>
+    
+    
+    <!-- img&img_btn description -->
+    <string name="start_lump">lump</string>
+    <string name="start_words">words</string>
+    <string name="wechat_des">wechat_img</string>
+    <string name="qq_des">qq_img</string>
+    <string name="weibo_des">weibo_img</string>
+    
+    <string name="account_des">account_img</string>
+    <string name="pass_des">pass_img</string>
+    <string name="delete_icon_des">delete_img</string>
+    <string name="register_next_des">next_img</string>
+    <string name="close_des">close</string>
+    <string name="back_des">back</string>
+    <string name="key_des"></string>
+    
+    <string name="profile_photo_des">photo</string>
+    <string name="profile_nickname_des">nickname</string>
+    <string name="profile_place_des">place</string>
+    <string name="profile_sex_des">sex</string>
+    
+    <string name="add_des">add_img</string>
+    <string name="user_logo_des">user_logo</string>
+    
+    <string name="editor_record_big_des">record_big</string>
+    <string name="editor_gallery_des">gallery</string>
+    <string name="editor_record_des">record</string>
+    <string name="editor_keyboard_des">keyboard</string>
+    <string name="editor_record_delete_des">record_delete</string>
+    <string name="editor_record_pause_des">record_pause</string>
+    <string name="editor_record_over_des">record_over</string>
+
+</resources>

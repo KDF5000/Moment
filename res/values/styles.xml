@@ -1,0 +1,55 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:windowNoTitle">true</item>
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <!-- 网络请求时弹出对话框 -->
+    <style name="dialog_style">
+        <item name="android:windowBackground">@color/bocop_dialog_bg</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@+android:style/Animation.Dialog</item>
+    </style>
+    
+    <!-- 播放录音的进度条 -->
+    <style name="editor_player_seekbar" parent="@android:style/Widget.SeekBar">
+        <item name="android:maxHeight">1dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/editor_player_progressbar</item>
+        <item name="android:minHeight">1dp</item>
+        <item name="android:thumb">@drawable/circle_shape</item>
+        <item name="android:thumbOffset">0dp</item>
+        <item name="android:padding">0dp</item>
+    </style>
+
+    <!-- activity透明 -->
+    <style name="activity_transparent">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/activity_share_anim</item>
+    </style>
+    
+    <style name="activity_share_anim">
+        <item name="android:activityOpenEnterAnimation">@anim/share_card_alpha_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/share_card_alpha_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/share_card_alpha_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/share_card_alpha_out</item>
+    </style>
+
+</resources>

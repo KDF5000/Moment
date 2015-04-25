@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/moment_dialog_edit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/select_activity_button_bg"
+        android:paddingLeft="20dp"
+        android:textColor="#000000"
+        android:text="编辑"
+        android:textSize="20sp"
+        android:gravity="left|center" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#dcdcdc" />
+
+    <Button
+        android:id="@+id/moment_dialog_open"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/select_activity_button_bg"
+        android:paddingLeft="20dp"
+        android:textColor="#000000"
+        android:text="公开"
+        android:textSize="20sp"
+        android:gravity="left|center" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#dcdcdc" />
+
+    <Button
+        android:id="@+id/moment_dialog_share"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/select_activity_button_bg"
+        android:paddingLeft="20dp"
+        android:textColor="#000000"
+        android:text="分享"
+        android:textSize="20sp"
+        android:gravity="left|center" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#dcdcdc" />
+
+    <Button
+        android:id="@+id/moment_dialog_label"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/select_activity_button_bg"
+        android:paddingLeft="20dp"
+        android:textColor="#000000"
+        android:text="标签"
+        android:textSize="20sp"
+        android:gravity="left|center" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#dcdcdc" />
+
+    <Button
+        android:id="@+id/moment_dialog_delete"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/select_activity_button_bg"
+        android:paddingLeft="20dp"
+        android:textColor="#000000"
+        android:text="删除"
+        android:textSize="20sp"
+        android:gravity="left|center" />
+
+</LinearLayout>

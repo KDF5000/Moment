@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.ktl.moment.android.component.pullzoomview.PullToZoomListViewEx
+        android:id="@+id/user_page_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        custom:headerView="@layout/activity_user_page_header"
+        custom:zoomView="@layout/user_page_zoom_view" />
+
+</LinearLayout>

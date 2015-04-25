@@ -1,0 +1,104 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/start_bg" >
+        
+    <ImageView 
+        android:id="@+id/start_lump"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/start_lamp"
+        android:contentDescription="@string/start_lump"/>
+    
+    <ImageView 
+        android:id="@+id/start_word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/start_words"
+        android:contentDescription="@string/start_words"/>
+        
+    
+    <LinearLayout
+        android:id="@+id/start_white_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="58dp"
+        android:orientation="vertical"
+        android:background="@drawable/start_white">
+        
+        <LinearLayout
+            android:id="@+id/start_white_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginTop="68dp"
+            android:orientation="vertical">
+            
+            <RelativeLayout 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+	            <Button 
+	                android:id="@+id/start_login"
+	                android:layout_width="120dp"
+	                android:layout_height="43dp"
+	                android:background="@drawable/btn_shape"
+	                android:layout_alignParentLeft="true"
+	                android:text="@string/login"
+	                android:textColor="@color/white"/>
+	            
+	            <Button 
+	                android:id="@+id/start_register"
+	                android:layout_width="120dp"
+	                android:layout_height="43dp"
+	                android:layout_alignParentRight="true"
+	                android:background="@drawable/btn_shape"
+	                android:text="@string/register"
+	                android:textColor="@color/white"
+	                />
+            </RelativeLayout>
+	        
+	        <TextView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="31dp"
+	            android:layout_gravity="center_horizontal"
+	            android:text="@string/strat_third_party_title"
+	            android:textColor="#707070"
+	            android:textSize="13sp"/>
+
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="16dp" >
+	
+	            <ImageView
+	                android:id="@+id/start_wechat_img"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+	                android:contentDescription="@string/wechat_des"
+	                android:src="@drawable/wechat" />
+	
+	            <ImageView
+	                android:id="@+id/start_weibo_img"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+					android:layout_centerInParent="true"
+	                android:contentDescription="@string/weibo_des"
+	                android:src="@drawable/weibo" />
+	
+	            <ImageView
+	                android:id="@+id/start_qq_img"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+	                android:contentDescription="@string/qq_des"
+	                android:src="@drawable/qq" />
+	        </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
