@@ -46,12 +46,11 @@ public class RichEditText extends EditText {
 		String pathTag = "<img src=\"" + filePath + "\"/>";
 		SpannableString spanString = new SpannableString(pathTag);
 		// 获取屏幕的宽高
-		DisplayMetrics dm = getResources().getDisplayMetrics();
 		int paddingLeft = getPaddingLeft();
 		int paddingRight = getPaddingRight();
 		int bmWidth = bitmap.getWidth();//图片高度
 		int bmHeight = bitmap.getHeight();//图片宽度
-		int zoomWidth = dm.widthPixels - (paddingLeft + paddingRight);
+		int zoomWidth = getWidth() - (paddingLeft + paddingRight);
 		int zoomHeight = (int) (((float)zoomWidth / (float)bmWidth) * bmHeight);
 		Bitmap newBitmap = zoomImage(bitmap, zoomWidth,zoomHeight);
 		ImageSpan imgSpan = new ImageSpan(mContext, newBitmap);
