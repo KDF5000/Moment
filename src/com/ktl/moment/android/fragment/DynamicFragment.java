@@ -111,18 +111,6 @@ public class DynamicFragment extends BaseFragment {
 				}, 2 * 1000);
 			}
 		});
-		// listviewItem 点击事件
-		findListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(ZrcListView parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(getActivity(),MomentDetailActivity.class);
-				intent.putExtra("momentId", momentList.get(position).getMomentId());
-				startActivity(intent);
-			}
-		});
 	}
 	
 	private void getDataFromServer(){

@@ -1,32 +1,43 @@
 package com.ktl.moment.entity;
 
 public class Comment extends BaseEntity {
-	private long commentFromUserId;//评论id
-	private String commentFromUserName;//评论人昵称
-	private String commentFromUserAvatar;//评论人头像
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private long commentId;//评论id
+	private long fromUserId;//评论人id
+	private String fromUserName;//评论人昵称
+	private String fromUserAvatar;//评论人头像
 	private String commentTime;//评论发布时间
 	private String commentContent;//评论内容
 	private int praiseNum;//点赞数
 	
-	private long commentToUserId;//被评论人id
-	private String commentToUserName;//被评论人昵称
-	public long getCommentFromUserId() {
-		return commentFromUserId;
+	private long repalyUserId;//被回复人id
+	private String repalyUserName;//被回复人昵称
+	public long getCommentId() {
+		return commentId;
 	}
-	public void setCommentFromUserId(long commentFromUserId) {
-		this.commentFromUserId = commentFromUserId;
+	public void setCommentId(long commentId) {
+		this.commentId = commentId;
 	}
-	public String getCommentFromUserName() {
-		return commentFromUserName;
+	public long getFromUserId() {
+		return fromUserId;
 	}
-	public void setCommentFromUserName(String commentFromUserName) {
-		this.commentFromUserName = commentFromUserName;
+	public void setFromUserId(long fromUserId) {
+		this.fromUserId = fromUserId;
 	}
-	public String getCommentFromUserAvatar() {
-		return commentFromUserAvatar;
+	public String getFromUserName() {
+		return fromUserName;
 	}
-	public void setCommentFromUserAvatar(String commentFromUserAvatar) {
-		this.commentFromUserAvatar = commentFromUserAvatar;
+	public void setFromUserName(String fromUserName) {
+		this.fromUserName = fromUserName;
+	}
+	public String getFromUserAvatar() {
+		return fromUserAvatar;
+	}
+	public void setFromUserAvatar(String fromUserAvatar) {
+		this.fromUserAvatar = fromUserAvatar;
 	}
 	public String getCommentTime() {
 		return commentTime;
@@ -46,16 +57,17 @@ public class Comment extends BaseEntity {
 	public void setPraiseNum(int praiseNum) {
 		this.praiseNum = praiseNum;
 	}
-	public long getCommentToUserId() {
-		return commentToUserId;
+	public long getRepalyUserId() {
+		return repalyUserId;
 	}
-	public void setCommentToUserId(long commentToUserId) {
-		this.commentToUserId = commentToUserId;
+	public void setRepalyUserId(long repalyUserId) {
+		this.repalyUserId = repalyUserId;
 	}
-	public String getCommentToUserName() {
-		return commentToUserName;
+	public String getRepalyUserName() {
+		return repalyUserName;
 	}
-	public void setCommentToUserName(String commentToUserName) {
-		this.commentToUserName = commentToUserName;
-	}
+	public void setRepalyUserName(String repalyUserName) {
+		this.repalyUserName = repalyUserName;
+	}	
+	
 }

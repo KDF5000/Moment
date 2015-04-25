@@ -63,13 +63,13 @@ public class CommentListViewAdapter extends BaseAdapter {
 		}
 		Comment comment = commentList.get(position);
 		
-		ImageLoader.getInstance().displayImage(comment.getCommentFromUserAvatar(),
+		ImageLoader.getInstance().displayImage(comment.getFromUserAvatar(),
 				holder.userAvatar, options);
-		holder.userFromName.setText(comment.getCommentFromUserName());
+		holder.userFromName.setText(comment.getFromUserName());
 		holder.commentTime.setText(comment.getCommentTime());
 		holder.praiseNum.setText(comment.getPraiseNum()+"");
 		holder.content.setText(comment.getCommentContent());
-		holder.userToName.setText(comment.getCommentToUserName());
+		holder.userToName.setText(comment.getRepalyUserName());
 		return convertView;
 	}
 	

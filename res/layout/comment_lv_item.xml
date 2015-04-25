@@ -88,6 +88,8 @@
                 android:id="@+id/comment_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
+                android:lineSpacingExtra="3dp"
                 android:text="谢谢你的建议，很好的主意，我会考虑一下的谢谢你的建议，很好的主意，我会考虑一下的谢谢你的建议，很好的主意，我会考虑一下的谢谢你的建议，很好的主意，我会考虑一下的"
                 android:textSize="12sp" />
         </LinearLayout>

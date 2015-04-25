@@ -41,6 +41,9 @@ public class SharedPreferencesUtil {
 	public synchronized void putObject(String key, Object obj){
 		Editor editor = sharedPreferences.edit();
 		String str = "";
+		if(obj == null){
+			obj = new Object();
+		}
 		try {
 			str = SerializableUtil.obj2Str(obj);
 		} catch (IOException e) {
@@ -59,6 +62,9 @@ public class SharedPreferencesUtil {
 	public synchronized<E> void putList(String key, List<E> list){
 		Editor editor = sharedPreferences.edit();
 		String str = "";
+		if(list == null){
+			list = new ArrayList<E>();
+		}
 		try {
 			str = SerializableUtil.list2String(list);
 		} catch (IOException e) {

@@ -17,8 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.MomentDetailActivity;
+import com.ktl.moment.android.activity.ShareActivity;
 import com.ktl.moment.android.activity.UserPageActivity;
 import com.ktl.moment.entity.Moment;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -56,37 +60,14 @@ public class FindListViewAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		final MomentHolder momentHolder;
 		if (convertView == null) {
 			convertView = this.mInflater.inflate(
 					R.layout.fragment_dynamic_list_item, null);
 			momentHolder = new MomentHolder();
-			momentHolder.tittleTv = (TextView) convertView
-					.findViewById(R.id.moment_title);
-			momentHolder.contentTv = (TextView) convertView
-					.findViewById(R.id.moment_content);
-			momentHolder.momentImg = (ImageView) convertView
-					.findViewById(R.id.moment_img);
-			momentHolder.avatar = (ImageView) convertView
-					.findViewById(R.id.user_avatar);
-			momentHolder.userNameTv = (TextView) convertView
-					.findViewById(R.id.user_name);
-			momentHolder.postTime = (TextView) convertView
-					.findViewById(R.id.post_time);
-			momentHolder.followNum = (TextView) convertView
-					.findViewById(R.id.follow_num);
-			momentHolder.praiseNum = (TextView) convertView
-					.findViewById(R.id.praise_num);
-			momentHolder.commentNum = (TextView) convertView
-					.findViewById(R.id.comments_num);
-			momentHolder.praiseArea = (LinearLayout) convertView
-					.findViewById(R.id.praise_area);
-			momentHolder.focusAuthorImg = (ImageView) convertView
-					.findViewById(R.id.focus_author);
-			momentHolder.labelTv = (TextView) convertView
-					.findViewById(R.id.label_tv);
+			ViewUtils.inject(momentHolder, convertView);
 			convertView.setTag(momentHolder);
 		} else {
 			momentHolder = (MomentHolder) convertView.getTag();
@@ -188,23 +169,75 @@ public class FindListViewAdapter extends BaseAdapter {
 				notifyDataSetChanged();
 			}
 		});
+		
+		momentHolder.shareArea.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(context,ShareActivity.class);
+				context.startActivity(intent);
+			}
+		});
+		
+
+		// listviewItem 点击事件
+		momentHolder.articleContent.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(context,MomentDetailActivity.class);
+				intent.putExtra("momentId", moment.getMomentId());
+				context.startActivity(intent);
+			}
+		});
 
 		return convertView;
 	}
 
 	public static class MomentHolder {
+		@ViewInject(R.id.moment_title)
 		TextView tittleTv;// 标题
+		
+		@ViewInject(R.id.moment_content)
 		TextView contentTv;// 内容
+		
+		@ViewInject(R.id.moment_img)
 		ImageView momentImg;// 笔记中的代表图
+		
+		@ViewInject(R.id.user_avatar)
 		ImageView avatar;// 头像
+		
+		@ViewInject(R.id.user_name)
 		TextView userNameTv;// 用户名
+		
+		@ViewInject(R.id.moment_title)
 		TextView postTime;// 发布时间
+		
+		@ViewInject(R.id.focus_author)
 		ImageView focusAuthorImg;// 关注作者
+		
+		@ViewInject(R.id.follow_num)
 		TextView followNum;// 收藏人数
+		
+		@ViewInject(R.id.praise_num)
 		TextView praiseNum;// 点赞人数
+		
+		@ViewInject(R.id.comments_num)
 		TextView commentNum;// 评论人数
+		
+		@ViewInject(R.id.label_tv)
 		TextView labelTv;// 灵感标签
+		
+		@ViewInject(R.id.moment_article_content)
+		LinearLayout articleContent;// 内容区域
+		
+		@ViewInject(R.id.praise_area)
 		LinearLayout praiseArea;// 点赞区域
+		
+		@ViewInject(R.id.share_area)//分享区域
+		LinearLayout shareArea;
+		
 	}
 
 }

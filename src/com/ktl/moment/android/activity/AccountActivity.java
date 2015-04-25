@@ -192,8 +192,8 @@ public class AccountActivity extends BaseActivity implements OnLoginListener,
 		case ANIMATION_NO_ANIM:
 			break;
 		case ANIMATION_ALPHA_IN:
-			fragmentTransaction.setCustomAnimations(R.anim.login_alpha_in,
-					R.anim.login_alpha_out);
+			fragmentTransaction.setCustomAnimations(R.anim.alpha_in,
+					R.anim.alpha_out);
 			break;
 		case ANIMATION_MOVE_RIGHT:
 			fragmentTransaction.setCustomAnimations(R.anim.left_in,
