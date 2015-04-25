@@ -77,7 +77,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				moment.setIsOpen(1);
 			}
 			if (i % 4 == 0) {
-				moment.setCollect(1);
+				moment.setIsCutCollect(1);
 			}
 			moment.setTitle(i + "不再懊悔 App 自动生成器");
 			String content = "隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说";

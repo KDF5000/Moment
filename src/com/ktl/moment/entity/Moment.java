@@ -1,6 +1,10 @@
 package com.ktl.moment.entity;
 
 public class Moment extends BaseEntity{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long momentId;//灵感id
 	private String title;//标题
 	private String content;//内容
@@ -16,9 +20,16 @@ public class Moment extends BaseEntity{
 	private String audioUrl;//音频文件存储路径
 	
 	private int isOpen;//是否公开	0：不公开，1：公开
-	private int isCollect;//是否收藏		0：不是收藏，1：收藏
+	private int isCutCollect;//是否剪藏		0：不是剪藏，1：剪藏
 	private int isFocused;//作者是否被关注	0:未被关注，1：关注
-	
+	private int isWatched;//灵感是否被围观		0：没有围观，1：围观
+
+	public int getIsWatched() {
+		return isWatched;
+	}
+	public void setIsWatched(int isWatched) {
+		this.isWatched = isWatched;
+	}
 	public int getIsFocused() {
 		return isFocused;
 	}
@@ -31,11 +42,11 @@ public class Moment extends BaseEntity{
 	public void setIsOpen(int isOpen) {
 		this.isOpen = isOpen;
 	}
-	public int getIsCollect() {
-		return isCollect;
+	public int getIsCutCollect() {
+		return isCutCollect;
 	}
-	public void setCollect(int isCollect) {
-		this.isCollect = isCollect;
+	public void setIsCutCollect(int isCutCollect) {
+		this.isCutCollect = isCutCollect;
 	}
 	public String getLabel() {
 		return label;

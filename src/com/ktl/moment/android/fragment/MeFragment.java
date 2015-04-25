@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.MyFocusActivty;
 import com.ktl.moment.android.activity.SettingActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.CircleImageView;
@@ -40,6 +41,9 @@ public class MeFragment extends BaseFragment {
 
 	@ViewInject(R.id.me_setting_layout)
 	private LinearLayout meSttingLayout;
+	
+	@ViewInject(R.id.me_my_focus)
+	private TextView myFocus;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,7 +58,7 @@ public class MeFragment extends BaseFragment {
 
 	private void initView() {
 		List<User> user = SharedPreferencesUtil.getInstance().getList(
-				C.SPKey.SPK_QQ_LOGIN_INFO);
+				C.SPKey.SPK_LOGIN_INFO);
 		if(user.size() == 0){
 			return;
 		}
@@ -73,14 +77,17 @@ public class MeFragment extends BaseFragment {
 		}
 	}
 
-	@OnClick({ R.id.me_setting_layout })
+	@OnClick({ R.id.me_setting_layout,R.id.me_my_focus })
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.me_setting_layout:
 			Intent intent = new Intent(getActivity(), SettingActivity.class);
 			startActivity(intent);
 			break;
-
+		case R.id.me_my_focus:
+			Intent focusIntent = new Intent(getActivity(), MyFocusActivty.class);
+			startActivity(focusIntent);
+			break;
 		default:
 			break;
 		}

@@ -3,7 +3,6 @@ package com.ktl.moment.android.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,13 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.activity.MomentDetailActivity;
 import com.ktl.moment.android.adapter.FindListViewAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
-import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnItemClickListener;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
@@ -34,7 +31,7 @@ public class DynamicFragment extends BaseFragment {
 	private List<Moment> momentList;// 灵感列表
 
 	private Handler handler;
-	private int pageSize = 1;
+	private int pageSize = 10;
 	private int pageNum = 0;
 	private FindListViewAdapter findListViewAdapter;
 
@@ -80,7 +77,7 @@ public class DynamicFragment extends BaseFragment {
 				// 刷新开始
 				pageNum = 0;
 				getDataFromServer();
-				findListViewAdapter.notifyDataSetChanged();
+//				findListViewAdapter.notifyDataSetChanged();
 				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
@@ -124,7 +121,7 @@ public class DynamicFragment extends BaseFragment {
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", 123);//暂时写死，这个id由登陆时服务端下发，客户端全程留存
-		ApiManager.getInstance().post(getActivity(), C.API.GET_FOCUS_LIST, params, new HttpCallBack() {
+		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST, params, new HttpCallBack() {
 			
 			@SuppressWarnings("unchecked")
 			@Override
