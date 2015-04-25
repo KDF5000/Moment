@@ -40,9 +40,13 @@ public class C {
 		 */
 		public static final String GET_HOME_FOCUS_LIST = "http://192.168.95.1/list.php";
 		/**
-		 * 获取用户关注作者list
+		 * 获取用户关注的作者list
 		 */
 		public static final String GET_FOCUS_AUTHOR_LIST = "http://192.168.95.1/focus.php";
+		/**
+		 * 关注/取消关注 作者
+		 */
+		public static final String FOCUS_AUTHOR = "http://192.168.95.1/addFocus.php";
 	}
 	
 	

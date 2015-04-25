@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.FansAdapter;
@@ -23,12 +25,16 @@ import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.loopj.android.http.RequestParams;
 
 public class MyFocusActivty extends BaseActivity{
 	
 	@ViewInject(R.id.my_focus)
 	private ZrcListView myFocus;
+	
+	@ViewInject(R.id.title_back_img)
+	private ImageView titleBackImg;
 	
 	private LayoutInflater inflater;
 	private List<User> focusList;
@@ -87,8 +93,6 @@ public class MyFocusActivty extends BaseActivity{
 			public void onStart() {
 				// 刷新开始
 				pageNum = 0;
-				getData();
-				fansAdapter.notifyDataSetChanged();
 				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
@@ -98,6 +102,8 @@ public class MyFocusActivty extends BaseActivity{
 						myFocus.setRefreshSuccess("");
 					}
 				}, 2 * 1000);
+				getData();
+				fansAdapter.notifyDataSetChanged();
 			}
 		});
 
@@ -107,7 +113,6 @@ public class MyFocusActivty extends BaseActivity{
 			public void onStart() {
 				// 加载更多
 				pageNum++;
-				getData();
 				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
@@ -117,6 +122,8 @@ public class MyFocusActivty extends BaseActivity{
 						myFocus.setLoadMoreSuccess();
 					}
 				}, 2 * 1000);
+				getData();
+				fansAdapter.notifyDataSetChanged();
 			}
 		});
 	}
@@ -146,5 +153,12 @@ public class MyFocusActivty extends BaseActivity{
 				ToastUtil.show(MyFocusActivty.this, (String)res);
 			}
 		}, "User");
+	}
+	
+	@OnClick({R.id.title_back_img})
+	private void click(View v){
+		if(v.getId() == R.id.title_back_img){
+			finish();
+		}
 	}
 }
