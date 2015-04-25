@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
-    <ListView
+    <com.ktl.moment.android.component.listview.arc.widget.ZrcListView
         android:id="@+id/moment_comment_lv"
         android:layout_width="match_parent"
-        android:divider="@null"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:divider="@color/main_content_container_color"
+        android:dividerHeight="10dp"
+        android:scrollbars="none" >
+    </com.ktl.moment.android.component.listview.arc.widget.ZrcListView>
 
 </LinearLayout>

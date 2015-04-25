@@ -18,12 +18,14 @@ public class C {
 		/**
 		 * 手机号登录
 		 */
-		public static final String USER_LOGIN = URL_BASE + "MomentService/UserInfoService/SignIn/login";
+//		public static final String USER_LOGIN = URL_BASE + "MomentService/UserInfoService/SignIn/login";
+		public static final String USER_LOGIN = "http://192.168.95.1/index.php";
 		
 		/**
 		 * 第三方登陆
 		 */
-		public static final String USER_THIRD_PARTY_LOGIN = URL_BASE + "MomentService/UserInfoService/SignIn/thirdparty/login";
+//		public static final String USER_THIRD_PARTY_LOGIN = URL_BASE + "MomentService/UserInfoService/SignIn/thirdparty/login";
+		public static final String USER_THIRD_PARTY_LOGIN = "http://192.168.95.1/login.php";
 		
 		/**
 		 * 用户注册

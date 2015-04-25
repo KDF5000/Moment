@@ -55,6 +55,9 @@ public class MeFragment extends BaseFragment {
 	private void initView() {
 		List<User> user = SharedPreferencesUtil.getInstance().getList(
 				C.SPKey.SPK_QQ_LOGIN_INFO);
+		if(user.size() == 0){
+			return;
+		}
 		ImageLoader.getInstance().displayImage(user.get(0).getUserAvatar(),
 				userAvatar, getDisplayImageOptions());
 		nickname.setText(user.get(0).getNickName());
@@ -63,7 +66,11 @@ public class MeFragment extends BaseFragment {
 		}else{
 			sex.setImageResource(R.drawable.male);
 		}
-		signature.setText(user.get(0).getSignature());
+		if(user.get(0).getSignature().equals("")){
+			signature.setText("这个童鞋TA很懒，还没有发表个性签名");
+		}else{
+			signature.setText(user.get(0).getSignature());
+		}
 	}
 
 	@OnClick({ R.id.me_setting_layout })

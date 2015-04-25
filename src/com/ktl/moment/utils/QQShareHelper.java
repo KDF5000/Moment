@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.component.LoadingDialog;
@@ -231,7 +230,6 @@ public class QQShareHelper {
 	 * @param params
 	 */
 	public void thirdPartyLogin(RequestParams params) {
-		Log.i("tag", params + "");
 		final LoadingDialog dialog = new LoadingDialog(activity);
 		dialog.show();
 		ApiManager.getInstance().post(activity, C.API.USER_THIRD_PARTY_LOGIN,

@@ -58,6 +58,7 @@ public class ApiManager {
 	 */
 	public void post(Context context, String url, RequestParams params,final HttpCallBack callBack,
 			final String ... modelNameList) {
+		Log.i("http request", params+"");
 		HttpManager.post(context, url, params, new AsyncHttpResponseHandler() {
 
 			@Override
