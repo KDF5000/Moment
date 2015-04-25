@@ -36,10 +36,13 @@ public class C {
 		 */
 		public static final String GET_QINIU_TOKEN = "http://mymoment.sinaapp.com/qiniu_token.php";
 		/**
-		 * 获取七牛token
+		 * 获取发现首页list
 		 */
-//		public static final String GET_FOCUS_LIST = "http://192.168.249.1/list.php";
-		public static final String GET_FOCUS_LIST = "http://192.168.95.1/list.php";
+		public static final String GET_HOME_FOCUS_LIST = "http://192.168.95.1/list.php";
+		/**
+		 * 获取用户关注作者list
+		 */
+		public static final String GET_FOCUS_AUTHOR_LIST = "http://192.168.95.1/focus.php";
 	}
 	
 	
@@ -174,6 +177,6 @@ public class C {
 		public static final String SPK_SINGUP_ACCOUNT = "signup_account";	//记录注册账号，文件中记录注册方式名称。eg：phone/qq/weibo/wechat
 		public static final String SPK_IS_PUSH = "push";	//是否开启推送  true：是，false：否
 		public static final String SPK_IS_SAVE_DATA = "save_data";	//是否开启省流量模式  true：是，false：否
-		public static final String SPK_QQ_LOGIN_INFO = "qq_info";	//用户使用QQ账号登陆时的个人信息
+		public static final String SPK_LOGIN_INFO = "qq_info";	//用户使用登陆时的个人信息
 	}
 }

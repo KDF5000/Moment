@@ -211,7 +211,7 @@ public class LoginFragment extends AccountBaseFragment {
 						@SuppressWarnings("unchecked")
 						List<User> user = (List<User>) res;
 						SharedPreferencesUtil.getInstance().putList(
-								C.SPKey.SPK_QQ_LOGIN_INFO, user);
+								C.SPKey.SPK_LOGIN_INFO, user);
 						
 						Intent intent = new Intent(getActivity(),
 								HomeActivity.class);

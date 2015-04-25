@@ -11,6 +11,14 @@ public class User extends BaseEntity {
 	private String signature;//用户飞人签名
 	private int sex;//性别
 	
+	private int isFocused;//用户是否被关注 0：否，1：是
+	
+	public int getIsFocused() {
+		return isFocused;
+	}
+	public void setIsFocused(int isFocused) {
+		this.isFocused = isFocused;
+	}
 	public long getUserId() {
 		return userId;
 	}

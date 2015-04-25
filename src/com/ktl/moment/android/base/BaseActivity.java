@@ -139,6 +139,10 @@ public class BaseActivity extends FragmentActivity {
 		middleTitleTv.setText(resStringId);
 	}
 
+	protected void setMiddleTitleName(CharSequence str) {
+		middleTitleTv.setText(str);
+	}
+
 	protected void setBaseActivityBgColor(int resColorId) {
 		baseTitleReLayout.setBackgroundColor(resColorId);
 	}

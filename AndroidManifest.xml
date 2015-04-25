@@ -24,7 +24,7 @@
         android:theme="@style/AppTheme" >
         
         <activity
-            android:name="com.ktl.moment.android.activity.HomeActivity"
+            android:name="com.ktl.moment.android.activity.AccountActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,7 +69,7 @@
 		</activity>
         
         <activity 
-            android:name="com.ktl.moment.android.activity.AccountActivity">
+            android:name="com.ktl.moment.android.activity.HomeActivity">
         </activity>
         <!-- 测试activity  -->
         <activity 
@@ -116,6 +116,10 @@
         <activity 
             android:name="com.ktl.moment.android.activity.ShareActivity"
             android:theme="@style/activity_transparent">
+        </activity>
+        <!-- 我关注的用户页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.MyFocusActivty">
         </activity>
     </application>
 
