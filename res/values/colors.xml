@@ -18,6 +18,7 @@
     <!-- 大众色系 -->
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="text_color">#a0a0a0</color>
     
     <color name="main_title_color">#41aaf2</color>
     <color name="main_content_container_color">#eeeeee</color>
@@ -32,4 +33,8 @@
     
     <!-- activity透明色 -->
     <color name="transparent">#a0000000</color>
+    
+    <!-- 首页关注页面色系 -->
+    <color name="praise_color">#ec584d</color>
+    <color name="watch_color">#7acb59</color>
 </resources>

@@ -138,7 +138,7 @@
                 android:id="@+id/share_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/share" />
+                android:src="@drawable/focus_share_selector" />
 
             <TextView
                 android:id="@+id/share_tv"
@@ -209,7 +209,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/comments" />
+                android:src="@drawable/focus_comments_selector" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -227,7 +227,7 @@
                 android:layout_marginLeft="2dp"
                 android:gravity="center"
                 android:text="2"
-                android:textColor="#a0a0a0"
+                android:textColor="@drawable/focus_text_color_seletor"
                 android:textSize="10sp" />
         </LinearLayout>
 
