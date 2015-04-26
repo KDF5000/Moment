@@ -121,6 +121,10 @@
         <activity 
             android:name="com.ktl.moment.android.activity.MyFocusActivty">
         </activity>
+        <!-- 推荐用户页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.RecommendAuthorActivity">
+        </activity>
     </application>
 
 </manifest>

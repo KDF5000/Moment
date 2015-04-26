@@ -9,7 +9,6 @@ public class C {
 		/**
 		 * url基地址
 		 */
-//		private static final String URL_BASE = "http://192.168.95.1/";
 		private static final String URL_BASE = "http://115.156.249.55:8080/";
 		/**
 		 * 七牛基地址
@@ -28,7 +27,8 @@ public class C {
 		/**
 		 * 用户注册
 		 */
-		public static final String USER_REGISTER = URL_BASE + "MomentService/UserInfoService/Registration";
+//		public static final String USER_REGISTER = URL_BASE + "MomentService/UserInfoService/Registration";
+		public static final String USER_REGISTER = "http://192.168.95.1/login.php";
 		/**
 		 * 获取七牛token
 		 */
@@ -53,6 +53,10 @@ public class C {
 		 * 围观/取消围观
 		 */
 		public static final String WATCH_MOMENT = "http://192.168.95.1/addFocus.php";
+		/**
+		 * 获取我的粉丝列表
+		 */
+		public static final String GET_MY_FANS_LIST = "http://192.168.95.1/focus.php";
 	}
 	
 	

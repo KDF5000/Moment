@@ -24,7 +24,7 @@ import android.widget.TextView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.AccountActivity;
 import com.ktl.moment.android.activity.CameraSelectActivity;
-import com.ktl.moment.android.activity.HomeActivity;
+import com.ktl.moment.android.activity.RecommendAuthorActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.android.component.LoadingDialog;
@@ -197,7 +197,7 @@ public class ProfileFragment extends AccountBaseFragment {
 				// TODO Auto-generated method stub
 				dialog.dismiss();
 				ToastUtil.show(getActivity(), "注册成功");
-				Intent intent = new Intent(getActivity(), HomeActivity.class);
+				Intent intent = new Intent(getActivity(), RecommendAuthorActivity.class);
 				startActivity(intent);
 				getActivity().finish();
 			}

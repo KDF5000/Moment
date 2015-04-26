@@ -356,11 +356,11 @@ public class FindListViewAdapter extends BaseAdapter {
 		LinearLayout shareArea;
 
 		@ViewInject(R.id.share_img)
-		// 分享区域
+		// 分享img
 		ImageView shareImg;
 
 		@ViewInject(R.id.share_tv)
-		// 分享区域
+		// 分享文本
 		TextView shareTv;
 		/***********************************/
 		@ViewInject(R.id.comments_num)

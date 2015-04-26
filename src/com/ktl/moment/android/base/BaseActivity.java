@@ -163,6 +163,10 @@ public class BaseActivity extends FragmentActivity {
 		titleRightTv.setText(resId);
 	}
 
+	protected void setTitleRightTv(CharSequence str) {
+		titleRightTv.setText(str);
+	}
+
 	/**
 	 * 销毁当前界面跳到指定界面 参数为map --- map里类型暂定 根据实际过程修改
 	 * 

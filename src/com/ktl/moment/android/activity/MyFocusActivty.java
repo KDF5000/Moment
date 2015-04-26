@@ -3,6 +3,7 @@ package com.ktl.moment.android.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -55,8 +56,11 @@ public class MyFocusActivty extends BaseActivity{
 	
 	private void initView(){
 		this.inflater = getLayoutInflater();
-		this.inflater.inflate(R.layout.activity_my_fans, contentLayout, true);
+		this.inflater.inflate(R.layout.activity_my_focus, contentLayout, true);
 		ViewUtils.inject(this);
+		
+		Intent intent = getIntent();
+		String intentFlag = intent.getStringExtra("intentFlag");
 
 		//从SP获取用户id
 		List<User> spUser = SharedPreferencesUtil.getInstance().getList(C.SPKey.SPK_LOGIN_INFO);
@@ -69,7 +73,11 @@ public class MyFocusActivty extends BaseActivity{
 		setTitleBackImgVisible(true);
 		setTitleBackImg(R.drawable.title_return_white);
 		setMiddleTitleVisible(true);
-		setMiddleTitleName("我的关注");
+		if(intentFlag.equals("focus")){
+			setMiddleTitleName("我的关注");
+		}else if(intentFlag.equals("fans")){
+			setMiddleTitleName("我的粉丝");
+		}
 		setBaseActivityBgColor(getResources().getColor(R.color.main_title_color));
 		
 		// 设置下拉刷新的样式（可选，但如果没有Header则无法下拉刷新）

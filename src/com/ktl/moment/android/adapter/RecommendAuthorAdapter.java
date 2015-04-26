@@ -3,6 +3,7 @@ package com.ktl.moment.android.adapter;
 import java.util.List;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.adapter.FansAdapter.FansHolder;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
@@ -18,22 +19,22 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class FansAdapter extends BaseAdapter {
+public class RecommendAuthorAdapter extends BaseAdapter{
 
 	private Context context;
 	private List<User> userList;
 	private LayoutInflater inflater;
 	private DisplayImageOptions options;
 	
-	private final String TAG = "fansAdapter";
+	private final String TAG = "recommendUserAdapter";
 
-	public FansAdapter(Context context, List<User> userList,
+	public RecommendAuthorAdapter(Context context, List<User> userList,
 			DisplayImageOptions options) {
 		this.context = context;
 		this.userList = userList;
@@ -62,46 +63,46 @@ public class FansAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		final FansHolder fansHolder;
+		final AuthorHolder authorHolder;
 		if (convertView == null) {
 			convertView = this.inflater.inflate(R.layout.fans_lv_adapter, null);
-			fansHolder = new FansHolder();
-			ViewUtils.inject(fansHolder, convertView);
-			convertView.setTag(fansHolder);
+			authorHolder = new AuthorHolder();
+			ViewUtils.inject(authorHolder, convertView);
+			convertView.setTag(authorHolder);
 		} else {
-			fansHolder = (FansHolder) convertView.getTag();
+			authorHolder = (AuthorHolder) convertView.getTag();
 		}
 
-		final User fans = userList.get(position);
-		ImageLoader.getInstance().displayImage(fans.getUserAvatar(),
-				fansHolder.fansAvatar, options);
-		fansHolder.fansNickname.setText(fans.getNickName());
-		fansHolder.fansSignature.setText(fans.getSignature());
-		if(fans.getIsFocused() == 0){
-			fansHolder.fansFocus.setImageResource(R.drawable.fans_add_focus);
+		final User user = userList.get(position);
+		ImageLoader.getInstance().displayImage(user.getUserAvatar(),
+				authorHolder.fansAvatar, options);
+		authorHolder.fansNickname.setText(user.getNickName());
+		authorHolder.fansSignature.setText(user.getSignature());
+		if(user.getIsFocused() == 0){
+			authorHolder.fansFocus.setImageResource(R.drawable.select_unable);
 		}else{
-			fansHolder.fansFocus.setImageResource(R.drawable.fans_delete_focus);
+			authorHolder.fansFocus.setImageResource(R.drawable.select_enable);
 		}
 		
-		fansHolder.fansFocus.setOnClickListener(new OnClickListener() {
+		authorHolder.fansFocus.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				int isAddFocus;
-				if(fans.getIsFocused() == 0){
-					fansHolder.fansFocus.setImageResource(R.drawable.fans_delete_focus);
-					fans.setIsFocused(1);
+				if(user.getIsFocused() == 0){
+					authorHolder.fansFocus.setImageResource(R.drawable.select_enable);
+					user.setIsFocused(1);
 					isAddFocus = 1;
 				}else{
-					fansHolder.fansFocus.setImageResource(R.drawable.fans_add_focus);
-					fans.setIsFocused(0);
+					authorHolder.fansFocus.setImageResource(R.drawable.select_unable);
+					user.setIsFocused(0);
 					isAddFocus = 0;
 				}
-				List<User> user = SharedPreferencesUtil.getInstance().getList(C.SPKey.SPK_LOGIN_INFO);
+				List<User> spUser = SharedPreferencesUtil.getInstance().getList(C.SPKey.SPK_LOGIN_INFO);
 				RequestParams params = new RequestParams();
-				params.put("userId", user.get(0).getId());
-				params.put("authorId", fans.getUserId());
+				params.put("userId", spUser.get(0).getId());
+				params.put("authorId", user.getUserId());
 				params.put("isAddFocus", isAddFocus);
 				Log.i(TAG, params+"");
 				ApiManager.getInstance().post(context, C.API.FOCUS_AUTHOR, params, new HttpCallBack() {
@@ -124,7 +125,7 @@ public class FansAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	public static class FansHolder {
+	public static class AuthorHolder {
 		@ViewInject(R.id.fans_avatar)
 		private ImageView fansAvatar;
 
@@ -139,3 +140,4 @@ public class FansAdapter extends BaseAdapter {
 	}
 
 }
+

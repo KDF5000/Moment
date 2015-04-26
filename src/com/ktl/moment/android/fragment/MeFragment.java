@@ -44,6 +44,9 @@ public class MeFragment extends BaseFragment {
 	
 	@ViewInject(R.id.me_my_focus)
 	private TextView myFocus;
+	
+	@ViewInject(R.id.me_my_fans)
+	private TextView myFans;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +80,7 @@ public class MeFragment extends BaseFragment {
 		}
 	}
 
-	@OnClick({ R.id.me_setting_layout,R.id.me_my_focus })
+	@OnClick({ R.id.me_setting_layout,R.id.me_my_focus,R.id.me_my_fans })
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.me_setting_layout:
@@ -86,7 +89,13 @@ public class MeFragment extends BaseFragment {
 			break;
 		case R.id.me_my_focus:
 			Intent focusIntent = new Intent(getActivity(), MyFocusActivty.class);
+			focusIntent.putExtra("intentFlag", "focus");
 			startActivity(focusIntent);
+			break;
+		case R.id.me_my_fans:
+			Intent fansIntent = new Intent(getActivity(), MyFocusActivty.class);
+			fansIntent.putExtra("intentFlag", "fans");
+			startActivity(fansIntent);
 			break;
 		default:
 			break;
