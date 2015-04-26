@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.FansAdapter;
+import com.ktl.moment.android.adapter.RecommendAuthorAdapter;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
@@ -30,7 +31,7 @@ public class RecommendAuthorActivity extends BaseActivity{
 	@ViewInject(R.id.title_right_tv)
 	private TextView titleRightTv;
 	
-	private FansAdapter fansAdapter;
+	private RecommendAuthorAdapter recommendAuthorAdapter;
 	private List<User> userList;
 	private long userId;
 	private int pageNum = 0;
@@ -58,8 +59,8 @@ public class RecommendAuthorActivity extends BaseActivity{
 		userId = spUser.get(0).getId();
 		
 		getData();
-		fansAdapter = new FansAdapter(this, userList, getDisplayImageOptions());
-		recommendAuthor.setAdapter(fansAdapter);
+		recommendAuthorAdapter = new RecommendAuthorAdapter(this, userList, getDisplayImageOptions());
+		recommendAuthor.setAdapter(recommendAuthorAdapter);
 	}
 	
 	private void getData(){
@@ -78,7 +79,7 @@ public class RecommendAuthorActivity extends BaseActivity{
 				@SuppressWarnings("unchecked")
 				List<User> user = (List<User>) res;
 				userList.addAll(user);
-				fansAdapter.notifyDataSetChanged();
+				recommendAuthorAdapter.notifyDataSetChanged();
 			}
 			
 			@Override
