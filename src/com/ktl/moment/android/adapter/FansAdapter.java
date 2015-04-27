@@ -98,12 +98,11 @@ public class FansAdapter extends BaseAdapter {
 					fans.setIsFocused(0);
 					isAddFocus = 0;
 				}
-				List<User> user = SharedPreferencesUtil.getInstance().getList(C.SPKey.SPK_LOGIN_INFO);
+				User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
 				RequestParams params = new RequestParams();
-				params.put("userId", user.get(0).getId());
-				params.put("authorId", fans.getUserId());
+				params.put("userId", user.getId());
+				params.put("attentionUserId", fans.getUserId());
 				params.put("isAddFocus", isAddFocus);
-				Log.i(TAG, params+"");
 				ApiManager.getInstance().post(context, C.API.FOCUS_AUTHOR, params, new HttpCallBack() {
 					
 					@Override

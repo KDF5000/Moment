@@ -3,20 +3,13 @@ package com.ktl.moment.android.adapter;
 import java.util.List;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.adapter.FansAdapter.FansHolder;
-import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
-import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.utils.SharedPreferencesUtil;
-import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +20,7 @@ import android.widget.TextView;
 
 public class RecommendAuthorAdapter extends BaseAdapter{
 
+	@SuppressWarnings("unused")
 	private Context context;
 	private List<User> userList;
 	private LayoutInflater inflater;
@@ -89,36 +83,13 @@ public class RecommendAuthorAdapter extends BaseAdapter{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				int isAddFocus;
 				if(user.getIsFocused() == 0){
 					authorHolder.fansFocus.setImageResource(R.drawable.select_enable);
 					user.setIsFocused(1);
-					isAddFocus = 1;
 				}else{
 					authorHolder.fansFocus.setImageResource(R.drawable.select_unable);
 					user.setIsFocused(0);
-					isAddFocus = 0;
 				}
-				List<User> spUser = SharedPreferencesUtil.getInstance().getList(C.SPKey.SPK_LOGIN_INFO);
-				RequestParams params = new RequestParams();
-				params.put("userId", spUser.get(0).getId());
-				params.put("authorId", user.getUserId());
-				params.put("isAddFocus", isAddFocus);
-				Log.i(TAG, params+"");
-				ApiManager.getInstance().post(context, C.API.FOCUS_AUTHOR, params, new HttpCallBack() {
-					
-					@Override
-					public void onSuccess(Object res) {
-						// TODO Auto-generated method stub
-						Log.i(TAG, "success");
-					}
-					
-					@Override
-					public void onFailure(Object res) {
-						// TODO Auto-generated method stub
-						Log.i(TAG, "fail");
-					}
-				}, "User");
 			}
 		});
 

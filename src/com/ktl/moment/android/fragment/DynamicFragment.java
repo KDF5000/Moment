@@ -19,7 +19,9 @@ import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.loopj.android.http.RequestParams;
@@ -34,6 +36,7 @@ public class DynamicFragment extends BaseFragment {
 	private int pageSize = 10;
 	private int pageNum = 0;
 	private FindListViewAdapter findListViewAdapter;
+	private long userId;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +50,9 @@ public class DynamicFragment extends BaseFragment {
 		getDataFromServer();
 		findListView.setAdapter(findListViewAdapter);
 		initEvent();
+		
+		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+		userId = user.getUserId();
 		return view;
 	}
 
@@ -77,8 +83,7 @@ public class DynamicFragment extends BaseFragment {
 				// 刷新开始
 				pageNum = 0;
 				getDataFromServer();
-//				findListViewAdapter.notifyDataSetChanged();
-				Log.i("pageNum", pageNum+"");
+				Log.i(TAG+"-->pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -97,7 +102,7 @@ public class DynamicFragment extends BaseFragment {
 				// 加载更多
 				pageNum++;
 				getDataFromServer();
-				Log.i("pageNum", pageNum+"");
+				Log.i(TAG+"-->pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -120,7 +125,7 @@ public class DynamicFragment extends BaseFragment {
 		RequestParams params = new RequestParams();
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
-		params.put("userId", 123);//暂时写死，这个id由登陆时服务端下发，客户端全程留存
+		params.put("userId", userId);
 		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST, params, new HttpCallBack() {
 			
 			@SuppressWarnings("unchecked")

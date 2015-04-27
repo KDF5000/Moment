@@ -45,7 +45,7 @@ public class CameraSelectActivity extends Activity {
 						time + ".jpg"));
 				intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
 						mPicUri);
-				startActivityForResult(intent, C.ActivityRequest.QEQUEST_CAMERA_ACTION);
+				startActivityForResult(intent, C.ActivityRequest.REQUEST_CAMERA_ACTION);
 			}
 		});
 
@@ -99,7 +99,7 @@ public class CameraSelectActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
-			case C.ActivityRequest.QEQUEST_CAMERA_ACTION:
+			case C.ActivityRequest.REQUEST_CAMERA_ACTION:
 				if (data == null) {
 					startCutPicture();
 				}

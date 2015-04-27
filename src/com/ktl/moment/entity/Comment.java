@@ -5,69 +5,100 @@ public class Comment extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private long commentId;//评论id
-	private long fromUserId;//评论人id
-	private String fromUserName;//评论人昵称
-	private String fromUserAvatar;//评论人头像
-	private String commentTime;//评论发布时间
-	private String commentContent;//评论内容
-	private int praiseNum;//点赞数
-	
-	private long repalyUserId;//被回复人id
-	private String repalyUserName;//被回复人昵称
+	private long commentId;// 评论id
+	private long userId;// 评论人id
+	private String userName;// 评论人昵称
+	private String userAvatar;// 评论人头像
+	private String postTime;// 评论发布时间
+	private String content;// 评论内容
+	private int praiseNum;// 点赞数
+	private int isPraised;// 是否点赞评论0：是，1：不是
+
+	private long repalyUserId;// 被回复用户id
+	private String repalyUserName;// 被回复用户昵称
+
+	public int getIsPraised() {
+		return isPraised;
+	}
+
+	public void setIsPraised(int isPraised) {
+		this.isPraised = isPraised;
+	}
+
 	public long getCommentId() {
 		return commentId;
 	}
+
 	public void setCommentId(long commentId) {
 		this.commentId = commentId;
 	}
-	public long getFromUserId() {
-		return fromUserId;
+
+	public long getUserId() {
+		return userId;
 	}
-	public void setFromUserId(long fromUserId) {
-		this.fromUserId = fromUserId;
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
-	public String getFromUserName() {
-		return fromUserName;
+
+	public String getUserName() {
+		return userName;
 	}
-	public void setFromUserName(String fromUserName) {
-		this.fromUserName = fromUserName;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public String getFromUserAvatar() {
-		return fromUserAvatar;
+
+	public String getUserAvatar() {
+		return userAvatar;
 	}
-	public void setFromUserAvatar(String fromUserAvatar) {
-		this.fromUserAvatar = fromUserAvatar;
+
+	public void setUserAvatar(String userAvatar) {
+		this.userAvatar = userAvatar;
 	}
-	public String getCommentTime() {
-		return commentTime;
+
+	public String getPostTime() {
+		return postTime;
 	}
-	public void setCommentTime(String commentTime) {
-		this.commentTime = commentTime;
+
+	public void setPostTime(String postTime) {
+		this.postTime = postTime;
 	}
-	public String getCommentContent() {
-		return commentContent;
+
+	public String getContent() {
+		return content;
 	}
-	public void setCommentContent(String commentContent) {
-		this.commentContent = commentContent;
+
+	public void setContent(String content) {
+		this.content = content;
 	}
+
 	public int getPraiseNum() {
 		return praiseNum;
 	}
+
 	public void setPraiseNum(int praiseNum) {
 		this.praiseNum = praiseNum;
 	}
+
 	public long getRepalyUserId() {
 		return repalyUserId;
 	}
+
 	public void setRepalyUserId(long repalyUserId) {
 		this.repalyUserId = repalyUserId;
 	}
+
 	public String getRepalyUserName() {
 		return repalyUserName;
 	}
+
 	public void setRepalyUserName(String repalyUserName) {
 		this.repalyUserName = repalyUserName;
-	}	
-	
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 }

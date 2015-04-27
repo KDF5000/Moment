@@ -2,6 +2,10 @@ package com.ktl.moment.entity;
 
 public class User extends BaseEntity {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long userId;//用户id
 	private String nickName;//用户名
 	private String password;//用户密码

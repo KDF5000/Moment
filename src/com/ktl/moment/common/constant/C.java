@@ -34,13 +34,9 @@ public class C {
 		 */
 		public static final String GET_QINIU_TOKEN = "http://mymoment.sinaapp.com/qiniu_token.php";
 		/**
-		 * 获取发现首页list
+		 * 获取关注首页list
 		 */
 		public static final String GET_HOME_FOCUS_LIST = "http://192.168.95.1/list.php";
-		/**
-		 * 获取用户关注的作者list
-		 */
-		public static final String GET_FOCUS_AUTHOR_LIST = "http://192.168.95.1/focus.php";
 		/**
 		 * 关注/取消关注 作者
 		 */
@@ -57,6 +53,26 @@ public class C {
 		 * 获取我的粉丝列表
 		 */
 		public static final String GET_MY_FANS_LIST = "http://192.168.95.1/focus.php";
+		/**
+		 * 获取关注的作者list
+		 */
+		public static final String GET_FOCUS_AUTHOR_LIST = "http://192.168.95.1/focus.php";
+		/**
+		 * 更新用户信息
+		 */
+		public static final String UPDATE_USER_INFO = "http://192.168.95.1/focus.php";
+		/**
+		 * 提交推荐关注用户
+		 */
+		public static final String SUBMIT_FOCUS_USER = "http://192.168.95.1/focus.php";
+		/**
+		 * 获取灵感详情
+		 */
+		public static final String GET_MOMENT_DETAIL = "http://192.168.95.1/focus.php";
+		/**
+		 * 获取评论list
+		 */
+		public static final String GET_COMMENT_LIST = "http://192.168.95.1/focus.php";
 	}
 	
 	
@@ -168,10 +184,11 @@ public class C {
 	 */
 	public static final class ActivityRequest{
 		public static final int REQUEST_SELECT_CAMERA_ACTIVITY = 1;//请求选择拍照还是从相册获取图片方式
-		public static final int QEQUEST_CAMERA_ACTION = 2;//请求调用系统相机
+		public static final int REQUEST_CAMERA_ACTION = 2;//请求调用系统相机
 		public static final int REQUEST_PICK_ALBUM_ACTION = 3;//从相册选择
 		public static final int REQUEST_PICTURE_CROP_ACTION = 4;//裁剪图片
-		public static final int QEQUEST_SELECT_CITY_ACTIVITY = 5;//选择所在城市
+		public static final int REQUEST_SELECT_CITY_ACTIVITY = 5;//选择所在城市
+		public static final int REQUEST_DATE_PICKER_ACTIVITY = 6;//选择日期
 	}
 	/**
 	 * 文件类型 声音 图片
