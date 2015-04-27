@@ -52,7 +52,9 @@ public class DynamicFragment extends BaseFragment {
 		initEvent();
 		
 		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
-		userId = user.getUserId();
+		if(user!=null){
+			userId = user.getUserId();
+		}
 		return view;
 	}
 

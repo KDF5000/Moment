@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.ChannelAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.DragGridView;
-import com.ktl.moment.android.component.DragGridView.OnRearrangeListener;
+import com.ktl.moment.android.component.DragGridView.OnChanageListener;
 import com.ktl.moment.entity.Channel;
 
 public class ChannelFragment extends BaseFragment {
@@ -45,17 +44,17 @@ public class ChannelFragment extends BaseFragment {
 	}
 
 	private void getData() {
-		int[] img = { R.drawable.channel_architecture,
-				R.drawable.channel_architecture,
-				R.drawable.channel_architecture,
-				R.drawable.channel_architecture,
-				R.drawable.channel_architecture ,R.drawable.channel_architecture,R.drawable.channel_architecture};
-		// R.drawable.channel_fashion, R.drawable.channel_internet,
-		// R.drawable.channel_photography, R.drawable.channel_room_design,
-		// R.drawable.channel_ui_design,R.drawable.login_forget,
-		// R.drawable.channel_fashion, R.drawable.channel_internet,
-		// R.drawable.channel_photography, R.drawable.channel_room_design,
-		// R.drawable.channel_ui_design,R.drawable.login_forget };
+		int[] img = { R.drawable.channel_internet,
+				R.drawable.channel_internet,
+				R.drawable.channel_internet,
+				R.drawable.channel_internet,
+				R.drawable.channel_internet ,R.drawable.channel_internet,R.drawable.channel_internet};
+//		 R.drawable.channel_fashion, R.drawable.channel_internet,
+//		 R.drawable.channel_photography, R.drawable.channel_room_design,
+//		 R.drawable.channel_ui_design,R.drawable.login_forget,
+//		 R.drawable.channel_fashion, R.drawable.channel_internet,
+//		 R.drawable.channel_photography, R.drawable.channel_room_design,
+//		 R.drawable.channel_ui_design,R.drawable.login_forget };
 
 		if (channelList == null) {
 			channelList = new ArrayList<Channel>();
@@ -63,6 +62,7 @@ public class ChannelFragment extends BaseFragment {
 		for (int i = 0; i < img.length; i++) {
 			Channel channel = new Channel();
 			channel.setChannelImgResId(img[i]);
+			channel.setChannelName("频道"+i);
 			channelList.add(channel);
 		}
 	}
@@ -72,20 +72,17 @@ public class ChannelFragment extends BaseFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				
 			}
 		});
-
-		draggableGridView.setOnRearrangeListener(new OnRearrangeListener() {
-
+		draggableGridView.setOnChangeListener(new OnChanageListener() {
+			
 			@Override
-			public void onRearrange(int oldIndex, int newIndex) {
+			public void onChange(int form, int to) {
 				// TODO Auto-generated method stub
-				Log.i(TAG, "OnRearrangeListener.onRearrange from=" + oldIndex
-						+ ", to=" + newIndex);
-				Channel item = (Channel) channelAdapter.getItem(oldIndex);
-				// channelAdapter.setNotifyOnChange(false);
-				channelAdapter.removeItem(oldIndex);
-				channelAdapter.insertItem(item, newIndex);
+				Channel temp = channelList.get(to);
+				channelList.set(to, channelList.get(form));
+				channelList.set(form, temp);
 				channelAdapter.notifyDataSetChanged();
 			}
 		});
