@@ -427,6 +427,6 @@ public class DragGridView extends GridView{
          * @param to  
          *          拖拽到的position 
          */  
-        public void onChange(int form, int to);  
+        public void onChange(int from, int to);  
     }  
 }

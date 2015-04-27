@@ -1,6 +1,7 @@
 package com.ktl.moment.android.fragment.find;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.os.Bundle;
@@ -78,11 +79,25 @@ public class ChannelFragment extends BaseFragment {
 		draggableGridView.setOnChangeListener(new OnChanageListener() {
 			
 			@Override
-			public void onChange(int form, int to) {
+			public void onChange(int from, int to) {
 				// TODO Auto-generated method stub
-				Channel temp = channelList.get(to);
-				channelList.set(to, channelList.get(form));
-				channelList.set(form, temp);
+//				Channel temp = channelList.get(to);
+				//直接交换
+//				channelList.set(to, channelList.get(form));
+//				channelList.set(form, temp);
+				//这里的处理需要注意下  
+				Channel temp = channelList.get(from);
+                if(from < to){  
+                    for(int i=from; i<to; i++){  
+                        Collections.swap(channelList, i, i+1);  
+                    }  
+                }else if(from > to){  
+                    for(int i=from; i>to; i--){  
+                        Collections.swap(channelList, i, i-1);  
+                    }  
+                }  
+                   
+                channelList.set(to, temp); 
 				channelAdapter.notifyDataSetChanged();
 			}
 		});
