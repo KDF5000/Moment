@@ -47,9 +47,10 @@ public class FindListViewAdapter extends BaseAdapter {
 		this.mInflater = LayoutInflater.from(context);
 		this.options = options;
 
-		List<User> user = SharedPreferencesUtil.getInstance().getList(
-				C.SPKey.SPK_LOGIN_INFO);
-		userId = user.get(0).getUserId();
+		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+		if(user!=null){
+			userId = user.getId();
+		}
 	}
 
 	@Override
@@ -92,50 +93,60 @@ public class FindListViewAdapter extends BaseAdapter {
 				momentHolder.momentImg, options);
 		momentHolder.userNameTv.setText(moment.getAuthorName());
 		momentHolder.postTime.setText(moment.getPostTime());
-		
-		if(moment.getIsFocused() == 0){
-			momentHolder.focusAuthorImg.setImageResource(R.drawable.focus_author_press);
-		}else{
-			momentHolder.focusAuthorImg.setImageResource(R.drawable.focus_author);
+
+		if (moment.getIsFocused() == 0) {
+			momentHolder.focusAuthorImg
+					.setImageResource(R.drawable.focus_author_press);
+		} else {
+			momentHolder.focusAuthorImg
+					.setImageResource(R.drawable.focus_author);
 		}
-		
-		if(moment.getIsWatched() == 1){
+
+		if (moment.getIsWatched() == 1) {
 			momentHolder.watchImg.setImageResource(R.drawable.watch_press);
-			momentHolder.watchTv.setTextColor(context.getResources().getColor(R.color.watch_color));
-			momentHolder.watchNum.setTextColor(context.getResources().getColor(R.color.watch_color));
-		}else{
+			momentHolder.watchTv.setTextColor(context.getResources().getColor(
+					R.color.watch_color));
+			momentHolder.watchNum.setTextColor(context.getResources().getColor(
+					R.color.watch_color));
+		} else {
 			momentHolder.watchImg.setImageResource(R.drawable.watch);
-			momentHolder.watchTv.setTextColor(context.getResources().getColor(R.color.text_color));
-			momentHolder.watchNum.setTextColor(context.getResources().getColor(R.color.text_color));
+			momentHolder.watchTv.setTextColor(context.getResources().getColor(
+					R.color.text_color));
+			momentHolder.watchNum.setTextColor(context.getResources().getColor(
+					R.color.text_color));
 		}
 		momentHolder.watchNum.setText(moment.getWatchNum() + "");
-		
-		if(moment.getIsPraised() == 0){
+
+		if (moment.getIsPraised() == 0) {
 			momentHolder.praiseImg.setImageResource(R.drawable.like);
-			momentHolder.praiseTv.setTextColor(context.getResources().getColor(R.color.text_color));
-			momentHolder.praiseNum.setTextColor(context.getResources().getColor(R.color.text_color));
-		}else{
+			momentHolder.praiseTv.setTextColor(context.getResources().getColor(
+					R.color.text_color));
+			momentHolder.praiseNum.setTextColor(context.getResources()
+					.getColor(R.color.text_color));
+		} else {
 			momentHolder.praiseImg.setImageResource(R.drawable.like_press);
-			momentHolder.praiseTv.setTextColor(context.getResources().getColor(R.color.praise_color));
-			momentHolder.praiseNum.setTextColor(context.getResources().getColor(R.color.praise_color));
+			momentHolder.praiseTv.setTextColor(context.getResources().getColor(
+					R.color.praise_color));
+			momentHolder.praiseNum.setTextColor(context.getResources()
+					.getColor(R.color.praise_color));
 		}
 		momentHolder.praiseNum.setText(moment.getPraiseNum() + "");
-		
+
 		momentHolder.commentNum.setText(moment.getCommentNum() + "");
 		momentHolder.labelTv.setText(moment.getLabel());
-		
+
 		// listviewItem 点击进入详情页
 		momentHolder.articleContent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(context,MomentDetailActivity.class);
+				Intent intent = new Intent(context, MomentDetailActivity.class);
 				intent.putExtra("momentId", moment.getMomentId());
 				context.startActivity(intent);
 			}
 		});
 
-		//进入作者个人页面
+		// 进入作者个人页面
 		momentHolder.avatar.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -147,7 +158,7 @@ public class FindListViewAdapter extends BaseAdapter {
 			}
 		});
 
-		//关注作者
+		// 关注作者
 		momentHolder.focusAuthorImg.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -206,61 +217,68 @@ public class FindListViewAdapter extends BaseAdapter {
 					isFocused = 0;
 				}
 				notifyDataSetChanged();
-				requestServer(isFocused, "isFocused", userId, moment.getMomentId(), C.API.FOCUS_AUTHOR);
+				requestServer(isFocused, "isFocused", userId,
+						moment.getMomentId(), C.API.FOCUS_AUTHOR);
 			}
 		});
 
 		// listviewItem 点击分享
 		momentHolder.shareArea.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(context,ShareActivity.class);
+				Intent intent = new Intent(context, ShareActivity.class);
 				context.startActivity(intent);
 			}
 		});
-		
-		//点击评论
+
+		// 点击评论
 		momentHolder.commentArea.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(context,MomentDetailActivity.class);
+				Intent intent = new Intent(context, MomentDetailActivity.class);
 				context.startActivity(intent);
 			}
 		});
-		
-		//围观
+
+		// 围观
 		momentHolder.watchArea.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				int isWatched;
 				int num = moment.getWatchNum();
-				if(moment.getIsWatched() == 0){
+				if (moment.getIsWatched() == 0) {
 					moment.setWatchtNum(++num);
 					moment.setIsWatched(1);
-					momentHolder.watchImg.setImageResource(R.drawable.watch_press);
-					momentHolder.watchTv.setTextColor(context.getResources().getColor(R.color.watch_color));
-					momentHolder.watchNum.setTextColor(context.getResources().getColor(R.color.watch_color));
+					momentHolder.watchImg
+							.setImageResource(R.drawable.watch_press);
+					momentHolder.watchTv.setTextColor(context.getResources()
+							.getColor(R.color.watch_color));
+					momentHolder.watchNum.setTextColor(context.getResources()
+							.getColor(R.color.watch_color));
 					isWatched = 1;
-				}else{
+				} else {
 					moment.setWatchtNum(--num);
 					moment.setIsWatched(0);
 					momentHolder.watchImg.setImageResource(R.drawable.watch);
-					momentHolder.watchTv.setTextColor(context.getResources().getColor(R.color.text_color));
-					momentHolder.watchNum.setTextColor(context.getResources().getColor(R.color.text_color));
+					momentHolder.watchTv.setTextColor(context.getResources()
+							.getColor(R.color.text_color));
+					momentHolder.watchNum.setTextColor(context.getResources()
+							.getColor(R.color.text_color));
 					isWatched = 0;
 				}
 				notifyDataSetChanged();
-				requestServer(isWatched, "isWatched", userId,moment.getMomentId() , C.API.WATCH_MOMENT);
+				requestServer(isWatched, "isWatched", userId,
+						moment.getMomentId(), C.API.WATCH_MOMENT);
 			}
 		});
 
-		//点赞
+		// 点赞
 		momentHolder.praiseArea.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -268,24 +286,30 @@ public class FindListViewAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				int isPraised;
 				int num = moment.getPraiseNum();
-				if(moment.getIsPraised() == 0){
+				if (moment.getIsPraised() == 0) {
 					moment.setPraiseNum(++num);
 					moment.setIsPraised(1);
-					momentHolder.praiseImg.setImageResource(R.drawable.like_press);
-					momentHolder.praiseTv.setTextColor(context.getResources().getColor(R.color.praise_color));
-					momentHolder.praiseNum.setTextColor(context.getResources().getColor(R.color.praise_color));
+					momentHolder.praiseImg
+							.setImageResource(R.drawable.like_press);
+					momentHolder.praiseTv.setTextColor(context.getResources()
+							.getColor(R.color.praise_color));
+					momentHolder.praiseNum.setTextColor(context.getResources()
+							.getColor(R.color.praise_color));
 					isPraised = 1;
-				}else{
+				} else {
 					moment.setPraiseNum(--num);
 					moment.setIsPraised(0);
 					momentHolder.praiseImg.setImageResource(R.drawable.like);
-					momentHolder.praiseTv.setTextColor(context.getResources().getColor(R.color.text_color));
-					momentHolder.praiseNum.setTextColor(context.getResources().getColor(R.color.text_color));
+					momentHolder.praiseTv.setTextColor(context.getResources()
+							.getColor(R.color.text_color));
+					momentHolder.praiseNum.setTextColor(context.getResources()
+							.getColor(R.color.text_color));
 					isPraised = 0;
 				}
 				notifyDataSetChanged();
 				// 可以在这里向服务器请求，也可以设置一个回调或者消息 给fragment 让他发送请求
-				requestServer(isPraised, "isPraised", userId,moment.getMomentId() , C.API.PRAISE_MOMENT);
+				requestServer(isPraised, "isPraised", userId,
+						moment.getMomentId(), C.API.PRAISE_MOMENT);
 			}
 		});
 
@@ -365,7 +389,7 @@ public class FindListViewAdapter extends BaseAdapter {
 		/***********************************/
 		@ViewInject(R.id.comments_num)
 		TextView commentNum;// 评论人数
-		
+
 		@ViewInject(R.id.comment_area)
 		LinearLayout commentArea;// 评论人数
 		/***********************************/
