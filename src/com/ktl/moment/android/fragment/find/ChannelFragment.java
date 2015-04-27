@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.ChannelAdapter;
@@ -62,6 +63,7 @@ public class ChannelFragment extends BaseFragment {
 		}
 		for (int i = 0; i < img.length; i++) {
 			Channel channel = new Channel();
+			channel.setChannelId(i);
 			channel.setChannelImgResId(img[i]);
 			channel.setChannelName("频道"+i);
 			channelList.add(channel);
@@ -99,6 +101,15 @@ public class ChannelFragment extends BaseFragment {
                    
                 channelList.set(to, temp); 
 				channelAdapter.notifyDataSetChanged();
+			}
+		});
+		draggableGridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getActivity(), "-->"+channelList.get(position).getChannelId(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
