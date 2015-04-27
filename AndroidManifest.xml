@@ -125,6 +125,15 @@
         <activity 
             android:name="com.ktl.moment.android.activity.RecommendAuthorActivity">
         </activity>
+        <!-- 编辑资料页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.EditInfoActivity">
+        </activity>
+        <!-- 日期选择对话框 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.CustomDatePicker"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.EditInfoActivity;
 import com.ktl.moment.android.activity.MyFocusActivty;
 import com.ktl.moment.android.activity.SettingActivity;
 import com.ktl.moment.android.base.BaseFragment;
@@ -29,24 +30,27 @@ public class MeFragment extends BaseFragment {
 
 	@ViewInject(R.id.me_user_avatar)
 	private CircleImageView userAvatar;
-	
+
 	@ViewInject(R.id.me_sex)
 	private ImageView sex;
-	
+
 	@ViewInject(R.id.me_user_nickname)
 	private TextView nickname;
-	
+
 	@ViewInject(R.id.me_signature)
 	private TextView signature;
 
 	@ViewInject(R.id.me_setting_layout)
 	private LinearLayout meSttingLayout;
-	
+
 	@ViewInject(R.id.me_my_focus)
 	private TextView myFocus;
-	
+
 	@ViewInject(R.id.me_my_fans)
 	private TextView myFans;
+
+	@ViewInject(R.id.me_edit_info_layout)
+	private LinearLayout meEditInfoLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,30 +66,32 @@ public class MeFragment extends BaseFragment {
 	private void initView() {
 		List<User> user = SharedPreferencesUtil.getInstance().getList(
 				C.SPKey.SPK_LOGIN_INFO);
-		if(user.size() == 0){
+		if (user.size() == 0) {
 			return;
 		}
 		ImageLoader.getInstance().displayImage(user.get(0).getUserAvatar(),
 				userAvatar, getDisplayImageOptions());
 		nickname.setText(user.get(0).getNickName());
-		if(user.get(0).getSex() == 0){
+		if (user.get(0).getSex() == 0) {
 			sex.setImageResource(R.drawable.female);
-		}else{
+		} else {
 			sex.setImageResource(R.drawable.male);
 		}
-		if(user.get(0).getSignature().equals("")){
+		if (user.get(0).getSignature().equals("")) {
 			signature.setText("这个童鞋TA很懒，还没有发表个性签名");
-		}else{
+		} else {
 			signature.setText(user.get(0).getSignature());
 		}
 	}
 
-	@OnClick({ R.id.me_setting_layout,R.id.me_my_focus,R.id.me_my_fans })
+	@OnClick({ R.id.me_setting_layout, R.id.me_my_focus, R.id.me_my_fans,
+			R.id.me_edit_info_layout })
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.me_setting_layout:
-			Intent intent = new Intent(getActivity(), SettingActivity.class);
-			startActivity(intent);
+			Intent settingIntent = new Intent(getActivity(),
+					SettingActivity.class);
+			startActivity(settingIntent);
 			break;
 		case R.id.me_my_focus:
 			Intent focusIntent = new Intent(getActivity(), MyFocusActivty.class);
@@ -96,6 +102,11 @@ public class MeFragment extends BaseFragment {
 			Intent fansIntent = new Intent(getActivity(), MyFocusActivty.class);
 			fansIntent.putExtra("intentFlag", "fans");
 			startActivity(fansIntent);
+			break;
+		case R.id.me_edit_info_layout:
+			Intent editInfoIntent = new Intent(getActivity(),
+					EditInfoActivity.class);
+			startActivity(editInfoIntent);
 			break;
 		default:
 			break;

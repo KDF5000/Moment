@@ -150,7 +150,7 @@ public class ProfileFragment extends AccountBaseFragment {
 		case R.id.profile_place_tv:
 			Intent intent = new Intent(getActivity(), HoloWheelActivity.class);
 			startActivityForResult(intent,
-					C.ActivityRequest.QEQUEST_SELECT_CITY_ACTIVITY);
+					C.ActivityRequest.REQUEST_SELECT_CITY_ACTIVITY);
 			break;
 		case R.id.profile_complete_btn:
 			complete();
@@ -216,7 +216,7 @@ public class ProfileFragment extends AccountBaseFragment {
 		// TODO Auto-generated method stub
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
-			case C.ActivityRequest.QEQUEST_SELECT_CITY_ACTIVITY:
+			case C.ActivityRequest.REQUEST_SELECT_CITY_ACTIVITY:
 				String province = data.getStringExtra("provinceText");
 				String city = data.getStringExtra("cityText");
 				profilePlaceTv.setText(province + " " + city);
