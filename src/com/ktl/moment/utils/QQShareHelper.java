@@ -244,8 +244,8 @@ public class QQShareHelper {
 						// 将用户基本信息写入SP
 						@SuppressWarnings("unchecked")
 						List<User> user = (List<User>) res;
-						SharedPreferencesUtil.getInstance().putList(
-								C.SPKey.SPK_LOGIN_INFO, user);
+						SharedPreferencesUtil.getInstance().putObject(
+								C.SPKey.SPK_LOGIN_INFO, user.get(0));
 						
 						Intent intent = new Intent(activity, HomeActivity.class);
 						activity.startActivity(intent);

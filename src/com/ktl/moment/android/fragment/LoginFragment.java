@@ -210,8 +210,8 @@ public class LoginFragment extends AccountBaseFragment {
 						dialog.dismiss();
 						@SuppressWarnings("unchecked")
 						List<User> user = (List<User>) res;
-						SharedPreferencesUtil.getInstance().putList(
-								C.SPKey.SPK_LOGIN_INFO, user);
+						SharedPreferencesUtil.getInstance().putObject(
+								C.SPKey.SPK_LOGIN_INFO, user.get(0));
 						
 						Intent intent = new Intent(getActivity(),
 								HomeActivity.class);

@@ -94,6 +94,9 @@ public class SharedPreferencesUtil {
 	public synchronized Object getObject(String key){
 		Object obj = new Object();
 		String str = sharedPreferences.getString(key, "");
+		if(str==""){
+			return null;
+		}
 		try {
 			obj = SerializableUtil.str2Obj(str);
 		} catch (StreamCorruptedException e) {
