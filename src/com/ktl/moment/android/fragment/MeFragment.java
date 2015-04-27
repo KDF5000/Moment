@@ -64,23 +64,23 @@ public class MeFragment extends BaseFragment {
 	}
 
 	private void initView() {
-		List<User> user = SharedPreferencesUtil.getInstance().getList(
+		User user = (User) SharedPreferencesUtil.getInstance().getObject(
 				C.SPKey.SPK_LOGIN_INFO);
-		if (user.size() == 0) {
+		if (user == null) {
 			return;
 		}
-		ImageLoader.getInstance().displayImage(user.get(0).getUserAvatar(),
+		ImageLoader.getInstance().displayImage(user.getUserAvatar(),
 				userAvatar, getDisplayImageOptions());
-		nickname.setText(user.get(0).getNickName());
-		if (user.get(0).getSex() == 0) {
+		nickname.setText(user.getNickName());
+		if (user.getSex() == 0) {
 			sex.setImageResource(R.drawable.female);
 		} else {
 			sex.setImageResource(R.drawable.male);
 		}
-		if (user.get(0).getSignature().equals("")) {
+		if (user.getSignature().equals("")) {
 			signature.setText("这个童鞋TA很懒，还没有发表个性签名");
 		} else {
-			signature.setText(user.get(0).getSignature());
+			signature.setText(user.getSignature());
 		}
 	}
 

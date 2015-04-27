@@ -8,7 +8,7 @@ public class Moment extends BaseEntity{
 	private long momentId;//灵感id
 	private String title;//标题
 	private String content;//内容
-	private String momentImg;//灵感内部的图片
+	private String momentImgs;//灵感内部的图片
 	private String label;//灵感标签
 	private String postTime;//发布时间
 	private int watchNum;//关注的用户个数
@@ -61,11 +61,11 @@ public class Moment extends BaseEntity{
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public String getMomentImg() {
-		return momentImg;
+	public String getMomentImgs() {
+		return momentImgs;
 	}
-	public void setMomentImg(String momentImg) {
-		this.momentImg = momentImg;
+	public void setMomentImgs(String momentImgs) {
+		this.momentImgs = momentImgs;
 	}	
 	public int getCommentNum() {
 		return commentNum;

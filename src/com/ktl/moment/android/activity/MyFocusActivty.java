@@ -63,8 +63,8 @@ public class MyFocusActivty extends BaseActivity{
 		String intentFlag = intent.getStringExtra("intentFlag");
 
 		//从SP获取用户id
-		List<User> spUser = SharedPreferencesUtil.getInstance().getList(C.SPKey.SPK_LOGIN_INFO);
-		userId = spUser.get(0).getId();
+		User spUser = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+		userId = spUser.getId();
 		
 		getData();
 		fansAdapter = new FansAdapter(this, focusList, getDisplayImageOptions());

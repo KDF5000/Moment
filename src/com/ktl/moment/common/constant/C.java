@@ -34,13 +34,9 @@ public class C {
 		 */
 		public static final String GET_QINIU_TOKEN = "http://mymoment.sinaapp.com/qiniu_token.php";
 		/**
-		 * 获取发现首页list
+		 * 获取关注首页list
 		 */
 		public static final String GET_HOME_FOCUS_LIST = "http://192.168.95.1/list.php";
-		/**
-		 * 获取用户关注的作者list
-		 */
-		public static final String GET_FOCUS_AUTHOR_LIST = "http://192.168.95.1/focus.php";
 		/**
 		 * 关注/取消关注 作者
 		 */
@@ -57,6 +53,10 @@ public class C {
 		 * 获取我的粉丝列表
 		 */
 		public static final String GET_MY_FANS_LIST = "http://192.168.95.1/focus.php";
+		/**
+		 * 获取关注的作者list
+		 */
+		public static final String GET_FOCUS_AUTHOR_LIST = "http://192.168.95.1/focus.php";
 		/**
 		 * 更新用户信息
 		 */
