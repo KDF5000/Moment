@@ -61,6 +61,18 @@ public class C {
 		 * 更新用户信息
 		 */
 		public static final String UPDATE_USER_INFO = "http://192.168.95.1/focus.php";
+		/**
+		 * 提交推荐关注用户
+		 */
+		public static final String SUBMIT_FOCUS_USER = "http://192.168.95.1/focus.php";
+		/**
+		 * 获取灵感详情
+		 */
+		public static final String GET_MOMENT_DETAIL = "http://192.168.95.1/focus.php";
+		/**
+		 * 获取评论list
+		 */
+		public static final String GET_COMMENT_LIST = "http://192.168.95.1/focus.php";
 	}
 	
 	

@@ -3,6 +3,7 @@ package com.ktl.moment.android.fragment;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -30,8 +31,10 @@ import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.android.component.wheel.HoloWheelActivity;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.EditTextUtil;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -173,42 +176,50 @@ public class ProfileFragment extends AccountBaseFragment {
 				return;
 			}
 		}
-		
-		Map<String,String> registerData = new HashMap<String, String>();
-		AccountActivity  accountActivity = (AccountActivity)getActivity();
-		if(accountActivity!=null){
+
+		Map<String, String> registerData = new HashMap<String, String>();
+		AccountActivity accountActivity = (AccountActivity) getActivity();
+		if (accountActivity != null) {
 			registerData = accountActivity.getRegisterData();
 		}
-		
+
 		final LoadingDialog dialog = new LoadingDialog(getActivity());
 		dialog.show();
-		
+
 		RequestParams params = new RequestParams();
 		params.put("mobilePhone", registerData.get("phone"));
 		params.put("password", registerData.get("pass"));
 		params.put("nickName", nickname);
 		params.put("area", place);
 		params.put("sex", sex);
-		params.put("userAvatar", "");//后面完善
-		ApiManager.getInstance().post(getActivity(), C.API.USER_REGISTER, params, new HttpCallBack() {
-			
-			@Override
-			public void onSuccess(Object res) {
-				// TODO Auto-generated method stub
-				dialog.dismiss();
-				ToastUtil.show(getActivity(), "注册成功");
-				Intent intent = new Intent(getActivity(), RecommendAuthorActivity.class);
-				startActivity(intent);
-				getActivity().finish();
-			}
-			
-			@Override
-			public void onFailure(Object res) {
-				// TODO Auto-generated method stub
-				dialog.dismiss();
-				ToastUtil.show(getActivity(), (String)res);
-			}
-		}, "User");
+		params.put("userAvatar", "");// 后面完善
+		ApiManager.getInstance().post(getActivity(), C.API.USER_REGISTER,
+				params, new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+						ToastUtil.show(getActivity(), "注册成功");
+						@SuppressWarnings("unchecked")
+						List<User> list = (List<User>) res;
+						Intent intent = new Intent(getActivity(),
+								RecommendAuthorActivity.class);
+						startActivity(intent);
+						getActivity().finish();
+						SharedPreferencesUtil.getInstance().putString(
+								C.SPKey.SPK_IS_LOGIN, "true");
+						SharedPreferencesUtil.getInstance().putObject(
+								C.SPKey.SPK_LOGIN_INFO, list.get(0));
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+						ToastUtil.show(getActivity(), (String) res);
+					}
+				}, "User");
 	}
 
 	@Override

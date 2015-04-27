@@ -103,12 +103,12 @@ public class MomentPlaAdapter extends BaseAdapter {
 						R.color.moment_etsy_text_color));
 			}
 		}
-		if (moment.getMomentImg() == null || moment.getMomentImg().equals("")
-				|| moment.getMomentImg() == "") {
+		if (moment.getMomentImgs() == null || moment.getMomentImgs().equals("")
+				|| moment.getMomentImgs() == "") {
 			momentHolder.articleImg.setVisibility(View.GONE);
 		} else {
 			momentHolder.articleImg.setVisibility(View.VISIBLE);
-			ImageLoader.getInstance().displayImage(moment.getMomentImg(),
+			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
 					momentHolder.articleImg, this.options);
 		}
 		momentHolder.articleTitle.setText(moment.getTitle());

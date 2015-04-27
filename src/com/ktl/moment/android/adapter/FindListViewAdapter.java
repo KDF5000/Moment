@@ -89,7 +89,7 @@ public class FindListViewAdapter extends BaseAdapter {
 		momentHolder.contentTv.setText(moment.getContent());
 		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
 				momentHolder.avatar, options);
-		ImageLoader.getInstance().displayImage(moment.getMomentImg(),
+		ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
 				momentHolder.momentImg, options);
 		momentHolder.userNameTv.setText(moment.getAuthorName());
 		momentHolder.postTime.setText(moment.getPostTime());
@@ -166,7 +166,7 @@ public class FindListViewAdapter extends BaseAdapter {
 				Animation anim = AnimationUtils.loadAnimation(context,
 						R.anim.focus_img_anim);
 				momentHolder.focusAuthorImg.setAnimation(anim);
-				int isFocused;
+				int isAddFocus;
 				if (moment.getIsFocused() == 0) {
 					anim.setAnimationListener(new AnimationListener() {
 
@@ -190,7 +190,7 @@ public class FindListViewAdapter extends BaseAdapter {
 							moment.setIsFocused(1);
 						}
 					});
-					isFocused = 1;
+					isAddFocus = 1;
 				} else {
 					anim.setAnimationListener(new AnimationListener() {
 
@@ -214,11 +214,11 @@ public class FindListViewAdapter extends BaseAdapter {
 							moment.setIsFocused(0);
 						}
 					});
-					isFocused = 0;
+					isAddFocus = 0;
 				}
 				notifyDataSetChanged();
-				requestServer(isFocused, "isFocused", userId,
-						moment.getMomentId(), C.API.FOCUS_AUTHOR);
+				requestServer(isAddFocus, "isAddFocus", userId,
+						moment.getMomentId(), C.API.FOCUS_AUTHOR, "User");
 			}
 		});
 
@@ -250,7 +250,7 @@ public class FindListViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				int isWatched;
+				int isAddWatch;
 				int num = moment.getWatchNum();
 				if (moment.getIsWatched() == 0) {
 					moment.setWatchtNum(++num);
@@ -261,7 +261,7 @@ public class FindListViewAdapter extends BaseAdapter {
 							.getColor(R.color.watch_color));
 					momentHolder.watchNum.setTextColor(context.getResources()
 							.getColor(R.color.watch_color));
-					isWatched = 1;
+					isAddWatch = 1;
 				} else {
 					moment.setWatchtNum(--num);
 					moment.setIsWatched(0);
@@ -270,11 +270,11 @@ public class FindListViewAdapter extends BaseAdapter {
 							.getColor(R.color.text_color));
 					momentHolder.watchNum.setTextColor(context.getResources()
 							.getColor(R.color.text_color));
-					isWatched = 0;
+					isAddWatch = 0;
 				}
 				notifyDataSetChanged();
-				requestServer(isWatched, "isWatched", userId,
-						moment.getMomentId(), C.API.WATCH_MOMENT);
+				requestServer(isAddWatch, "isAddWatch", userId,
+						moment.getMomentId(), C.API.WATCH_MOMENT, "Moment");
 			}
 		});
 
@@ -284,7 +284,7 @@ public class FindListViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				int isPraised;
+				int isAddPraise;
 				int num = moment.getPraiseNum();
 				if (moment.getIsPraised() == 0) {
 					moment.setPraiseNum(++num);
@@ -295,7 +295,7 @@ public class FindListViewAdapter extends BaseAdapter {
 							.getColor(R.color.praise_color));
 					momentHolder.praiseNum.setTextColor(context.getResources()
 							.getColor(R.color.praise_color));
-					isPraised = 1;
+					isAddPraise = 1;
 				} else {
 					moment.setPraiseNum(--num);
 					moment.setIsPraised(0);
@@ -304,12 +304,12 @@ public class FindListViewAdapter extends BaseAdapter {
 							.getColor(R.color.text_color));
 					momentHolder.praiseNum.setTextColor(context.getResources()
 							.getColor(R.color.text_color));
-					isPraised = 0;
+					isAddPraise = 0;
 				}
 				notifyDataSetChanged();
 				// 可以在这里向服务器请求，也可以设置一个回调或者消息 给fragment 让他发送请求
-				requestServer(isPraised, "isPraised", userId,
-						moment.getMomentId(), C.API.PRAISE_MOMENT);
+				requestServer(isAddPraise, "isAddPraise", userId,
+						moment.getMomentId(), C.API.PRAISE_MOMENT, "Moment");
 			}
 		});
 
@@ -322,14 +322,18 @@ public class FindListViewAdapter extends BaseAdapter {
 	 * @param isFlag
 	 * @param flagName
 	 * @param userId
-	 * @param momentId
+	 * @param momentId 当用于关注作者时，该字段为被关注用户的id
 	 * @param url
 	 */
 	public void requestServer(int isFlag, String flagName, long userId,
-			long momentId, String url) {
+			long momentId, String url, String modelName) {
 		RequestParams params = new RequestParams();
 		params.put("userId", userId);
-		params.put("momentId", momentId);
+		if(modelName.equals("User")){
+			params.put("attentionUserId", momentId);
+		}else{
+			params.put("momentId", momentId);
+		}
 		params.put(flagName, isFlag);
 		ApiManager.getInstance().post(context, url, params, new HttpCallBack() {
 
@@ -344,7 +348,7 @@ public class FindListViewAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 
 			}
-		}, "Moment");
+		}, modelName);
 	}
 
 	public static class MomentHolder {

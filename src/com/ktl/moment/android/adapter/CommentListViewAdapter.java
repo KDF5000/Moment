@@ -5,9 +5,11 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
@@ -52,7 +54,7 @@ public class CommentListViewAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		CommentHolder holder = null;
+		final CommentHolder holder;
 		if(convertView==null){
 			convertView = this.mInflater.inflate(R.layout.comment_lv_item, null);
 			holder = new CommentHolder();
@@ -61,15 +63,46 @@ public class CommentListViewAdapter extends BaseAdapter {
 		}else{
 			holder = (CommentHolder) convertView.getTag();
 		}
-		Comment comment = commentList.get(position);
+		final Comment comment = commentList.get(position);
 		
-		ImageLoader.getInstance().displayImage(comment.getFromUserAvatar(),
+		ImageLoader.getInstance().displayImage(comment.getUserAvatar(),
 				holder.userAvatar, options);
-		holder.userFromName.setText(comment.getFromUserName());
-		holder.commentTime.setText(comment.getCommentTime());
+		holder.userFromName.setText(comment.getUserName());
+		holder.commentTime.setText(comment.getPostTime());
+		
+		if(comment.getIsPraised() == 0){
+			holder.praiseIcon.setImageResource(R.drawable.like_small);
+			holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.praise_color));
+		}else{
+			holder.praiseIcon.setImageResource(R.drawable.like_small);
+			holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.text_color));
+		}
 		holder.praiseNum.setText(comment.getPraiseNum()+"");
-		holder.content.setText(comment.getCommentContent());
-		holder.userToName.setText(comment.getRepalyUserName());
+		holder.content.setText(comment.getContent());
+		
+		if(comment.getRepalyUserId() == 0){
+			holder.repalyLayout.setVisibility(View.GONE);
+		}else{
+			holder.userToName.setText(comment.getRepalyUserName());
+		}
+		
+		holder.praiseIcon.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(comment.getIsPraised() == 0){
+					holder.praiseIcon.setImageResource(R.drawable.like_small);
+					holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.praise_color));
+					comment.setIsPraised(1);
+				}else{
+					holder.praiseIcon.setImageResource(R.drawable.like_small);
+					holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.text_color));
+					comment.setIsPraised(0);
+				}
+				notifyDataSetChanged();
+			}
+		});
 		return convertView;
 	}
 	
@@ -94,6 +127,9 @@ public class CommentListViewAdapter extends BaseAdapter {
 		
 		@ViewInject(R.id.comment_praise_icon)
 		ImageView praiseIcon;
+		
+		@ViewInject(R.id.repaly_layout)
+		LinearLayout repalyLayout;
 	}
 
 }

@@ -84,9 +84,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			moment.setContent(content);
 			moment.setLabel("创意、果蔬");
 			if (i % 2 == 1) {
-				moment.setMomentImg("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
+				moment.setMomentImgs("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
 			} else {
-				moment.setMomentImg(null);
+				moment.setMomentImgs(null);
 			}
 			momentList.add(moment);
 		}
