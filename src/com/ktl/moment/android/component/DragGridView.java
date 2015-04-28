@@ -100,6 +100,7 @@ public class DragGridView extends ViewGroup implements View.OnTouchListener,
 	}
 
 	protected Runnable updateTask = new Runnable() {
+		@Override
 		public void run() {
 			if (dragged != -1) {
 				if (lastY < padding * 3 && scroll > 0)
@@ -269,6 +270,7 @@ public class DragGridView extends ViewGroup implements View.OnTouchListener,
 	}
 
 	// EVENT HANDLERS
+	@Override
 	public void onClick(View view) {
 		if (enabled) {
 			if (secondaryOnClickListener != null)
@@ -280,6 +282,7 @@ public class DragGridView extends ViewGroup implements View.OnTouchListener,
 		}
 	}
 
+	@Override
 	public boolean onLongClick(View view) {
 		if (!enabled)
 			return false;
@@ -292,6 +295,7 @@ public class DragGridView extends ViewGroup implements View.OnTouchListener,
 		return false;
 	}
 
+	@Override
 	public boolean onTouch(View view, MotionEvent event) {
 		int action = event.getAction();
 		switch (action & MotionEvent.ACTION_MASK) {

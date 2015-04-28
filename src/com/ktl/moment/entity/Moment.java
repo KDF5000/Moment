@@ -18,13 +18,20 @@ public class Moment extends BaseEntity{
 	private String authorName;//作者昵称
 	private String userAvatar;//头像路径
 	private String audioUrl;//音频文件存储路径
-	
+
+	private int hasAudio;//是否带有录音 0：没有，1：有
 	private int isOpen;//是否公开	0：不公开，1：公开
 	private int isCutCollect;//是否剪藏		0：不是剪藏，1：剪藏
 	private int isFocused;//作者是否被关注	0:未被关注，1：关注
 	private int isWatched;//灵感是否被围观		0：没有围观，1：围观
 	private int isPraised;//是否赞过灵感		0：没有赞过，1：赞过
 
+	public int getHasAudio() {
+		return hasAudio;
+	}
+	public void setHasAudio(int hasAudio) {
+		this.hasAudio = hasAudio;
+	}
 	public int getIsPraised() {
 		return isPraised;
 	}

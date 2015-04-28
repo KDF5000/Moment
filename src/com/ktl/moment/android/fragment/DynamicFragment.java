@@ -44,6 +44,10 @@ public class DynamicFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_dynamic, container, false);
 		findListView = (ZrcListView) view.findViewById(R.id.fragment_dynamic_list);
+		
+		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+		userId = user.getUserId();
+		
 		momentList = new ArrayList<Moment>();
 		initView();
 		// 从服务端获取数据
@@ -51,8 +55,6 @@ public class DynamicFragment extends BaseFragment {
 		findListView.setAdapter(findListViewAdapter);
 		initEvent();
 		
-		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
-		userId = user.getUserId();
 		return view;
 	}
 
