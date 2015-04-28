@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#ffffff"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
 
     <ImageView
@@ -12,9 +13,12 @@
         android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp" 
+        android:id="@+id/find_channel_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
         android:gravity="center"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:text="UI设计"/>
 
 </LinearLayout>

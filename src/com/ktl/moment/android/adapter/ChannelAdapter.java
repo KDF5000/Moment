@@ -2,17 +2,18 @@ package com.ktl.moment.android.adapter;
 
 import java.util.List;
 
-import com.ktl.moment.R;
-import com.ktl.moment.entity.Channel;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.ktl.moment.R;
+import com.ktl.moment.entity.Channel;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class ChannelAdapter extends BaseAdapter{
 	
@@ -44,14 +45,6 @@ public class ChannelAdapter extends BaseAdapter{
 		return position;
 	}
 	
-	public void removeItem(int position){
-		channelList.remove(position);
-	}
-	
-	public void insertItem(Channel item, int position){
-		channelList.add(position, item);
-	}
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
@@ -66,12 +59,16 @@ public class ChannelAdapter extends BaseAdapter{
 		}
 		Channel channel = channelList.get(position);
 		holder.channelImg.setImageResource(channel.getChannelImgResId());
+		holder.channelName.setText(channel.getChannelName());
 		return convertView;
 	}
 	
 	private static class ChannelHolder{
 		@ViewInject(R.id.find_channel_img)
 		ImageView channelImg;
+		
+		@ViewInject(R.id.find_channel_name)
+		TextView channelName;
 	}
 
 }

@@ -1,539 +1,432 @@
-package com.ktl.moment.android.component;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
-import android.annotation.SuppressLint;
+package com.ktl.moment.android.component;  
+   
 import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
-import android.graphics.Point;
+import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.os.Handler;
-import android.os.SystemClock;
+import android.os.Vibrator;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Adapter;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
-
-/**
- * 另外一种方式实现动画可拖动item的GridView
+/** 
+ * @blog http://blog.csdn.net/xiaanming  
+ *  
+ * @author xiaanming 
  * 
- * @author way
- * 
- */
-@SuppressLint("WrongCall")
-public class DragGridView extends ViewGroup implements View.OnTouchListener,
-		View.OnClickListener, View.OnLongClickListener {
-	// layout vars
-	public static float childRatio = .9f;
-	protected int colCount, childSize, padding, dpi, scroll = 0;
-	protected float lastDelta = 0;
-	protected Handler handler = new Handler();
-	// dragging vars
-	protected int dragged = -1, lastX = -1, lastY = -1, lastTarget = -1;
-	protected boolean enabled = true, touching = false;
-	// anim vars
-	public static int animT = 150;
-	protected ArrayList<Integer> newPositions = new ArrayList<Integer>();
-	// listeners
-	protected OnRearrangeListener onRearrangeListener;
-	protected OnClickListener secondaryOnClickListener;
-	private OnItemClickListener onItemClickListener;
-
-	private Adapter mAdapter;
-	private int mGridWidth;
-	private int mGridHeight = 0;
-	private int mCurrentHeight = 0;
-	private int mCurrentRow = 0;
-	private final DataSetObserver mDataSetObserver = new DataSetObserver() {
-		@Override
-		public void onChanged() {
-			dataSetChanged();
-		}
-
-		@Override
-		public void onInvalidated() {
-			dataSetChanged();
-		}
-	};
-
-	/**
-	 * 拖动item的接口
-	 */
-	public interface OnRearrangeListener {
-
-		public abstract void onRearrange(int oldIndex, int newIndex);
-	}
-
-	// CONSTRUCTOR AND HELPERS
-	public DragGridView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		setListeners();
-		handler.removeCallbacks(updateTask);
-		handler.postAtTime(updateTask, SystemClock.uptimeMillis() + 500);
-		setChildrenDrawingOrderEnabled(true);
-
-		DisplayMetrics metrics = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay()
-				.getMetrics(metrics);
-		dpi = metrics.densityDpi;
-	}
-
-	protected void setListeners() {
-		setOnTouchListener(this);
-		super.setOnClickListener(this);
-		setOnLongClickListener(this);
-	}
-
-	@Override
-	public void setOnClickListener(OnClickListener l) {
-		secondaryOnClickListener = l;
-	}
-
-	protected Runnable updateTask = new Runnable() {
-		@Override
-		public void run() {
-			if (dragged != -1) {
-				if (lastY < padding * 3 && scroll > 0)
-					scroll -= 20;
-				else if (lastY > getBottom() - getTop() - (padding * 3)
-						&& scroll < getMaxScroll())
-					scroll += 20;
-			} else if (lastDelta != 0 && !touching) {
-				scroll += lastDelta;
-				lastDelta *= .9;
-				if (Math.abs(lastDelta) < .25)
-					lastDelta = 0;
-			}
-			clampScroll();
-			onLayout(true, getLeft(), getTop(), getRight(), getBottom());
-
-			handler.postDelayed(this, 25);
-		}
-	};
-
-	@Override
-	public void addView(View child) {
-		super.addView(child);
-		newPositions.add(-1);
-	};
-
-	@Override
-	public void removeViewAt(int index) {
-		super.removeViewAt(index);
-		newPositions.remove(index);
-	};
-
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		// TODO Auto-generated method stub
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		final int childCount = getChildCount();
-		int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
-		int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
-		setMeasuredDimension(widthSpecSize, heightSpecSize);
-		for (int i = 0; i < childCount; i++) {
-			View child = getChildAt(i);
-			child.measure(widthMeasureSpec, heightMeasureSpec);
-			setMeasuredDimension(widthSpecSize, heightSpecSize);
-		}
-	}
-
-	// LAYOUT
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		// compute width of view, in dp
-		float w = (r - l) / (dpi / 160f);
-
-		// determine number of columns, at least 2
-		colCount = 0;
-		int sub = 240;
-		w -= 280;
-		while (w > 0) {
-			colCount++;
-			w -= sub;
-			sub += 40;
-		}
-
-		// determine childSize and padding, in px
-		childSize = (r - l) / colCount;
-		childSize = Math.round(childSize * childRatio);
-		padding = ((r - l) - (childSize * colCount)) / (colCount + 1);
-		int childCount = getChildCount();
-		mCurrentHeight = 0;
-		mGridHeight = 0;
-		if(childCount>0){
-			View firstChild = getChildAt(0);
-			int height = firstChild.getMeasuredHeight();
-			Point xy = getCoorFromIndex(0);
-			firstChild.layout(xy.x, xy.y, xy.x + childSize,
-					xy.y + height);
-			mCurrentHeight = height;
-		}
-		for (int i = 1; i < childCount; i++)
-			if (i != dragged) {
-				View child = getChildAt(i);
-				int height = child.getMeasuredHeight();
-				if(height > mCurrentHeight){
-					mCurrentHeight = height;
-				}
-				if((i/colCount) > mCurrentRow){
-					mGridHeight = mGridHeight  + mCurrentHeight + padding;
-					mCurrentRow++;
-				}
-				Point xy = getCoorFromIndex(i);
-				child.layout(xy.x, xy.y, xy.x + childSize,
-						xy.y + height);
-			}
-	}
-
-	@Override
-	protected int getChildDrawingOrder(int childCount, int i) {
-		if (dragged == -1)
-			return i;
-		else if (i == childCount - 1)
-			return dragged;
-		else if (i >= dragged)
-			return i + 1;
-		return i;
-	}
-
-	public int getIndexFromCoor(int x, int y) {
-		int col = getColOrRowFromCoor(x), row = getColOrRowFromCoor(y + scroll);
-		if (col == -1 || row == -1) // touch is between columns or rows
-			return -1;
-		int index = row * colCount + col;
-		if (index >= getChildCount())
-			return -1;
-		return index;
-	}
-
-	protected int getColOrRowFromCoor(int coor) {
-		coor -= padding;
-		for (int i = 0; coor > 0; i++) {
-			if (coor < childSize)
-				return i;
-			coor -= (childSize + padding);
-		}
-		return -1;
-	}
-
-	protected int getTargetFromCoor(int x, int y) {
-		if (getColOrRowFromCoor(y + scroll) == -1) // touch is between rows
-			return -1;
-		// if (getIndexFromCoor(x, y) != -1) //touch on top of another visual
-		// return -1;
-
-		int leftPos = getIndexFromCoor(x - (childSize / 4), y);
-		int rightPos = getIndexFromCoor(x + (childSize / 4), y);
-		if (leftPos == -1 && rightPos == -1) // touch is in the middle of
-												// nowhere
-			return -1;
-		if (leftPos == rightPos) // touch is in the middle of a visual
-			return -1;
-
-		int target = -1;
-		if (rightPos > -1)
-			target = rightPos;
-		else if (leftPos > -1)
-			target = leftPos + 1;
-		if (dragged < target)
-			return target - 1;
-
-		// Toast.makeText(getContext(), "Target: " + target + ".",
-		// Toast.LENGTH_SHORT).show();
-		return target;
-	}
-
-	protected Point getCoorFromIndex(int index) {
-		int col = index % colCount;
-		int row = index / colCount;
-//		return new Point(padding + (childSize + padding) * col, padding
-//				+ (childSize + padding) * row - scroll);
-		return new Point(padding + (childSize + padding) * col, mGridHeight - scroll);
-	}
-
-	public int getIndexOf(View child) {
-		for (int i = 0; i < getChildCount(); i++)
-			if (getChildAt(i) == child)
-				return i;
-		return -1;
-	}
-
-	// EVENT HANDLERS
-	@Override
-	public void onClick(View view) {
-		if (enabled) {
-			if (secondaryOnClickListener != null)
-				secondaryOnClickListener.onClick(view);
-			if (onItemClickListener != null && getLastIndex() != -1)
-				onItemClickListener.onItemClick(null,
-						getChildAt(getLastIndex()), getLastIndex(),
-						getLastIndex() / colCount);
-		}
-	}
-
-	@Override
-	public boolean onLongClick(View view) {
-		if (!enabled)
-			return false;
-		int index = getLastIndex();
-		if (index != -1) {
-			dragged = index;
-			animateDragged();
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean onTouch(View view, MotionEvent event) {
-		int action = event.getAction();
-		switch (action & MotionEvent.ACTION_MASK) {
-		case MotionEvent.ACTION_DOWN:
-			enabled = true;
-			lastX = (int) event.getX();
-			lastY = (int) event.getY();
-			touching = true;
-			break;
-		case MotionEvent.ACTION_MOVE:
-			int delta = lastY - (int) event.getY();
-			if (dragged != -1) {
-				// change draw location of dragged visual
-				int x = (int) event.getX(), y = (int) event.getY();
-				int l = x - (3 * childSize / 4), t = y - (3 * childSize / 4);
-				getChildAt(dragged).layout(l, t, l + (childSize * 3 / 2),
-						t + (childSize * 3 / 2));
-
-				// check for new target hover
-				int target = getTargetFromCoor(x, y);
-				if (lastTarget != target) {
-					if (target != -1) {
-						animateGap(target);
-						lastTarget = target;
-					}
-				}
-			} else {
-				scroll += delta;
-				clampScroll();
-				if (Math.abs(delta) > 2)
-					enabled = false;
-				onLayout(true, getLeft(), getTop(), getRight(), getBottom());
-			}
-			lastX = (int) event.getX();
-			lastY = (int) event.getY();
-			lastDelta = delta;
-			break;
-		case MotionEvent.ACTION_UP:
-			if (dragged != -1) {
-				View v = getChildAt(dragged);
-				if (lastTarget != -1)
-					reorderChildren();
-				else {
-					Point xy = getCoorFromIndex(dragged);
-					v.layout(xy.x, xy.y, xy.x + childSize, xy.y + childSize);
-				}
-				v.clearAnimation();
-				if (v instanceof ImageView)
-					((ImageView) v).setAlpha(255);
-				lastTarget = -1;
-				dragged = -1;
-			}
-			touching = false;
-			break;
-		}
-		if (dragged != -1)
-			return true;
-		return false;
-	}
-
-	// EVENT HELPERS
-	protected void animateDragged() {
-		View v = getChildAt(dragged);
-		int x = getCoorFromIndex(dragged).x + childSize / 2, y = getCoorFromIndex(dragged).y
-				+ childSize / 2;
-		int l = x - (3 * childSize / 4), t = y - (3 * childSize / 4);
-		v.layout(l, t, l + (childSize * 3 / 2), t + (childSize * 3 / 2));
-		AnimationSet animSet = new AnimationSet(true);
-		ScaleAnimation scale = new ScaleAnimation(.667f, 1, .667f, 1,
-				childSize * 3 / 4, childSize * 3 / 4);
-		scale.setDuration(animT);
-		AlphaAnimation alpha = new AlphaAnimation(1, .5f);
-		alpha.setDuration(animT);
-
-		animSet.addAnimation(scale);
-		animSet.addAnimation(alpha);
-		animSet.setFillEnabled(true);
-		animSet.setFillAfter(true);
-
-		v.clearAnimation();
-		v.startAnimation(animSet);
-	}
-
-	protected void animateGap(int target) {
-		for (int i = 0; i < getChildCount(); i++) {
-			View v = getChildAt(i);
-			if (i == dragged)
-				continue;
-			int newPos = i;
-			if (dragged < target && i >= dragged + 1 && i <= target)
-				newPos--;
-			else if (target < dragged && i >= target && i < dragged)
-				newPos++;
-
-			// animate
-			int oldPos = i;
-			if (newPositions.get(i) != -1)
-				oldPos = newPositions.get(i);
-			if (oldPos == newPos)
-				continue;
-
-			Point oldXY = getCoorFromIndex(oldPos);
-			Point newXY = getCoorFromIndex(newPos);
-			Point oldOffset = new Point(oldXY.x - v.getLeft(), oldXY.y
-					- v.getTop());
-			Point newOffset = new Point(newXY.x - v.getLeft(), newXY.y
-					- v.getTop());
-
-			TranslateAnimation translate = new TranslateAnimation(
-					Animation.ABSOLUTE, oldOffset.x, Animation.ABSOLUTE,
-					newOffset.x, Animation.ABSOLUTE, oldOffset.y,
-					Animation.ABSOLUTE, newOffset.y);
-			translate.setDuration(animT);
-			translate.setFillEnabled(true);
-			translate.setFillAfter(true);
-			v.clearAnimation();
-			v.startAnimation(translate);
-
-			newPositions.set(i, newPos);
-		}
-	}
-
-	protected void reorderChildren() {
-		// FIGURE OUT HOW TO REORDER CHILDREN WITHOUT REMOVING THEM ALL AND
-		// RECONSTRUCTING THE LIST!!!
-		if (onRearrangeListener != null)
-			onRearrangeListener.onRearrange(dragged, lastTarget);
-		ArrayList<View> children = new ArrayList<View>();
-		for (int i = 0; i < getChildCount(); i++) {
-			getChildAt(i).clearAnimation();
-			children.add(getChildAt(i));
-		}
-		removeAllViews();
-		while (dragged != lastTarget)
-			if (lastTarget == children.size()) // dragged and dropped to the
-												// right of the last element
-			{
-				children.add(children.remove(dragged));
-				dragged = lastTarget;
-			} else if (dragged < lastTarget) // shift to the right
-			{
-				Collections.swap(children, dragged, dragged + 1);
-				dragged++;
-			} else if (dragged > lastTarget) // shift to the left
-			{
-				Collections.swap(children, dragged, dragged - 1);
-				dragged--;
-			}
-		for (int i = 0; i < children.size(); i++) {
-			newPositions.set(i, -1);
-			addView(children.get(i));
-		}
-		onLayout(true, getLeft(), getTop(), getRight(), getBottom());
-	}
-
-	public void scrollToTop() {
-		scroll = 0;
-	}
-
-	public void scrollToBottom() {
-		scroll = Integer.MAX_VALUE;
-		clampScroll();
-	}
-
-	protected void clampScroll() {
-		int stretch = 3, overreach = getHeight() / 2;
-		int max = getMaxScroll();
-		max = Math.max(max, 0);
-
-		if (scroll < -overreach) {
-			scroll = -overreach;
-			lastDelta = 0;
-		} else if (scroll > max + overreach) {
-			scroll = max + overreach;
-			lastDelta = 0;
-		} else if (scroll < 0) {
-			if (scroll >= -stretch)
-				scroll = 0;
-			else if (!touching)
-				scroll -= scroll / stretch;
-		} else if (scroll > max) {
-			if (scroll <= max + stretch)
-				scroll = max;
-			else if (!touching)
-				scroll += (max - scroll) / stretch;
-		}
-	}
-
-	protected int getMaxScroll() {
-		int rowCount = (int) Math.ceil((double) getChildCount() / colCount), max = rowCount
-				* childSize + (rowCount + 1) * padding - getHeight();
-		return max;
-	}
-
-	public int getLastIndex() {
-		return getIndexFromCoor(lastX, lastY);
-	}
-
-	// OTHER METHODS
-	public void setOnRearrangeListener(OnRearrangeListener l) {
-		this.onRearrangeListener = l;
-	}
-
-	public void setOnItemClickListener(OnItemClickListener l) {
-		this.onItemClickListener = l;
-	}
-
-	private void dataSetChanged() {
-		for (int i = 0; i < getChildCount() && i < mAdapter.getCount(); i++) {
-			final View child = getChildAt(i);
-			final View newChild = mAdapter.getView(i, child, this);
-			if (newChild != child) {
-				removeViewAt(i);
-				addView(newChild, i);
-			}
-		}
-		for (int i = getChildCount(); i < mAdapter.getCount(); i++) {
-			final View child = mAdapter.getView(i, null, this);
-			addView(child);
-		}
-		while (getChildCount() > mAdapter.getCount()) {
-			removeViewAt(getChildCount() - 1);
-		}
-	}
-	
-	public void setAdapter(Adapter adapter) {
-		if (mAdapter != null) {
-			mAdapter.unregisterDataSetObserver(mDataSetObserver);
-			removeAllViews();
-			scrollTo(0, 0);
-		}
-		mAdapter = adapter;
-		if (mAdapter != null) {
-			mAdapter.registerDataSetObserver(mDataSetObserver);
-			for (int i = 0; i < mAdapter.getCount(); i++) {
-				final View child = mAdapter.getView(i, null, this);
-				addView(child);
-			}
-		}
-	}
+ */  
+public class DragGridView extends GridView{  
+    /** 
+     * DragGridView的item长按响应的时间， 默认是1000毫秒，也可以自行设置 
+     */  
+    private long dragResponseMS = 1000;  
+       
+    /** 
+     * 是否可以拖拽，默认不可以 
+     */  
+    private boolean isDrag = false;  
+       
+    private int mDownX;  
+    private int mDownY;  
+    private int moveX;  
+    private int moveY;  
+    /** 
+     * 正在拖拽的position 
+     */  
+    private int mDragPosition;  
+       
+    /** 
+     * 刚开始拖拽的item对应的View 
+     */  
+    private View mStartDragItemView = null;  
+       
+    /** 
+     * 用于拖拽的镜像，这里直接用一个ImageView 
+     */  
+    private ImageView mDragImageView;  
+       
+    /** 
+     * 震动器 
+     */  
+    private Vibrator mVibrator;  
+       
+    private WindowManager mWindowManager;  
+    /** 
+     * item镜像的布局参数 
+     */  
+    private WindowManager.LayoutParams mWindowLayoutParams;  
+       
+    /** 
+     * 我们拖拽的item对应的Bitmap 
+     */  
+    private Bitmap mDragBitmap;  
+       
+    /** 
+     * 按下的点到所在item的上边缘的距离 
+     */  
+    private int mPoint2ItemTop ;   
+       
+    /** 
+     * 按下的点到所在item的左边缘的距离 
+     */  
+    private int mPoint2ItemLeft;  
+       
+    /** 
+     * DragGridView距离屏幕顶部的偏移量 
+     */  
+    private int mOffset2Top;  
+       
+    /** 
+     * DragGridView距离屏幕左边的偏移量 
+     */  
+    private int mOffset2Left;  
+       
+    /** 
+     * 状态栏的高度 
+     */  
+    private int mStatusHeight;   
+       
+    /** 
+     * DragGridView自动向下滚动的边界值 
+     */  
+    private int mDownScrollBorder;  
+       
+    /** 
+     * DragGridView自动向上滚动的边界值 
+     */  
+    private int mUpScrollBorder;  
+       
+    /** 
+     * DragGridView自动滚动的速度 
+     */  
+    private static final int speed = 20;  
+       
+    /** 
+     * item发生变化回调的接口 
+     */  
+    private OnChanageListener onChanageListener;  
+       
+       
+       
+    public DragGridView(Context context) {  
+        this(context, null);  
+    }  
+       
+    public DragGridView(Context context, AttributeSet attrs) {  
+        this(context, attrs, 0);  
+    }  
+   
+    public DragGridView(Context context, AttributeSet attrs, int defStyle) {  
+        super(context, attrs, defStyle);  
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);  
+        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);  
+        mStatusHeight = getStatusHeight(context); //获取状态栏的高度  
+           
+    }  
+       
+    private Handler mHandler = new Handler();  
+       
+    //用来处理是否为长按的Runnable  
+    private Runnable mLongClickRunnable = new Runnable() {  
+           
+        @Override  
+        public void run() {  
+            isDrag = true; //设置可以拖拽  
+            mVibrator.vibrate(50); //震动一下  
+            mStartDragItemView.setVisibility(View.INVISIBLE);//隐藏该item  
+               
+            //根据我们按下的点显示item镜像  
+            createDragImage(mDragBitmap, mDownX, mDownY);  
+        }  
+    };  
+       
+    /** 
+     * 设置回调接口 
+     * @param onChanageListener 
+     */  
+    public void setOnChangeListener(OnChanageListener onChanageListener){  
+        this.onChanageListener = onChanageListener;  
+    }  
+       
+    /** 
+     * 设置响应拖拽的毫秒数，默认是1000毫秒 
+     * @param dragResponseMS 
+     */  
+    public void setDragResponseMS(long dragResponseMS) {  
+        this.dragResponseMS = dragResponseMS;  
+    }  
+   
+    @Override  
+    public boolean dispatchTouchEvent(MotionEvent ev) {  
+        switch(ev.getAction()){  
+        case MotionEvent.ACTION_DOWN:  
+            mDownX = (int) ev.getX();  
+            mDownY = (int) ev.getY();  
+               
+            //根据按下的X,Y坐标获取所点击item的position  
+            mDragPosition = pointToPosition(mDownX, mDownY);  
+               
+               
+            if(mDragPosition == AdapterView.INVALID_POSITION){  
+                return super.dispatchTouchEvent(ev);  
+            }  
+               
+            //使用Handler延迟dragResponseMS执行mLongClickRunnable  
+            mHandler.postDelayed(mLongClickRunnable, dragResponseMS);  
+               
+            //根据position获取该item所对应的View  
+            mStartDragItemView = getChildAt(mDragPosition - getFirstVisiblePosition());  
+               
+            //下面这几个距离大家可以参考我的博客上面的图来理解下  
+            mPoint2ItemTop = mDownY - mStartDragItemView.getTop();  
+            mPoint2ItemLeft = mDownX - mStartDragItemView.getLeft();  
+               
+            mOffset2Top = (int) (ev.getRawY() - mDownY);  
+            mOffset2Left = (int) (ev.getRawX() - mDownX);  
+               
+            //获取DragGridView自动向上滚动的偏移量，小于这个值，DragGridView向下滚动  
+            mDownScrollBorder = getHeight() /4;  
+            //获取DragGridView自动向下滚动的偏移量，大于这个值，DragGridView向上滚动  
+            mUpScrollBorder = getHeight() * 3/4;  
+               
+               
+               
+            //开启mDragItemView绘图缓存  
+            mStartDragItemView.setDrawingCacheEnabled(true);  
+            //获取mDragItemView在缓存中的Bitmap对象  
+            mDragBitmap = Bitmap.createBitmap(mStartDragItemView.getDrawingCache());  
+            //这一步很关键，释放绘图缓存，避免出现重复的镜像  
+            mStartDragItemView.destroyDrawingCache();  
+               
+               
+            break;  
+        case MotionEvent.ACTION_MOVE:  
+            int moveX = (int)ev.getX();  
+            int moveY = (int) ev.getY();  
+               
+            //如果我们在按下的item上面移动，只要不超过item的边界我们就不移除mRunnable  
+            if(!isTouchInItem(mStartDragItemView, moveX, moveY)){  
+                mHandler.removeCallbacks(mLongClickRunnable);  
+            }  
+            break;  
+        case MotionEvent.ACTION_UP:  
+            mHandler.removeCallbacks(mLongClickRunnable);  
+            mHandler.removeCallbacks(mScrollRunnable);  
+            break;  
+        }  
+        return super.dispatchTouchEvent(ev);  
+    }  
+   
+       
+    /** 
+     * 是否点击在GridView的item上面 
+     * @param itemView 
+     * @param x 
+     * @param y 
+     * @return 
+     */  
+    private boolean isTouchInItem(View dragView, int x, int y){  
+        if(dragView == null){  
+            return false;  
+        }  
+        int leftOffset = dragView.getLeft();  
+        int topOffset = dragView.getTop();  
+        if(x < leftOffset || x > leftOffset + dragView.getWidth()){  
+            return false;  
+        }  
+           
+        if(y < topOffset || y > topOffset + dragView.getHeight()){  
+            return false;  
+        }  
+           
+        return true;  
+    }  
+       
+       
+   
+    @Override  
+    public boolean onTouchEvent(MotionEvent ev) {  
+        if(isDrag && mDragImageView != null){  
+            switch(ev.getAction()){  
+            case MotionEvent.ACTION_MOVE:  
+                moveX = (int) ev.getX();  
+                moveY = (int) ev.getY();  
+                //拖动item  
+                onDragItem(moveX, moveY);  
+                break;  
+            case MotionEvent.ACTION_UP:  
+                onStopDrag();  
+                isDrag = false;  
+                break;  
+            }  
+            return true;  
+        }  
+        return super.onTouchEvent(ev);  
+    }  
+       
+       
+    /** 
+     * 创建拖动的镜像 
+     * @param bitmap  
+     * @param downX 
+     *          按下的点相对父控件的X坐标 
+     * @param downY 
+     *          按下的点相对父控件的X坐标 
+     */  
+    private void createDragImage(Bitmap bitmap, int downX , int downY){  
+        mWindowLayoutParams = new WindowManager.LayoutParams();  
+        mWindowLayoutParams.format = PixelFormat.TRANSLUCENT; //图片之外的其他地方透明  
+        mWindowLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;  
+        mWindowLayoutParams.x = downX - mPoint2ItemLeft + mOffset2Left;  
+        mWindowLayoutParams.y = downY - mPoint2ItemTop + mOffset2Top - mStatusHeight;  
+        mWindowLayoutParams.alpha = 0.55f; //透明度  
+        mWindowLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;    
+        mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;    
+        mWindowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE    
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE ;  
+             
+        mDragImageView = new ImageView(getContext());    
+        mDragImageView.setImageBitmap(bitmap);    
+        mWindowManager.addView(mDragImageView, mWindowLayoutParams);    
+    }  
+       
+    /** 
+     * 从界面上面移动拖动镜像 
+     */  
+    private void removeDragImage(){  
+        if(mDragImageView != null){  
+            mWindowManager.removeView(mDragImageView);  
+            mDragImageView = null;  
+        }  
+    }  
+       
+    /** 
+     * 拖动item，在里面实现了item镜像的位置更新，item的相互交换以及GridView的自行滚动 
+     * @param x 
+     * @param y 
+     */  
+    private void onDragItem(int moveX, int moveY){  
+        mWindowLayoutParams.x = moveX - mPoint2ItemLeft + mOffset2Left;  
+        mWindowLayoutParams.y = moveY - mPoint2ItemTop + mOffset2Top - mStatusHeight;  
+        mWindowManager.updateViewLayout(mDragImageView, mWindowLayoutParams); //更新镜像的位置  
+        onSwapItem(moveX, moveY);  
+           
+        //GridView自动滚动  
+        mHandler.post(mScrollRunnable);  
+    }  
+       
+       
+    /** 
+     * 当moveY的值大于向上滚动的边界值，触发GridView自动向上滚动 
+     * 当moveY的值小于向下滚动的边界值，触犯GridView自动向下滚动 
+     * 否则不进行滚动 
+     */  
+    private Runnable mScrollRunnable = new Runnable() {  
+           
+        @Override  
+        public void run() {  
+            int scrollY;  
+            if(moveY > mUpScrollBorder){  
+                 scrollY = speed;  
+                 mHandler.postDelayed(mScrollRunnable, 25);  
+            }else if(moveY < mDownScrollBorder){  
+                scrollY = -speed;  
+                 mHandler.postDelayed(mScrollRunnable, 25);  
+            }else{  
+                scrollY = 0;  
+                mHandler.removeCallbacks(mScrollRunnable);  
+            }  
+               
+            //当我们的手指到达GridView向上或者向下滚动的偏移量的时候，可能我们手指没有移动，但是DragGridView在自动的滚动  
+            //所以我们在这里调用下onSwapItem()方法来交换item  
+            onSwapItem(moveX, moveY);  
+               
+               
+            smoothScrollBy(scrollY, 10);  
+        }  
+    };  
+       
+       
+    /** 
+     * 交换item,并且控制item之间的显示与隐藏效果 
+     * @param moveX 
+     * @param moveY 
+     */  
+    private void onSwapItem(int moveX, int moveY){  
+        //获取我们手指移动到的那个item的position  
+        int tempPosition = pointToPosition(moveX, moveY);  
+           
+        //假如tempPosition 改变了并且tempPosition不等于-1,则进行交换  
+        if(tempPosition != mDragPosition && tempPosition != AdapterView.INVALID_POSITION){  
+            if(onChanageListener != null){  
+                onChanageListener.onChange(mDragPosition, tempPosition);  
+            }  
+               
+            getChildAt(tempPosition - getFirstVisiblePosition()).setVisibility(View.INVISIBLE);//拖动到了新的item,新的item隐藏掉  
+            getChildAt(mDragPosition - getFirstVisiblePosition()).setVisibility(View.VISIBLE);//之前的item显示出来  
+               
+            mDragPosition = tempPosition;  
+        }  
+    }  
+       
+       
+    /** 
+     * 停止拖拽我们将之前隐藏的item显示出来，并将镜像移除 
+     */  
+    private void onStopDrag(){  
+        View view = getChildAt(mDragPosition - getFirstVisiblePosition());  
+        if(view != null){  
+            view.setVisibility(View.VISIBLE);  
+        }  
+//        ((DragAdapter)this.getAdapter()).setItemHide(-1);  
+        removeDragImage();  
+    }  
+       
+    /** 
+     * 获取状态栏的高度 
+     * @param context 
+     * @return 
+     */  
+    private static int getStatusHeight(Context context){  
+        int statusHeight = 0;  
+        Rect localRect = new Rect();  
+        ((Activity) context).getWindow().getDecorView().getWindowVisibleDisplayFrame(localRect);  
+        statusHeight = localRect.top;  
+        if (0 == statusHeight){  
+            Class<?> localClass;  
+            try {  
+                localClass = Class.forName("com.android.internal.R$dimen");  
+                Object localObject = localClass.newInstance();  
+                int i5 = Integer.parseInt(localClass.getField("status_bar_height").get(localObject).toString());  
+                statusHeight = context.getResources().getDimensionPixelSize(i5);  
+            } catch (Exception e) {  
+                e.printStackTrace();  
+            }   
+        }  
+        return statusHeight;  
+    }  
+   
+       
+    /** 
+     *  
+     * @author xiaanming 
+     * 
+     */  
+    public interface OnChanageListener{  
+           
+        /** 
+         * 当item交换位置的时候回调的方法，我们只需要在该方法中实现数据的交换即可 
+         * @param form 
+         *          开始的position 
+         * @param to  
+         *          拖拽到的position 
+         */  
+        public void onChange(int from, int to);  
+    }  
 }
