@@ -7,14 +7,14 @@
     android:orientation="horizontal"
      android:paddingLeft="5dp"
      android:paddingRight="5dp"
-     android:paddingTop="10dp"
-     android:paddingBottom="10dp" >
+     android:paddingTop="12.5dp"
+     android:paddingBottom="12.5dp" >
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
@@ -26,6 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
+            android:textColor="#a0a0a0"
+            android:textSize="12sp"
             android:text="点击回复" />
     </LinearLayout>
 
@@ -38,13 +40,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@drawable/share" />
+        android:clickable="true"
+        android:src="@drawable/focus_share_selector" />
 
     <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@drawable/comments" />
+        android:src="@drawable/clipper" />
 
     <ImageView
         android:layout_width="0dp"
