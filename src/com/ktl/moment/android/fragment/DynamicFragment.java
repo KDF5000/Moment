@@ -3,6 +3,7 @@ package com.ktl.moment.android.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.AccountActivity;
 import com.ktl.moment.android.adapter.FindListViewAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
@@ -46,6 +48,11 @@ public class DynamicFragment extends BaseFragment {
 		findListView = (ZrcListView) view.findViewById(R.id.fragment_dynamic_list);
 		
 		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+		if(user==null){
+			Intent intent = new Intent(getActivity(),AccountActivity.class);
+			startActivity(intent);
+			getActivity().finish();
+		}
 		userId = user.getUserId();
 		
 		momentList = new ArrayList<Moment>();

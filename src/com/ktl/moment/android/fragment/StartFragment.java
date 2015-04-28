@@ -254,8 +254,6 @@ public class StartFragment extends AccountBaseFragment {
 					} 
 					params.put("sex", sex);
 					thirdPartyLogin(params);
-					// 保存登陆成功的用户信息，然后跳转到主页
-					actionStart(HomeActivity.class);
 				} else {
 					Toast.makeText(getActivity(), response, Toast.LENGTH_LONG)
 							.show();
