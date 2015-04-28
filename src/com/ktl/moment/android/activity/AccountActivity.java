@@ -3,6 +3,7 @@ package com.ktl.moment.android.activity;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,7 @@ import com.ktl.moment.android.fragment.StartFragment.OnRegisterListener;
 import com.ktl.moment.android.fragment.VerifyFragment.OnBackToRegisterListener;
 import com.ktl.moment.android.fragment.VerifyFragment.OnNextToProfileListener;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.utils.FileUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.lidroid.xutils.ViewUtils;
@@ -62,12 +64,11 @@ public class AccountActivity extends BaseActivity implements OnLoginListener,
 		// 初始化sharedPreferences,暂时放在这里，后续会迁移至第一次打开的那个页面
 		SharedPreferencesUtil.initSharedPreferences(getApplicationContext());
 		// 是否登陆了
-		String isLogin = SharedPreferencesUtil.getInstance().getString(
-				C.SPKey.SPK_IS_LOGIN);
-		if (isLogin.equals("true")) {
+		 User userInfo = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+		 
+		if(userInfo!=null){
 			actionStart(HomeActivity.class);
 		}
-
 		// 初始为登陆界面
 		fragmentManager = getSupportFragmentManager();// 获取fragment的管理器
 		switchFragmentByTag(C.Account.FRAGMENT_START, ANIMATION_NO_ANIM);// 设置默认的界面
@@ -316,4 +317,14 @@ public class AccountActivity extends BaseActivity implements OnLoginListener,
 		switchFragmentByTag(C.Account.FRAGMENT_VERIFY, ANIMATION_MOVE_RIGHT);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		Fragment fg = getFragmentByTag(currentFgTag);
+		if(fg!=null){
+			fg.onActivityResult(requestCode, resultCode, data);
+		}
+		
+	}
 }

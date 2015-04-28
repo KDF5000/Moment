@@ -210,4 +210,14 @@ public class C {
 		public static final String SPK_IS_SAVE_DATA = "save_data";	//是否开启省流量模式  true：是，false：否
 		public static final String SPK_LOGIN_INFO = "Account";	//用户使用登陆时的个人信息
 	}
+	/**
+	 * 第三方登陆类型
+	 * @author KDF5000
+	 *
+	 */
+	public static final class ThirdLoginType{
+		public static final int WEIXIN_LOGIN = 0;//微信登陆
+		public static final int QQ_LOGIN = 1;//QQ登陆
+		public static final int WEIBO_LOGIN = 2;//微博登陆
+	}
 }
