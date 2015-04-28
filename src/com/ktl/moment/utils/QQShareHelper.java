@@ -122,11 +122,10 @@ public class QQShareHelper {
 						String avatarUrl = jsonObject
 								.optString("figureurl_qq_2");
 						String openId = "qq" + tencent.getOpenId();
-						int loginType = 1; // 用于区分第三方登陆方式
 
 						RequestParams params = new RequestParams();
 						params.put("identifier", openId);
-						params.put("logintype", loginType);
+						params.put("logintype", C.ThirdLoginType.WEIXIN_LOGIN);
 						params.put("nickName", nickName);
 						params.put("userAvatar", avatarUrl);
 						params.put("sex", gender);
