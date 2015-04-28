@@ -12,13 +12,11 @@
     
     <color name="bocop_dialog_bg">#77000000</color>
     
-    <!-- ripple component-->
-    <color name="rippelColor">#0099CC</color>
-    
     <!-- 大众色系 -->
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="text_color">#a0a0a0</color>
+    <color name="text_color_unable">#959595</color>
     
     <color name="main_title_color">#41aaf2</color>
     <color name="main_content_container_color">#eeeeee</color>
@@ -37,4 +35,8 @@
     <!-- 首页关注页面色系 -->
     <color name="praise_color">#ec584d</color>
     <color name="watch_color">#7acb59</color>
+    
+    <!-- ripple component-->
+    <color name="rippelColor">#0099CC</color>
+    
 </resources>

@@ -3,9 +3,20 @@ package com.ktl.moment.android.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.CustomViewPagerAdapter;
@@ -21,7 +32,21 @@ public class MsgRemindActivity extends BaseActivity {
 	@ViewInject(R.id.msg_viewpager)
 	private ViewPager msgViewPager;
 
+	@ViewInject(R.id.msg_tab_notification)
+	private TextView tabNotification;
+
+	@ViewInject(R.id.msg_tab_new_fans)
+	private TextView tabNewFans;
+
+	@ViewInject(R.id.msg_tab_personal_msg)
+	private TextView tabPersonalMsg;
+
+	@ViewInject(R.id.msg_under_tag)
+	private ImageView underTag;
+
 	private List<Fragment> fragmentList;
+	private int width;// 下方的小滑块的宽度
+	private int currentItem = 0;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -32,6 +57,7 @@ public class MsgRemindActivity extends BaseActivity {
 
 		ViewUtils.inject(this);
 		initView();
+		initTab();
 		initViewPager();
 	}
 
@@ -46,6 +72,25 @@ public class MsgRemindActivity extends BaseActivity {
 				.getColor(R.color.main_title_color));
 	}
 
+	private void initTab() {
+		tabNotification.setOnClickListener(new TitleTabOnClickListener(0));
+		tabNewFans.setOnClickListener(new TitleTabOnClickListener(1));
+		tabPersonalMsg.setOnClickListener(new TitleTabOnClickListener(2));
+
+		DisplayMetrics ds = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(ds);
+		width = ds.widthPixels / 3;
+		LayoutParams params = underTag.getLayoutParams();
+		params.width = width;
+		Log.i("width", width + "");
+		underTag.setLayoutParams(params);
+
+		Matrix matrix = new Matrix();
+		matrix.postTranslate(0, 0);
+		underTag.setImageMatrix(matrix);// 设置动画初始位置
+
+	}
+
 	private void initViewPager() {
 		if (fragmentList == null) {
 			fragmentList = new ArrayList<Fragment>();
@@ -56,9 +101,100 @@ public class MsgRemindActivity extends BaseActivity {
 		fragmentList.add(notificationFragment);
 		fragmentList.add(newFansFragment);
 		fragmentList.add(personalLetterFragment);
-		
+
 		msgViewPager.setAdapter(new CustomViewPagerAdapter(
 				getSupportFragmentManager(), fragmentList));
 		msgViewPager.setCurrentItem(0, true);
+		msgViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
+	}
+
+	/**
+	 * title_tab点击监听
+	 */
+	public class TitleTabOnClickListener implements OnClickListener {
+		private int index = 0;
+
+		public TitleTabOnClickListener(int i) {
+			index = i;
+		}
+
+		public void onClick(View v) {
+			msgViewPager.setCurrentItem(index);
+		}
+	};
+
+	/**
+	 * viewpager切换监听
+	 * 
+	 * @author HUST_LH
+	 * 
+	 */
+	public class ViewPagerChangeListener implements OnPageChangeListener {
+		int one = width;// 页卡1 -> 页卡2 偏移量
+		int two = one * 2;// 页卡1 -> 页卡3 偏移量
+
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onPageSelected(int arg0) {
+			// TODO Auto-generated method stub
+			Animation animation = null;
+			switch (arg0) {
+			case 0:
+				if (currentItem == 1) {
+					animation = new TranslateAnimation(one, 0, 0, 0);
+				} else if (currentItem == 2) {
+					animation = new TranslateAnimation(two, 0, 0, 0);
+				}
+				tabNotification.setTextColor(getResources().getColor(
+						R.color.black));
+				tabNewFans.setTextColor(getResources().getColor(
+						R.color.text_color_unable));
+				tabPersonalMsg.setTextColor(getResources().getColor(
+						R.color.text_color_unable));
+				break;
+			case 1:
+				if (currentItem == 0) {
+					animation = new TranslateAnimation(0, one, 0, 0);
+				} else if (currentItem == 2) {
+					animation = new TranslateAnimation(two, one, 0, 0);
+				}
+				tabNotification.setTextColor(getResources().getColor(
+						R.color.text_color_unable));
+				tabNewFans.setTextColor(getResources().getColor(R.color.black));
+				tabPersonalMsg.setTextColor(getResources().getColor(
+						R.color.text_color_unable));
+				break;
+			case 2:
+				if (currentItem == 0) {
+					animation = new TranslateAnimation(0, two, 0, 0);
+				} else if (currentItem == 1) {
+					animation = new TranslateAnimation(one, two, 0, 0);
+				}
+				tabNotification.setTextColor(getResources().getColor(
+						R.color.text_color_unable));
+				tabNewFans.setTextColor(getResources().getColor(
+						R.color.text_color_unable));
+				tabPersonalMsg.setTextColor(getResources().getColor(
+						R.color.black));
+				break;
+			}
+			currentItem = arg0;
+			animation.setFillAfter(true);// True:图片停在动画结束位置
+			animation.setDuration(250);
+			underTag.startAnimation(animation);
+
+		}
+
 	}
 }
