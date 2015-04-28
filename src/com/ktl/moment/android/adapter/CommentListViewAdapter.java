@@ -72,10 +72,10 @@ public class CommentListViewAdapter extends BaseAdapter {
 		
 		if(comment.getIsPraised() == 0){
 			holder.praiseIcon.setImageResource(R.drawable.like_small);
-			holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.praise_color));
-		}else{
-			holder.praiseIcon.setImageResource(R.drawable.like_small);
 			holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.text_color));
+		}else{
+			holder.praiseIcon.setImageResource(R.drawable.like_small_press);
+			holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.praise_color));
 		}
 		holder.praiseNum.setText(comment.getPraiseNum()+"");
 		holder.content.setText(comment.getContent());
@@ -91,11 +91,14 @@ public class CommentListViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				int praiseNum = comment.getPraiseNum();
 				if(comment.getIsPraised() == 0){
-					holder.praiseIcon.setImageResource(R.drawable.like_small);
+					comment.setPraiseNum(++praiseNum);
+					holder.praiseIcon.setImageResource(R.drawable.like_small_press);
 					holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.praise_color));
 					comment.setIsPraised(1);
 				}else{
+					comment.setPraiseNum(--praiseNum);
 					holder.praiseIcon.setImageResource(R.drawable.like_small);
 					holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.text_color));
 					comment.setIsPraised(0);

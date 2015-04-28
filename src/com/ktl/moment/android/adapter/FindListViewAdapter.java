@@ -38,7 +38,7 @@ public class FindListViewAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private List<Moment> momentList;// 灵感列表
 	private DisplayImageOptions options;// 图片设置选项
-	private long userId;
+//	private User user;
 
 	public FindListViewAdapter(Context context, List<Moment> momentList,
 			DisplayImageOptions options) {
@@ -47,10 +47,6 @@ public class FindListViewAdapter extends BaseAdapter {
 		this.mInflater = LayoutInflater.from(context);
 		this.options = options;
 
-		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
-		if(user!=null){
-			userId = user.getId();
-		}
 	}
 
 	@Override
@@ -134,6 +130,8 @@ public class FindListViewAdapter extends BaseAdapter {
 
 		momentHolder.commentNum.setText(moment.getCommentNum() + "");
 		momentHolder.labelTv.setText(moment.getLabel());
+		
+		final User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
 
 		// listviewItem 点击进入详情页
 		momentHolder.articleContent.setOnClickListener(new OnClickListener() {
@@ -142,6 +140,7 @@ public class FindListViewAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(context, MomentDetailActivity.class);
 				intent.putExtra("momentId", moment.getMomentId());
+				intent.putExtra("userId", moment.getAuthorId());
 				context.startActivity(intent);
 			}
 		});
@@ -217,8 +216,8 @@ public class FindListViewAdapter extends BaseAdapter {
 					isAddFocus = 0;
 				}
 				notifyDataSetChanged();
-				requestServer(isAddFocus, "isAddFocus", userId,
-						moment.getMomentId(), C.API.FOCUS_AUTHOR, "User");
+				requestServer(isAddFocus, "isAddFocus", user.getUserId(),
+						moment.getAuthorId(), C.API.FOCUS_AUTHOR, "User");
 			}
 		});
 
@@ -273,7 +272,7 @@ public class FindListViewAdapter extends BaseAdapter {
 					isAddWatch = 0;
 				}
 				notifyDataSetChanged();
-				requestServer(isAddWatch, "isAddWatch", userId,
+				requestServer(isAddWatch, "isAddWatch", user.getUserId(),
 						moment.getMomentId(), C.API.WATCH_MOMENT, "Moment");
 			}
 		});
@@ -308,7 +307,7 @@ public class FindListViewAdapter extends BaseAdapter {
 				}
 				notifyDataSetChanged();
 				// 可以在这里向服务器请求，也可以设置一个回调或者消息 给fragment 让他发送请求
-				requestServer(isAddPraise, "isAddPraise", userId,
+				requestServer(isAddPraise, "isAddPraise", user.getUserId(),
 						moment.getMomentId(), C.API.PRAISE_MOMENT, "Moment");
 			}
 		});

@@ -9,7 +9,7 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		private static final String URL_BASE = "http://115.156.249.55:8080/";
+		private static final String URL_BASE = "http://115.156.249.44:8080/MomentService/";
 		/**
 		 * 七牛基地址
 		 */
@@ -17,18 +17,18 @@ public class C {
 		/**
 		 * 手机号登录
 		 */
-//		public static final String USER_LOGIN = URL_BASE + "MomentService/UserInfoService/SignIn/login";
-		public static final String USER_LOGIN = "http://192.168.95.1/index.php";
+		public static final String USER_LOGIN = URL_BASE + "UserInfoService/SignIn/login";
+//		public static final String USER_LOGIN = "http://192.168.95.1/index.php";
 		/**
 		 * 第三方登陆
 		 */
-//		public static final String USER_THIRD_PARTY_LOGIN = URL_BASE + "MomentService/UserInfoService/SignIn/thirdparty/login";
-		public static final String USER_THIRD_PARTY_LOGIN = "http://192.168.95.1/login.php";
+		public static final String USER_THIRD_PARTY_LOGIN = URL_BASE + "UserInfoService/SignIn/thirdparty/login";
+//		public static final String USER_THIRD_PARTY_LOGIN = "http://192.168.95.1/login.php";
 		/**
 		 * 用户注册
 		 */
-//		public static final String USER_REGISTER = URL_BASE + "MomentService/UserInfoService/Registration";
-		public static final String USER_REGISTER = "http://192.168.95.1/login.php";
+		public static final String USER_REGISTER = URL_BASE + "UserInfoService/Registration/";
+//		public static final String USER_REGISTER = "http://192.168.95.1/login.php";
 		/**
 		 * 获取七牛token
 		 */
@@ -36,27 +36,27 @@ public class C {
 		/**
 		 * 获取关注首页list
 		 */
-		public static final String GET_HOME_FOCUS_LIST = "http://192.168.95.1/list.php";
+		public static final String GET_HOME_FOCUS_LIST = URL_BASE+"MomentsService/Attention/getMomentList";
 		/**
 		 * 关注/取消关注 作者
 		 */
-		public static final String FOCUS_AUTHOR = "http://192.168.95.1/addFocus.php";
+		public static final String FOCUS_AUTHOR = URL_BASE+"UserInfoService/FriendRelationship/addAttention";
 		/**
 		 * 点赞/取消点赞
 		 */
-		public static final String PRAISE_MOMENT = "http://192.168.95.1/addFocus.php";
+		public static final String PRAISE_MOMENT = URL_BASE+"MomentsService/MomentOperate/praiseMoment";
 		/**
 		 * 围观/取消围观
 		 */
-		public static final String WATCH_MOMENT = "http://192.168.95.1/addFocus.php";
+		public static final String WATCH_MOMENT = URL_BASE+"MomentsService/MomentOperate/collectMoment";
 		/**
 		 * 获取我的粉丝列表
 		 */
-		public static final String GET_MY_FANS_LIST = "http://192.168.95.1/focus.php";
+		public static final String GET_MY_FANS_LIST = URL_BASE+"UserInfoService/UserInfo/getFans";
 		/**
 		 * 获取关注的作者list
 		 */
-		public static final String GET_FOCUS_AUTHOR_LIST = "http://192.168.95.1/focus.php";
+		public static final String GET_FOCUS_AUTHOR_LIST = URL_BASE+"UserInfoService/UserInfo/getAtentionUsers";
 		/**
 		 * 更新用户信息
 		 */
@@ -68,11 +68,11 @@ public class C {
 		/**
 		 * 获取灵感详情
 		 */
-		public static final String GET_MOMENT_DETAIL = "http://192.168.95.1/focus.php";
+		public static final String GET_MOMENT_DETAIL = URL_BASE+"MomentsService/MomentDetails/getMomentDetails";
 		/**
 		 * 获取评论list
 		 */
-		public static final String GET_COMMENT_LIST = "http://192.168.95.1/focus.php";
+		public static final String GET_COMMENT_LIST = URL_BASE+"MomentsService/Comments/getMoreComment";
 	}
 	
 	

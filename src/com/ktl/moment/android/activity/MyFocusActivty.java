@@ -44,7 +44,8 @@ public class MyFocusActivty extends BaseActivity{
 	
 	private int pageNum = 0;
 	private int pageSize = 10;
-	private long userId;
+	private User spUser;
+	private String intentFlag;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -60,11 +61,10 @@ public class MyFocusActivty extends BaseActivity{
 		ViewUtils.inject(this);
 		
 		Intent intent = getIntent();
-		String intentFlag = intent.getStringExtra("intentFlag");
+		intentFlag = intent.getStringExtra("intentFlag");
 
 		//从SP获取用户id
-		User spUser = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
-		userId = spUser.getId();
+		spUser = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
 		
 		getData();
 		fansAdapter = new FansAdapter(this, focusList, getDisplayImageOptions());
@@ -141,10 +141,16 @@ public class MyFocusActivty extends BaseActivity{
 			focusList = new ArrayList<User>();
 		}
 		RequestParams params = new RequestParams();
-		params.put("userId", userId);
+		params.put("userId", spUser.getUserId());
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
-		ApiManager.getInstance().post(this, C.API.GET_FOCUS_AUTHOR_LIST, params, new HttpCallBack() {
+		String url = C.API.GET_FOCUS_AUTHOR_LIST;
+		if(intentFlag.equals("focus")){
+			url = C.API.GET_FOCUS_AUTHOR_LIST;
+		}else if(intentFlag.equals("fans")){
+			url = C.API.GET_MY_FANS_LIST;
+		}
+		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
 			
 			@Override
 			public void onSuccess(Object res) {

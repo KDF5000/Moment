@@ -76,6 +76,7 @@ public class MomentDetailActivity extends BaseActivity {
 	private Handler handler;
 
 	private long momentId;
+	private long userId;
 	private int pageNum = 0;
 	private int pageSize = 10;
 
@@ -85,6 +86,7 @@ public class MomentDetailActivity extends BaseActivity {
 		super.onCreate(arg0);
 		Intent intent = getIntent();
 		momentId = intent.getLongExtra("momentId", 0);
+		userId = intent.getLongExtra("userId", 0);
 		Toast.makeText(this, momentId + "", Toast.LENGTH_SHORT).show();
 		initView();
 		initEvent();
@@ -106,10 +108,11 @@ public class MomentDetailActivity extends BaseActivity {
 		setBaseActivityBgColor(getResources()
 				.getColor(R.color.main_title_color));
 		setMiddleTitleName(R.string.moment_detail_text_view);
+		setBaseContainerBgColor(0xffffffff);
 
-//		initMomentDetail();
-//		getCommentData();
-		tmp();
+		initMomentDetail();
+		getCommentData();
+//		tmp();
 
 		commentListViewAdapter = new CommentListViewAdapter(this, commentList,
 				getDisplayImageOptions());
@@ -223,6 +226,7 @@ public class MomentDetailActivity extends BaseActivity {
 		}
 		RequestParams params = new RequestParams();
 		params.put("momentId", momentId);
+		params.put("userId", userId);
 		ApiManager.getInstance().post(this, C.API.GET_MOMENT_DETAIL, params,
 				new HttpCallBack() {
 

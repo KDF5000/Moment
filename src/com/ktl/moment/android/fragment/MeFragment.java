@@ -1,7 +1,5 @@
 package com.ktl.moment.android.fragment;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +12,7 @@ import android.widget.TextView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.EditInfoActivity;
 import com.ktl.moment.android.activity.MyFocusActivty;
+import com.ktl.moment.android.activity.MsgRemindActivity;
 import com.ktl.moment.android.activity.SettingActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.CircleImageView;
@@ -51,6 +50,9 @@ public class MeFragment extends BaseFragment {
 
 	@ViewInject(R.id.me_edit_info_layout)
 	private LinearLayout meEditInfoLayout;
+	
+	@ViewInject(R.id.me_notification_layout)
+	private LinearLayout meNotificationLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,7 +87,7 @@ public class MeFragment extends BaseFragment {
 	}
 
 	@OnClick({ R.id.me_setting_layout, R.id.me_my_focus, R.id.me_my_fans,
-			R.id.me_edit_info_layout })
+			R.id.me_edit_info_layout,R.id.me_notification_layout })
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.me_setting_layout:
@@ -107,6 +109,11 @@ public class MeFragment extends BaseFragment {
 			Intent editInfoIntent = new Intent(getActivity(),
 					EditInfoActivity.class);
 			startActivity(editInfoIntent);
+			break;
+		case R.id.me_notification_layout:
+			Intent notificationIntent = new Intent(getActivity(),
+					MsgRemindActivity.class);
+			startActivity(notificationIntent);
 			break;
 		default:
 			break;

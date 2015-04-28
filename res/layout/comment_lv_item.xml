@@ -53,6 +53,8 @@
                     android:id="@+id/comment_praise_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="20dp"
                     android:src="@drawable/like_small" />
 
                 <TextView
@@ -66,8 +68,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/comment_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
             android:orientation="horizontal" >
 
             <LinearLayout
@@ -86,8 +90,14 @@
                     android:id="@+id/comment_to_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="刘浩:"
+                    android:text="刘浩"
                     android:textColor="#41aaf2"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="："
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -95,11 +105,14 @@
                 android:id="@+id/comment_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
                 android:lineSpacingExtra="3dp"
                 android:text="谢谢你的建议，很好的主意，我会考虑一下的谢谢你的建议，很好的主意，我会考虑一下的谢谢你的建议，很好的主意，我会考虑一下的谢谢你的建议，很好的主意，我会考虑一下的"
                 android:textSize="12sp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <View

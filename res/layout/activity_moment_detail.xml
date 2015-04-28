@@ -8,18 +8,18 @@
         android:id="@+id/moment_comment_lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:divider="@color/main_content_container_color"
         android:dividerHeight="10dp"
-        android:layout_marginBottom="10dp"
         android:listSelector="@android:color/transparent"
         android:scrollbars="none" >
     </com.ktl.moment.android.component.listview.arc.widget.ZrcListView>
 
     <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         layout="@layout/moment_detail_operate_menu" >
+        layout="@layout/moment_detail_operate_menu" >
     </include>
 
 </RelativeLayout>
