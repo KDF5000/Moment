@@ -2,9 +2,9 @@ package com.ktl.moment.android.component;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-public class ResizeLayout extends LinearLayout {
+public class ResizeRelativeLayout extends RelativeLayout {
 	private OnResizeListener mListener;
 
 	public interface OnResizeListener {
@@ -15,7 +15,7 @@ public class ResizeLayout extends LinearLayout {
 		mListener = l;
 	}
 
-	public ResizeLayout(Context context, AttributeSet attrs) {
+	public ResizeRelativeLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 

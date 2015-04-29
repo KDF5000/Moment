@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#eeeeee" >
     
     <EditText 
         android:id="@+id/comment_et"
@@ -13,16 +14,20 @@
         android:paddingLeft="12dp"
         android:paddingTop="16dp"
         android:paddingRight="12dp"
+        android:gravity="top|left"
         android:textSize="14sp"
-        android:textColor="#bfbfbf"
-        android:background="#0000"
+        android:hint="在此写下你的评论吧"
+        android:textColorHint="#bfbfbfbf"
+        android:background="#ffffff"
         android:lineSpacingExtra="4dp"/>
     
     <Button 
         android:id="@+id/comment_submit"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/login_button_shape"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/comment_submit_btn"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
         android:layout_centerHorizontal="true"

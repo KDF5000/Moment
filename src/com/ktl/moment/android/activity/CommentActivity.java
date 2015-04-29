@@ -26,7 +26,7 @@ public class CommentActivity extends BaseActivity{
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
-		setContentView(R.layout.activity_comment);
+		getLayoutInflater().inflate(R.layout.activity_comment, contentLayout, true);
 		
 		ViewUtils.inject(this);
 		initView();
@@ -37,7 +37,7 @@ public class CommentActivity extends BaseActivity{
 		setTitleBackImg(R.drawable.title_return_white);
 		setMiddleTitleVisible(true);
 		setMiddleTitleName("评论");
-		setBaseContainerBgColor(getResources().getColor(R.color.main_title_color));
+		setBaseActivityBgColor(getResources().getColor(R.color.main_title_color));
 	}
 	
 	@OnClick({R.id.title_back_img,R.id.comment_submit})

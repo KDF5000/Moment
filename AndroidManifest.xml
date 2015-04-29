@@ -138,6 +138,11 @@
         <activity 
             android:name="com.ktl.moment.android.activity.MsgRemindActivity">
         </activity>
+        <!-- 评论页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.CommentActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
 
 </manifest>

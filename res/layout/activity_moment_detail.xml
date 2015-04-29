@@ -9,11 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:divider="@color/main_content_container_color"
-        android:dividerHeight="10dp"
         android:listSelector="@android:color/transparent"
         android:scrollbars="none" >
     </com.ktl.moment.android.component.listview.arc.widget.ZrcListView>
+
+    <!--
+        android:divider="@color/main_content_container_color"
+        android:dividerHeight="10dp"
+    -->
 
     <include
         android:layout_width="match_parent"

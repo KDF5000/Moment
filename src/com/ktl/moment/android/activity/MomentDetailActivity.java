@@ -20,6 +20,7 @@ import com.ktl.moment.android.adapter.CommentListViewAdapter;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
+import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnItemClickListener;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Comment;
@@ -122,6 +123,16 @@ public class MomentDetailActivity extends BaseActivity {
 		SimpleFooter footer = new SimpleFooter(this);
 		footer.setCircleColor(0xff33bbee);
 		commentsListView.setFootable(footer);
+		
+		commentsListView.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(ZrcListView parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(MomentDetailActivity.this, CommentActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 	private void initMomentDetail() {
@@ -170,24 +181,6 @@ public class MomentDetailActivity extends BaseActivity {
 		case R.id.focus_author_icon:
 			focusClick();
 			break;
-		}
-	}
-	
-	private void tmp(){
-		if (commentList == null) {
-			commentList = new ArrayList<Comment>();
-		}
-		for (int i = 0; i < 10; i++) {
-			Comment comment = new Comment();
-			comment.setUserAvatar("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
-			comment.setUserId(100 + i);
-			comment.setUserName("Luis");
-			comment.setPostTime("3分钟前");
-			comment.setPraiseNum(10);
-			comment.setRepalyUserId(1000 + i);
-			comment.setRepalyUserName("刘浩");
-			comment.setContent("谢谢你的建议，很好的主意，我会考虑一下的谢谢你的建议");
-			commentList.add(comment);
 		}
 	}
 

@@ -46,7 +46,7 @@ public class SettingActivity extends BaseActivity {
 		getLayoutInflater().inflate(R.layout.activity_setting, contentLayout,
 				true);
 		ViewUtils.inject(this);
-		
+
 		initView();
 	}
 
@@ -63,11 +63,11 @@ public class SettingActivity extends BaseActivity {
 				C.SPKey.SPK_IS_PUSH);
 		if (pushFlag.equals("")) {
 			SharedPreferencesUtil.getInstance().putString(C.SPKey.SPK_IS_PUSH,
-					"true");//默认为开启推送
+					"true");// 默认为开启推送
 			push.setImageResource(R.drawable.setting_open);
-		} else if (pushFlag.equals("false")) {//用户设置了关闭推送
+		} else if (pushFlag.equals("false")) {// 用户设置了关闭推送
 			push.setImageResource(R.drawable.setting_close);
-		} else {//用户设置开启推送
+		} else {// 用户设置开启推送
 			push.setImageResource(R.drawable.setting_open);
 		}
 
@@ -75,11 +75,11 @@ public class SettingActivity extends BaseActivity {
 				C.SPKey.SPK_IS_SAVE_DATA);
 		if (saveDataFlag.equals("")) {
 			SharedPreferencesUtil.getInstance().putString(
-					C.SPKey.SPK_IS_SAVE_DATA, "false");//默认关闭省流量模式
+					C.SPKey.SPK_IS_SAVE_DATA, "false");// 默认关闭省流量模式
 			save.setImageResource(R.drawable.setting_close);
-		} else if (saveDataFlag.equals("false")) {//用户设置关闭省流量模式
+		} else if (saveDataFlag.equals("false")) {// 用户设置关闭省流量模式
 			save.setImageResource(R.drawable.setting_close);
-		} else {//用户设置开启省流量模式
+		} else {// 用户设置开启省流量模式
 			save.setImageResource(R.drawable.setting_open);
 		}
 	}
@@ -113,24 +113,30 @@ public class SettingActivity extends BaseActivity {
 	}
 
 	private void save() {
-		String str = SharedPreferencesUtil.getInstance().getString(C.SPKey.SPK_IS_SAVE_DATA);
-		if (str.equals("false")) {//原来设置为关闭省流量模式
+		String str = SharedPreferencesUtil.getInstance().getString(
+				C.SPKey.SPK_IS_SAVE_DATA);
+		if (str.equals("false")) {// 原来设置为关闭省流量模式
 			save.setImageResource(R.drawable.setting_open);
-			SharedPreferencesUtil.getInstance().putString(C.SPKey.SPK_IS_SAVE_DATA, "true");
+			SharedPreferencesUtil.getInstance().putString(
+					C.SPKey.SPK_IS_SAVE_DATA, "true");
 		} else {
 			save.setImageResource(R.drawable.setting_close);
-			SharedPreferencesUtil.getInstance().putString(C.SPKey.SPK_IS_SAVE_DATA, "false");
+			SharedPreferencesUtil.getInstance().putString(
+					C.SPKey.SPK_IS_SAVE_DATA, "false");
 		}
 	}
 
 	private void push() {
-		String str = SharedPreferencesUtil.getInstance().getString(C.SPKey.SPK_IS_PUSH);
-		if (str.equals("false")) {//原来设置为关闭推送
+		String str = SharedPreferencesUtil.getInstance().getString(
+				C.SPKey.SPK_IS_PUSH);
+		if (str.equals("false")) {// 原来设置为关闭推送
 			push.setImageResource(R.drawable.setting_open);
-			SharedPreferencesUtil.getInstance().putString(C.SPKey.SPK_IS_PUSH, "true");
+			SharedPreferencesUtil.getInstance().putString(C.SPKey.SPK_IS_PUSH,
+					"true");
 		} else {
 			push.setImageResource(R.drawable.setting_close);
-			SharedPreferencesUtil.getInstance().putString(C.SPKey.SPK_IS_PUSH, "false");
+			SharedPreferencesUtil.getInstance().putString(C.SPKey.SPK_IS_PUSH,
+					"false");
 		}
 	}
 

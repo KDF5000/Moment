@@ -1,4 +1,4 @@
-<com.ktl.moment.android.component.ResizeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ktl.moment.android.component.ResizeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.ktl.moment"
     android:id="@+id/editor_base_content"
     android:layout_width="match_parent"
@@ -271,4 +271,4 @@
         </com.ktl.moment.android.component.RippleBackground>
     </RelativeLayout>
 
-</com.ktl.moment.android.component.ResizeLayout>
+</com.ktl.moment.android.component.ResizeLinearLayout>

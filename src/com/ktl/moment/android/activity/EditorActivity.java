@@ -32,8 +32,8 @@ import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
-import com.ktl.moment.android.component.ResizeLayout;
-import com.ktl.moment.android.component.ResizeLayout.OnResizeListener;
+import com.ktl.moment.android.component.ResizeLinearLayout;
+import com.ktl.moment.android.component.ResizeLinearLayout.OnResizeListener;
 import com.ktl.moment.android.component.RichEditText;
 import com.ktl.moment.android.component.RippleBackground;
 import com.ktl.moment.common.constant.C;
@@ -83,7 +83,7 @@ public class EditorActivity extends BaseActivity {
 	private RelativeLayout toolContent;
 
 	@ViewInject(R.id.editor_base_content)
-	private ResizeLayout baseContent;
+	private ResizeLinearLayout baseContent;
 
 	@ViewInject(R.id.editor_wave_content)
 	private RippleBackground ripple;
