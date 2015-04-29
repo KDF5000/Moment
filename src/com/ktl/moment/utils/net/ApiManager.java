@@ -131,7 +131,6 @@ public class ApiManager {
 			if(modelNameList==null){
 				callBack.onSuccess(httpResult.getMsg());
 			}else if(modelNameList.length==1){
-				Log.i("test", httpResult+"");
 				callBack.onSuccess(httpResult.getResultList(modelNameList[0]));
 			}else if(modelNameList.length>1){
 				HashMap<String,ArrayList<? extends BaseEntity>> mapList = new HashMap<String, ArrayList<? extends BaseEntity>>();

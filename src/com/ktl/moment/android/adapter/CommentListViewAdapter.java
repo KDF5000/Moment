@@ -3,6 +3,7 @@ package com.ktl.moment.android.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -83,6 +84,7 @@ public class CommentListViewAdapter extends BaseAdapter {
 		if(comment.getRepalyUserId() == 0){
 			holder.repalyLayout.setVisibility(View.GONE);
 		}else{
+			holder.repalyLayout.setVisibility(View.VISIBLE);
 			holder.userToName.setText(comment.getRepalyUserName());
 		}
 		
