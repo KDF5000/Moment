@@ -43,8 +43,8 @@ public class FindFragment extends BaseFragment {
 		fragmentList = new ArrayList<Fragment>();
 		Fragment channelFragment = new ChannelFragment();
 		Fragment recomendFragment = new RecomendFragment();
-		fragmentList.add(recomendFragment);
 		fragmentList.add(channelFragment);
+		fragmentList.add(recomendFragment);
 
 		viewPager.setAdapter(new CustomViewPagerAdapter(
 				getChildFragmentManager(), fragmentList));

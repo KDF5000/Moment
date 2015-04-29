@@ -157,7 +157,6 @@ public class EditorActivity extends BaseActivity {
 	private static final int PLAY_STOP = 2;
 	private boolean isPlaying = false; // 是否播放中
 
-	private static final int REQUEST_CODE = 1000;
 	private boolean isConfirmDelete; // 录音播放栏删除音频的标识
 
 	private InputHandler inputHandler = new InputHandler();
@@ -379,8 +378,9 @@ public class EditorActivity extends BaseActivity {
 			break;
 		case R.id.editor_play_delete: {
 			// 弹出dialog
-			Intent intent = new Intent(this, EditorDialogActivity.class);
-			startActivityForResult(intent, REQUEST_CODE);
+			Intent intent = new Intent(this, SimpleDialogActivity.class);
+			intent.putExtra("content", "您确定彻底删除该录音？");
+			startActivityForResult(intent, C.ActivityRequest.REQUEST_DIALOG_ACTIVITY);
 
 			// 先暂停音频播放
 			RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
@@ -742,9 +742,9 @@ public class EditorActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
-			case REQUEST_CODE:
+			case C.ActivityRequest.REQUEST_DIALOG_ACTIVITY:
 				// 确认删除录音
-				isConfirmDelete = data.getBooleanExtra("isDelete", false);
+				isConfirmDelete = data.getBooleanExtra("isConfirm", false);
 				playerDelete();
 				break;
 			case C.ActivityRequest.REQUEST_PICTURE_CROP_ACTION: {

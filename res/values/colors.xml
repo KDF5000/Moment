@@ -20,7 +20,7 @@
     
     <color name="main_title_color">#41aaf2</color>
     <color name="main_content_container_color">#eeeeee</color>
-    <color name="menu_text_checked">#5dd2f9</color>
+    <color name="menu_text_checked">#41aaf2</color>
     <color name="menu_text_uncheked">#676666</color>
     
     <!-- moment页面瀑布流中的字体颜色，包括：日期、是否公开、标签 -->

@@ -13,7 +13,7 @@ import android.view.MotionEvent;
  */
 public class CustomViewPager extends ViewPager {
 
-	private boolean isCanScroll = false;//改为false即可开启滑动
+	private boolean isCanScroll = true;//改为false即可开启滑动
 
 	public CustomViewPager(Context context) {
 		super(context);

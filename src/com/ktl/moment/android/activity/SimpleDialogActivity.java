@@ -10,13 +10,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-public class EditorDialogActivity extends Activity{
+public class SimpleDialogActivity extends Activity{
+	
+	@ViewInject(R.id.dialog_content)
+	private TextView dialogContent;
 
-	@ViewInject(R.id.editor_play_delete_cancle)
+	@ViewInject(R.id.cancle)
 	private Button cancle;
 	
-	@ViewInject(R.id.editor_play_delete_confirm)
+	@ViewInject(R.id.confirm)
 	private Button confirm;
 		
 	@Override
@@ -26,19 +30,23 @@ public class EditorDialogActivity extends Activity{
 		setContentView(R.layout.activity_editor_dialog);
 		
 		ViewUtils.inject(this);
+		
+		Intent intent = getIntent();
+		CharSequence cs = intent.getStringExtra("content");
+		dialogContent.setText(cs);
 	}
 	
-	@OnClick({R.id.editor_play_delete_cancle, R.id.editor_play_delete_confirm})
+	@OnClick({R.id.cancle, R.id.confirm})
 	public void onClick(View v){
-		Intent intent = new Intent(EditorDialogActivity.this, EditorActivity.class);
+		Intent intent = new Intent(SimpleDialogActivity.this, EditorActivity.class);
 		switch (v.getId()) {
-		case R.id.editor_play_delete_cancle:
-			intent.putExtra("isDelete", false);
+		case R.id.cancle:
+			intent.putExtra("isConfirm", false);
 			setResult(Activity.RESULT_OK, intent);
 			finish();
 			break;
-		case R.id.editor_play_delete_confirm:
-			intent.putExtra("isDelete", true);
+		case R.id.confirm:
+			intent.putExtra("isConfirm", true);
 			setResult(Activity.RESULT_OK, intent);
 			finish();
 			break;

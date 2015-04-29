@@ -16,7 +16,14 @@ public class User extends BaseEntity {
 	private int sex;//性别
 	
 	private int isFocused;//用户是否被关注 0：否，1：是
+	private String focusedTime;//用户被关注的时间
 	
+	public String getFocusedTime() {
+		return focusedTime;
+	}
+	public void setFocusedTime(String focusedTime) {
+		this.focusedTime = focusedTime;
+	}
 	public int getIsFocused() {
 		return isFocused;
 	}

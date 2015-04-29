@@ -26,6 +26,7 @@ import com.ktl.moment.android.fragment.message.NotificationFragment;
 import com.ktl.moment.android.fragment.message.PersonalLetterFragment;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 public class MsgRemindActivity extends BaseActivity {
 
@@ -73,6 +74,11 @@ public class MsgRemindActivity extends BaseActivity {
 	}
 
 	private void initTab() {
+		tabNotification.setTextColor(getResources().getColor(R.color.black));
+		tabNewFans.setTextColor(getResources().getColor(
+				R.color.text_color_unable));
+		tabPersonalMsg.setTextColor(getResources().getColor(
+				R.color.text_color_unable));
 		tabNotification.setOnClickListener(new TitleTabOnClickListener(0));
 		tabNewFans.setOnClickListener(new TitleTabOnClickListener(1));
 		tabPersonalMsg.setOnClickListener(new TitleTabOnClickListener(2));
@@ -106,6 +112,20 @@ public class MsgRemindActivity extends BaseActivity {
 				getSupportFragmentManager(), fragmentList));
 		msgViewPager.setCurrentItem(0, true);
 		msgViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
+	}
+
+	@OnClick({ R.id.title_back_img, R.id.title_right_img })
+	public void click(View v) {
+		switch (v.getId()) {
+		case R.id.title_back_img:
+			finish();
+			break;
+		case R.id.title_right_img:
+
+			break;
+		default:
+			break;
+		}
 	}
 
 	/**

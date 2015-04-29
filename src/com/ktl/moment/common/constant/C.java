@@ -189,6 +189,7 @@ public class C {
 		public static final int REQUEST_PICTURE_CROP_ACTION = 4;//裁剪图片
 		public static final int REQUEST_SELECT_CITY_ACTIVITY = 5;//选择所在城市
 		public static final int REQUEST_DATE_PICKER_ACTIVITY = 6;//选择日期
+		public static final int REQUEST_DIALOG_ACTIVITY = 7;//弹出对话框
 	}
 	/**
 	 * 文件类型 声音 图片

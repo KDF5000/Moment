@@ -9,4 +9,7 @@
     <issue id="SmallSp">
         <ignore path="res/layout/activity_setting.xml" />
     </issue>
+    <issue id="UseCompoundDrawables">
+        <ignore path="res/layout/msg_new_fans_adapter.xml" />
+    </issue>
 </lint>

@@ -11,7 +11,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 public class ImageManager {
 	public interface ImgLoadCallback {
-		public void OnComplete(String imageUri,Bitmap loadedImage);
+		public void OnComplete(String imageUri, Bitmap loadedImage);
 
 		public void OnError(FailReason failReason);
 	}
@@ -19,8 +19,9 @@ public class ImageManager {
 	private ImgLoadCallback mImgLoadCallback;
 	private static ImageManager instance = null;
 
-	private ImageManager(){
+	private ImageManager() {
 	}
+
 	/**
 	 * 获取一个实例
 	 * 
@@ -36,6 +37,7 @@ public class ImageManager {
 	public void setmImgLoadCallback(ImgLoadCallback mImgLoadCallback) {
 		this.mImgLoadCallback = mImgLoadCallback;
 	}
+
 	/**
 	 * 
 	 * @param imageUri
@@ -47,15 +49,16 @@ public class ImageManager {
 				.showImageOnFail(R.drawable.ic_launcher).cacheOnDisk(true)
 				.cacheInMemory(true).bitmapConfig(Bitmap.Config.RGB_565)
 				.considerExifParams(true).build();
-		
-		ImageLoader.getInstance().loadImage(imageUri, null,
-				options, new SimpleImageLoadingListener() {
+
+		ImageLoader.getInstance().loadImage(imageUri, null, options,
+				new SimpleImageLoadingListener() {
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
 							Bitmap loadedImage) {
 						// Do whatever you want with Bitmap
-						mImgLoadCallback.OnComplete(imageUri,loadedImage);
+						mImgLoadCallback.OnComplete(imageUri, loadedImage);
 					}
+
 					@Override
 					public void onLoadingFailed(String imageUri, View view,
 							FailReason failReason) {
@@ -64,5 +67,15 @@ public class ImageManager {
 						mImgLoadCallback.OnError(failReason);
 					}
 				});
+	}
+
+	public DisplayImageOptions getDisplayImageOptions() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.default_img)
+				.showImageForEmptyUri(R.drawable.default_img)
+				.showImageOnFail(R.drawable.default_img).cacheOnDisk(true)
+				.cacheInMemory(true).bitmapConfig(Bitmap.Config.RGB_565)
+				.considerExifParams(true).build();
+		return options;
 	}
 }
