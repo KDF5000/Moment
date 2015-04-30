@@ -164,7 +164,7 @@ public class EditInfoActivity extends BaseActivity {
 		int year = Integer.parseInt(dateArray[0]);
 		int month = Integer.parseInt(dateArray[1]);
 		int day = Integer.parseInt(dateArray[2]);
-		Log.i("date", year+"-"+month+"-"+day);
+		Log.i("date", year + "-" + month + "-" + day);
 		Intent intent = new Intent(this, CustomDatePicker.class);
 		intent.putExtra("year", year);
 		intent.putExtra("month", month);
@@ -250,6 +250,6 @@ public class EditInfoActivity extends BaseActivity {
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

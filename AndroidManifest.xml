@@ -132,7 +132,7 @@
         <!-- 日期选择对话框 -->
         <activity 
             android:name="com.ktl.moment.android.activity.CustomDatePicker"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
         </activity>
         <!-- 通知页面 -->
         <activity 
