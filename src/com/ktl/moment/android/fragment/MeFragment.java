@@ -13,9 +13,8 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.activity.EditInfoActivity;
 import com.ktl.moment.android.activity.MyFocusActivty;
 import com.ktl.moment.android.activity.MsgRemindActivity;
-import com.ktl.moment.android.activity.PraiseActivity;
 import com.ktl.moment.android.activity.SettingActivity;
-import com.ktl.moment.android.activity.WatchedActivity;
+import com.ktl.moment.android.activity.WPActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.common.constant.C;
@@ -126,13 +125,15 @@ public class MeFragment extends BaseFragment {
 			break;
 		case R.id.me_watched_layout:
 			Intent watchedIntent = new Intent(getActivity(),
-					WatchedActivity.class);
+					WPActivity.class);
+			watchedIntent.putExtra("wp", "watch");
 			startActivity(watchedIntent);
 			break;
 		case R.id.me_praise_layout:
-			Intent praiseIntent = new Intent(getActivity(),
-					PraiseActivity.class);
-			startActivity(praiseIntent);
+			Intent praisedIntent = new Intent(getActivity(),
+					WPActivity.class);
+			praisedIntent.putExtra("wp", "praise");
+			startActivity(praisedIntent);
 			break;
 		default:
 			break;
