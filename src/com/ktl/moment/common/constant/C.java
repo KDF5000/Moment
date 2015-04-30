@@ -9,9 +9,8 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		// private static final String URL_BASE =
-		// "http://115.156.249.44:8080/MomentService/";
-		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
+		 private static final String URL_BASE = "http://115.156.249.27:8080/MomentService/";
+//		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
 		 */
