@@ -104,7 +104,8 @@ public class MomentDetailActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		ViewUtils.inject(this, headerView);
 		commentsListView.addHeaderView(headerView, null, false);
-
+		
+		
 		setMiddleTitleVisible(true);
 		setTitleBackImgVisible(true);
 		setTitleBackImg(R.drawable.title_return_white);
@@ -113,7 +114,7 @@ public class MomentDetailActivity extends BaseActivity {
 		setMiddleTitleName(R.string.moment_detail_text_view);
 		setBaseContainerBgColor(0xffffffff);
 
-		initMomentDetail();
+		getMomentDetail();
 		getCommentData();
 
 		commentListViewAdapter = new CommentListViewAdapter(this, commentList,
@@ -137,7 +138,6 @@ public class MomentDetailActivity extends BaseActivity {
 	}
 
 	private void initMomentDetail() {
-		getMomentDetail();
 		momentTitle.setText(moment.getTitle());
 		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
 				momentUserAvatar, getDisplayImageOptions());
@@ -230,6 +230,7 @@ public class MomentDetailActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						List<Moment> momentList = (List<Moment>) res;
 						moment = momentList.get(0);
+						initMomentDetail();
 					}
 
 					@Override
