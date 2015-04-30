@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -244,4 +245,9 @@ public class MsgRemindActivity extends BaseActivity {
 
 	}
 
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		
+	}
 }

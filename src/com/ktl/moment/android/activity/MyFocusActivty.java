@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -174,5 +175,11 @@ public class MyFocusActivty extends BaseActivity{
 		if(v.getId() == R.id.title_back_img){
 			finish();
 		}
+	}
+
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		
 	}
 }

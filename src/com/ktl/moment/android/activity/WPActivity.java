@@ -2,6 +2,7 @@ package com.ktl.moment.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -51,5 +52,11 @@ public class WPActivity extends BaseActivity {
 		DynamicFragment df = new DynamicFragment();
 		ft.replace(R.id.activity_base_content_container, df);
 		ft.commit();
+	}
+
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -3,6 +3,7 @@ package com.ktl.moment.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,5 +87,11 @@ public class CommentActivity extends BaseActivity{
 				break;
 			}
 		}
+	}
+
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		
 	}
 }

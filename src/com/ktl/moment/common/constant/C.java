@@ -238,4 +238,8 @@ public class C {
 		public static final int QQ_LOGIN = 1;// QQ登陆
 		public static final int WEIBO_LOGIN = 2;// 微博登陆
 	}
+	
+	public static final class DbTaskId{
+		public static final int EDITOR_MOMENT_SAVE = 1;//编辑界面保存灵感到本地数据库
+	}
 }
