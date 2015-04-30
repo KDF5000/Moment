@@ -104,7 +104,8 @@ public class MomentDetailActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		ViewUtils.inject(this, headerView);
 		commentsListView.addHeaderView(headerView, null, false);
-
+		
+		
 		setMiddleTitleVisible(true);
 		setTitleBackImgVisible(true);
 		setTitleBackImg(R.drawable.title_return_white);
