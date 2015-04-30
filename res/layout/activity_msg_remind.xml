@@ -59,7 +59,8 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/msg_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@color/main_content_container_color" >
     </android.support.v4.view.ViewPager>
 
 </LinearLayout>

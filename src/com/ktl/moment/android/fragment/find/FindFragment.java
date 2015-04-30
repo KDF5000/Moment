@@ -43,8 +43,8 @@ public class FindFragment extends BaseFragment {
 		fragmentList = new ArrayList<Fragment>();
 		Fragment channelFragment = new ChannelFragment();
 		Fragment recomendFragment = new RecomendFragment();
-		fragmentList.add(recomendFragment);
 		fragmentList.add(channelFragment);
+		fragmentList.add(recomendFragment);
 
 		viewPager.setAdapter(new CustomViewPagerAdapter(
 				getChildFragmentManager(), fragmentList));
@@ -58,7 +58,7 @@ public class FindFragment extends BaseFragment {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						((HomeActivity) getActivity()).titleMiddleRecommend
-								.setBackgroundResource(R.drawable.title_middle_recommend_shape_enable);
+								.setBackgroundResource(R.drawable.title_middle_channel_shape_enable);
 						((HomeActivity) getActivity()).titleMiddleRecommend
 								.setTextColor(getResources().getColor(
 										R.color.main_title_color));
@@ -69,7 +69,7 @@ public class FindFragment extends BaseFragment {
 								.setTextColor(getResources().getColor(
 										R.color.white));
 
-						viewPager.setCurrentItem(0, true);
+						viewPager.setCurrentItem(1, true);
 					}
 				});
 		((HomeActivity) getActivity()).titleMiddleChannel
@@ -79,7 +79,7 @@ public class FindFragment extends BaseFragment {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						((HomeActivity) getActivity()).titleMiddleChannel
-								.setBackgroundResource(R.drawable.title_middle_channel_shape_enable);
+								.setBackgroundResource(R.drawable.title_middle_recommend_shape_enable);
 						((HomeActivity) getActivity()).titleMiddleChannel
 								.setTextColor(getResources().getColor(
 										R.color.main_title_color));
@@ -90,7 +90,7 @@ public class FindFragment extends BaseFragment {
 								.setTextColor(getResources().getColor(
 										R.color.white));
 
-						viewPager.setCurrentItem(1, true);
+						viewPager.setCurrentItem(0, true);
 					}
 				});
 	}

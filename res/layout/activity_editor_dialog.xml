@@ -12,10 +12,11 @@
         android:orientation="vertical" >
 
         <TextView 
+            android:id="@+id/dialog_content"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:background="#ffffff"
-            android:text="您确定彻底删除该录音？"
+            android:text=""
             android:textSize="18sp"
             android:gravity="center"
             android:textColor="#000000"/>
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/editor_play_delete_cancle"
+                android:id="@+id/cancle"
                 android:layout_width="0dp"
                 android:layout_height="43dp"
                 android:layout_weight="1"
@@ -46,7 +47,7 @@
                 android:background="#888899" />
 
             <Button
-                android:id="@+id/editor_play_delete_confirm"
+                android:id="@+id/confirm"
                 android:layout_width="0dp"
                 android:layout_height="43dp"
                 android:layout_weight="1"
