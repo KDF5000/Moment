@@ -38,7 +38,8 @@ public class FindListViewAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private List<Moment> momentList;// 灵感列表
 	private DisplayImageOptions options;// 图片设置选项
-//	private User user;
+
+	// private User user;
 
 	public FindListViewAdapter(Context context, List<Moment> momentList,
 			DisplayImageOptions options) {
@@ -130,8 +131,9 @@ public class FindListViewAdapter extends BaseAdapter {
 
 		momentHolder.commentNum.setText(moment.getCommentNum() + "");
 		momentHolder.labelTv.setText(moment.getLabel());
-		
-		final User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+
+		final User user = (User) SharedPreferencesUtil.getInstance().getObject(
+				C.SPKey.SPK_LOGIN_INFO);
 
 		// listviewItem 点击进入详情页
 		momentHolder.articleContent.setOnClickListener(new OnClickListener() {
@@ -321,16 +323,17 @@ public class FindListViewAdapter extends BaseAdapter {
 	 * @param isFlag
 	 * @param flagName
 	 * @param userId
-	 * @param momentId 当用于关注作者时，该字段为被关注用户的id
+	 * @param momentId
+	 *            当用于关注作者时，该字段为被关注用户的id
 	 * @param url
 	 */
 	public void requestServer(int isFlag, String flagName, long userId,
 			long momentId, String url, String modelName) {
 		RequestParams params = new RequestParams();
 		params.put("userId", userId);
-		if(modelName.equals("User")){
+		if (modelName.equals("User")) {
 			params.put("attentionUserId", momentId);
-		}else{
+		} else {
 			params.put("momentId", momentId);
 		}
 		params.put(flagName, isFlag);

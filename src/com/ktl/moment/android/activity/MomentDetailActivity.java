@@ -106,6 +106,7 @@ public class MomentDetailActivity extends BaseActivity {
 
 		setMiddleTitleVisible(true);
 		setTitleBackImgVisible(true);
+		setTitleBackImg(R.drawable.title_return_white);
 		setBaseActivityBgColor(getResources()
 				.getColor(R.color.main_title_color));
 		setMiddleTitleName(R.string.moment_detail_text_view);
@@ -113,7 +114,6 @@ public class MomentDetailActivity extends BaseActivity {
 
 		initMomentDetail();
 		getCommentData();
-//		tmp();
 
 		commentListViewAdapter = new CommentListViewAdapter(this, commentList,
 				getDisplayImageOptions());

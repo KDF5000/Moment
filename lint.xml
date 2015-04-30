@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="ContentDescription">
+        <ignore path="res/layout/activity_msg_remind.xml" />
         <ignore path="res/layout/activity_setting.xml" />
         <ignore path="res/layout/msg_notificaiton_adapter.xml" />
     </issue>

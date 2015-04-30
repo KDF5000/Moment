@@ -44,24 +44,27 @@ public class DynamicFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View view = inflater.inflate(R.layout.fragment_dynamic, container, false);
-		findListView = (ZrcListView) view.findViewById(R.id.fragment_dynamic_list);
-		
-		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
-		if(user==null){
-			Intent intent = new Intent(getActivity(),AccountActivity.class);
+		View view = inflater.inflate(R.layout.fragment_dynamic, container,
+				false);
+		findListView = (ZrcListView) view
+				.findViewById(R.id.fragment_dynamic_list);
+
+		User user = (User) SharedPreferencesUtil.getInstance().getObject(
+				C.SPKey.SPK_LOGIN_INFO);
+		if (user == null) {
+			Intent intent = new Intent(getActivity(), AccountActivity.class);
 			startActivity(intent);
 			getActivity().finish();
 		}
 		userId = user.getUserId();
-		
+
 		momentList = new ArrayList<Moment>();
 		initView();
 		// 从服务端获取数据
 		getDataFromServer();
 		findListView.setAdapter(findListViewAdapter);
 		initEvent();
-		
+
 		return view;
 	}
 
@@ -92,7 +95,7 @@ public class DynamicFragment extends BaseFragment {
 				// 刷新开始
 				pageNum = 0;
 				getDataFromServer();
-				Log.i(TAG+"-->pageNum", pageNum+"");
+				Log.i(TAG + "-->pageNum", pageNum + "");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -111,7 +114,7 @@ public class DynamicFragment extends BaseFragment {
 				// 加载更多
 				pageNum++;
 				getDataFromServer();
-				Log.i(TAG+"-->pageNum", pageNum+"");
+				Log.i(TAG + "-->pageNum", pageNum + "");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -123,34 +126,36 @@ public class DynamicFragment extends BaseFragment {
 			}
 		});
 	}
-	
-	private void getDataFromServer(){
+
+	private void getDataFromServer() {
 		if (momentList == null) {
 			momentList = new ArrayList<Moment>();
 		}
-		if(findListViewAdapter == null){
-			findListViewAdapter = new FindListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
+		if (findListViewAdapter == null) {
+			findListViewAdapter = new FindListViewAdapter(getActivity(),
+					momentList, getDisplayImageOptions());
 		}
 		RequestParams params = new RequestParams();
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", userId);
-		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST, params, new HttpCallBack() {
-			
-			@SuppressWarnings("unchecked")
-			@Override
-			public void onSuccess(Object res) {
-				// TODO Auto-generated method stub
-				List <Moment> moment = (List<Moment>) res;
-				momentList.addAll(moment);
-				findListViewAdapter.notifyDataSetChanged();
-			}
-			
-			@Override
-			public void onFailure(Object res) {
-				// TODO Auto-generated method stub
-				ToastUtil.show(getActivity(), (String)res);
-			}
-		}, "Moment");
+		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST,
+				params, new HttpCallBack() {
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						List<Moment> moment = (List<Moment>) res;
+						momentList.addAll(moment);
+						findListViewAdapter.notifyDataSetChanged();
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(getActivity(), (String) res);
+					}
+				}, "Moment");
 	}
 }
