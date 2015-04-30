@@ -17,6 +17,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
@@ -46,9 +48,17 @@ public class MsgRemindActivity extends BaseActivity {
 	@ViewInject(R.id.msg_under_tag)
 	private ImageView underTag;
 
+	@ViewInject(R.id.msg_main_layout)
+	private RelativeLayout mainLayout;
+
+	@ViewInject(R.id.msg_menu_layout)
+	private LinearLayout menuLayout;
+
 	private List<Fragment> fragmentList;
 	private int width;// 下方的小滑块的宽度
 	private int currentItem = 0;
+
+	private boolean isShow = false;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -115,13 +125,29 @@ public class MsgRemindActivity extends BaseActivity {
 		msgViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
 	}
 
-	@OnClick({ R.id.title_back_img, R.id.title_right_img })
+	@OnClick({ R.id.title_back_img, R.id.title_right_img, R.id.msg_main_layout,
+			R.id.msg_menu_layout })
 	public void click(View v) {
 		switch (v.getId()) {
 		case R.id.title_back_img:
 			finish();
 			break;
 		case R.id.title_right_img:
+			if (!isShow) {
+				mainLayout.setVisibility(View.VISIBLE);
+				isShow = true;
+			} else {
+				mainLayout.setVisibility(View.GONE);
+				isShow = false;
+			}
+			break;
+		case R.id.msg_main_layout:
+			if (isShow) {
+				mainLayout.setVisibility(View.GONE);
+				isShow = false;
+			}
+			break;
+		case R.id.msg_menu_layout:
 
 			break;
 		default:
