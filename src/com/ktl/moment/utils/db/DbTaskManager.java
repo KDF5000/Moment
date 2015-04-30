@@ -13,10 +13,10 @@ public class DbTaskManager {
 		taskPool = Executors.newCachedThreadPool();
 	}
 
-	public void addTask(DbTaskType dbTaskType, List<?> entities,
+	public void addTask(int taskId,DbTaskType dbTaskType, List<?> entities,
 			Class<?> entityType, DbTaskHandler taskHandler) {
 		try {
-			taskPool.execute(new TaskThread(dbTaskType, entities, entityType,
+			taskPool.execute(new TaskThread(taskId,dbTaskType, entities, entityType,
 					taskHandler));
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -30,13 +30,14 @@ public class DbTaskManager {
 		private DbTaskType dbTaskType;
 		private List<?> entities;
 		private Class<?> entityType;
-
-		public TaskThread(DbTaskType dbTaskType, List<?> entities,
+		private int taskId;
+		public TaskThread(int taskId,DbTaskType dbTaskType, List<?> entities,
 				Class<?> entityType, DbTaskHandler taskHandler) {
 			this.dbTaskType = dbTaskType;
 			this.entities = entities;
 			this.entityType = entityType;
 			this.taskHandler = taskHandler;
+			this.taskId = taskId;
 		}
 
 		@Override
@@ -45,7 +46,7 @@ public class DbTaskManager {
 			Object res = null;
 			switch (this.dbTaskType) {
 			case saveOrUpdate:
-
+				DBManager.getInstance().saveOrUpdate(entities.get(0));
 				break;
 			case saveOrUpdateAll:
 
@@ -71,6 +72,7 @@ public class DbTaskManager {
 			if (this.taskHandler != null) {
 				Message msg = this.taskHandler.obtainMessage();
 				msg.obj = "res";//改为结果
+				msg.what = this.taskId;
 				this.taskHandler.sendMessage(msg);
 			}
 		}

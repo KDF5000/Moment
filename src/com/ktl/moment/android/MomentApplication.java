@@ -1,6 +1,7 @@
 package com.ktl.moment.android;
 
 import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.db.DBManager;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -37,5 +38,6 @@ public class MomentApplication extends Application {
 
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config.build());
+		
 	}
 }

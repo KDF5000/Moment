@@ -2,6 +2,7 @@ package com.ktl.moment.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -148,5 +149,11 @@ public class SettingActivity extends BaseActivity {
 			weiboBindingImg.setImageResource(R.drawable.setting_unbindling);
 			isBindingWeibo = false;
 		}
+	}
+
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		
 	}
 }

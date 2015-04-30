@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.ListView;
 
@@ -121,5 +122,11 @@ public class RecommendAuthorActivity extends BaseActivity {
 						ToastUtil.show(RecommendAuthorActivity.this, "请稍后重试");
 					}
 				}, "User");
+	}
+
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		
 	}
 }

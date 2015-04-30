@@ -3,6 +3,7 @@ package com.ktl.moment.android.activity;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
@@ -37,6 +38,7 @@ import com.ktl.moment.android.component.ResizeLinearLayout.OnResizeListener;
 import com.ktl.moment.android.component.RichEditText;
 import com.ktl.moment.android.component.RippleBackground;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.QiniuToken;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.manager.TaskManager;
@@ -48,6 +50,8 @@ import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
 import com.ktl.moment.utils.TimerCountUtil;
 import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.db.DbTaskHandler;
+import com.ktl.moment.utils.db.DbTaskType;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -183,6 +187,8 @@ public class EditorActivity extends BaseActivity {
 			super.handleMessage(msg);
 		}
 	}
+
+	private DbTaskHandler dbTaskHandler = new DbTaskHandler(this);// 保存数据库的handler
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -380,7 +386,8 @@ public class EditorActivity extends BaseActivity {
 			// 弹出dialog
 			Intent intent = new Intent(this, SimpleDialogActivity.class);
 			intent.putExtra("content", "您确定彻底删除该录音？");
-			startActivityForResult(intent, C.ActivityRequest.REQUEST_DIALOG_ACTIVITY);
+			startActivityForResult(intent,
+					C.ActivityRequest.REQUEST_DIALOG_ACTIVITY);
 
 			// 先暂停音频播放
 			RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
@@ -563,7 +570,7 @@ public class EditorActivity extends BaseActivity {
 
 		// 设置seekbar不可以被拖动
 		editorPlaySeekbar.setEnabled(false);
-		
+
 		editorRecordAudio.setImageResource(R.drawable.audio_frame_anim);
 		animationDrawable = (AnimationDrawable) editorRecordAudio.getDrawable();
 		animationDrawable.start();
@@ -654,7 +661,7 @@ public class EditorActivity extends BaseActivity {
 				R.anim.right_out);
 		audioPlayLayout.setAnimation(animRightOut);
 		audioPlayLayout.setVisibility(View.GONE);
-		
+
 		editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 
 		isPlaying = false;
@@ -686,6 +693,12 @@ public class EditorActivity extends BaseActivity {
 					}, "QiniuToken");
 		} else {
 			// 保存到本地
+			Moment moment = new Moment();
+			moment.setTitle("我是一条灵感");
+			moment.setContent(editText.getText().toString());
+			moment.setAuthorId(1);
+			moment.setAuthorName("KDF5000");
+			saveMomentDb(moment);
 		}
 	}
 
@@ -797,7 +810,7 @@ public class EditorActivity extends BaseActivity {
 						EditorActivity.this, R.anim.right_out);
 				audioPlayLayout.setAnimation(animRightOut);
 				audioPlayLayout.setVisibility(View.GONE);
-				
+
 				editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 				break;
 			}
@@ -884,8 +897,35 @@ public class EditorActivity extends BaseActivity {
 		isSeekBarPause = true;
 		isNewStart = true;
 		isPlaying = false;
-		
+
 		TimerCountUtil.getInstance().stopTimerCount();
 		TimerCountUtil.getInstance().clearTimerCount();
+	}
+
+	/**
+	 * 保存灵感到本地数据库
+	 * @param moment
+	 */
+	private void saveMomentDb(Moment moment) {
+		if (moment == null) {
+			return;
+		}
+		List<Moment> list = new ArrayList<Moment>();
+		list.add(moment);
+		saveDbDataAsync(C.DbTaskId.EDITOR_MOMENT_SAVE, DbTaskType.saveOrUpdate,
+				Moment.class, list, dbTaskHandler);
+	}
+
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		int taskId = res.what;
+		switch (taskId) {
+		case C.DbTaskId.EDITOR_MOMENT_SAVE:
+			ToastUtil.show(this, "保存成功");
+			break;
+		default:
+			break;
+		}
 	}
 }

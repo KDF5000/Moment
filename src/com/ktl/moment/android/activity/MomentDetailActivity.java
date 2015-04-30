@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -310,6 +311,12 @@ public class MomentDetailActivity extends BaseActivity {
 				
 			}
 		}, "User");
+	}
+
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
