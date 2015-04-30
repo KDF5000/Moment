@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -233,5 +234,12 @@ public class BaseActivity extends FragmentActivity {
 				.cacheInMemory(true).bitmapConfig(Bitmap.Config.RGB_565)
 				.considerExifParams(true).build();
 		return options;
+	}
+	/**
+	 * 数据库任务操作的回调 子类重写
+	 * @param res
+	 */
+	public void OnDbTaskComplete (Message res){
+		
 	}
 }
