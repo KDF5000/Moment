@@ -2,14 +2,20 @@
 <lint>
     <issue id="ContentDescription">
         <ignore path="res/layout/activity_setting.xml" />
+        <ignore path="res/layout/msg_notificaiton_adapter.xml" />
     </issue>
     <issue id="HardcodedText">
         <ignore path="res/layout/activity_setting.xml" />
+        <ignore path="res/layout/msg_notificaiton_adapter.xml" />
     </issue>
     <issue id="SmallSp">
         <ignore path="res/layout/activity_setting.xml" />
+        <ignore path="res/layout/msg_notificaiton_adapter.xml" />
     </issue>
     <issue id="UseCompoundDrawables">
         <ignore path="res/layout/msg_new_fans_adapter.xml" />
+    </issue>
+    <issue id="UselessParent">
+        <ignore path="res/layout/msg_notificaiton_adapter.xml" />
     </issue>
 </lint>
