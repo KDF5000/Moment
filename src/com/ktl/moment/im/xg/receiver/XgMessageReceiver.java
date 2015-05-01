@@ -1,6 +1,7 @@
 package com.ktl.moment.im.xg.receiver;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.tencent.android.tpush.XGPushBaseReceiver;
 import com.tencent.android.tpush.XGPushClickedResult;
@@ -45,7 +46,7 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 	@Override
 	public void onTextMessage(Context arg0, XGPushTextMessage arg1) {
 		// TODO Auto-generated method stub
-
+		Log.i("xgTag", "shoudao");
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.ktl.moment.android.activity;
 
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -19,6 +20,7 @@ import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.tencent.android.tpush.XGIOperateCallback;
+import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
 
 public class HomeActivity extends BaseActivity {
@@ -201,12 +203,13 @@ public class HomeActivity extends BaseActivity {
 	 */
 	public void registXgPush(){
 		int userId = 0;
-		XGPushManager.registerPush(getApplicationContext(), userId+"12", new XGIOperateCallback() {
+		XGPushConfig.enableDebug(this, true);
+		XGPushManager.registerPush(getApplicationContext(), "123", new XGIOperateCallback() {
 			
 			@Override
 			public void onSuccess(Object data, int flag) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(HomeActivity.this, "注册成功"+data);
+				ToastUtil.show(HomeActivity.this, "注册成功"+XGPushConfig.getAccessId(getApplicationContext()));
 			}
 			
 			@Override

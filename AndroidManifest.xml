@@ -103,7 +103,7 @@
             <intent-filter>
 
                 <!-- 【必须】 请修改为当前APP名包.PUSH_ACTION，如demo的包名为：com.qq.xgdemo -->
-                <action android:name="com.example.xgdemo.PUSH_ACTION" />
+                <action android:name="com.ktl.moment.PUSH_ACTION" />
             </intent-filter>
         </service>
 
@@ -122,11 +122,11 @@
         <!-- 【必须】 请修改为APP的AccessId，“21”开头的10位数字，中间没空格 -->
         <meta-data
             android:name="XG_V2_ACCESS_ID"
-            android:value="2100108218" />
+            android:value="2100108290" />
         <!-- 【必须】 请修改为APP的AccessKey，“A”开头的12位字符串，中间没空格 -->
         <meta-data
             android:name="XG_V2_ACCESS_KEY"
-            android:value="A71UF25XIY3I" />
+            android:value="AV5BF528J1NL" />
 
         <!-- **************************** 信鸽服务 end ************************ -->
 
