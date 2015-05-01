@@ -5,6 +5,7 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -325,6 +326,12 @@ public class AccountActivity extends BaseActivity implements OnLoginListener,
 		if(fg!=null){
 			fg.onActivityResult(requestCode, resultCode, data);
 		}
+		
+	}
+
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
 		
 	}
 }

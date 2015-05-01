@@ -1,7 +1,10 @@
 package com.ktl.moment.android.activity;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +16,8 @@ import com.ktl.moment.android.component.BottomMenu;
 import com.ktl.moment.android.component.BottomMenu.OnMenuItemClickListener;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.db.DbTaskHandler;
+import com.ktl.moment.utils.db.DbTaskType;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushManager;
 
@@ -23,6 +28,8 @@ public class HomeActivity extends BaseActivity {
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
 	private String currentFgTag = "";// 一定要和需要默认显示的fragment 不一样
+
+	private DbTaskHandler dbTaskHandler = new DbTaskHandler(this);
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -49,12 +56,12 @@ public class HomeActivity extends BaseActivity {
 		setHomeTitleVisible(true);
 		setTitleTvName(R.string.attention_text_view);
 		setBaseActivityBgColor(getResources()
-				.getColor(R.color.main_title_color));//设置title颜色
+				.getColor(R.color.main_title_color));// 设置title颜色
 		setBaseContainerBgColor(getResources().getColor(
-				R.color.main_content_container_color));//设置内容区域颜色
+				R.color.main_content_container_color));// 设置内容区域颜色
 		customMenu = (BottomMenu) findViewById(R.id.bottom_menu);
 		customMenu.setDefaultCheckedMenu(R.id.menu_foucs);
-		
+
 	}
 
 	/**
@@ -80,7 +87,8 @@ public class HomeActivity extends BaseActivity {
 					setMiddleFindTabVisible(false);
 					break;
 				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
-					Intent editorIntent = new Intent(HomeActivity.this, EditorActivity.class);
+					Intent editorIntent = new Intent(HomeActivity.this,
+							EditorActivity.class);
 					startActivity(editorIntent);
 					return;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:
@@ -210,4 +218,40 @@ public class HomeActivity extends BaseActivity {
 		});
 	}
 
+	/**
+	 * 数据库操作的回调
+	 */
+	@Override
+	public void OnDbTaskComplete(Message res) {
+		// TODO Auto-generated method stub
+		int taskId = res.what;
+		switch (taskId) {
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 保存数据到数据库
+	 * 
+	 * @param taskId
+	 * @param entityType
+	 * @param datas
+	 */
+	public void saveDbData(int taskId, Class<?> entityType, List<?> datas) {
+		// 可以根据不同的任务 设置不同的tasktype
+		saveDbDataAsync(taskId, DbTaskType.saveOrUpdateAll, entityType, datas,
+				dbTaskHandler);
+	}
+
+	/**
+	 * 从数据库获取数据
+	 * 
+	 * @param taskId
+	 * @param entityType
+	 */
+	public void getDbData(int taskId, Class<?> entityType) {
+		// 可以根据不同的任务 设置不同的tasktype
+		getDbDataAsync(taskId, DbTaskType.findByPage, entityType, dbTaskHandler);
+	}
 }

@@ -14,6 +14,7 @@ import com.ktl.moment.android.activity.EditInfoActivity;
 import com.ktl.moment.android.activity.MyFocusActivty;
 import com.ktl.moment.android.activity.MsgRemindActivity;
 import com.ktl.moment.android.activity.SettingActivity;
+import com.ktl.moment.android.activity.WPActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.common.constant.C;
@@ -50,9 +51,15 @@ public class MeFragment extends BaseFragment {
 
 	@ViewInject(R.id.me_edit_info_layout)
 	private LinearLayout meEditInfoLayout;
-	
+
 	@ViewInject(R.id.me_notification_layout)
 	private LinearLayout meNotificationLayout;
+
+	@ViewInject(R.id.me_watched_layout)
+	private LinearLayout meWatchedLayout;
+
+	@ViewInject(R.id.me_praise_layout)
+	private LinearLayout mePraiseLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,7 +94,8 @@ public class MeFragment extends BaseFragment {
 	}
 
 	@OnClick({ R.id.me_setting_layout, R.id.me_my_focus, R.id.me_my_fans,
-			R.id.me_edit_info_layout,R.id.me_notification_layout })
+			R.id.me_edit_info_layout, R.id.me_notification_layout,
+			R.id.me_watched_layout, R.id.me_praise_layout })
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.me_setting_layout:
@@ -114,6 +122,18 @@ public class MeFragment extends BaseFragment {
 			Intent notificationIntent = new Intent(getActivity(),
 					MsgRemindActivity.class);
 			startActivity(notificationIntent);
+			break;
+		case R.id.me_watched_layout:
+			Intent watchedIntent = new Intent(getActivity(),
+					WPActivity.class);
+			watchedIntent.putExtra("wp", "watch");
+			startActivity(watchedIntent);
+			break;
+		case R.id.me_praise_layout:
+			Intent praisedIntent = new Intent(getActivity(),
+					WPActivity.class);
+			praisedIntent.putExtra("wp", "praise");
+			startActivity(praisedIntent);
 			break;
 		default:
 			break;

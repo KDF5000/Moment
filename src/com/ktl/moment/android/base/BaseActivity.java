@@ -5,6 +5,7 @@
  */
 package com.ktl.moment.android.base;
 
+import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -23,9 +25,13 @@ import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.manager.AppManager;
+import com.ktl.moment.utils.db.DBManager;
+import com.ktl.moment.utils.db.DbTaskHandler;
+import com.ktl.moment.utils.db.DbTaskManager;
+import com.ktl.moment.utils.db.DbTaskType;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
-public class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends FragmentActivity {
 
 	protected TextView titleNameTv;
 	protected RelativeLayout baseTitleReLayout;
@@ -40,6 +46,7 @@ public class BaseActivity extends FragmentActivity {
 	public TextView titleMiddleRecommend;
 	public TextView titleMiddleChannel;
 
+	private DbTaskManager taskManager;
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -50,6 +57,11 @@ public class BaseActivity extends FragmentActivity {
 		findViews();
 		hideAllNavigationInfo();
 		AppManager.getInstance().addActivity(this);
+		
+		//数据库操作管理类
+		taskManager = new DbTaskManager();
+		//init db
+		DBManager.getInstance().init(this);
 	}
 
 	private void findViews() {
@@ -234,4 +246,29 @@ public class BaseActivity extends FragmentActivity {
 				.considerExifParams(true).build();
 		return options;
 	}
+	/**
+	 * 数据库任务操作的回调 子类重写
+	 * @param res
+	 * @return 
+	 */
+	public abstract void OnDbTaskComplete (Message res);
+	/**
+	 * 异步保存数据到数据库
+	 * @param taskType
+	 * @param entityType
+	 * @param entities
+	 */
+	protected void saveDbDataAsync(int taskId,DbTaskType taskType,Class<?> entityType,List<?> entities,DbTaskHandler handler){
+		taskManager.addTask(taskId,taskType, entities, entityType, handler);
+	}
+	/**
+	 * 从本地数据库获取数据
+	 * @param taskType
+	 * @param entityType
+	 * @param handler
+	 */
+	protected void getDbDataAsync(int taskId,DbTaskType taskType,Class<?> entityType,DbTaskHandler handler){
+		taskManager.addTask(taskId,taskType, null, entityType, handler);
+	}
+	
 }

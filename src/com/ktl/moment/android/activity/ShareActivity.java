@@ -7,8 +7,10 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,8 +37,9 @@ public class ShareActivity extends Activity {
 	}
 
 	private void initAnim() {
-		Animation anim = AnimationUtils.loadAnimation(this, R.anim.share_card_in);
-		shareContent.setAnimation(anim);
+		Animation animIn = AnimationUtils.loadAnimation(this,
+				R.anim.share_card_in);
+		shareContent.setAnimation(animIn);
 	}
 
 	@OnClick({ R.id.share_blank_content, R.id.share_cancle })
@@ -44,9 +47,31 @@ public class ShareActivity extends Activity {
 		switch (v.getId()) {
 		case R.id.share_blank_content:
 		case R.id.share_cancle:
-			Animation anim = AnimationUtils.loadAnimation(this, R.anim.share_card_out);
-			shareContent.setAnimation(anim);
-			finish();
+			Animation animOut = AnimationUtils.loadAnimation(this,
+					R.anim.share_card_out);
+			shareContent.startAnimation(animOut);
+			Log.i("tag", "click");
+			animOut.setAnimationListener(new AnimationListener() {
+
+				@Override
+				public void onAnimationStart(Animation animation) {
+					// TODO Auto-generated method stub
+					Log.i("anim", "start");
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+					// TODO Auto-generated method stub
+					Log.i("anim", "repeat");
+				}
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					// TODO Auto-generated method stub
+					Log.i("anim", "end");
+					finish();
+				}
+			});
 			break;
 		default:
 			break;
