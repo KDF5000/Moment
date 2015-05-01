@@ -4,6 +4,10 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="libs/universal-image-loader-1.9.3.jar"/>
+	<classpathentry kind="lib" path="libs/jg_filter_sdk_1.1.jar"/>
+	<classpathentry kind="lib" path="libs/mid-sdk-2.10.jar"/>
+	<classpathentry kind="lib" path="libs/wup-1.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/Xg_sdk_v2.38_20150405_2046.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>

@@ -213,7 +213,7 @@ public class DragGridView extends GridView{
             //如果我们在按下的item上面移动，只要不超过item的边界我们就不移除mRunnable  
             if(!isTouchInItem(mStartDragItemView, moveX, moveY)){  
                 mHandler.removeCallbacks(mLongClickRunnable);  
-            }  
+            }
             break;  
         case MotionEvent.ACTION_UP:  
             mHandler.removeCallbacks(mLongClickRunnable);  

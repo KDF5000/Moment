@@ -1,10 +1,13 @@
 package com.ktl.moment.android;
 
+import com.ktl.moment.config.AppConfig;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.tencent.android.tpush.XGPushConfig;
+import com.tencent.android.tpush.XGPushManager;
 
 import android.app.Application;
 import android.content.Context;
@@ -16,8 +19,10 @@ public class MomentApplication extends Application {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		initImageLoader(this);
-		// 初始化sharedPreferences,暂时放在这里，后续会迁移至第一次打开的那个页面
+		// 初始化sharedPreferences
 		SharedPreferencesUtil.initSharedPreferences(getApplicationContext());
+		//配置信鸽
+		XGPushConfig.enableDebug(this, AppConfig.MODE_DEVELOP);
 	}
 
 	public static void initImageLoader(Context context) {

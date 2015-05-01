@@ -12,6 +12,9 @@ import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.BottomMenu;
 import com.ktl.moment.android.component.BottomMenu.OnMenuItemClickListener;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.utils.ToastUtil;
+import com.tencent.android.tpush.XGIOperateCallback;
+import com.tencent.android.tpush.XGPushManager;
 
 public class HomeActivity extends BaseActivity {
 	private static final String TAG = "HomeAtivity";
@@ -27,10 +30,13 @@ public class HomeActivity extends BaseActivity {
 		super.onCreate(arg0);
 		initView();
 		initEvent();
-
+		
 		// 初始为发现界面
 		fragmentManager = getSupportFragmentManager();// 获取fragment的管理器
 		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);// 设置默认的界面
+		
+		//注册信鸽
+		registXgPush();
 	}
 
 	/**
@@ -181,6 +187,27 @@ public class HomeActivity extends BaseActivity {
 			f = BaseFragment.getInstance(tag);
 		}
 		return f;
+	}
+	/**
+	 * 注册信鸽推送服务
+	 */
+	public void registXgPush(){
+		int userId = 0;
+		XGPushManager.registerPush(getApplicationContext(), userId+"12", new XGIOperateCallback() {
+			
+			@Override
+			public void onSuccess(Object data, int flag) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(HomeActivity.this, "注册成功"+data);
+			}
+			
+			@Override
+			public void onFail(Object data, int errCode, String msg) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(HomeActivity.this, "注册失败"+ msg);
+				
+			}
+		});
 	}
 
 }
