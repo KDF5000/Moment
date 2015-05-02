@@ -46,6 +46,7 @@ import com.ktl.moment.manager.TaskManager.TaskCallback;
 import com.ktl.moment.qiniu.QiniuTask;
 import com.ktl.moment.utils.BasicInfoUtil;
 import com.ktl.moment.utils.FileUtil;
+import com.ktl.moment.utils.RecordPlaySeekbarUtil;
 import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
 import com.ktl.moment.utils.TimerCountUtil;
@@ -159,9 +160,13 @@ public class EditorActivity extends BaseActivity {
 	private static final int PLAY_START = 0;
 	private static final int PLAY_PAUSE = 1;
 	private static final int PLAY_STOP = 2;
+	private boolean isClickPlayer = false;// 控制录音播放按钮不被重复点击，原则上只允许点击一次，除非退出播放界面
 	private boolean isPlaying = false; // 是否播放中
+	private boolean isReplay = false;// 是否重新播放
 
 	private boolean isConfirmDelete; // 录音播放栏删除音频的标识
+
+	private RecordPlaySeekbarUtil recordPlaySeekbarUtil;// seekbar工具类
 
 	private InputHandler inputHandler = new InputHandler();
 
@@ -380,7 +385,11 @@ public class EditorActivity extends BaseActivity {
 			closePlayer();
 			break;
 		case R.id.editor_play_start:
-			playerPause();
+			if (!isReplay) {
+				playerPause();
+			} else {
+				playerRestart();
+			}
 			break;
 		case R.id.editor_play_delete: {
 			// 弹出dialog
@@ -390,8 +399,8 @@ public class EditorActivity extends BaseActivity {
 					C.ActivityRequest.REQUEST_DIALOG_ACTIVITY);
 
 			// 先暂停音频播放
-			RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
-			pauseSeekBar();
+			RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
+			recordPlaySeekbarUtil.pauseSeekBar();
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
 			break;
 		}
@@ -555,41 +564,74 @@ public class EditorActivity extends BaseActivity {
 	}
 
 	/**
+	 * 用于通知主线程更新播放界面UI
+	 */
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1: {
+				editorRecordAudio.setImageResource(R.drawable.editor_audio3);
+				editorPlayStartImg
+						.setImageResource(R.drawable.editor_record_replay_selector);
+				isPlaying = recordPlaySeekbarUtil.stopSeekBar();
+				isReplay = true; // 播放完录音时将重播表示置为true
+				break;
+			}
+			}
+			super.handleMessage(msg);
+		};
+	};
+
+	/**
 	 * 进入录音播放栏,同时播放录音
 	 */
 	public void player() {
-		Animation animLeftOut = AnimationUtils.loadAnimation(this,
-				R.anim.left_out);
-		toolsLayout.setAnimation(animLeftOut);
-		toolsLayout.setVisibility(View.GONE);
+		if (!isClickPlayer) {
+			Animation animLeftOut = AnimationUtils.loadAnimation(this,
+					R.anim.left_out);
+			toolsLayout.setAnimation(animLeftOut);
+			toolsLayout.setVisibility(View.GONE);
 
-		audioPlayLayout.setVisibility(View.VISIBLE);
-		Animation animRightIn = AnimationUtils.loadAnimation(this,
-				R.anim.right_in);
-		audioPlayLayout.setAnimation(animRightIn);
+			audioPlayLayout.setVisibility(View.VISIBLE);
+			Animation animRightIn = AnimationUtils.loadAnimation(this,
+					R.anim.right_in);
+			audioPlayLayout.setAnimation(animRightIn);
 
-		// 设置seekbar不可以被拖动
-		editorPlaySeekbar.setEnabled(false);
+			// 初始化seekbar
+			editorPlaySeekbar.setEnabled(false);
+			recordPlaySeekbarUtil = new RecordPlaySeekbarUtil(
+					editorPlaySeekbar, handler);
 
+			// 没有播放，那就开始播放
+			if (!isPlaying) {
+				playerPlay();
+			}
+
+			isClickPlayer = true;
+		}
+	}
+
+	/**
+	 * 开始录音播放
+	 */
+	public void playerPlay() {
+		TimerCountUtil.getInstance().clearTimerCount();// 播放前进行一次强制清零计时
 		editorRecordAudio.setImageResource(R.drawable.audio_frame_anim);
 		animationDrawable = (AnimationDrawable) editorRecordAudio.getDrawable();
 		animationDrawable.start();
 
-		// 没有播放，那就开始播放
-		if (!isPlaying) {
-			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
+		editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
 
-			int duration = RecordUtil.getInstance().play(recordAudioPath,
-					PLAY_START);
-			String recordTime = TimerCountUtil.getInstance().turnInt2Time(
-					duration / 1000 + 1);
-			startSeekBar(duration / 1000);
-			editorPlayTimeTv.setText(recordTime);
+		int duration = RecordUtil.getInstance().play(recordAudioPath,
+				PLAY_START);
+		String recordTime = TimerCountUtil.getInstance().turnInt2Time(
+				duration / 1000 + 1);
+		recordPlaySeekbarUtil.startSeekBar(duration / 1000);
+		editorPlayTimeTv.setText(recordTime);
 
-			TimerCountUtil.getInstance().setTextView(editorPlayStatusTv);
-			isPlaying = true;
-		}
-
+		TimerCountUtil.getInstance().setTextView(editorPlayStatusTv);
+		isPlaying = true;
 	}
 
 	/**
@@ -600,17 +642,25 @@ public class EditorActivity extends BaseActivity {
 		if (isPlaying) {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
 			RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
-			pauseSeekBar();
+			recordPlaySeekbarUtil.pauseSeekBar();
 			animationDrawable.stop();
 			isPlaying = false;
 		} else {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
 			int duration = RecordUtil.getInstance().play(recordAudioPath,
 					PLAY_START);
-			restartSeekBar(duration / 1000);
+			recordPlaySeekbarUtil.restartSeekBar(duration / 1000);
 			animationDrawable.start();
 			isPlaying = true;
 		}
+	}
+
+	/**
+	 * 重播录音
+	 */
+	public void playerRestart() {
+		isReplay = false; // 重播录音时将重播表示置为false
+		playerPlay();
 	}
 
 	/**
@@ -642,6 +692,8 @@ public class EditorActivity extends BaseActivity {
 				// 隐藏小喇叭图标
 				editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 				editorRecordAudio.setVisibility(View.GONE);
+
+				isClickPlayer = false;
 			} else {
 				ToastUtil.show(this, "录音文件删除失败");
 			}
@@ -652,6 +704,8 @@ public class EditorActivity extends BaseActivity {
 	 * 关闭录音播放栏
 	 */
 	public void closePlayer() {
+		RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
+
 		toolsLayout.setVisibility(View.VISIBLE);
 		Animation animLeftIn = AnimationUtils.loadAnimation(this,
 				R.anim.left_in);
@@ -664,7 +718,8 @@ public class EditorActivity extends BaseActivity {
 
 		editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 
-		isPlaying = false;
+		isPlaying = recordPlaySeekbarUtil.stopSeekBar();
+		isClickPlayer = false;
 	}
 
 	private void saveContent() {
@@ -786,124 +841,9 @@ public class EditorActivity extends BaseActivity {
 		}
 	}
 
-	/*********************************************
-	 * SeekBar status control *
-	 *********************************************/
-	private boolean isSeekBarPause; // seekbar是否暂停
-	private boolean isNewStart; // 是否是从头开始播放
-	private int startProgress = 0;
-
-	final Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1: {
-				editorPlayStartImg
-						.setImageResource(R.drawable.editor_record_start);
-
-				toolsLayout.setVisibility(View.VISIBLE);
-				Animation animLeftIn = AnimationUtils.loadAnimation(
-						EditorActivity.this, R.anim.left_in);
-				toolsLayout.setAnimation(animLeftIn);
-
-				Animation animRightOut = AnimationUtils.loadAnimation(
-						EditorActivity.this, R.anim.right_out);
-				audioPlayLayout.setAnimation(animRightOut);
-				audioPlayLayout.setVisibility(View.GONE);
-
-				editorRecordAudio.setImageResource(R.drawable.editor_audio3);
-				break;
-			}
-			}
-			super.handleMessage(msg);
-		};
-	};
-
-	public class SeekBarThread extends Thread {
-
-		private int maxProgress; // seekbar的最大值，这里为播放音频文件的时长
-
-		public SeekBarThread(int maxProgress) {
-			this.maxProgress = maxProgress;
-
-			editorPlaySeekbar.setMax(maxProgress * 20);
-		}
-
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			int endProgress = maxProgress * 20;
-			if (isNewStart) {
-				startProgress = 0;
-			}
-			editorPlaySeekbar.setProgress(startProgress);
-			while (startProgress <= endProgress && !isSeekBarPause) {
-				editorPlaySeekbar.setProgress(startProgress++);
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (editorPlaySeekbar.getProgress() == endProgress) {
-				stopSeekBar();
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
-			}
-		}
-	}
-
-	/**
-	 * 开始seekbar动画
-	 * 
-	 * @param maxProgress
-	 */
-	public void startSeekBar(int maxProgress) {
-		isSeekBarPause = false;
-		isNewStart = true;
-		SeekBarThread seekThread = new SeekBarThread(maxProgress);
-		seekThread.start();
-		TimerCountUtil.getInstance().startTimerCount();
-	}
-
-	/**
-	 * 暂停seekbar动画
-	 */
-	public void pauseSeekBar() {
-		isSeekBarPause = true;
-		isNewStart = false;
-		TimerCountUtil.getInstance().pauseTimerCount();
-	}
-
-	/**
-	 * 继续seekbar动画
-	 * 
-	 * @param maxProgress
-	 */
-	public void restartSeekBar(int maxProgress) {
-		isSeekBarPause = false;
-		isNewStart = false;
-		SeekBarThread seekThread = new SeekBarThread(maxProgress);
-		seekThread.start();
-		TimerCountUtil.getInstance().restartTimerCount();
-	}
-
-	/**
-	 * 停止seekbar
-	 */
-	public void stopSeekBar() {
-		isSeekBarPause = true;
-		isNewStart = true;
-		isPlaying = false;
-
-		TimerCountUtil.getInstance().stopTimerCount();
-		TimerCountUtil.getInstance().clearTimerCount();
-	}
-
 	/**
 	 * 保存灵感到本地数据库
+	 * 
 	 * @param moment
 	 */
 	private void saveMomentDb(Moment moment) {
