@@ -2,7 +2,6 @@ package com.ktl.moment.android.activity;
 
 import java.util.List;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -15,10 +14,16 @@ import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.BottomMenu;
 import com.ktl.moment.android.component.BottomMenu.OnMenuItemClickListener;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.User;
+import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.LogUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
+import com.ktl.moment.utils.net.ApiManager;
+import com.loopj.android.http.RequestParams;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
@@ -202,14 +207,35 @@ public class HomeActivity extends BaseActivity {
 	 * 注册信鸽推送服务
 	 */
 	public void registXgPush(){
-		int userId = 0;
+		final User user = Account.getUserInfo();
+		if(user == null){
+			return ;
+		}
 		XGPushConfig.enableDebug(this, true);
-		XGPushManager.registerPush(getApplicationContext(), "123", new XGIOperateCallback() {
+		XGPushManager.registerPush(getApplicationContext(), user.getUserId()+"1", new XGIOperateCallback() {
 			
 			@Override
 			public void onSuccess(Object data, int flag) {
 				// TODO Auto-generated method stub
 				ToastUtil.show(HomeActivity.this, "注册成功"+XGPushConfig.getAccessId(getApplicationContext()));
+				//向服务上传token
+				RequestParams params = new RequestParams();
+				params.put("user_id", user.getUserId());
+				params.put("xg_token", data);
+				ApiManager.getInstance().post(HomeActivity.this, C.API.XG_UPLOAD_TOKEN, params , new HttpCallBack() {
+					
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						LogUtil.i("信鸽token上传成功");
+					}
+					
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						LogUtil.i(res.toString());
+					}
+				}, "");
 			}
 			
 			@Override

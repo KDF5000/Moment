@@ -20,7 +20,9 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.component.LoadingDialog;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.TencentQQUtils;
 import com.ktl.moment.utils.SharedPreferencesUtil;
@@ -38,7 +40,6 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.UsersAPI;
 import com.sina.weibo.sdk.openapi.models.ErrorInfo;
-import com.sina.weibo.sdk.openapi.models.User;
 
 public class StartFragment extends AccountBaseFragment {
 
@@ -236,7 +237,7 @@ public class StartFragment extends AccountBaseFragment {
 		public void onComplete(String response) {
 			if (!TextUtils.isEmpty(response)) {
 				// 调用 User#parse 将JSON串解析成User对象
-				User user = User.parse(response);
+				com.sina.weibo.sdk.openapi.models.User user = com.sina.weibo.sdk.openapi.models.User.parse(response);
 				if (user != null) {
 					Toast.makeText(getActivity(),
 							"获取User信息成功，用户ID：" + user.id + "  用户昵称:"
@@ -308,8 +309,8 @@ public class StartFragment extends AccountBaseFragment {
 							ToastUtil.show(getActivity(), "登陆失败");
 							return ;
 						}
-						SharedPreferencesUtil.getInstance().putObject(
-								C.SPKey.SPK_LOGIN_INFO, user.get(0));
+						//保存用户信息
+						Account.saveUserInfo(user.get(0));
 						actionStart(HomeActivity.class);
 						dialog.dismiss();
 					}
