@@ -19,6 +19,7 @@ import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.User;
@@ -49,8 +50,7 @@ public class DynamicFragment extends BaseFragment {
 		findListView = (ZrcListView) view
 				.findViewById(R.id.fragment_dynamic_list);
 
-		User user = (User) SharedPreferencesUtil.getInstance().getObject(
-				C.SPKey.SPK_LOGIN_INFO);
+		User user = Account.getUserInfo();
 		if (user == null) {
 			Intent intent = new Intent(getActivity(), AccountActivity.class);
 			startActivity(intent);

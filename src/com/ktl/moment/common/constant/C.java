@@ -82,6 +82,10 @@ public class C {
 		 */
 		public static final String GET_COMMENT_LIST = URL_BASE
 				+ "MomentsService/Comments/getMoreComment";
+		/**
+		 * 上传信鸽token
+		 */
+		public static final String XG_UPLOAD_TOKEN = URL_BASE + "XgService/XgOperate/uploadToken";
 	}
 
 	/******************************************************************************
