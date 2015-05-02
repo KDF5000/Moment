@@ -69,6 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
-        android:src="@drawable/editor_close_player" />
+        android:src="@drawable/editor_close_player"
+        android:visibility="visible" />
 
 </LinearLayout>

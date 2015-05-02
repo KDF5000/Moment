@@ -236,6 +236,10 @@
             android:name="com.ktl.moment.android.activity.CommentActivity"
             android:windowSoftInputMode="adjustResize" >
         </activity>
+        <!-- 我关注的灵感页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.WPActivity">
+        </activity>
     </application>
 
 </manifest>

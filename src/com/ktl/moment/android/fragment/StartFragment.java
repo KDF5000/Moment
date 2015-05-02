@@ -22,7 +22,7 @@ import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.utils.QQShareHelper;
+import com.ktl.moment.utils.TencentQQUtils;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
@@ -69,7 +69,7 @@ public class StartFragment extends AccountBaseFragment {
 	public OnLoginListener onLoginListener;
 	public OnRegisterListener onRegisterListener;
 
-	private QQShareHelper qqShareHelper;
+	private TencentQQUtils tencentQQUtils;
 
 	public interface OnLoginListener {
 		public void login();
@@ -100,7 +100,7 @@ public class StartFragment extends AccountBaseFragment {
 	}
 
 	public void init() {
-		qqShareHelper = new QQShareHelper(getActivity());
+		tencentQQUtils = new TencentQQUtils(getActivity());
 	}
 
 	@OnClick({ R.id.start_qq_img, R.id.start_weibo_img, R.id.start_wechat_img,
@@ -111,7 +111,7 @@ public class StartFragment extends AccountBaseFragment {
 			weiboLogin();
 			break;
 		case R.id.start_qq_img:
-			qqShareHelper.qqLogin();
+			tencentQQUtils.qqLogin();
 			break;
 		case R.id.start_login:
 			startAnim(true);

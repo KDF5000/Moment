@@ -91,7 +91,7 @@ public class SettingActivity extends BaseActivity {
 	public void click(View v) {
 		switch (v.getId()) {
 		case R.id.setting_logout:
-			SharedPreferencesUtil.getInstance().delete(C.SPKey.SPK_IS_LOGIN);
+			SharedPreferencesUtil.getInstance().delete(C.SPKey.SPK_LOGIN_INFO);
 			Intent intent = new Intent(this, AccountActivity.class);
 			startActivity(intent);
 			finish();
