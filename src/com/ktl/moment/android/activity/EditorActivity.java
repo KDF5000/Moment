@@ -748,10 +748,18 @@ public class EditorActivity extends BaseActivity {
 					}, "QiniuToken");
 		} else {
 			// 保存到本地
+			Map<String,String> imgMap = RichEditUtils.extractImg(editText.getText().toString());
 			Moment moment = new Moment();
 			moment.setTitle("我是一条灵感");
+			if(!imgMap.isEmpty()){
+				for (Map.Entry<String, String> entry : imgMap.entrySet()) {
+					moment.setMomentImgs(entry.getValue());
+					break;
+				}
+			}
 			moment.setContent(editText.getText().toString());
 			moment.setAuthorId(1);
+			moment.setDirty(1);//本地的标志
 			moment.setAuthorName("KDF5000");
 			saveMomentDb(moment);
 		}

@@ -84,7 +84,7 @@ public class QiniuManager {
 	 * @param callback
 	 */
 	public void uploadFile(Context context,final File file,final String fileType,final QiniuRequestCallbBack callback){
-ApiManager.getInstance().get(context, C.API.GET_QINIU_TOKEN, null, new HttpCallBack() {
+		ApiManager.getInstance().get(context, C.API.GET_QINIU_TOKEN, null, new HttpCallBack() {
 			
 			@Override
 			public void onSuccess(Object res) {

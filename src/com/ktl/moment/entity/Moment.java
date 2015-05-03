@@ -8,16 +8,22 @@ public class Moment extends BaseEntity{
 	private long momentId;//灵感id
 	private String title;//标题
 	private String content;//内容
+	private int dirty;//是否同步，1:本地，0:同步过
+
 	private String momentImgs;//灵感内部的图片
+	private String audioUrl;//音频文件存储路径
+	
 	private String label;//灵感标签
 	private String postTime;//发布时间
+	
 	private int watchNum;//关注的用户个数
 	private int praiseNum;//点赞的用户个数
 	private int commentNum;//评论数
+	
 	private long authorId;//发表人的id
 	private String authorName;//作者昵称
 	private String userAvatar;//头像路径
-	private String audioUrl;//音频文件存储路径
+	
 
 	private int hasAudio;//是否带有录音 0：没有，1：有
 	private int isOpen;//是否公开	0：不公开，1：公开
@@ -140,6 +146,11 @@ public class Moment extends BaseEntity{
 	public void setAudioUrl(String audioUrl) {
 		this.audioUrl = audioUrl;
 	}
-	
+	public int getDirty() {
+		return dirty;
+	}
+	public void setDirty(int dirty) {
+		this.dirty = dirty;
+	}
 	
 }

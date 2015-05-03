@@ -86,6 +86,10 @@ public class C {
 		 * 上传信鸽token
 		 */
 		public static final String XG_UPLOAD_TOKEN = URL_BASE + "XgService/XgOperate/uploadToken";
+		/**
+		 * 上传灵感
+		 */
+		public static final String UPLOAD_MOMENT = URL_BASE + "";
 	}
 
 	/******************************************************************************
