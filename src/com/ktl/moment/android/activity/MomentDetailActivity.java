@@ -68,6 +68,7 @@ public class MomentDetailActivity extends BaseActivity {
 
 	@ViewInject(R.id.moment_comment_num)
 	private TextView commentsNum;// 灵感评论数
+	
 	/******************** end *********************/
 
 	private LayoutInflater mInflater;
@@ -104,7 +105,6 @@ public class MomentDetailActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		ViewUtils.inject(this, headerView);
 		commentsListView.addHeaderView(headerView, null, false);
-		
 		
 		setMiddleTitleVisible(true);
 		setTitleBackImgVisible(true);

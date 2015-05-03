@@ -1,6 +1,8 @@
 package com.ktl.moment.android.activity;
 
 import com.ktl.moment.R;
+import com.ktl.moment.entity.Moment;
+import com.ktl.moment.utils.TencentQQUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -13,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class ShareActivity extends Activity {
@@ -26,6 +29,24 @@ public class ShareActivity extends Activity {
 	@ViewInject(R.id.share_cancle)
 	private Button shareCancle;
 
+	@ViewInject(R.id.share_qq)
+	private ImageView shareQQ;
+
+	@ViewInject(R.id.share_zone)
+	private ImageView shareZone;
+
+	@ViewInject(R.id.share_wechat_friends)
+	private ImageView shareWechatFriends;
+
+	@ViewInject(R.id.share_moments)
+	private ImageView shareMoments;
+
+	@ViewInject(R.id.share_weibo)
+	private ImageView shareWeibo;
+
+	private Moment moment;
+	private TencentQQUtils tencentQQUtils;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -34,6 +55,11 @@ public class ShareActivity extends Activity {
 
 		ViewUtils.inject(this);
 		initAnim();
+
+		Bundle bundle = this.getIntent().getBundleExtra("share");
+		moment = (Moment) bundle.getSerializable("moment");
+
+		tencentQQUtils = new TencentQQUtils(this);
 	}
 
 	private void initAnim() {
@@ -42,7 +68,8 @@ public class ShareActivity extends Activity {
 		shareContent.setAnimation(animIn);
 	}
 
-	@OnClick({ R.id.share_blank_content, R.id.share_cancle })
+	@OnClick({ R.id.share_blank_content, R.id.share_cancle, R.id.share_qq,
+			R.id.share_zone })
 	public void click(View v) {
 		switch (v.getId()) {
 		case R.id.share_blank_content:
@@ -72,6 +99,12 @@ public class ShareActivity extends Activity {
 					finish();
 				}
 			});
+			break;
+		case R.id.share_qq:
+			tencentQQUtils.shareToQQFriends(moment);
+			break;
+		case R.id.share_zone:
+			tencentQQUtils.shareToQzone(moment);
 			break;
 		default:
 			break;

@@ -1,5 +1,6 @@
 package com.ktl.moment.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -7,6 +8,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -14,18 +16,21 @@ import android.text.TextUtils;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.net.ApiManager;
 import com.loopj.android.http.RequestParams;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
+import com.tencent.connect.share.QQShare;
+import com.tencent.connect.share.QzoneShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
 @SuppressLint("HandlerLeak")
-public class QQShareHelper {
+public class TencentQQUtils {
 
 	private Tencent tencent;
 	private Activity activity;
@@ -33,7 +38,7 @@ public class QQShareHelper {
 	private static final int FLAG_GET_QQ_USER_INFO_COMPLETE = 0;
 	private static final int FLAG_QQ_LOGIN = 1;
 
-	public QQShareHelper(Activity activity) {
+	public TencentQQUtils(Activity activity) {
 		this.activity = activity;
 		tencent = Tencent.createInstance(C.ThirdSdk.QQ_OPEN_FLAT_APP_ID,
 				activity.getApplicationContext());
@@ -163,7 +168,7 @@ public class QQShareHelper {
 		}
 	}
 
-	IUiListener qqLoginListener = new BaseUiListener() {
+	IUiListener tencentListener = new BaseUiListener() {
 		@Override
 		protected void doComplete(JSONObject values) {
 			ToastUtil.show(activity, "login");
@@ -174,7 +179,7 @@ public class QQShareHelper {
 
 	public void qqLogin() {
 		if (!tencent.isSessionValid()) {
-			tencent.login(activity, "all", qqLoginListener);
+			tencent.login(activity, "all", tencentListener);
 		} else {
 			tencent.logout(activity);
 			getQQUserInfo();
@@ -245,7 +250,7 @@ public class QQShareHelper {
 						List<User> user = (List<User>) res;
 						SharedPreferencesUtil.getInstance().putObject(
 								C.SPKey.SPK_LOGIN_INFO, user.get(0));
-						
+
 						Intent intent = new Intent(activity, HomeActivity.class);
 						activity.startActivity(intent);
 						activity.finish();
@@ -259,5 +264,62 @@ public class QQShareHelper {
 						ToastUtil.show(activity, (String) res);
 					}
 				}, "User");
+	}
+
+	/**
+	 * share moment to QQ friends
+	 * 
+	 * @param params
+	 */
+	public void shareToQQFriends(Moment moment) {
+		Bundle params = new Bundle();
+		params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,
+				QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+		params.putString(QQShare.SHARE_TO_QQ_TITLE, moment.getTitle());// 分享的标题
+		params.putString(QQShare.SHARE_TO_QQ_SUMMARY, moment.getContent());// 分享的内容
+		params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, moment.getMomentImgs());// 分享的图片
+		params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,
+				"http://www.hao123.com/?tn=90681109_hao_pg");// 被点击时跳转的页面，即用户浏览时看到的页面
+		params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "灵动");
+		doShareAsync(params, "qqFriends");
+	}
+
+	/**
+	 * share moment to Qzone
+	 * 
+	 * @param params
+	 */
+	public void shareToQzone(Moment moment) {
+		Bundle params = new Bundle();
+		params.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE,
+				QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
+		params.putString(QzoneShare.SHARE_TO_QQ_TITLE, moment.getTitle());
+		params.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, moment.getContent());
+		params.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL,
+				"http://www.hao123.com/?tn=90681109_hao_pg");// 必填
+		params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL,
+				new ArrayList<String>());//暂时这样写，这行不能删除，否则分享至Qzone不能正常工作
+		doShareAsync(params, "qzone");
+	}
+
+	/**
+	 * 执行异步分享
+	 * 
+	 * @param params
+	 */
+	private void doShareAsync(final Bundle params, final String shareType) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if (shareType.equals("qqFriends")) {
+					tencent.shareToQQ(activity, params, tencentListener);
+				}
+				if (shareType.equals("qzone")) {
+					tencent.shareToQzone(activity, params, tencentListener);
+				}
+			}
+		}).start();
 	}
 }
