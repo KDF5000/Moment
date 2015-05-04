@@ -226,7 +226,7 @@
         <!-- 日期选择对话框 -->
         <activity
             android:name="com.ktl.moment.android.activity.CustomDatePicker"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" >
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>
         <!-- 通知页面 -->
         <activity android:name="com.ktl.moment.android.activity.MsgRemindActivity" >
@@ -236,9 +236,13 @@
             android:name="com.ktl.moment.android.activity.CommentActivity"
             android:windowSoftInputMode="adjustResize" >
         </activity>
-        <!-- 我关注的灵感页面 -->
+        <!-- 我关注的和我点赞的灵感页面 -->
         <activity 
             android:name="com.ktl.moment.android.activity.WPActivity">
+        </activity>
+        <!-- 频道详情页 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.ChannelListActivity">
         </activity>
     </application>
 
