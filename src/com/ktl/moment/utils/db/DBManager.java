@@ -129,5 +129,17 @@ public class DBManager {
 		}
 		return null;
 	}
+	/**
+	 * 更新实体
+	 * @param entity
+	 * @param updateColumnNames
+	 */
+	public void update(Object entity,String ...updateColumnNames){
+		try {
+			db.update(entity, updateColumnNames);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 	
 }

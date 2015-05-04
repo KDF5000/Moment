@@ -1,7 +1,10 @@
 package com.ktl.moment.momentstore;
 
+import android.util.Log;
+
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.momentstore.MomentStoreUtil.syncLocalCallback;
+import com.ktl.moment.utils.db.DBManager;
 
 public class MomentSyncTask {
 
@@ -23,6 +26,9 @@ public class MomentSyncTask {
 			@Override
 			public void OnSuccess(Object res) {
 				// TODO Auto-generated method stub
+				mMoment.setDirty(0);
+				DBManager.getInstance().update(mMoment,"dirty");//更新数据库里的dirty字段
+				Log.i("MomentUpdae", mMoment.getDirty()+"");
 				mManager.finishSync(res);
 			}
 			

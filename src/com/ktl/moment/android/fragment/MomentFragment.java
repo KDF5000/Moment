@@ -108,7 +108,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		}
 		for (int i = 0; i < 20; i++) {
 			Moment moment = new Moment();
-			moment.setAuthorId(123);
+			moment.setAuthorId(i+123);
 			moment.setMomentId(i);
 			moment.setPostTime(postTime);
 			if (i % 3 == 0) {
@@ -128,7 +128,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				moment.setMomentImgs(null);
 			}
 			momentList.add(moment);
-			moment.setMomentUid(EncryptUtil.md5(123+"",i + "不再懊悔 App 自动生成器",postTime).hashCode());
+			moment.setMomentUid(EncryptUtil.md5((i+123)+"",i + "不再懊悔 App 自动生成器",postTime).hashCode());
 		}
 		
 		((HomeActivity)getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE, Moment.class, momentList);
