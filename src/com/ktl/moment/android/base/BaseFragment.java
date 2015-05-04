@@ -38,5 +38,4 @@ public class BaseFragment extends Fragment {
 	        .considerExifParams(true).build();
 		return options;
 	}
-	
 }

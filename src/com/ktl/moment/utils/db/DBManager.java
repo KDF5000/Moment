@@ -105,9 +105,9 @@ public class DBManager {
 	 * @param value
 	 * @return
 	 */
-	public <T> T findByCondition(Class<?> objClass,String columnName,String op,Object value){
+	public <T> List<T> findByCondition(Class<?> objClass,WhereBuilder whereBuilder){
 		try {
-			return db.findFirst(Selector.from(objClass).where(columnName, op, value));
+			return db.findAll(Selector.from(objClass).where(whereBuilder));
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

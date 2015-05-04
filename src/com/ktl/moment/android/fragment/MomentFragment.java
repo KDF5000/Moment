@@ -2,6 +2,7 @@ package com.ktl.moment.android.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,20 +10,30 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.activity.MomentDialogActivity;
 import com.ktl.moment.android.adapter.MomentPlaAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.etsy.StaggeredGridView;
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
+import com.ktl.moment.momentstore.MomentSyncTask;
+import com.ktl.moment.momentstore.MomentSyncTaskManager;
+import com.ktl.moment.momentstore.MomentSyncTaskManager.MomentSyncCallback;
+import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.db.DbTaskType;
+import com.lidroid.xutils.db.sqlite.WhereBuilder;
 
 public class MomentFragment extends BaseFragment implements OnScrollListener,
 		OnItemClickListener, OnItemLongClickListener {
@@ -47,9 +58,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				.inflate(R.layout.fragment_moment, container, false);
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.moment_pla_list);
-
 		momentList = new ArrayList<Moment>();
-		getData();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
 		momentPlaAdapter.notifyDataSetChanged();
@@ -58,14 +67,38 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView.setOnScrollListener(this);
 		staggeredGridView.setOnItemClickListener(this);
 		staggeredGridView.setOnItemLongClickListener(this);
-
+		getDataFromServer();
+		initEvent();
 		return view;
+	}
+
+	/**
+	 * 初始化事件
+	 */
+	private void initEvent() {
+		ImageView navRightImg = ((HomeActivity) getActivity())
+				.getTitleRightImg();
+		if (navRightImg != null) {
+			navRightImg.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					ToastUtil.show(getActivity(), "开始同步");
+					// 1.从本地数据库查找所有没有上传到服务端的灵感
+					((HomeActivity) getActivity()).getDbData(
+							C.DbTaskId.MOMENT_GET_DIRTY_MOMENT,
+							DbTaskType.findByCondition, Moment.class,
+							WhereBuilder.b("dirty", "=", 1));//
+				}
+			});
+		}
 	}
 
 	/**
 	 * 从服务器拉取数据
 	 */
-	private void getData() {
+	private void getDataFromServer() {
 		if (momentList == null) {
 			momentList = new ArrayList<Moment>();
 		}
@@ -75,6 +108,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			moment.setPostTime("4月10日");
 			if (i % 3 == 0) {
 				moment.setIsOpen(1);
+				moment.setDirty(1);
 			}
 			if (i % 4 == 0) {
 				moment.setIsCutCollect(1);
@@ -90,6 +124,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			}
 			momentList.add(moment);
 		}
+		
+		((HomeActivity)getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE, Moment.class, momentList);
+		momentPlaAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -130,7 +167,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		Log.i(TAG, "click item");
 		Toast.makeText(getActivity(), "Item Clicked: " + position,
 				Toast.LENGTH_SHORT).show();
-
 	}
 
 	@Override
@@ -172,16 +208,61 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		return true;
 	}
 
-//	private void onLoadMoreItems() {
-//		// final ArrayList<String> sampleData = SampleData.generateSampleData();
-//		for (String data : sampleData) {
-//			momentPlaAdapter.add(data);
-//		}
-//		// stash all the data in our backing store
-//		momentList.addAll(sampleData);
-//		// notify the adapter that we can update now
-//		momentPlaAdapter.notifyDataSetChanged();
-//		mHasRequestedMore = false;
-//	}
+	// private void onLoadMoreItems() {
+	// // final ArrayList<String> sampleData = SampleData.generateSampleData();
+	// for (String data : sampleData) {
+	// momentPlaAdapter.add(data);
+	// }
+	// // stash all the data in our backing store
+	// momentList.addAll(sampleData);
+	// // notify the adapter that we can update now
+	// momentPlaAdapter.notifyDataSetChanged();
+	// mHasRequestedMore = false;
+	// }
+	/**
+	 * 
+	 * @param taskId
+	 * @param res
+	 */
+	public void dataFinish(int taskId,Object res){
+		switch (taskId) {
+		case C.DbTaskId.MOMENT_GET_DIRTY_MOMENT:
+
+			@SuppressWarnings("unchecked")
+			List<Moment> dirtyMoments = (List<Moment>)res;
+			if(dirtyMoments!=null && !dirtyMoments.isEmpty()){
+				//上传灵感
+				int len = dirtyMoments.size();
+				MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
+				for(int i=0;i<len;i++){
+					MomentSyncTask task = new MomentSyncTask(dirtyMoments.get(i), syncMomentManager);
+					syncMomentManager.addSyncTask(task);
+				}
+				syncMomentManager.setTaskCallBack(new MomentSyncCallback() {
+					
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(getActivity(), msg);
+					}
+					
+					@Override
+					public void onComplete(int syncCount) {
+						// TODO Auto-generated method stub
+						//从服务端获取数据
+						ToastUtil.show(getActivity(), syncCount+"");
+						getDataFromServer();
+					}
+				});
+				syncMomentManager.startSync();
+			}else{
+				getDataFromServer();
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
 
 }

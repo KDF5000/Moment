@@ -53,7 +53,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"/>
-
+  
         <LinearLayout
             android:id="@+id/title_find_tab"
             android:layout_width="134dp"

@@ -89,7 +89,7 @@ public class C {
 		/**
 		 * 上传灵感
 		 */
-		public static final String UPLOAD_MOMENT = URL_BASE + "";
+		public static final String UPLOAD_MOMENT = URL_BASE + "MomentsService/Attention/uploadMoment";
 	}
 
 	/******************************************************************************
@@ -248,5 +248,7 @@ public class C {
 	
 	public static final class DbTaskId{
 		public static final int EDITOR_MOMENT_SAVE = 1;//编辑界面保存灵感到本地数据库
+		public static final int MOMENT_GET_DIRTY_MOMENT = 2;//获取灵感页面没有同步到服务端的灵感
+		public static final int MOMENT_LIST_SAVE = 3;//灵感页面保存momentlist
 	}
 }

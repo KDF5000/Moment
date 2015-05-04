@@ -1,32 +1,27 @@
-package com.ktl.moment.manager;
+package com.ktl.moment.momentstore;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.json.JSONException;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.ktl.moment.android.MomentApplication;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.QiniuToken;
 import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.infrastructure.HttpResult;
+import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
 import com.ktl.moment.qiniu.QiniuTask;
-import com.ktl.moment.utils.AppUtil;
-import com.ktl.moment.utils.HttpUtils;
 import com.ktl.moment.utils.RichEditUtils;
 import com.ktl.moment.utils.net.ApiManager;
 import com.loopj.android.http.RequestParams;
-import com.tencent.android.tpush.common.m;
 
-public class MomentStoreManager {
-	private Context mContext;
+public class MomentStoreUtil {
 	
-	public MomentStoreManager(Context context){
-		this.mContext = context;
+	public MomentStoreUtil(){
 	}
 	/**
 	 * 
@@ -43,25 +38,43 @@ public class MomentStoreManager {
 	 * @param callback
 	 * @return
 	 */
-	public int syncLocalMoment(Moment moment,syncLocalCallback callback){
+	public void syncLocalMoment(final Moment moment,final syncLocalCallback callback){
 		//1.先上传图片到途牛
 		// 获取token
-		 String httpResponse = HttpUtils.sendPostMethod(C.API.GET_QINIU_TOKEN, null, "utf-8");
-		 if(httpResponse == null){
-			 try {
-				HttpResult result = AppUtil.getHttpResult(httpResponse);
-				@SuppressWarnings("unchecked")
-				ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) result.getResultList("QiniuToken");
-				String token = TokenList.get(0).getToken();
-				//上传文件到骑七牛
-				uploadFilte2Qiniu(token,moment,callback);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				callback.OnFailed(e.getMessage());
-			}
-		 }
-		return 0;
+		ApiManager.getInstance().get(MomentApplication.getApplication(), C.API.GET_QINIU_TOKEN, null,
+				new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						@SuppressWarnings("unchecked")
+						ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) res;
+						String token = TokenList.get(0).getToken();
+						uploadFilte2Qiniu(token,moment,callback);
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						callback.OnFailed(res.toString());
+					}
+				}, "QiniuToken");
+		 // 获取token
+//		 String httpResponse = HttpUtils.sendPostMethod(C.API.GET_QINIU_TOKEN, null, "utf-8");
+//		 if(httpResponse == null){
+//			 try {
+//				HttpResult result = AppUtil.getHttpResult(httpResponse);
+//				@SuppressWarnings("unchecked")
+//				ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) result.getResultList("QiniuToken");
+//				String token = TokenList.get(0).getToken();
+//				//上传文件到骑七牛
+//				uploadFilte2Qiniu(token,moment,callback);
+//			} catch (JSONException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				callback.OnFailed(e.getMessage());
+//			}
+//		}
 	}
 	
 	/**
@@ -97,7 +110,7 @@ public class MomentStoreManager {
 			}
 		});
 		for (Map.Entry<String, String> entry : imgMap.entrySet()) {
-			QiniuTask task = new QiniuTask(mContext, manager);
+			QiniuTask task = new QiniuTask(MomentApplication.getApplication(), manager);
 			task.setToken(token);
 			task.setKey(entry.getKey());
 			task.setLocalPath(entry.getValue());
@@ -113,7 +126,7 @@ public class MomentStoreManager {
 	private void upload2Server(Moment moment,final syncLocalCallback callback){
 		RequestParams params = new RequestParams();
 		//设置参数
-		ApiManager.getInstance().post(this.mContext, C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
+		ApiManager.getInstance().post(MomentApplication.getApplication(), C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 			
 			@Override
 			public void onSuccess(Object res) {

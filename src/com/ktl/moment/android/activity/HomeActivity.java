@@ -14,6 +14,7 @@ import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.BottomMenu;
 import com.ktl.moment.android.component.BottomMenu.OnMenuItemClickListener;
+import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
@@ -23,6 +24,7 @@ import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.ktl.moment.utils.net.ApiManager;
+import com.lidroid.xutils.db.sqlite.WhereBuilder;
 import com.loopj.android.http.RequestParams;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
@@ -87,10 +89,12 @@ public class HomeActivity extends BaseActivity {
 					tag = C.menu.FRAGMENT_FIND_TAG;
 					setTitleTvNameEmpty();
 					setMiddleFindTabVisible(true);
+					setTitleRightImgVisible(false);
 					break;
 				case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
 					tag = C.menu.FRAGMENT_DYNAMIC_TAG;
 					setTitleTvName(R.string.attention_text_view);
+					setTitleRightImgVisible(false);
 					setMiddleFindTabVisible(false);
 					break;
 				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
@@ -102,11 +106,14 @@ public class HomeActivity extends BaseActivity {
 					tag = C.menu.FRAGMENT_MOMENT_TAG;
 					setTitleTvName(R.string.moment_text_view);
 					setMiddleFindTabVisible(false);
+					setTitleRightImgVisible(true);
+					setTitleRightImg(R.drawable.editor_record_delete_enable);
 					break;
 				case C.menu.FRAGMENT_ME_MENU_ID:
 					tag = C.menu.FRAGMENT_ME_TAG;
 					setTitleTvName(R.string.me_text_view);
 					setMiddleFindTabVisible(false);
+					setTitleRightImgVisible(false);
 					break;
 				}
 				switchMenuByTag(tag);
@@ -255,6 +262,9 @@ public class HomeActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		int taskId = res.what;
 		switch (taskId) {
+		case C.DbTaskId.MOMENT_GET_DIRTY_MOMENT:
+			MomentFragment momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
+			momentFragment.dataFinish(C.DbTaskId.MOMENT_GET_DIRTY_MOMENT, res.obj);
 		default:
 			break;
 		}
@@ -282,5 +292,15 @@ public class HomeActivity extends BaseActivity {
 	public void getDbData(int taskId, Class<?> entityType) {
 		// 可以根据不同的任务 设置不同的tasktype
 		getDbDataAsync(taskId, DbTaskType.findByPage, entityType, dbTaskHandler);
+	}
+	/**
+	 * 
+	 * @param taskId
+	 * @param taskType
+	 * @param entityType
+	 */
+	public void getDbData(int taskId, DbTaskType taskType,Class<?> entityType,WhereBuilder whereBuilder) {
+		// 可以根据不同的任务 设置不同的tasktype
+		getDbDataAsync(taskId, taskType, entityType, whereBuilder,dbTaskHandler);
 	}
 }

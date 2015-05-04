@@ -29,6 +29,7 @@ import com.ktl.moment.utils.db.DBManager;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskManager;
 import com.ktl.moment.utils.db.DbTaskType;
+import com.lidroid.xutils.db.sqlite.WhereBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 public abstract class BaseActivity extends FragmentActivity {
@@ -39,7 +40,7 @@ public abstract class BaseActivity extends FragmentActivity {
 	protected FrameLayout contentLayout;
 	protected TextView middleTitleTv;
 	protected ImageView titleBackImg;
-	protected ImageView titleRightImg;
+	private ImageView titleRightImg;
 	protected TextView titleRightTv;
 
 	public LinearLayout titleFindTab;
@@ -47,6 +48,9 @@ public abstract class BaseActivity extends FragmentActivity {
 	public TextView titleMiddleChannel;
 
 	private DbTaskManager taskManager;
+	public ImageView getTitleRightImg() {
+		return titleRightImg;
+	}
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -269,6 +273,17 @@ public abstract class BaseActivity extends FragmentActivity {
 	 */
 	protected void getDbDataAsync(int taskId,DbTaskType taskType,Class<?> entityType,DbTaskHandler handler){
 		taskManager.addTask(taskId,taskType, null, entityType, handler);
+	}
+	/**
+	 * 从本地数据库获取数据
+	 * @param taskId
+	 * @param taskType
+	 * @param entityType
+	 * @param builder
+	 * @param handler
+	 */
+	protected void getDbDataAsync(int taskId,DbTaskType taskType,Class<?> entityType,WhereBuilder builder,DbTaskHandler handler){
+		taskManager.addTask(taskId,taskType, null, entityType, builder,handler);
 	}
 	
 }
