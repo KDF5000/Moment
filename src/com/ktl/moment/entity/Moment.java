@@ -1,10 +1,15 @@
 package com.ktl.moment.entity;
 
+import com.lidroid.xutils.db.annotation.Id;
+import com.lidroid.xutils.db.annotation.NoAutoIncrement;
+
 public class Moment extends BaseEntity{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@NoAutoIncrement @Id
+	private long momentUid;
 	private long momentId;//灵感id
 	private String title;//标题
 	private String content;//内容
@@ -151,6 +156,12 @@ public class Moment extends BaseEntity{
 	}
 	public void setDirty(int dirty) {
 		this.dirty = dirty;
+	}
+	public long getMomentUid() {
+		return momentUid;
+	}
+	public void setMomentUid(long momentUid) {
+		this.momentUid = momentUid;
 	}
 	
 }
