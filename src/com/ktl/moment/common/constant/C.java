@@ -90,6 +90,14 @@ public class C {
 		 * 上传灵感
 		 */
 		public static final String UPLOAD_MOMENT = URL_BASE + "MomentsService/Attention/uploadMoment";
+		/**
+		 * 消息中心私信列表
+		 */
+		public static final String GET_MSG_LIST = URL_BASE+"msg.php";
+		/**
+		 * 消息中心通知列表
+		 */
+		public static final String GET_NOTIFICATION_LIST = URL_BASE+"notify.php";
 	}
 
 	/******************************************************************************

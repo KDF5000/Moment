@@ -15,12 +15,14 @@ public class TimeFormatUtil {
 
 	/**
 	 * 获取当前日期时间 yyyy-MM-dd HH:mm:ss
+	 * 
 	 * @return
 	 */
-	public static String getCurrentDateTime(){
+	public static String getCurrentDateTime() {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sf.format(new Date());
 	}
+
 	/**
 	 * 将字符串时间转化为毫秒时间
 	 * 
@@ -49,7 +51,6 @@ public class TimeFormatUtil {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		System.out.println(cal.getTime());
 		return cal.getTimeInMillis();
 	}
 

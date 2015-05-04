@@ -5,12 +5,11 @@ import java.util.List;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.MsgNotificationAdapter;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Notification;
-import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.manager.ImageManager;
-import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -67,14 +66,12 @@ public class NotificationFragment extends Fragment {
 			notifyList.add(tmp);
 		}
 
-		User spUser = (User) SharedPreferencesUtil.getInstance().getObject(
-				C.SPKey.SPK_LOGIN_INFO);
 		RequestParams params = new RequestParams();
-		params.put("userId", spUser.getUserId());
+		params.put("userId", Account.getUserInfo().getUserId());
 		params.put("pageNum", 0);
 		params.put("pageSize", 10);
 		ApiManager.getInstance().post(getActivity(),
-				C.API.GET_FOCUS_AUTHOR_LIST, params, new HttpCallBack() {
+				C.API.GET_NOTIFICATION_LIST, params, new HttpCallBack() {
 
 					@Override
 					public void onSuccess(Object res) {
@@ -90,6 +87,6 @@ public class NotificationFragment extends Fragment {
 						// TODO Auto-generated method stub
 						ToastUtil.show(getActivity(), (String) res);
 					}
-				}, "User");
+				}, "Notification");
 	}
 }
