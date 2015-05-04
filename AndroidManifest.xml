@@ -240,6 +240,10 @@
         <activity 
             android:name="com.ktl.moment.android.activity.WPActivity">
         </activity>
+        <!-- 频道详情页 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.ChannelListActivity">
+        </activity>
     </application>
 
 </manifest>
