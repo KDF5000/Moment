@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 @SuppressLint("SimpleDateFormat")
 public class TimeFormatUtil {
@@ -12,6 +13,14 @@ public class TimeFormatUtil {
 	private static final int HOUR_TIME_UNIT = 3600 * THOUSAND;
 	private static final int DAY_TIME_UNIT = 86400 * THOUSAND;
 
+	/**
+	 * 获取当前日期时间 yyyy-MM-dd HH:mm:ss
+	 * @return
+	 */
+	public static String getCurrentDateTime(){
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sf.format(new Date());
+	}
 	/**
 	 * 将字符串时间转化为毫秒时间
 	 * 

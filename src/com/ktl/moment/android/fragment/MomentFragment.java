@@ -31,6 +31,8 @@ import com.ktl.moment.entity.Moment;
 import com.ktl.moment.momentstore.MomentSyncTask;
 import com.ktl.moment.momentstore.MomentSyncTaskManager;
 import com.ktl.moment.momentstore.MomentSyncTaskManager.MomentSyncCallback;
+import com.ktl.moment.utils.EncryptUtil;
+import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.lidroid.xutils.db.sqlite.WhereBuilder;
@@ -104,8 +106,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		}
 		for (int i = 0; i < 20; i++) {
 			Moment moment = new Moment();
+			moment.setAuthorId(123);
 			moment.setMomentId(i);
-			moment.setPostTime("4月10日");
+			String postTime = TimeFormatUtil.getCurrentDateTime();
+			moment.setPostTime(postTime);
 			if (i % 3 == 0) {
 				moment.setIsOpen(1);
 				moment.setDirty(1);
@@ -123,6 +127,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				moment.setMomentImgs(null);
 			}
 			momentList.add(moment);
+			moment.setId(EncryptUtil.md5(123+"",i + "不再懊悔 App 自动生成器",postTime).hashCode());
 		}
 		
 		((HomeActivity)getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE, Moment.class, momentList);

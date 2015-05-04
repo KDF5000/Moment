@@ -36,7 +36,7 @@ public class VerificationUtil {
 				sb.append(C.YunZhiXun.APP_ID);
 				sb.append(phone);
 				sb.append(C.YunZhiXun.MD5KEY);
-				String sign = EncryptUtil.MD5(sb.toString());
+				String sign = EncryptUtil.md5(sb.toString());
 				Log.i("sign", sign);
 				getVerificationCode(phone, sign);
 			}
