@@ -26,6 +26,7 @@ import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -90,7 +91,7 @@ public class FindListViewAdapter extends BaseAdapter {
 		ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
 				momentHolder.momentImg, options);
 		momentHolder.userNameTv.setText(moment.getAuthorName());
-		momentHolder.postTime.setText(moment.getPostTime());
+		momentHolder.postTime.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
 
 		if (moment.getIsFocused() == 0) {
 			momentHolder.focusAuthorImg
@@ -373,7 +374,7 @@ public class FindListViewAdapter extends BaseAdapter {
 		@ViewInject(R.id.user_name)
 		TextView userNameTv;// 用户名
 
-		@ViewInject(R.id.moment_title)
+		@ViewInject(R.id.post_time)
 		TextView postTime;// 发布时间
 
 		@ViewInject(R.id.focus_author)
