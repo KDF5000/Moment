@@ -50,6 +50,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	private static final int REAUEST_CODE_LABEL = 1001;
 	private static final int REQUEST_CODE_DELETE = 1002;
 
+	private String postTime;
 	private boolean mHasRequestedMore = true;
 
 	@Override
@@ -69,6 +70,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView.setOnScrollListener(this);
 		staggeredGridView.setOnItemClickListener(this);
 		staggeredGridView.setOnItemLongClickListener(this);
+	    postTime = TimeFormatUtil.getCurrentDateTime();
 		getDataFromServer();
 		initEvent();
 		return view;
@@ -106,9 +108,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		}
 		for (int i = 0; i < 20; i++) {
 			Moment moment = new Moment();
-			moment.setAuthorId(123);
+			moment.setAuthorId(i+123);
 			moment.setMomentId(i);
-			String postTime = TimeFormatUtil.getCurrentDateTime();
 			moment.setPostTime(postTime);
 			if (i % 3 == 0) {
 				moment.setIsOpen(1);
@@ -127,7 +128,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				moment.setMomentImgs(null);
 			}
 			momentList.add(moment);
-			moment.setId(EncryptUtil.md5(123+"",i + "不再懊悔 App 自动生成器",postTime).hashCode());
+			moment.setMomentUid(EncryptUtil.md5((i+123)+"",i + "不再懊悔 App 自动生成器",postTime).hashCode());
 		}
 		
 		((HomeActivity)getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE, Moment.class, momentList);
