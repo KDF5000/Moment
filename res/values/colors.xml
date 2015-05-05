@@ -34,7 +34,7 @@
     
     <!-- 首页关注页面色系 -->
     <color name="praise_color">#ec584d</color>
-    <color name="watch_color">#7acb59</color>
+    <color name="watch_color">#65bbf6</color>
     
     <!-- ripple component-->
     <color name="rippelColor">#0099CC</color>

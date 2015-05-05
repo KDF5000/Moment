@@ -1,6 +1,7 @@
 package com.ktl.moment.android.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -77,13 +78,14 @@ public class UserPageActivity extends Activity {
 				mScreenWidth, (int) (16.0F * (mScreenWidth / 20.0F)));
 		userPageListView.setHeaderLayoutParams(localObject);
 
-		//设置头像
+		// 设置头像
 		ImageLoader.getInstance().displayImage(
 				"http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg", userAvatar,
 				getDisplayImageOptions());
 	}
 
-	@OnClick({ R.id.userpage_back_iv, R.id.userpage_cancel_ly })
+	@OnClick({ R.id.userpage_back_iv, R.id.userpage_cancel_ly,
+			R.id.userpage_sendmsg_ly })
 	public void OnClick(View v) {
 		switch (v.getId()) {
 		case R.id.userpage_back_iv:
@@ -91,6 +93,12 @@ public class UserPageActivity extends Activity {
 			break;
 		case R.id.userpage_cancel_ly:
 			Toast.makeText(this, "cancel", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.userpage_sendmsg_ly:
+			Intent intent = new Intent(this, MsgActivity.class);
+			intent.putExtra("userName", "TEST");
+			intent.putExtra("userId", 0);
+			startActivity(intent);
 			break;
 		}
 	}

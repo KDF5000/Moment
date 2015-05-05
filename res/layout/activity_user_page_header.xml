@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="17dp" >
+        android:paddingBottom="26.5dp"
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp"
+        android:paddingTop="7.5dp" >
 
         <ImageView
             android:id="@+id/userpage_back_iv"
@@ -25,18 +28,18 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/more" />
     </RelativeLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" 
-        android:orientation="vertical">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
 
         <com.ktl.moment.android.component.CircleImageView
             android:id="@+id/userpage_avatar_iv"
             android:layout_width="83dp"
             android:layout_height="83dp"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" />
 
         <LinearLayout
             android:id="@+id/user_page_nickname"
@@ -67,8 +70,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="自由设计师，爱绘画，爱旅游，爱摄影"
             android:gravity="center_horizontal"
+            android:text="自由设计师，爱绘画，爱旅游，爱摄影"
             android:textColor="#ffffff"
             android:textSize="12sp" />
 
@@ -127,8 +130,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="12dp"
+            android:layout_weight="1"
             android:orientation="horizontal" >
 
             <LinearLayout

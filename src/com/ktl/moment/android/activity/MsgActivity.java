@@ -51,8 +51,8 @@ public class MsgActivity extends BaseActivity {
 		ViewUtils.inject(this);
 
 		Intent intent = this.getIntent();
-		sendUserName = intent.getStringExtra("sendUserName");
-		sendUserId = intent.getLongExtra("sendUserId", 0);
+		sendUserName = intent.getStringExtra("userName");
+		sendUserId = intent.getLongExtra("userId", 0);
 
 		/**
 		 * init adapter
@@ -66,6 +66,15 @@ public class MsgActivity extends BaseActivity {
 
 		headerView = getLayoutInflater().inflate(R.layout.msg_blank_view, null);
 		msgListview.addHeaderView(headerView);
+
+		// 设置listview滚动到底部
+		msgListview.post(new Runnable() {
+			@Override
+			public void run() {
+				// Select the last row so it will scroll into view...
+				msgListview.setSelection(msgAdapter.getCount() - 1);
+			}
+		});
 
 		initView();
 		addTextChanged();

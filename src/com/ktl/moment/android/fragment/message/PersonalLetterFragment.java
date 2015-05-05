@@ -64,8 +64,8 @@ public class PersonalLetterFragment extends Fragment {
 					int position, long id) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(getActivity(), MsgActivity.class);
-				intent.putExtra("sendUserId", msgList.get(position).getSendUserId());
-				intent.putExtra("sendUserName", msgList.get(position).getSendUserName());
+				intent.putExtra("userId", msgList.get(position).getSendUserId());
+				intent.putExtra("userName", msgList.get(position).getSendUserName());
 				startActivity(intent);
 			}
 		});
