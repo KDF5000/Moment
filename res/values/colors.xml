@@ -39,4 +39,6 @@
     <!-- ripple component-->
     <color name="rippelColor">#0099CC</color>
     
+    <!-- msg页面色值 -->
+    <color name="msg_submit_text">#bfbfbf</color>
 </resources>

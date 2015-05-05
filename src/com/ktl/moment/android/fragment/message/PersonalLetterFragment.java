@@ -3,7 +3,18 @@ package com.ktl.moment.android.fragment.message;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.MsgActivity;
 import com.ktl.moment.android.adapter.MsgPersonalAdapter;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
@@ -15,13 +26,6 @@ import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.loopj.android.http.RequestParams;
-
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 
 public class PersonalLetterFragment extends Fragment {
 
@@ -39,6 +43,7 @@ public class PersonalLetterFragment extends Fragment {
 				container, false);
 		ViewUtils.inject(this, view);
 		initView();
+		initEvent();
 
 		return view;
 	}
@@ -49,6 +54,21 @@ public class PersonalLetterFragment extends Fragment {
 		msgPersonalAdapter = new MsgPersonalAdapter(getActivity(), msgList,
 				ImageManager.getInstance().getDisplayImageOptions());
 		msgListview.setAdapter(msgPersonalAdapter);
+	}
+	
+	private void initEvent(){
+		msgListview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(getActivity(), MsgActivity.class);
+				intent.putExtra("sendUserId", msgList.get(position).getSendUserId());
+				intent.putExtra("sendUserName", msgList.get(position).getSendUserName());
+				startActivity(intent);
+			}
+		});
 	}
 
 	private void getData() {

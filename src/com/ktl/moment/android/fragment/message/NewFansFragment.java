@@ -50,12 +50,12 @@ public class NewFansFragment extends Fragment {
 				ImageManager.getInstance().getDisplayImageOptions());
 		fansListView.setAdapter(newFansAdapter);
 	}
-	
-	private void getData(){
-		if(fansList == null){
+
+	private void getData() {
+		if (fansList == null) {
 			fansList = new ArrayList<User>();
 		}
-		for(int i=0;i<10;i++){
+		for (int i = 0; i < 10; i++) {
 			User tmp = new User();
 			tmp.setUserAvatar("");
 			tmp.setNickName("张三");
@@ -64,27 +64,29 @@ public class NewFansFragment extends Fragment {
 			fansList.add(tmp);
 		}
 
-		User spUser = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+		User spUser = (User) SharedPreferencesUtil.getInstance().getObject(
+				C.SPKey.SPK_LOGIN_INFO);
 		RequestParams params = new RequestParams();
 		params.put("userId", spUser.getUserId());
 		params.put("pageNum", 0);
 		params.put("pageSize", 10);
-		ApiManager.getInstance().post(getActivity(), C.API.GET_FOCUS_AUTHOR_LIST, params, new HttpCallBack() {
-			
-			@Override
-			public void onSuccess(Object res) {
-				// TODO Auto-generated method stub
-				@SuppressWarnings("unchecked")
-				List<User> user = (List<User>) res;
-				fansList.addAll(user);
-				newFansAdapter.notifyDataSetChanged();
-			}
-			
-			@Override
-			public void onFailure(Object res) {
-				// TODO Auto-generated method stub
-				ToastUtil.show(getActivity(), (String)res);
-			}
-		}, "User");
+		ApiManager.getInstance().post(getActivity(),
+				C.API.GET_FOCUS_AUTHOR_LIST, params, new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						@SuppressWarnings("unchecked")
+						List<User> user = (List<User>) res;
+						fansList.addAll(user);
+						newFansAdapter.notifyDataSetChanged();
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(getActivity(), (String) res);
+					}
+				}, "User");
 	}
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ktl.moment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.ktl.moment.android.component.CircleImageView
+        android:id="@+id/msg_recieve_user_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"
+        android:src="@drawable/login_forget"
+        app:border_color="@color/white"
+        app:border_width="0.5dp" />
+
+    <TextView
+        android:id="@+id/msg_recieve_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/msg_recieve_user_avatar"
+        android:background="@drawable/msg_recieve_bg"
+        android:lineSpacingExtra="4dp"
+        android:maxWidth="234dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="10dp"
+        android:text="隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说，20 年前，她就想做在线购物网站。斜对面老吴说，建国时，他就想做一款应用商店，从此不会编程的你，也可轻松制作自己的 App"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+</RelativeLayout>

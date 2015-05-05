@@ -19,10 +19,10 @@ import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -45,7 +45,6 @@ public class MyFocusActivty extends BaseActivity{
 	
 	private int pageNum = 0;
 	private int pageSize = 10;
-	private User spUser;
 	private String intentFlag;
 
 	@Override
@@ -64,9 +63,6 @@ public class MyFocusActivty extends BaseActivity{
 		Intent intent = getIntent();
 		intentFlag = intent.getStringExtra("intentFlag");
 
-		//从SP获取用户id
-		spUser = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
-		
 		getData();
 		fansAdapter = new FansAdapter(this, focusList, getDisplayImageOptions());
 		myFocus.setAdapter(fansAdapter);
@@ -142,7 +138,7 @@ public class MyFocusActivty extends BaseActivity{
 			focusList = new ArrayList<User>();
 		}
 		RequestParams params = new RequestParams();
-		params.put("userId", spUser.getUserId());
+		params.put("userId", Account.getUserInfo().getUserId());
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		String url = C.API.GET_FOCUS_AUTHOR_LIST;

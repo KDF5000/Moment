@@ -6,12 +6,31 @@ public class Message extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 	public long msgId;
-	public String sendUserId;
+	public long sendUserId;
 	public String sendUserName;
 	public String sendUserAvatar;
-	public String recieveUserId;
+	public long recieveUserId;
+	public String recieveUserAvatar;
+
 	public String sendTime;
 	public String msgContent;
+	public int msgType; // 0：send msg；1：recieve msg；2：time
+
+	public String getRecieveUserAvatar() {
+		return recieveUserAvatar;
+	}
+
+	public void setRecieveUserAvatar(String recieveUserAvatar) {
+		this.recieveUserAvatar = recieveUserAvatar;
+	}
+
+	public int getMsgType() {
+		return msgType;
+	}
+
+	public void setMsgType(int msgType) {
+		this.msgType = msgType;
+	}
 
 	public String getMsgContent() {
 		return msgContent;
@@ -29,11 +48,11 @@ public class Message extends BaseEntity {
 		this.msgId = msgId;
 	}
 
-	public String getSendUserId() {
+	public long getSendUserId() {
 		return sendUserId;
 	}
 
-	public void setSendUserId(String sendUserId) {
+	public void setSendUserId(long sendUserId) {
 		this.sendUserId = sendUserId;
 	}
 
@@ -53,11 +72,11 @@ public class Message extends BaseEntity {
 		this.sendUserAvatar = sendUserAvatar;
 	}
 
-	public String getRecieveUserId() {
+	public long getRecieveUserId() {
 		return recieveUserId;
 	}
 
-	public void setRecieveUserId(String recieveUserId) {
+	public void setRecieveUserId(long recieveUserId) {
 		this.recieveUserId = recieveUserId;
 	}
 

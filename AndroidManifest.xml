@@ -244,6 +244,11 @@
         <activity 
             android:name="com.ktl.moment.android.activity.ChannelListActivity">
         </activity>
+        <!-- 私信页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.MsgActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
 
 </manifest>
