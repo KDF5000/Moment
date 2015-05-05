@@ -286,8 +286,8 @@ public class DragGridView extends GridView{
         mWindowLayoutParams.x = downX - mPoint2ItemLeft + mOffset2Left;  
         mWindowLayoutParams.y = downY - mPoint2ItemTop + mOffset2Top - mStatusHeight;  
         mWindowLayoutParams.alpha = 0.55f; //透明度  
-        mWindowLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;    
-        mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;    
+        mWindowLayoutParams.width = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;    
+        mWindowLayoutParams.height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;    
         mWindowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE    
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE ;  
              

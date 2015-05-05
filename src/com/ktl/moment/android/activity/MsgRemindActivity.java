@@ -165,6 +165,7 @@ public class MsgRemindActivity extends BaseActivity {
 			index = i;
 		}
 
+		@Override
 		public void onClick(View v) {
 			msgViewPager.setCurrentItem(index);
 		}

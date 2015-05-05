@@ -1,7 +1,6 @@
 package com.ktl.moment.momentstore;
 
 import java.util.LinkedList;
-import java.util.Map;
 
 public class MomentSyncTaskManager {
 

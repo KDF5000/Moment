@@ -1,5 +1,8 @@
 package com.ktl.moment.android.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,16 +12,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.adapter.FindListViewAdapter;
 import com.ktl.moment.android.component.pullzoomview.PullToZoomListViewEx;
+import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.Moment;
+import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -50,6 +59,12 @@ public class UserPageActivity extends Activity {
 	@ViewInject(R.id.userpage_sendmsg_ly)
 	private LinearLayout sendMsgLy;// 私信
 
+	private List<Moment> momentList;
+	private FindListViewAdapter momentListAdapter;
+	private int pageNum = 0;
+	private int pageSize = 10;
+	private long userId;
+
 	@Override
 	protected void onCreate(Bundle saveInstanceBundle) {
 		// TODO Auto-generated method stub
@@ -57,10 +72,12 @@ public class UserPageActivity extends Activity {
 		setContentView(R.layout.activity_user_page);
 		ViewUtils.inject(this);
 
-		String[] adapterData = new String[] {};
+		// String[] adapterData = new String[] {};
 
-		userPageListView.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, adapterData));
+		// userPageListView.setAdapter(new ArrayAdapter<String>(this,
+		// android.R.layout.simple_list_item_1, adapterData));
+		getDataFromServer();
+		userPageListView.setAdapter(momentListAdapter);
 
 		userPageListView
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -111,5 +128,40 @@ public class UserPageActivity extends Activity {
 				.cacheInMemory(true).bitmapConfig(Bitmap.Config.RGB_565)
 				.considerExifParams(true).build();
 		return options;
+	}
+
+	private void getDataFromServer() {
+		if (momentList == null) {
+			momentList = new ArrayList<Moment>();
+		}
+		if (momentListAdapter == null) {
+			momentListAdapter = new FindListViewAdapter(this, momentList,
+					getDisplayImageOptions());
+		}
+		RequestParams params = new RequestParams();
+		params.put("pageNum", pageNum);
+		params.put("pageSize", pageSize);
+		params.put("userId", userId);
+		ApiManager.getInstance().post(this, C.API.GET_HOME_FOCUS_LIST, params,
+				new HttpCallBack() {
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						List<Moment> moment = (List<Moment>) res;
+						momentList.addAll(moment);
+						momentListAdapter.notifyDataSetChanged();
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(UserPageActivity.this, (String) res);
+					}
+				}, "Moment");
+	}
+	
+	private void initEvent(){
 	}
 }

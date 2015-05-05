@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-import android.content.Context;
 import android.util.Log;
 
 import com.ktl.moment.android.MomentApplication;
