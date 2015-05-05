@@ -29,8 +29,8 @@ import android.widget.ListView;
 public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements AbsListView.OnScrollListener {
     private static final String TAG = PullToZoomListViewEx.class.getSimpleName();
     private FrameLayout mHeaderContainer;
-    private int mHeaderHeight;
     private ScalingRunnable mScalingRunnable;
+    private int mHeaderHeight;
 
     private static final Interpolator sInterpolator = new Interpolator() {
         @Override
@@ -253,12 +253,14 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (mZoomView != null && !isHideHeader() && isPullToZoomEnabled()) {
             float f = mHeaderHeight - mHeaderContainer.getBottom();
-            Log.d(TAG, "onScroll --> f = " + f);
             if (isParallax()) {
                 if ((f > 0.0F) && (f < mHeaderHeight)) {
-                    int i = (int) (0.65D * f);
-                    mHeaderContainer.scrollTo(0, -i);
+                	//实现向上滚动有减速的效果
+//                    int i = (int) (0.65D * f);
+//                    mHeaderContainer.scrollTo(0, -i);
+                    mHeaderContainer.scrollTo(0, 0);
                 } else if (mHeaderContainer.getScrollY() != 0) {
+                	Log.d(TAG, "onScroll --> mHeaderContainer.getScrollY() = " + mHeaderContainer.getScrollY());
                     mHeaderContainer.scrollTo(0, 0);
                 }
             }
@@ -313,5 +315,15 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
                 post(this);
             }
         }
+    }
+    /**
+     * 获取header container bottom  
+     * @return
+     */
+    protected int getHeaderContainerBottom(){
+    	if(mHeaderContainer!=null){
+    		return mHeaderContainer.getBottom();
+    	}
+    	return 0;
     }
 }
