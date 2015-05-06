@@ -137,8 +137,7 @@ public class HomeActivity extends BaseActivity {
 			return;
 		}
 		fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction
-				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);//
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);//
 		if (selectedTag != null && !selectedTag.equals("")) {
 			detachFragment(getFragmentByTag(currentFgTag));// detach当前的fragment
 		}
@@ -169,8 +168,7 @@ public class HomeActivity extends BaseActivity {
 		if (f != null) {
 			if (fragmentTransaction == null) {
 				fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction
-						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			}
 			if (f.isDetached()) {
 				fragmentTransaction.attach(f);
@@ -191,8 +189,7 @@ public class HomeActivity extends BaseActivity {
 		if (f != null && !f.isDetached()) {
 			if (fragmentTransaction == null) {
 				fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction
-						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			}
 			fragmentTransaction.detach(f);
 		}

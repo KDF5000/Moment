@@ -77,10 +77,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		getDataFromDB();
 		navRightImg = ((HomeActivity) getActivity()).getTitleRightImg();
 		
-		momentList = new ArrayList<Moment>();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
-		momentPlaAdapter.notifyDataSetChanged();
 		staggeredGridView.setAdapter(momentPlaAdapter);
 
 		staggeredGridView.setOnScrollListener(this);
@@ -88,8 +86,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView.setOnItemLongClickListener(this);
 		postTime = TimeFormatUtil.getCurrentDateTime();
 
-	    postTime = TimeFormatUtil.getCurrentDateTime();
-		getDataFromServer();
+//		getDataFromServer();
 		initEvent();
 		return view;
 	}
