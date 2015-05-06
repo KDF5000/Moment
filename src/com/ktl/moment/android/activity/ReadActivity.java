@@ -15,6 +15,7 @@ import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.component.RichTextView;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
+import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.lidroid.xutils.ViewUtils;
@@ -33,7 +34,7 @@ public class ReadActivity extends BaseActivity {
 	@ViewInject(R.id.read_title_tv)
 	private TextView title;
 
-	private List<Moment> momentList;
+	private Moment momentDetail;
 	private long momentUid;
 	private DbTaskHandler dbTaskHandler = new DbTaskHandler(this);
 
@@ -70,7 +71,12 @@ public class ReadActivity extends BaseActivity {
 			finish();
 			break;
 		case R.id.read_edit:
+			if(momentDetail == null){
+				ToastUtil.show(this, "获取详情失败");
+				break;
+			}
 			Intent editIntent = new Intent(this, EditorActivity.class);
+			editIntent.putExtra("moment", momentDetail);
 			startActivity(editIntent);
 			break;
 		case R.id.title_right_img_left:
@@ -103,12 +109,15 @@ public class ReadActivity extends BaseActivity {
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
-		momentList = new ArrayList<Moment>();
 		@SuppressWarnings("unchecked")
 		List<Moment> list = (List<Moment>) res.obj;
-		momentList.addAll(list);
-		title.setText(momentList.get(0).getTitle());
-		content.setText(momentList.get(0).getContent());
+		if(list==null || list.isEmpty()){
+			ToastUtil.show(this, "获取详情失败");
+			return;
+		}
+		momentDetail = list.get(0);
+		title.setText(momentDetail.getTitle());
+		content.setText(momentDetail.getContent());
 	}
 
 }

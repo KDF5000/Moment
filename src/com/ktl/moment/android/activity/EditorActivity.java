@@ -87,7 +87,7 @@ public class EditorActivity extends BaseActivity {
 	private EditText articleTitle;
 
 	@ViewInject(R.id.editor_edit_area)
-	private RichEditText editText;
+	private RichEditText contentRichEditText;
 
 	@ViewInject(R.id.editor_tool_content)
 	private RelativeLayout toolContent;
@@ -148,6 +148,8 @@ public class EditorActivity extends BaseActivity {
 	@ViewInject(R.id.activity_base_title_container_layout)
 	private RelativeLayout baseTitleContainer;
 
+	private Moment moment;//灵感类
+	
 	private int appHeight;
 	private int baseLayoutHeight;
 
@@ -211,6 +213,11 @@ public class EditorActivity extends BaseActivity {
 		FileUtil.createDir("record");
 
 		appHeight = getAppHeight();
+		//设置灵感内容
+		Intent intent = getIntent();
+		moment = (Moment) intent.getSerializableExtra("moment");
+		articleTitle.setText(moment.getTitle());
+		contentRichEditText.setText(moment.getContent());
 	}
 
 	private void init() {
@@ -288,7 +295,7 @@ public class EditorActivity extends BaseActivity {
 			keyboardImg
 					.setImageResource(R.drawable.editor_keyboard_enable_selector);
 			flag = false;
-			// if (currentStatus == SHOW_TOOLS && editText.hasFocus()) {
+			// if (currentStatus == SHOW_TOOLS && contentRichEditText.hasFocus()) {
 			if (currentStatus == SHOW_TOOLS) {
 				showSoftKeyBoard();
 			} else {
@@ -734,7 +741,7 @@ public class EditorActivity extends BaseActivity {
 			/**
 			 * 先保存到本地
 			 */
-			// Map<String, String> imgMap = RichEditUtils.extractImg(editText
+			// Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText
 			// .getText().toString());
 			// Moment moment = new Moment();
 			// moment.setTitle("我是一条灵感");
@@ -745,7 +752,7 @@ public class EditorActivity extends BaseActivity {
 			// }
 			// }
 			// moment.setTitle(articleTitle.getText().toString());
-			// moment.setContent(editText.getText().toString());
+			// moment.setContent(contentRichEditText.getText().toString());
 			// moment.setDirty(0);// 本地的标志
 			// moment.setAuthorId(1);
 			// moment.setAuthorName("KDF5000");
@@ -789,7 +796,7 @@ public class EditorActivity extends BaseActivity {
 	 */
 	private void saveDataToDB(int dirty) {
 		// 保存到本地
-		Map<String, String> imgMap = RichEditUtils.extractImg(editText
+		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText
 				.getText().toString());
 		Moment moment = new Moment();
 		moment.setTitle("我是一条灵感");
@@ -800,7 +807,7 @@ public class EditorActivity extends BaseActivity {
 			}
 		}
 		moment.setTitle(articleTitle.getText().toString());
-		moment.setContent(editText.getText().toString());
+		moment.setContent(contentRichEditText.getText().toString());
 		moment.setAuthorId(1);
 		moment.setDirty(dirty);// 本地的标志
 		moment.setAuthorName("KDF5000");
@@ -812,7 +819,7 @@ public class EditorActivity extends BaseActivity {
 	 * 上传文件到七牛
 	 */
 	private void uploadFilte2Qiniu(String token) {
-		Map<String, String> imgMap = RichEditUtils.extractImg(editText
+		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText
 				.getText().toString());
 		TaskManager manager = new TaskManager();
 		manager.setTaskCallBack(new TaskCallback() {
@@ -828,7 +835,7 @@ public class EditorActivity extends BaseActivity {
 			@Override
 			public void onComplete(Map<String, String> resMap) {
 				// TODO Auto-generated method stub
-				String content = editText.getText().toString();
+				String content = contentRichEditText.getText().toString();
 				for (Map.Entry<String, String> entry : resMap.entrySet()) {
 					Log.i("URL",
 							"-->" + entry.getKey() + "=" + entry.getValue());
@@ -880,7 +887,7 @@ public class EditorActivity extends BaseActivity {
 					e.printStackTrace();
 				}
 				if (originalBitmap != null) {
-					editText.addImage(originalBitmap,
+					contentRichEditText.addImage(originalBitmap,
 							getAbsoluteImagePath(originalUri));
 				} else {
 					Toast.makeText(this, "获取图片失败", Toast.LENGTH_LONG).show();
