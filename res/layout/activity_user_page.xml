@@ -15,6 +15,7 @@
         android:id="@+id/top_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#000000"
         android:paddingBottom="7.5dp"
         android:paddingLeft="17dp"
         android:paddingRight="17dp"
@@ -26,6 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:src="@drawable/title_return_white" />
+
+        <TextView
+            android:id="@+id/top_nav_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:textColor="#ffffff" />
 
         <ImageView
             android:id="@+id/userpage_more_iv"

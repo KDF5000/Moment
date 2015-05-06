@@ -130,6 +130,7 @@ public class RichTextView extends TextView {
 	
 	public void setRichText(String text){
 		this.mRichText = text;
+		this.mRichText = mRichText.replaceAll("[\\n\\r]", "<br>");
 		setText(Html.fromHtml(mRichText, httpImgGetter, null));
 	}
 

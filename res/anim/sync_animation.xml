@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false" >
+
+ 	 <item android:drawable="@drawable/sync_1" android:duration="150"></item>
+	 <item android:drawable="@drawable/sync_2" android:duration="150"></item>
+	 <item android:drawable="@drawable/sync_3" android:duration="150"></item>
+	 <item android:drawable="@drawable/sync_4" android:duration="150"></item>
+ 	 <item android:drawable="@drawable/sync_5" android:duration="150"></item>
+  	 <item android:drawable="@drawable/sync_6" android:duration="150"></item>
+  	 <item android:drawable="@drawable/sync_7" android:duration="150"></item>
+     <item android:drawable="@drawable/sync_8" android:duration="150"></item>
+   	 <item android:drawable="@drawable/sync_9" android:duration="150"></item>
+     <item android:drawable="@drawable/sync_10" android:duration="150"></item>
+     <item android:drawable="@drawable/sync_11" android:duration="150"></item>
+     <item android:drawable="@drawable/sync_12" android:duration="150"></item>
+     <item android:drawable="@drawable/sync_13" android:duration="150"></item>
+     <item android:drawable="@drawable/sync_14" android:duration="150"></item>
+     <item android:drawable="@drawable/sync_15" android:duration="150"></item>
+     <item android:drawable="@drawable/sync_16" android:duration="150"></item>
+    
+</animation-list>

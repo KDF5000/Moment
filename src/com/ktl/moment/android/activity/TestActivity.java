@@ -11,12 +11,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.component.RichTextView;
+import com.ktl.moment.android.component.RichEditText;
 import com.ktl.moment.android.component.wheel.HoloWheelActivity;
 
 public class TestActivity extends Activity {
 	private Button button;
-	private RichTextView textView;
+	private RichEditText textView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class TestActivity extends Activity {
 		
 		
 		button = (Button) findViewById(R.id.button1);
-		textView = (RichTextView)findViewById(R.id.textView1);
+		textView = (RichEditText)findViewById(R.id.textView1);
 		String content = getIntent().getStringExtra("data");
 		textView.setRichText(content);
 		
