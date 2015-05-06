@@ -78,7 +78,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView.setOnItemClickListener(this);
 		staggeredGridView.setOnItemLongClickListener(this);
 	    postTime = TimeFormatUtil.getCurrentDateTime();
-//		getDataFromServer();
+		getDataFromServer();
 		initEvent();
 		return view;
 	}

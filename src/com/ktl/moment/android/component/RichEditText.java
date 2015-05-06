@@ -1,20 +1,37 @@
 package com.ktl.moment.android.component;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import com.ktl.moment.manager.ImageManager;
+import com.ktl.moment.manager.ImageManager.ImgLoadCallback;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.text.Editable;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
 
 public class RichEditText extends EditText {
 
 	private Context mContext;
+	private String path = Environment.getExternalStorageDirectory()
+			.getAbsolutePath() + "/moment/";
 
+	private String mRichText;
+	
 	public RichEditText(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
@@ -61,7 +78,13 @@ public class RichEditText extends EditText {
 		this.setText(editable);
 		this.setSelection(start, spanString.length());
 	}
-
+	/**
+	 * 对图片进行缩放
+	 * @param bgimage
+	 * @param newWidth
+	 * @param newHeight
+	 * @return
+	 */
 	private Bitmap zoomImage(Bitmap bgimage, double newWidth, double newHeight) {
 		// 获取这个图片的宽和高
 		float width = bgimage.getWidth();
@@ -76,6 +99,100 @@ public class RichEditText extends EditText {
 		Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width,
 				(int) height, matrix, true);
 		return bitmap;
+	}
+	
+	/**
+	 * 
+	 * @param bitmap
+	 * @param fileName
+	 * @throws IOException
+	 */
+	private void save2File(Bitmap bitmap, String fileName) throws IOException {
+		File dirFile = new File(path);
+		if (!dirFile.exists()) {
+			dirFile.mkdir();
+		}
+		File myCaptureFile = new File(path + fileName);
+		BufferedOutputStream bos = new BufferedOutputStream(
+				new FileOutputStream(myCaptureFile));
+		bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+		bos.flush();
+		bos.close();
+	}
+
+	/**
+	 * 
+	 */
+	final private Html.ImageGetter httpImgGetter = new Html.ImageGetter() {
+
+		@Override
+		public Drawable getDrawable(String source) {
+			// TODO Auto-generated method stub
+			Drawable drawable = null;
+			// 判断SD卡里面是否存在图片文件
+			if (new File(source).exists()) {
+				// 获取本地文件返回Drawable
+				drawable = Drawable.createFromPath(source);
+				// 设置图片边界
+				//获取控件的左右padding
+				int paddingLeft = getPaddingLeft();
+				int paddingRight = getPaddingRight();
+				int drawableWidth = drawable.getIntrinsicWidth();
+				int drawableHeight = drawable.getIntrinsicHeight();
+				DisplayMetrics dm = getResources().getDisplayMetrics();
+				int showWidth = dm.widthPixels -(paddingLeft+paddingRight);
+				int showHeight = (int) (((float)showWidth/(float)drawableWidth) * drawableHeight);
+				drawable.setBounds(0, 0,showWidth ,showHeight);
+				return drawable;
+			} else {
+				// 启动新线程下载
+				String filePath = path + String.valueOf(source.hashCode());
+				if (new File(filePath).exists()) {
+					// 获取本地文件返回Drawable
+					drawable = Drawable.createFromPath(filePath);
+					//获取控件的左右padding
+					int paddingLeft = getPaddingLeft();
+					int paddingRight = getPaddingRight();
+					int drawableWidth = drawable.getIntrinsicWidth();
+					int drawableHeight = drawable.getIntrinsicHeight();
+					DisplayMetrics dm = getResources().getDisplayMetrics();
+					int showWidth = dm.widthPixels -(paddingLeft+paddingRight);
+					int showHeight = (int) (((float)showWidth/(float)drawableWidth) * drawableHeight);
+					drawable.setBounds(0, 0,showWidth ,showHeight);
+					return drawable;
+				} else {
+					ImageManager manager = ImageManager.getInstance();
+					manager.setmImgLoadCallback(new ImgLoadCallback() {
+
+						@Override
+						public void OnError(FailReason failReason) {
+							// TODO Auto-generated method stub
+						}
+
+						@Override
+						public void OnComplete(String imageUri,
+								Bitmap loadedImage) {
+							// TODO Auto-generated method stub
+							try {
+								save2File(loadedImage,String.valueOf(imageUri.hashCode()));
+								setText(Html.fromHtml(mRichText, httpImgGetter, null));
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+					manager.loadImg(source);
+				}
+				return drawable;
+			}
+		}
+	};
+	
+	public void setRichText(String text){
+		this.mRichText = text;
+		this.mRichText = mRichText.replaceAll("[\\n\\r]", "<br>");
+		this.setText(Html.fromHtml(mRichText, httpImgGetter, null));
 	}
 
 }
