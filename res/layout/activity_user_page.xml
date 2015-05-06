@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <com.ktl.moment.android.component.pullzoomview.PullToZoomListViewEx
+    <com.ktl.moment.android.component.CustomListViewPullZoom
         android:id="@+id/user_page_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         custom:headerView="@layout/activity_user_page_header"
         custom:zoomView="@layout/user_page_zoom_view" />
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/top_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp"
+        android:paddingTop="7.5dp" >
+
+        <ImageView
+            android:id="@+id/userpage_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/title_return_white" />
+
+        <ImageView
+            android:id="@+id/userpage_more_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/more" />
+    </RelativeLayout>
+
+</RelativeLayout>

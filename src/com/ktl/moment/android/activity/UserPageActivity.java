@@ -14,11 +14,13 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.FindListViewAdapter;
-import com.ktl.moment.android.component.pullzoomview.PullToZoomListViewEx;
+import com.ktl.moment.android.component.CustomListViewPullZoom;
+import com.ktl.moment.android.component.CustomListViewPullZoom.OnScrollListener;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.infrastructure.HttpCallBack;
@@ -32,8 +34,12 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class UserPageActivity extends Activity {
+	
+	@ViewInject(R.id.top_nav)
+	private RelativeLayout topNavRl;//导航栏
+	
 	@ViewInject(R.id.user_page_list_view)
-	private PullToZoomListViewEx userPageListView;
+	private CustomListViewPullZoom userPageListView;
 
 	@ViewInject(R.id.userpage_back_iv)
 	private ImageView backIv;// 后退
@@ -79,8 +85,7 @@ public class UserPageActivity extends Activity {
 		getDataFromServer();
 		userPageListView.setAdapter(momentListAdapter);
 
-		userPageListView
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		userPageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
@@ -89,7 +94,7 @@ public class UserPageActivity extends Activity {
 				});
 		DisplayMetrics localDisplayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
-		int mScreenHeight = localDisplayMetrics.heightPixels;
+//		int mScreenHeight = localDisplayMetrics.heightPixels;
 		int mScreenWidth = localDisplayMetrics.widthPixels;
 		AbsListView.LayoutParams localObject = new AbsListView.LayoutParams(
 				mScreenWidth, (int) (16.0F * (mScreenWidth / 20.0F)));
@@ -99,6 +104,22 @@ public class UserPageActivity extends Activity {
 		ImageLoader.getInstance().displayImage(
 				"http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg", userAvatar,
 				getDisplayImageOptions());
+		
+		userPageListView.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void OnScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount, int headerBottom) {
+				// TODO Auto-generated method stub
+				Log.i("UserPageActivity", "headerBottom-->"+headerBottom);
+				Log.i("UserPageActivity", "topNavRl-->"+topNavRl.getHeight());
+				if(headerBottom <= topNavRl.getHeight()){
+					topNavRl.setBackgroundColor(getResources().getColor(R.color.transparent));
+				}else{
+					topNavRl.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+				}
+			}
+		});
 	}
 
 	@OnClick({ R.id.userpage_back_iv, R.id.userpage_cancel_ly,
