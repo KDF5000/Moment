@@ -1,5 +1,6 @@
 package com.ktl.moment.android.component.pullzoomview;
 
+import android.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.SystemClock;
@@ -204,7 +205,8 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
         if (mHeaderView != null) {
             mHeaderContainer.addView(mHeaderView);
         }
-
+//        mHeaderContainer.setBackgroundColor(getResources().getColor(R.color.background_dark));
+        mHeaderContainer.setAlpha(1);
         mRootView.addHeaderView(mHeaderContainer);
     }
 
@@ -325,5 +327,12 @@ public class PullToZoomListViewEx extends PullToZoomBase<ListView> implements Ab
     		return mHeaderContainer.getBottom();
     	}
     	return 0;
+    }
+    /**
+     * 获取Header 的container
+     * @return
+     */
+    protected FrameLayout getHeaderContainer(){
+    	return this.mHeaderContainer;
     }
 }

@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
@@ -37,6 +39,9 @@ public class UserPageActivity extends Activity {
 	
 	@ViewInject(R.id.top_nav)
 	private RelativeLayout topNavRl;//导航栏
+	
+	@ViewInject(R.id.top_nav_title)
+	private TextView topNavTitle;//导航栏标题
 	
 	@ViewInject(R.id.user_page_list_view)
 	private CustomListViewPullZoom userPageListView;
@@ -71,6 +76,8 @@ public class UserPageActivity extends Activity {
 	private int pageSize = 10;
 	private long userId;
 
+	private String currentNavSelect = "灵感";//当前选中的菜单
+	
 	@Override
 	protected void onCreate(Bundle saveInstanceBundle) {
 		// TODO Auto-generated method stub
@@ -104,19 +111,34 @@ public class UserPageActivity extends Activity {
 		ImageLoader.getInstance().displayImage(
 				"http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg", userAvatar,
 				getDisplayImageOptions());
+		topNavRl.getBackground().setAlpha(0);//设置title背景色透明
 		
 		userPageListView.setOnScrollListener(new OnScrollListener() {
 			
 			@Override
 			public void OnScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount, int headerBottom) {
+					int visibleItemCount, int totalItemCount,
+					FrameLayout headerContainer) {
 				// TODO Auto-generated method stub
-				Log.i("UserPageActivity", "headerBottom-->"+headerBottom);
+				Log.i("UserPageActivity", "headerBottom-->"+headerContainer.getBottom());
 				Log.i("UserPageActivity", "topNavRl-->"+topNavRl.getHeight());
-				if(headerBottom <= topNavRl.getHeight()){
-					topNavRl.setBackgroundColor(getResources().getColor(R.color.transparent));
+				Log.i("UserPageActivity","headercontainterheight-->"+headerContainer.getHeight());
+				int headerHeight = headerContainer.getHeight();//容器高度
+				int headerBottom = headerContainer.getBottom();//容器底部位置
+				
+				float alp = (float)(headerHeight - headerBottom)/(float)headerHeight;
+				headerContainer.setAlpha(1-alp * 0.75f);
+				int topNavHeight = topNavRl.getHeight();
+				if(headerBottom <= 2 * topNavHeight){
+					int topNavAlp = 255 * (2 * topNavHeight-headerBottom)/(2* topNavHeight);
+					topNavRl.getBackground().setAlpha(topNavAlp);
+					topNavTitle.setVisibility(View.VISIBLE);
+					topNavTitle.setText(currentNavSelect);
+					topNavTitle.setAlpha((float)(2 * topNavHeight-headerBottom)/(2* topNavHeight));
+					Log.i("UserPageActivity", "TITLE_ALPHA-->"+(float)(2 * topNavHeight-headerBottom)/(2* topNavHeight));
 				}else{
-					topNavRl.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+					topNavRl.getBackground().setAlpha(0);
+					topNavTitle.setVisibility(View.GONE);
 				}
 			}
 		});
