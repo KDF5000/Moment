@@ -216,8 +216,10 @@ public class EditorActivity extends BaseActivity {
 		//设置灵感内容
 		Intent intent = getIntent();
 		moment = (Moment) intent.getSerializableExtra("moment");
-		articleTitle.setText(moment.getTitle());
-		contentRichEditText.setText(moment.getContent());
+		if(moment!=null){
+			articleTitle.setText(moment.getTitle());
+			contentRichEditText.setText(moment.getContent());
+		}
 	}
 
 	private void init() {
