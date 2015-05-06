@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 
 	private static final String TAG = "MomentFragment";
 
+	
 	private StaggeredGridView staggeredGridView;
 	private List<Moment> momentList;
 	private MomentPlaAdapter momentPlaAdapter;
@@ -52,7 +54,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 
 	private String postTime;
 	private boolean mHasRequestedMore = true;
-
+    
+	private ImageView navRightImg;//同步图标
+	private AnimationDrawable syncAnimationDrawable ;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -61,6 +66,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				.inflate(R.layout.fragment_moment, container, false);
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.moment_pla_list);
+		navRightImg = ((HomeActivity) getActivity()).getTitleRightImg();
+		
 		momentList = new ArrayList<Moment>();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
@@ -80,20 +87,30 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	 * 初始化事件
 	 */
 	private void initEvent() {
-		ImageView navRightImg = ((HomeActivity) getActivity())
-				.getTitleRightImg();
 		if (navRightImg != null) {
 			navRightImg.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					ToastUtil.show(getActivity(), "开始同步");
-					// 1.从本地数据库查找所有没有上传到服务端的灵感
-					((HomeActivity) getActivity()).getDbData(
-							C.DbTaskId.MOMENT_GET_DIRTY_MOMENT,
-							DbTaskType.findByCondition, Moment.class,
-							WhereBuilder.b("dirty", "=", 1));//
+//					ToastUtil.show(getActivity(), "开始同步");
+					//2.
+					if(syncAnimationDrawable == null){
+						navRightImg.setImageResource(R.anim.sync_animation);
+						syncAnimationDrawable = (AnimationDrawable) navRightImg.getDrawable();
+						syncAnimationDrawable.start();
+						// 1.从本地数据库查找所有没有上传到服务端的灵感
+						((HomeActivity) getActivity()).getDbData(
+								C.DbTaskId.MOMENT_GET_DIRTY_MOMENT,
+								DbTaskType.findByCondition, Moment.class,
+								WhereBuilder.b("dirty", "=", 1));//
+					}else{
+						if(syncAnimationDrawable.isRunning()){
+							syncAnimationDrawable.stop();
+						}else{
+							syncAnimationDrawable.start();
+						}
+					}
 				}
 			});
 		}
@@ -261,7 +278,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 					public void onComplete(int syncCount) {
 						// TODO Auto-generated method stub
 						//从服务端获取数据
-						ToastUtil.show(getActivity(), syncCount+"");
+						if(syncAnimationDrawable!=null){
+							syncAnimationDrawable.stop();
+						}
 						getDataFromServer();
 					}
 				});

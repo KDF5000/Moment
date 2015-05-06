@@ -107,7 +107,7 @@ public class HomeActivity extends BaseActivity {
 					setTitleTvName(R.string.moment_text_view);
 					setMiddleFindTabVisible(false);
 					setTitleRightImgVisible(true);
-					setTitleRightImg(R.drawable.editor_record_delete_enable);
+					setTitleRightImg(R.drawable.sync_1);
 					break;
 				case C.menu.FRAGMENT_ME_MENU_ID:
 					tag = C.menu.FRAGMENT_ME_TAG;
