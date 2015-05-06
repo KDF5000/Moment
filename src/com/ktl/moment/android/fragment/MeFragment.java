@@ -2,6 +2,7 @@ package com.ktl.moment.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.ktl.moment.android.activity.MsgRemindActivity;
 import com.ktl.moment.android.activity.SettingActivity;
 import com.ktl.moment.android.activity.WPActivity;
 import com.ktl.moment.android.base.BaseFragment;
+import com.ktl.moment.android.component.BadgeView;
 import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
@@ -61,6 +63,8 @@ public class MeFragment extends BaseFragment {
 	@ViewInject(R.id.me_praise_layout)
 	private LinearLayout mePraiseLayout;
 
+	private BadgeView msgNotifyBadge;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -68,6 +72,7 @@ public class MeFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.fragment_me, container, false);
 		ViewUtils.inject(this, view);
 		initView();
+		addBadge();
 
 		return view;
 	}
@@ -124,19 +129,25 @@ public class MeFragment extends BaseFragment {
 			startActivity(notificationIntent);
 			break;
 		case R.id.me_watched_layout:
-			Intent watchedIntent = new Intent(getActivity(),
-					WPActivity.class);
+			Intent watchedIntent = new Intent(getActivity(), WPActivity.class);
 			watchedIntent.putExtra("wp", "watch");
 			startActivity(watchedIntent);
 			break;
 		case R.id.me_praise_layout:
-			Intent praisedIntent = new Intent(getActivity(),
-					WPActivity.class);
+			Intent praisedIntent = new Intent(getActivity(), WPActivity.class);
 			praisedIntent.putExtra("wp", "praise");
 			startActivity(praisedIntent);
 			break;
 		default:
 			break;
 		}
+	}
+
+	private void addBadge() {
+		msgNotifyBadge = new BadgeView(getActivity());
+		msgNotifyBadge.setBadgeCount(8);
+		msgNotifyBadge.setTargetView(meNotificationLayout);
+		msgNotifyBadge.setBadgeMargin(0, 0, 20, 0);
+		msgNotifyBadge.setBadgeGravity(Gravity.CENTER|Gravity.RIGHT);
 	}
 }

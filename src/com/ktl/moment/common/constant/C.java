@@ -258,5 +258,7 @@ public class C {
 		public static final int EDITOR_MOMENT_SAVE = 1;//编辑界面保存灵感到本地数据库
 		public static final int MOMENT_GET_DIRTY_MOMENT = 2;//获取灵感页面没有同步到服务端的灵感
 		public static final int MOMENT_LIST_SAVE = 3;//灵感页面保存momentlist
+		public static final int GET_MOMENT_DETAIL = 4;//获取单条灵感内容
+		public static final int GET_MOMENT_LIST = 5;//获取灵感页面list
 	}
 }

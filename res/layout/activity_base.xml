@@ -36,24 +36,33 @@
             android:textSize="@dimen/account_text_size" />
 
         <ImageView
+            android:id="@+id/title_right_img_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/title_right_img"
+            android:src="@drawable/read_comments" />
+
+        <ImageView
             android:id="@+id/title_right_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp" />
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/title_right_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:text="完成"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"/>
-  
+            android:layout_marginRight="16dp"
+            android:text="完成"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
         <LinearLayout
             android:id="@+id/title_find_tab"
             android:layout_width="134dp"
@@ -66,9 +75,9 @@
                 android:id="@+id/title_middle_channel"
                 android:layout_width="67dp"
                 android:layout_height="match_parent"
+                android:background="@drawable/title_middle_recommend_shape_enable"
                 android:gravity="center"
                 android:text="频道"
-                android:background="@drawable/title_middle_recommend_shape_enable"
                 android:textColor="@color/main_title_color" />
 
             <TextView

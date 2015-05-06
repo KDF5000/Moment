@@ -3,6 +3,7 @@ package com.ktl.moment.android.adapter;
 import java.util.List;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.component.BadgeView;
 import com.ktl.moment.entity.Message;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.lidroid.xutils.ViewUtils;
@@ -11,11 +12,13 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MsgPersonalAdapter extends BaseAdapter {
@@ -60,6 +63,13 @@ public class MsgPersonalAdapter extends BaseAdapter {
 			convertView = this.inflater.inflate(
 					R.layout.msg_personal_msg_adapter, null);
 			ViewUtils.inject(msgHolder, convertView);
+
+			msgHolder.badge = new BadgeView(context);
+			msgHolder.badge.setTargetView(msgHolder.layout);
+//			msgHolder.badge.setBadgeGravity(Gravity.CENTER_VERTICAL
+//					| Gravity.RIGHT);
+			msgHolder.badge.setBadgeMargin(0, 4, 10, 0);
+
 			convertView.setTag(msgHolder);
 		} else {
 			msgHolder = (MsgHolder) convertView.getTag();
@@ -72,6 +82,8 @@ public class MsgPersonalAdapter extends BaseAdapter {
 		msgHolder.sendTime
 				.setText(TimeFormatUtil.formatDate(msg.getSendTime()));
 		msgHolder.msgContent.setText(msg.getMsgContent());
+		
+		msgHolder.badge.setText("99+");
 
 		return convertView;
 	}
@@ -88,6 +100,11 @@ public class MsgPersonalAdapter extends BaseAdapter {
 
 		@ViewInject(R.id.personal_msg_content)
 		private TextView msgContent;
+		
+		@ViewInject(R.id.personal_msg_content_layout)
+		private LinearLayout layout;
+
+		private BadgeView badge;
 	}
 
 }

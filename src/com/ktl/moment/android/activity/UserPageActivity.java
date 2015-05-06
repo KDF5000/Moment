@@ -161,7 +161,4 @@ public class UserPageActivity extends Activity {
 					}
 				}, "Moment");
 	}
-	
-	private void initEvent(){
-	}
 }

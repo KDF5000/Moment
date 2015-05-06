@@ -3,6 +3,7 @@ package com.ktl.moment.android.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Message;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.CustomViewPagerAdapter;
 import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.BadgeView;
 import com.ktl.moment.android.fragment.message.NewFansFragment;
 import com.ktl.moment.android.fragment.message.NotificationFragment;
 import com.ktl.moment.android.fragment.message.PersonalLetterFragment;
@@ -53,12 +55,15 @@ public class MsgRemindActivity extends BaseActivity {
 
 	@ViewInject(R.id.msg_menu_layout)
 	private LinearLayout menuLayout;
-
+	
 	private List<Fragment> fragmentList;
 	private int width;// 下方的小滑块的宽度
 	private int currentItem = 0;
 
 	private boolean isShow = false;
+	
+	private BadgeView fansBadge;
+	private BadgeView msgBadge;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -71,6 +76,7 @@ public class MsgRemindActivity extends BaseActivity {
 		initView();
 		initTab();
 		initViewPager();
+		addBadge();
 	}
 
 	private void initView() {
@@ -153,6 +159,20 @@ public class MsgRemindActivity extends BaseActivity {
 		default:
 			break;
 		}
+	}
+	
+	private void addBadge(){
+		fansBadge = new BadgeView(this);
+		fansBadge.setBackground(1, Color.parseColor("#ec584d"));
+		fansBadge.setTargetView(tabNewFans);
+		fansBadge.setBadgeMargin(0, 10, 28, 0);
+		fansBadge.setText("");
+		
+		msgBadge = new BadgeView(this);
+//		msgBadge.setBackground(3, Color.parseColor("#ec584d"));
+		msgBadge.setTargetView(tabPersonalMsg);
+		msgBadge.setBadgeMargin(0, 10, 28, 0);
+		msgBadge.setBadgeCount(10);
 	}
 
 	/**
