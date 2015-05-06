@@ -77,8 +77,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		getDataFromDB();
 		navRightImg = ((HomeActivity) getActivity()).getTitleRightImg();
 		
+		momentList = new ArrayList<Moment>();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
+		momentPlaAdapter.notifyDataSetChanged();
 		staggeredGridView.setAdapter(momentPlaAdapter);
 
 		staggeredGridView.setOnScrollListener(this);
@@ -86,8 +88,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView.setOnItemLongClickListener(this);
 		postTime = TimeFormatUtil.getCurrentDateTime();
 
-//		getDataFromServer();
-		initEvent();
 		return view;
 	}
 
@@ -137,7 +137,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	 */
 	private void getDataFromServer() {
 		List<Moment> list = new ArrayList<Moment>();
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 4; i++) {
 			Moment moment = new Moment();
 			moment.setAuthorId(i + 123);
 			moment.setMomentId(i);
@@ -306,9 +306,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			break;
 		}
 		case C.DbTaskId.GET_MOMENT_LIST:
-			if (momentList == null) {
-				momentList = new ArrayList<Moment>();
-			}
 			List<Moment> list = (List<Moment>) res;
 			try {
 				momentList.addAll(list);
