@@ -50,6 +50,7 @@ import com.ktl.moment.utils.FileUtil;
 import com.ktl.moment.utils.RecordPlaySeekbarUtil;
 import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
+import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.TimerCountUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
@@ -733,23 +734,25 @@ public class EditorActivity extends BaseActivity {
 			/**
 			 * 先保存到本地
 			 */
-			Map<String, String> imgMap = RichEditUtils.extractImg(editText
-					.getText().toString());
-			Moment moment = new Moment();
-			moment.setTitle("我是一条灵感");
-			if (!imgMap.isEmpty()) {
-				for (Map.Entry<String, String> entry : imgMap.entrySet()) {
-					moment.setMomentImgs(entry.getValue());
-					break;
-				}
-			}
-			moment.setTitle(articleTitle.getText().toString());
-			moment.setContent(editText.getText().toString());
-			moment.setDirty(0);// 本地的标志
-			moment.setAuthorId(1);
-			moment.setAuthorName("KDF5000");
-			saveMomentDb(moment);
-			
+			// Map<String, String> imgMap = RichEditUtils.extractImg(editText
+			// .getText().toString());
+			// Moment moment = new Moment();
+			// moment.setTitle("我是一条灵感");
+			// if (!imgMap.isEmpty()) {
+			// for (Map.Entry<String, String> entry : imgMap.entrySet()) {
+			// moment.setMomentImgs(entry.getValue());
+			// break;
+			// }
+			// }
+			// moment.setTitle(articleTitle.getText().toString());
+			// moment.setContent(editText.getText().toString());
+			// moment.setDirty(0);// 本地的标志
+			// moment.setAuthorId(1);
+			// moment.setAuthorName("KDF5000");
+			// moment.setPostTime(TimeFormatUtil.getCurrentDateTime());
+			// saveMomentDb(moment);
+
+			saveDataToDB(0);
 			/**
 			 * 再上传至云端
 			 */
@@ -771,28 +774,38 @@ public class EditorActivity extends BaseActivity {
 							// TODO Auto-generated method stub
 							Toast.makeText(EditorActivity.this, (String) res,
 									Toast.LENGTH_SHORT).show();
+							saveDataToDB(1);
 						}
 					}, "QiniuToken");
 
 		} else {
-			// 保存到本地
-			Map<String, String> imgMap = RichEditUtils.extractImg(editText
-					.getText().toString());
-			Moment moment = new Moment();
-			moment.setTitle("我是一条灵感");
-			if (!imgMap.isEmpty()) {
-				for (Map.Entry<String, String> entry : imgMap.entrySet()) {
-					moment.setMomentImgs(entry.getValue());
-					break;
-				}
-			}
-			moment.setTitle(articleTitle.getText().toString());
-			moment.setContent(editText.getText().toString());
-			moment.setAuthorId(1);
-			moment.setDirty(1);// 本地的标志
-			moment.setAuthorName("KDF5000");
-			saveMomentDb(moment);
+			saveDataToDB(1);
 		}
+	}
+
+	/**
+	 * 
+	 * @param dirty
+	 */
+	private void saveDataToDB(int dirty) {
+		// 保存到本地
+		Map<String, String> imgMap = RichEditUtils.extractImg(editText
+				.getText().toString());
+		Moment moment = new Moment();
+		moment.setTitle("我是一条灵感");
+		if (!imgMap.isEmpty()) {
+			for (Map.Entry<String, String> entry : imgMap.entrySet()) {
+				moment.setMomentImgs(entry.getValue());
+				break;
+			}
+		}
+		moment.setTitle(articleTitle.getText().toString());
+		moment.setContent(editText.getText().toString());
+		moment.setAuthorId(1);
+		moment.setDirty(dirty);// 本地的标志
+		moment.setAuthorName("KDF5000");
+		moment.setPostTime(TimeFormatUtil.getCurrentDateTime());
+		saveMomentDb(moment);
 	}
 
 	/**
@@ -809,6 +822,7 @@ public class EditorActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				Toast.makeText(EditorActivity.this, msg, Toast.LENGTH_SHORT)
 						.show();
+				saveDataToDB(1);
 			}
 
 			@Override

@@ -8,6 +8,7 @@ import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.DbUtils.DbUpgradeListener;
 import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.db.sqlite.WhereBuilder;
+import com.lidroid.xutils.exception.DbException;
 
 public class DBManager {
 
@@ -140,6 +141,20 @@ public class DBManager {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+	}
+	
+	/**
+	 * 自定义查询
+	 * @param selector
+	 */
+	public <T> List<T> selectByCustom(Selector selector){
+		try {
+			return db.findAll(selector);
+		} catch (DbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

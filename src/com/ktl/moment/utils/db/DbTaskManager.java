@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.db.sqlite.WhereBuilder;
 
 import android.os.Message;
@@ -24,17 +25,19 @@ public class DbTaskManager {
 	 * @param whereBuilder
 	 * @param taskHandler
 	 */
-	public void addTask(int taskId,DbTaskType dbTaskType, List<?> entities,
-			Class<?> entityType, WhereBuilder whereBuilder,DbTaskHandler taskHandler) {
+	public void addTask(int taskId, DbTaskType dbTaskType, List<?> entities,
+			Class<?> entityType, WhereBuilder whereBuilder,
+			DbTaskHandler taskHandler) {
 		try {
-			taskPool.execute(new TaskThread(taskId,dbTaskType, entities, entityType,whereBuilder,
-					taskHandler));
+			taskPool.execute(new TaskThread(taskId, dbTaskType, entities,
+					entityType, whereBuilder, taskHandler));
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			taskPool.shutdown();
 		}
 	}
+
 	/**
 	 * 
 	 * @param taskId
@@ -43,18 +46,38 @@ public class DbTaskManager {
 	 * @param entityType
 	 * @param taskHandler
 	 */
-	public void addTask(int taskId,DbTaskType dbTaskType, List<?> entities,
-			Class<?> entityType,DbTaskHandler taskHandler) {
+	public void addTask(int taskId, DbTaskType dbTaskType, List<?> entities,
+			Class<?> entityType, DbTaskHandler taskHandler) {
 		try {
-			taskPool.execute(new TaskThread(taskId,dbTaskType, entities, entityType,
-					taskHandler));
+			taskPool.execute(new TaskThread(taskId, dbTaskType, entities,
+					entityType, taskHandler));
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			taskPool.shutdown();
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @param taskId
+	 * @param dbTaskType
+	 * @param entities
+	 * @param selector
+	 * @param taskHandler
+	 */
+	public void addTask(int taskId, DbTaskType dbTaskType, List<?> entities,
+			Selector selector, DbTaskHandler taskHandler) {
+		try {
+			taskPool.execute(new TaskThread(taskId, dbTaskType, entities,
+					selector, taskHandler));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			taskPool.shutdown();
+		}
+	}
+
 	private class TaskThread implements Runnable {
 		private DbTaskHandler taskHandler;
 		private DbTaskType dbTaskType;
@@ -62,8 +85,10 @@ public class DbTaskManager {
 		private Class<?> entityType;
 		private int taskId;
 		private WhereBuilder whereBuilder;
-		
-		public TaskThread(int taskId,DbTaskType dbTaskType, List<?> entities,
+
+		private Selector selector;
+
+		public TaskThread(int taskId, DbTaskType dbTaskType, List<?> entities,
 				Class<?> entityType, DbTaskHandler taskHandler) {
 			this.dbTaskType = dbTaskType;
 			this.entities = entities;
@@ -71,9 +96,10 @@ public class DbTaskManager {
 			this.taskHandler = taskHandler;
 			this.taskId = taskId;
 		}
-		
-		public TaskThread(int taskId,DbTaskType dbTaskType, List<?> entities,
-				Class<?> entityType,WhereBuilder whereBuilder, DbTaskHandler taskHandler) {
+
+		public TaskThread(int taskId, DbTaskType dbTaskType, List<?> entities,
+				Class<?> entityType, WhereBuilder whereBuilder,
+				DbTaskHandler taskHandler) {
 			this.dbTaskType = dbTaskType;
 			this.entities = entities;
 			this.entityType = entityType;
@@ -81,6 +107,16 @@ public class DbTaskManager {
 			this.taskId = taskId;
 			this.whereBuilder = whereBuilder;
 		}
+
+		public TaskThread(int taskId, DbTaskType dbTaskType, List<?> entities,
+				Selector selector, DbTaskHandler taskHandler) {
+			this.dbTaskType = dbTaskType;
+			this.entities = entities;
+			this.taskHandler = taskHandler;
+			this.taskId = taskId;
+			this.selector = selector;
+		}
+
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -99,12 +135,16 @@ public class DbTaskManager {
 
 				break;
 			case findByCondition:
-				res = DBManager.getInstance().findByCondition(this.entityType,this.whereBuilder);
+				res = DBManager.getInstance().findByCondition(this.entityType,
+						this.whereBuilder);
 				break;
 			case deleteAll:
 
 				break;
 			case detele:
+				break;
+			case selectByCustom:
+				res = DBManager.getInstance().selectByCustom(selector);
 				break;
 			default:
 				break;
@@ -112,7 +152,7 @@ public class DbTaskManager {
 			// 回调
 			if (this.taskHandler != null) {
 				Message msg = this.taskHandler.obtainMessage();
-				msg.obj = res;//改为结果
+				msg.obj = res;// 改为结果
 				msg.what = this.taskId;
 				this.taskHandler.sendMessage(msg);
 			}

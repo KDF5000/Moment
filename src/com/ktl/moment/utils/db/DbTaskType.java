@@ -8,4 +8,5 @@ public enum DbTaskType {
 	findByCondition,
 	detele,
 	deleteAll,
+	selectByCustom,
 }

@@ -1,13 +1,18 @@
 package com.ktl.moment.android.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.RichTextView;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.utils.db.DbTaskHandler;
@@ -22,7 +27,14 @@ public class ReadActivity extends BaseActivity {
 	@ViewInject(R.id.read_edit)
 	private ImageView readEdit;
 
-	private Moment moment;
+	@ViewInject(R.id.read_content_tv)
+	private RichTextView content;
+
+	@ViewInject(R.id.read_title_tv)
+	private TextView title;
+
+	private List<Moment> momentList;
+	private long momentUid;
 	private DbTaskHandler dbTaskHandler = new DbTaskHandler(this);
 
 	@Override
@@ -33,7 +45,11 @@ public class ReadActivity extends BaseActivity {
 				.inflate(R.layout.activity_read, contentLayout, true);
 		ViewUtils.inject(this);
 
+		Intent intent = this.getIntent();
+		momentUid = intent.getLongExtra("momentUid", 0);
+
 		initView();
+		getData();
 	}
 
 	private void initView() {
@@ -44,6 +60,7 @@ public class ReadActivity extends BaseActivity {
 		setTitleRightImg(R.drawable.editor_open_enable);
 		setBaseActivityBgColor(getResources().getColor(
 				R.color.editor_main_color));
+
 	}
 
 	@OnClick({ R.id.read_edit, R.id.title_back_img, R.id.title_right_img_left })
@@ -66,8 +83,8 @@ public class ReadActivity extends BaseActivity {
 	}
 
 	private void getData() {
-		getDbData(C.DbTaskId.GET_MOMENT_DETAIL, DbTaskType.findById,
-				Moment.class, WhereBuilder.b("momentId", "=", 1));
+		getDbData(C.DbTaskId.GET_MOMENT_DETAIL, DbTaskType.findByCondition,
+				Moment.class, WhereBuilder.b("momentUid", "=", momentUid));
 	}
 
 	/**
@@ -86,7 +103,12 @@ public class ReadActivity extends BaseActivity {
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
-
+		momentList = new ArrayList<Moment>();
+		@SuppressWarnings("unchecked")
+		List<Moment> list = (List<Moment>) res.obj;
+		momentList.addAll(list);
+		title.setText(momentList.get(0).getTitle());
+		content.setText(momentList.get(0).getContent());
 	}
 
 }

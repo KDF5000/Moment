@@ -24,6 +24,7 @@ import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.ktl.moment.utils.net.ApiManager;
+import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.db.sqlite.WhereBuilder;
 import com.loopj.android.http.RequestParams;
 import com.tencent.android.tpush.XGIOperateCallback;
@@ -46,12 +47,12 @@ public class HomeActivity extends BaseActivity {
 		super.onCreate(arg0);
 		initView();
 		initEvent();
-		
+
 		// 初始为发现界面
 		fragmentManager = getSupportFragmentManager();// 获取fragment的管理器
 		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);// 设置默认的界面
-		
-		//注册信鸽
+
+		// 注册信鸽
 		registXgPush();
 	}
 
@@ -210,46 +211,53 @@ public class HomeActivity extends BaseActivity {
 		}
 		return f;
 	}
+
 	/**
 	 * 注册信鸽推送服务
 	 */
-	public void registXgPush(){
+	public void registXgPush() {
 		final User user = Account.getUserInfo();
-		if(user == null){
-			return ;
+		if (user == null) {
+			return;
 		}
 		XGPushConfig.enableDebug(this, true);
-		XGPushManager.registerPush(getApplicationContext(), user.getUserId()+"1", new XGIOperateCallback() {
-			
+		XGPushManager.registerPush(getApplicationContext(), user.getUserId()
+				+ "1", new XGIOperateCallback() {
+
 			@Override
 			public void onSuccess(Object data, int flag) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(HomeActivity.this, "注册成功"+XGPushConfig.getAccessId(getApplicationContext()));
-				//向服务上传token
+				ToastUtil.show(
+						HomeActivity.this,
+						"注册成功"
+								+ XGPushConfig
+										.getAccessId(getApplicationContext()));
+				// 向服务上传token
 				RequestParams params = new RequestParams();
 				params.put("user_id", user.getUserId());
 				params.put("xg_token", data);
-				ApiManager.getInstance().post(HomeActivity.this, C.API.XG_UPLOAD_TOKEN, params , new HttpCallBack() {
-					
-					@Override
-					public void onSuccess(Object res) {
-						// TODO Auto-generated method stub
-						LogUtil.i("信鸽token上传成功");
-					}
-					
-					@Override
-					public void onFailure(Object res) {
-						// TODO Auto-generated method stub
-						LogUtil.i(res.toString());
-					}
-				}, "");
+				ApiManager.getInstance().post(HomeActivity.this,
+						C.API.XG_UPLOAD_TOKEN, params, new HttpCallBack() {
+
+							@Override
+							public void onSuccess(Object res) {
+								// TODO Auto-generated method stub
+								LogUtil.i("信鸽token上传成功");
+							}
+
+							@Override
+							public void onFailure(Object res) {
+								// TODO Auto-generated method stub
+								LogUtil.i(res.toString());
+							}
+						}, "");
 			}
-			
+
 			@Override
 			public void onFail(Object data, int errCode, String msg) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(HomeActivity.this, "注册失败"+ msg);
-				
+				ToastUtil.show(HomeActivity.this, "注册失败" + msg);
+
 			}
 		});
 	}
@@ -261,10 +269,17 @@ public class HomeActivity extends BaseActivity {
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
 		int taskId = res.what;
+		MomentFragment momentFragment;
 		switch (taskId) {
 		case C.DbTaskId.MOMENT_GET_DIRTY_MOMENT:
-			MomentFragment momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
-			momentFragment.dataFinish(C.DbTaskId.MOMENT_GET_DIRTY_MOMENT, res.obj);
+			momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
+			momentFragment.dataFinish(C.DbTaskId.MOMENT_GET_DIRTY_MOMENT,
+					res.obj);
+			break;
+		case C.DbTaskId.GET_MOMENT_LIST:
+			momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
+			momentFragment.dataFinish(C.DbTaskId.GET_MOMENT_LIST,res.obj);
+			break;
 		default:
 			break;
 		}
@@ -293,14 +308,27 @@ public class HomeActivity extends BaseActivity {
 		// 可以根据不同的任务 设置不同的tasktype
 		getDbDataAsync(taskId, DbTaskType.findByPage, entityType, dbTaskHandler);
 	}
+
 	/**
 	 * 
 	 * @param taskId
 	 * @param taskType
 	 * @param entityType
 	 */
-	public void getDbData(int taskId, DbTaskType taskType,Class<?> entityType,WhereBuilder whereBuilder) {
+	public void getDbData(int taskId, DbTaskType taskType, Class<?> entityType,
+			WhereBuilder whereBuilder) {
 		// 可以根据不同的任务 设置不同的tasktype
-		getDbDataAsync(taskId, taskType, entityType, whereBuilder,dbTaskHandler);
+		getDbDataAsync(taskId, taskType, entityType, whereBuilder,
+				dbTaskHandler);
+	}
+
+	/**
+	 * 
+	 * @param taskId
+	 * @param taskType
+	 * @param selector
+	 */
+	public void getDbData(int taskId, DbTaskType taskType, Selector selector) {
+		getDbDataAsync(taskId, taskType, selector, dbTaskHandler);
 	}
 }

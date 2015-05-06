@@ -35,6 +35,7 @@ import com.ktl.moment.utils.EncryptUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskType;
+import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.db.sqlite.WhereBuilder;
 
 public class MomentFragment extends BaseFragment implements OnScrollListener,
@@ -53,15 +54,21 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	private String postTime;
 	private boolean mHasRequestedMore = true;
 
+	private int pageSize = 1;
+	private int pageNum = 0;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View view = inflater
 				.inflate(R.layout.fragment_moment, container, false);
+		initEvent();
+
+		momentList = new ArrayList<Moment>();
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.moment_pla_list);
-		momentList = new ArrayList<Moment>();
+		getDataFromDB();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
 		momentPlaAdapter.notifyDataSetChanged();
@@ -70,9 +77,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView.setOnScrollListener(this);
 		staggeredGridView.setOnItemClickListener(this);
 		staggeredGridView.setOnItemLongClickListener(this);
-	    postTime = TimeFormatUtil.getCurrentDateTime();
-//		getDataFromServer();
-		initEvent();
+		postTime = TimeFormatUtil.getCurrentDateTime();
+
 		return view;
 	}
 
@@ -98,21 +104,23 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			});
 		}
 	}
-	
-	private void getDataFromDB(){
-//		((HomeActivity) getActivity()).getDbData(C.DbTaskId.GET_MOMENT_LIST, DbTaskType.findByPage, Moment.class, WhereBuilder.b(columnName, op, value));
+
+	private void getDataFromDB() {
+		Selector selector = Selector.from(Moment.class)
+				.orderBy("postTime", true).limit(pageSize)
+				.offset(pageSize * pageNum);
+		((HomeActivity) getActivity()).getDbData(C.DbTaskId.GET_MOMENT_LIST,
+				DbTaskType.selectByCustom, selector);
 	}
 
 	/**
-	 * 从服务器拉取数据
+	 * 获取取数据
 	 */
 	private void getDataFromServer() {
-		if (momentList == null) {
-			momentList = new ArrayList<Moment>();
-		}
+		List<Moment> list = new ArrayList<Moment>();
 		for (int i = 0; i < 20; i++) {
 			Moment moment = new Moment();
-			moment.setAuthorId(i+123);
+			moment.setAuthorId(i + 123);
 			moment.setMomentId(i);
 			moment.setPostTime(postTime);
 			if (i % 3 == 0) {
@@ -131,12 +139,13 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			} else {
 				moment.setMomentImgs(null);
 			}
-			momentList.add(moment);
-			moment.setMomentUid(EncryptUtil.md5((i+123)+"",i + "不再懊悔 App 自动生成器",postTime).hashCode());
+			list.add(moment);
+			moment.setMomentUid(EncryptUtil.md5((i + 123) + "",
+					i + "不再懊悔 App 自动生成器", postTime).hashCode());
 		}
-		
-		((HomeActivity)getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE, Moment.class, momentList);
-		momentPlaAdapter.notifyDataSetChanged();
+
+		((HomeActivity) getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE,
+				Moment.class, list);
 	}
 
 	@Override
@@ -177,6 +186,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		Toast.makeText(getActivity(), "Item Clicked: " + position,
 				Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(getActivity(), ReadActivity.class);
+		intent.putExtra("momentUid", momentList.get(position).getMomentUid());
 		startActivity(intent);
 	}
 
@@ -220,7 +230,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	}
 
 	// private void onLoadMoreItems() {
-	// // final ArrayList<String> sampleData = SampleData.generateSampleData();
+	// final ArrayList<String> sampleData = SampleData.generateSampleData();
 	// for (String data : sampleData) {
 	// momentPlaAdapter.add(data);
 	// }
@@ -235,42 +245,56 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	 * @param taskId
 	 * @param res
 	 */
-	public void dataFinish(int taskId,Object res){
+	@SuppressWarnings("unchecked")
+	public void dataFinish(int taskId, Object res) {
 		switch (taskId) {
-		case C.DbTaskId.MOMENT_GET_DIRTY_MOMENT:
+		case C.DbTaskId.MOMENT_GET_DIRTY_MOMENT: {
 
-			@SuppressWarnings("unchecked")
-			List<Moment> dirtyMoments = (List<Moment>)res;
-			if(dirtyMoments!=null && !dirtyMoments.isEmpty()){
-				//上传灵感
+			List<Moment> dirtyMoments = (List<Moment>) res;
+			if (dirtyMoments != null && !dirtyMoments.isEmpty()) {
+				// 上传灵感
 				int len = dirtyMoments.size();
 				MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
-				for(int i=0;i<len;i++){
-					MomentSyncTask task = new MomentSyncTask(dirtyMoments.get(i), syncMomentManager);
+				for (int i = 0; i < len; i++) {
+					MomentSyncTask task = new MomentSyncTask(
+							dirtyMoments.get(i), syncMomentManager);
 					syncMomentManager.addSyncTask(task);
 				}
 				syncMomentManager.setTaskCallBack(new MomentSyncCallback() {
-					
+
 					@Override
 					public void onError(String msg) {
 						// TODO Auto-generated method stub
 						ToastUtil.show(getActivity(), msg);
 					}
-					
+
 					@Override
 					public void onComplete(int syncCount) {
 						// TODO Auto-generated method stub
-						//从服务端获取数据
-						ToastUtil.show(getActivity(), syncCount+"");
+						// 从服务端获取数据
+						ToastUtil.show(getActivity(), syncCount + "");
 						getDataFromServer();
 					}
 				});
 				syncMomentManager.startSync();
-			}else{
+			} else {
 				getDataFromServer();
 			}
 			break;
-
+		}
+		case C.DbTaskId.GET_MOMENT_LIST:
+			if (momentList == null) {
+				momentList = new ArrayList<Moment>();
+			}
+			List<Moment> list = (List<Moment>) res;
+			try {
+				momentList.addAll(list);
+				momentPlaAdapter.notifyDataSetChanged();
+			} catch (NullPointerException e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
 		default:
 			break;
 		}

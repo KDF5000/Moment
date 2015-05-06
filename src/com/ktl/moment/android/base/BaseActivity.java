@@ -29,6 +29,7 @@ import com.ktl.moment.utils.db.DBManager;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskManager;
 import com.ktl.moment.utils.db.DbTaskType;
+import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.db.sqlite.WhereBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
@@ -309,6 +310,19 @@ public abstract class BaseActivity extends FragmentActivity {
 			Class<?> entityType, WhereBuilder builder, DbTaskHandler handler) {
 		taskManager.addTask(taskId, taskType, null, entityType, builder,
 				handler);
+	}
+
+	/**
+	 * 根据自定义的sql获取本地数据，具有较大的灵活性
+	 * 
+	 * @param taskId
+	 * @param taskType
+	 * @param selector
+	 * @param handler
+	 */
+	protected void getDbDataAsync(int taskId, DbTaskType taskType,
+			Selector selector, DbTaskHandler handler) {
+		taskManager.addTask(taskId, taskType, null, selector, handler);
 	}
 
 }
