@@ -52,6 +52,5 @@ public class HttpManager {
 	public static void cancelAllRequest(){
 		client.cancelAllRequests(true);
 	}
-	
 			
 }

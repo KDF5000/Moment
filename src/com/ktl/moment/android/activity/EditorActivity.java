@@ -46,6 +46,7 @@ import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
 import com.ktl.moment.qiniu.QiniuTask;
 import com.ktl.moment.utils.BasicInfoUtil;
+import com.ktl.moment.utils.EncryptUtil;
 import com.ktl.moment.utils.FileUtil;
 import com.ktl.moment.utils.RecordPlaySeekbarUtil;
 import com.ktl.moment.utils.RecordUtil;
@@ -148,8 +149,8 @@ public class EditorActivity extends BaseActivity {
 	@ViewInject(R.id.activity_base_title_container_layout)
 	private RelativeLayout baseTitleContainer;
 
-	private Moment moment;//灵感类
-	
+	private Moment moment;// 灵感类
+
 	private int appHeight;
 	private int baseLayoutHeight;
 
@@ -213,10 +214,10 @@ public class EditorActivity extends BaseActivity {
 		FileUtil.createDir("record");
 
 		appHeight = getAppHeight();
-		//设置灵感内容
+		// 设置灵感内容
 		Intent intent = getIntent();
 		moment = (Moment) intent.getSerializableExtra("moment");
-		if(moment!=null){
+		if (moment != null) {
 			articleTitle.setText(moment.getTitle());
 			contentRichEditText.setText(moment.getContent());
 		}
@@ -297,7 +298,8 @@ public class EditorActivity extends BaseActivity {
 			keyboardImg
 					.setImageResource(R.drawable.editor_keyboard_enable_selector);
 			flag = false;
-			// if (currentStatus == SHOW_TOOLS && contentRichEditText.hasFocus()) {
+			// if (currentStatus == SHOW_TOOLS &&
+			// contentRichEditText.hasFocus()) {
 			if (currentStatus == SHOW_TOOLS) {
 				showSoftKeyBoard();
 			} else {
@@ -739,32 +741,25 @@ public class EditorActivity extends BaseActivity {
 	private void saveContent() {
 		// 没有网络的话保存到本地
 		BasicInfoUtil basicInfoUtil = BasicInfoUtil.getInstance(this);
-		if (basicInfoUtil.isNetworkConnected()) {// 有网
-			/**
-			 * 先保存到本地
-			 */
-			// Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText
-			// .getText().toString());
-			// Moment moment = new Moment();
-			// moment.setTitle("我是一条灵感");
-			// if (!imgMap.isEmpty()) {
-			// for (Map.Entry<String, String> entry : imgMap.entrySet()) {
-			// moment.setMomentImgs(entry.getValue());
-			// break;
-			// }
-			// }
-			// moment.setTitle(articleTitle.getText().toString());
-			// moment.setContent(contentRichEditText.getText().toString());
-			// moment.setDirty(0);// 本地的标志
-			// moment.setAuthorId(1);
-			// moment.setAuthorName("KDF5000");
-			// moment.setPostTime(TimeFormatUtil.getCurrentDateTime());
-			// saveMomentDb(moment);
+		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText.getText().toString());
+		moment.setTitle("我是一条灵感");
+		/*if (!imgMap.isEmpty()) {
+			for (Map.Entry<String, String> entry : imgMap.entrySet()) {
+				moment.setMomentImgs(entry.getValue());
+				break;
+			}
+		}*/
+		moment.setTitle(articleTitle.getText().toString());
+		moment.setContent(contentRichEditText.getText().toString());
+		moment.setAuthorId(1);
+		moment.setAuthorName("KDF5000");
+		String postTime = TimeFormatUtil.getCurrentDateTime();
+		moment.setPostTime(postTime);
+		//用用户id，灵感标题，发布时间作为保存数据库的momentid
+		moment.setMomentUid(EncryptUtil.md5("1",articleTitle.getText().toString(), postTime).hashCode());
 
-			saveDataToDB(0);
-			/**
-			 * 再上传至云端
-			 */
+		if (basicInfoUtil.isNetworkConnected()) {// 有网
+			moment.setDirty(1);// 本地的标志
 			// 获取token
 			ApiManager.getInstance().get(this, C.API.GET_QINIU_TOKEN, null,
 					new HttpCallBack() {
@@ -783,12 +778,13 @@ public class EditorActivity extends BaseActivity {
 							// TODO Auto-generated method stub
 							Toast.makeText(EditorActivity.this, (String) res,
 									Toast.LENGTH_SHORT).show();
-							saveDataToDB(1);
+							moment.setDirty(1);
+							saveMomentDb(moment);
 						}
 					}, "QiniuToken");
 
 		} else {
-			saveDataToDB(1);
+			saveMomentDb(moment);
 		}
 	}
 
@@ -798,22 +794,25 @@ public class EditorActivity extends BaseActivity {
 	 */
 	private void saveDataToDB(int dirty) {
 		// 保存到本地
-		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText
-				.getText().toString());
+		Map<String, String> imgMap = RichEditUtils
+				.extractImg(contentRichEditText.getText().toString());
 		Moment moment = new Moment();
 		moment.setTitle("我是一条灵感");
-		if (!imgMap.isEmpty()) {
+		/*if (!imgMap.isEmpty()) {
 			for (Map.Entry<String, String> entry : imgMap.entrySet()) {
 				moment.setMomentImgs(entry.getValue());
 				break;
 			}
-		}
+		}*/
 		moment.setTitle(articleTitle.getText().toString());
 		moment.setContent(contentRichEditText.getText().toString());
 		moment.setAuthorId(1);
 		moment.setDirty(dirty);// 本地的标志
 		moment.setAuthorName("KDF5000");
-		moment.setPostTime(TimeFormatUtil.getCurrentDateTime());
+		String postTime = TimeFormatUtil.getCurrentDateTime();
+		moment.setPostTime(postTime);
+		//用用户id，灵感标题，发布时间作为保存数据库的momentid
+		moment.setMomentUid(EncryptUtil.md5("1",articleTitle.getText().toString(), postTime).hashCode());
 		saveMomentDb(moment);
 	}
 
@@ -821,8 +820,8 @@ public class EditorActivity extends BaseActivity {
 	 * 上传文件到七牛
 	 */
 	private void uploadFilte2Qiniu(String token) {
-		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText
-				.getText().toString());
+		Map<String, String> imgMap = RichEditUtils
+				.extractImg(contentRichEditText.getText().toString());
 		TaskManager manager = new TaskManager();
 		manager.setTaskCallBack(new TaskCallback() {
 
@@ -831,7 +830,7 @@ public class EditorActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				Toast.makeText(EditorActivity.this, msg, Toast.LENGTH_SHORT)
 						.show();
-				saveDataToDB(1);
+				saveMomentDb(moment);
 			}
 
 			@Override
@@ -839,15 +838,16 @@ public class EditorActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				String content = contentRichEditText.getText().toString();
 				for (Map.Entry<String, String> entry : resMap.entrySet()) {
-					Log.i("URL",
-							"-->" + entry.getKey() + "=" + entry.getValue());
+					Log.i("URL","-->" + entry.getKey() + "=" + entry.getValue());
 					// 替换et内容
-					content = content.replaceAll(entry.getKey(), "<img src=\""
-							+ C.API.QINIU_BASE_URL + entry.getValue() + "\"/>");
+					content = content.replaceAll(entry.getKey(), "<img src=\""+ C.API.QINIU_BASE_URL + entry.getValue() + "\"/>");
+					// 最好取第一个
+					moment.setMomentImgs(C.API.QINIU_BASE_URL + entry.getValue());
 				}
-				// 上传到服务器
-				Toast.makeText(EditorActivity.this, content, Toast.LENGTH_SHORT)
-						.show();
+				// 上传到服务器 上传成功后保存到本地
+				moment.setDirty(0);
+				
+				Toast.makeText(EditorActivity.this, content, Toast.LENGTH_SHORT).show();
 
 				Intent intent = new Intent(EditorActivity.this,
 						TestActivity.class);
