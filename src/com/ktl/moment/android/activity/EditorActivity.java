@@ -38,9 +38,11 @@ import com.ktl.moment.android.component.ResizeLinearLayout;
 import com.ktl.moment.android.component.ResizeLinearLayout.OnResizeListener;
 import com.ktl.moment.android.component.RichEditText;
 import com.ktl.moment.android.component.RippleBackground;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.QiniuToken;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
@@ -60,6 +62,7 @@ import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.loopj.android.http.RequestParams;
 
 /**
  * 灵感编辑
@@ -846,13 +849,34 @@ public class EditorActivity extends BaseActivity {
 				}
 				// 上传到服务器 上传成功后保存到本地
 				moment.setDirty(0);
-				
-				Toast.makeText(EditorActivity.this, content, Toast.LENGTH_SHORT).show();
-
-				Intent intent = new Intent(EditorActivity.this,
-						TestActivity.class);
-				intent.putExtra("data", content);
-				startActivity(intent);
+				RequestParams params = new RequestParams();
+				User userInfo = Account.getUserInfo();
+				if(userInfo==null){
+					actionStart(AccountActivity.class);
+				}
+				params.put("userId", userInfo.getUserId());
+				params.put("title", moment.getTitle());
+				params.put("content", moment.getContent());
+				params.put("label", moment.getLabel());
+				params.put("isPublic", moment.getIsOpen());
+				ApiManager.getInstance().post(EditorActivity.this, C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
+					
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						//保存数据库
+						saveMomentDb(moment);
+						//跳转到灵感页面
+						finish();
+					}
+					
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						//
+						
+					}
+				},"");
 			}
 		});
 		for (Map.Entry<String, String> entry : imgMap.entrySet()) {
