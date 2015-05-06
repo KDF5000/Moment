@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/editor_main_color" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/read_title_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/editor_main_color"
+                android:gravity="center|left"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="我们以为贫穷就是饥饿、衣不蔽体和没有房屋。"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <com.ktl.moment.android.component.RichTextView
+                    android:id="@+id/read_content_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/editor_main_color"
+                    android:gravity="left|top"
+                    android:lineSpacingExtra="4.6dp"
+                    android:scrollbars="vertical"
+                    android:text="我们以为贫穷就是饥饿、衣不蔽体和没有房屋。然而最大的贫穷却是不被需要、没有爱和不被关心。
+　　当你什么工作皆不想做，或人生每一桩事皆有极大的不情愿，在这时刻，你最好去流浪。去千山万水的熬时度日，耗空你的身心，粗砺你的知觉，直到你能自发的甘愿的回抵原先的枯燥岗位做你身前之事。
+　　你的时间有限，不要浪费于重复别人的生活。不要让别人的观点淹没了你内心的声音。
+　　老板只能给一个位置，不能给一个未来。舞台再大，人走茶凉。下对注，赢一次;跟对人，赢一世。不识货，半世苦;不识人，一世苦。学识不如知识，知识不如做事，做事不如做人。重师者王，重友者霸，重己者亡。人生三比：比才华;比财力;比境界。
+　　一切伟大的行动和思想，都有一个微不足道的开始。快乐不是因为拥有的多而是计较的少。乐观者在灾祸中看到机会;悲观者在机会中看到灾祸。人生重要的不是所站的位置，而是所朝的方向。
+　　等一朵花开，念一世情怀。
+　　认清自己往往比轻视别人更重要。生活的美，来源于你对生活的热爱;友情的纯真，来源于你对朋友真诚的相待。人生只有一次，它提醒我要珍惜这易逝的时光。敞开心扉，知已就不再难寻。在最悲伤的时候，不能失去信念;在最幸福的时候，不能忘记挫折。
+       每件赏心悦目的东西背后，总有一段悲哀的隐情，连最不起眼的小花要开放，世界也得经历阵痛。---王尔德
+　　要无条件自信，即使在做错的时候。不要想太多，定时清除消极思想。学会忘记痛苦，为阳光记忆腾出空间。敢于尝试，敢于丢脸。每天都是新的，烦恼痛苦不过夜。面对别人的优秀时，发自内心地赞美。做人最高境界不是一味低调，也不是一味张扬，而是不卑不亢。
+　　似乎我们总是很容易忽略当下的生活，忽略许多美好的时光。而当所有的时光在被辜负被浪费后，才能从记忆里将某一段拎出，拍拍上面沉积的灰尘，感叹它是最好的。---钱钟书
+　　你的过去我不愿过问，那是你的事情。你的未来我希望参与，这是我的荣幸。
+　　不要狠狠地把门“砰”地关上，因为很可能你还要回来;有舞台就演好角色，没舞台就静静地做观众;不要整天抱怨生活欠你什么，实际上生活不知道你是谁;把弯路走直是聪明，因为找到了捷径;把直路走弯是豁达，因为能多看几道风景;让别人快乐是慈悲，让自己快乐是智慧。
+　　爱就是让对方住进你心里，理解就是在心里和对方生活在一起。
+　　世上最奢侈的人，是肯花时间陪你的人。谁的时间都有价值，把时间分给了你，就等于把自己的世界分给了你。世界那么大，有人肯陪你，是多大的情分!人们总给爱添加各种含义，其实这个字的解释也很简单，就是：有个人，直到最后也没走。
+　　女人一生最成功的事情之一，便是选了一个对的男人。炊烟起了，我在门口等你。夕阳下了，我在山边等你。叶子黄了，我在树下等你。月儿弯了，我在十五等你。细雨来了，我在伞下等你。流水冻了，我在河畔等你。生命累了，我在天堂等你。我们老了，我在来生等你。
+                "
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/read_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="14dp"
+                android:background="#f7f7f7"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/read_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/detail_audio" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <SeekBar
+                        android:id="@+id/read_play_seekbar"
+                        style="@style/editor_player_seekbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/read_play_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginTop="6dp"
+                            android:text="已暂停"
+                            android:textColor="#676666"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/read_play_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="6dp"
+                            android:text="00:00"
+                            android:textColor="#676666"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/read_play_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/editor_record_start" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/read_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="12dp"
+        android:src="@drawable/read_edit" />
+
+</RelativeLayout>

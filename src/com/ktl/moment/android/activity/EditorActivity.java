@@ -24,6 +24,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -80,6 +81,9 @@ public class EditorActivity extends BaseActivity {
 
 	@ViewInject(R.id.editor_record_big_img)
 	private ImageView recordBigImg;
+
+	@ViewInject(R.id.editor_article_title)
+	private EditText articleTitle;
 
 	@ViewInject(R.id.editor_edit_area)
 	private RichEditText editText;
@@ -726,6 +730,29 @@ public class EditorActivity extends BaseActivity {
 		// 没有网络的话保存到本地
 		BasicInfoUtil basicInfoUtil = BasicInfoUtil.getInstance(this);
 		if (basicInfoUtil.isNetworkConnected()) {// 有网
+			/**
+			 * 先保存到本地
+			 */
+			Map<String, String> imgMap = RichEditUtils.extractImg(editText
+					.getText().toString());
+			Moment moment = new Moment();
+			moment.setTitle("我是一条灵感");
+			if (!imgMap.isEmpty()) {
+				for (Map.Entry<String, String> entry : imgMap.entrySet()) {
+					moment.setMomentImgs(entry.getValue());
+					break;
+				}
+			}
+			moment.setTitle(articleTitle.getText().toString());
+			moment.setContent(editText.getText().toString());
+			moment.setDirty(0);// 本地的标志
+			moment.setAuthorId(1);
+			moment.setAuthorName("KDF5000");
+			saveMomentDb(moment);
+			
+			/**
+			 * 再上传至云端
+			 */
 			// 获取token
 			ApiManager.getInstance().get(this, C.API.GET_QINIU_TOKEN, null,
 					new HttpCallBack() {
@@ -746,20 +773,23 @@ public class EditorActivity extends BaseActivity {
 									Toast.LENGTH_SHORT).show();
 						}
 					}, "QiniuToken");
+
 		} else {
 			// 保存到本地
-			Map<String,String> imgMap = RichEditUtils.extractImg(editText.getText().toString());
+			Map<String, String> imgMap = RichEditUtils.extractImg(editText
+					.getText().toString());
 			Moment moment = new Moment();
 			moment.setTitle("我是一条灵感");
-			if(!imgMap.isEmpty()){
+			if (!imgMap.isEmpty()) {
 				for (Map.Entry<String, String> entry : imgMap.entrySet()) {
 					moment.setMomentImgs(entry.getValue());
 					break;
 				}
 			}
+			moment.setTitle(articleTitle.getText().toString());
 			moment.setContent(editText.getText().toString());
 			moment.setAuthorId(1);
-			moment.setDirty(1);//本地的标志
+			moment.setDirty(1);// 本地的标志
 			moment.setAuthorName("KDF5000");
 			saveMomentDb(moment);
 		}

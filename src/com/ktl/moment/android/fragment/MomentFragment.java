@@ -2,6 +2,7 @@ package com.ktl.moment.android.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.activity.MomentDialogActivity;
+import com.ktl.moment.android.activity.ReadActivity;
 import com.ktl.moment.android.adapter.MomentPlaAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.etsy.StaggeredGridView;
@@ -69,7 +71,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView.setOnItemClickListener(this);
 		staggeredGridView.setOnItemLongClickListener(this);
 	    postTime = TimeFormatUtil.getCurrentDateTime();
-		getDataFromServer();
+//		getDataFromServer();
 		initEvent();
 		return view;
 	}
@@ -95,6 +97,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				}
 			});
 		}
+	}
+	
+	private void getDataFromDB(){
+//		((HomeActivity) getActivity()).getDbData(C.DbTaskId.GET_MOMENT_LIST, DbTaskType.findByPage, Moment.class, WhereBuilder.b(columnName, op, value));
 	}
 
 	/**
@@ -168,9 +174,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		Log.i(TAG, "click item");
 		Toast.makeText(getActivity(), "Item Clicked: " + position,
 				Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(getActivity(), ReadActivity.class);
+		startActivity(intent);
 	}
 
 	@Override

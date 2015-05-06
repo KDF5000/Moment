@@ -249,6 +249,10 @@
             android:name="com.ktl.moment.android.activity.MsgActivity"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <!-- 阅读灵感页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.ReadActivity">
+        </activity>
     </application>
 
 </manifest>

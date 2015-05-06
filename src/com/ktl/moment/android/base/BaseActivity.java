@@ -40,7 +40,8 @@ public abstract class BaseActivity extends FragmentActivity {
 	protected FrameLayout contentLayout;
 	protected TextView middleTitleTv;
 	protected ImageView titleBackImg;
-	private ImageView titleRightImg;
+	protected ImageView titleRightImg;
+	protected ImageView titleRightImgLeft;
 	protected TextView titleRightTv;
 
 	public LinearLayout titleFindTab;
@@ -48,9 +49,11 @@ public abstract class BaseActivity extends FragmentActivity {
 	public TextView titleMiddleChannel;
 
 	private DbTaskManager taskManager;
+
 	public ImageView getTitleRightImg() {
 		return titleRightImg;
 	}
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -61,10 +64,10 @@ public abstract class BaseActivity extends FragmentActivity {
 		findViews();
 		hideAllNavigationInfo();
 		AppManager.getInstance().addActivity(this);
-		
-		//数据库操作管理类
+
+		// 数据库操作管理类
 		taskManager = new DbTaskManager();
-		//init db
+		// init db
 		DBManager.getInstance().init(this);
 	}
 
@@ -79,6 +82,7 @@ public abstract class BaseActivity extends FragmentActivity {
 
 		titleRightImg = (ImageView) findViewById(R.id.title_right_img);
 		titleRightTv = (TextView) findViewById(R.id.title_right_tv);
+		titleRightImgLeft = (ImageView) findViewById(R.id.title_right_img_left);
 
 		titleFindTab = (LinearLayout) findViewById(R.id.title_find_tab);
 		titleMiddleChannel = (TextView) findViewById(R.id.title_middle_channel);
@@ -91,6 +95,7 @@ public abstract class BaseActivity extends FragmentActivity {
 		setMiddleTitleVisible(false);
 		setTitleBackImgVisible(false);
 		setTitleRightImgVisible(false);
+		setTitleRightImgLeftVisible(false);
 		setMiddleFindTabVisible(false);
 		setTitleRightTvVisible(false);
 	}
@@ -124,6 +129,14 @@ public abstract class BaseActivity extends FragmentActivity {
 			titleRightImg.setVisibility(View.VISIBLE);
 		} else {
 			titleRightImg.setVisibility(View.GONE);
+		}
+	}
+
+	protected void setTitleRightImgLeftVisible(boolean isVisible) {
+		if (isVisible) {
+			titleRightImgLeft.setVisibility(View.VISIBLE);
+		} else {
+			titleRightImgLeft.setVisibility(View.GONE);
 		}
 	}
 
@@ -250,40 +263,52 @@ public abstract class BaseActivity extends FragmentActivity {
 				.considerExifParams(true).build();
 		return options;
 	}
+
 	/**
 	 * 数据库任务操作的回调 子类重写
+	 * 
 	 * @param res
-	 * @return 
+	 * @return
 	 */
-	public abstract void OnDbTaskComplete (Message res);
+	public abstract void OnDbTaskComplete(Message res);
+
 	/**
 	 * 异步保存数据到数据库
+	 * 
 	 * @param taskType
 	 * @param entityType
 	 * @param entities
 	 */
-	protected void saveDbDataAsync(int taskId,DbTaskType taskType,Class<?> entityType,List<?> entities,DbTaskHandler handler){
-		taskManager.addTask(taskId,taskType, entities, entityType, handler);
+	protected void saveDbDataAsync(int taskId, DbTaskType taskType,
+			Class<?> entityType, List<?> entities, DbTaskHandler handler) {
+		taskManager.addTask(taskId, taskType, entities, entityType, handler);
 	}
+
 	/**
 	 * 从本地数据库获取数据
+	 * 
 	 * @param taskType
 	 * @param entityType
 	 * @param handler
 	 */
-	protected void getDbDataAsync(int taskId,DbTaskType taskType,Class<?> entityType,DbTaskHandler handler){
-		taskManager.addTask(taskId,taskType, null, entityType, handler);
+	protected void getDbDataAsync(int taskId, DbTaskType taskType,
+			Class<?> entityType, DbTaskHandler handler) {
+		taskManager.addTask(taskId, taskType, null, entityType, handler);
 	}
+
 	/**
 	 * 从本地数据库获取数据
+	 * 
 	 * @param taskId
 	 * @param taskType
 	 * @param entityType
 	 * @param builder
 	 * @param handler
 	 */
-	protected void getDbDataAsync(int taskId,DbTaskType taskType,Class<?> entityType,WhereBuilder builder,DbTaskHandler handler){
-		taskManager.addTask(taskId,taskType, null, entityType, builder,handler);
+	protected void getDbDataAsync(int taskId, DbTaskType taskType,
+			Class<?> entityType, WhereBuilder builder, DbTaskHandler handler) {
+		taskManager.addTask(taskId, taskType, null, entityType, builder,
+				handler);
 	}
-	
+
 }
