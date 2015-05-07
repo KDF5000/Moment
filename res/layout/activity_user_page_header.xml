@@ -99,6 +99,7 @@
                     android:src="@drawable/cancel" />
 
                 <TextView
+                    android:id="@+id/userpage_focus_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -165,7 +166,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/user_collection_nav"
+                android:id="@+id/user_watch_nav"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -176,7 +177,7 @@
                 android:paddingTop="5dp" >
 
                 <TextView
-                    android:id="@+id/userpage_collection_num"
+                    android:id="@+id/userpage_watch_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5"
@@ -187,7 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="收藏"
+                    android:text="围观"
                     android:textColor="#ffffff"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -221,6 +222,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/user_fans_nav"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

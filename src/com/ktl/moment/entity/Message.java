@@ -15,6 +15,15 @@ public class Message extends BaseEntity {
 	public String sendTime;
 	public String msgContent;
 	public int msgType; // 0：send msg；1：recieve msg；2：time
+	public int msgCount;
+
+	public int getMsgCount() {
+		return msgCount;
+	}
+
+	public void setMsgCount(int msgCount) {
+		this.msgCount = msgCount;
+	}
 
 	public String getRecieveUserAvatar() {
 		return recieveUserAvatar;

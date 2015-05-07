@@ -46,6 +46,7 @@ public class MyFocusActivty extends BaseActivity{
 	private int pageNum = 0;
 	private int pageSize = 10;
 	private String intentFlag;
+	private long userId;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -62,6 +63,7 @@ public class MyFocusActivty extends BaseActivity{
 		
 		Intent intent = getIntent();
 		intentFlag = intent.getStringExtra("intentFlag");
+		userId = intent.getLongExtra("userId", -1);
 
 		getData();
 		fansAdapter = new FansAdapter(this, focusList, getDisplayImageOptions());
@@ -74,6 +76,10 @@ public class MyFocusActivty extends BaseActivity{
 			setMiddleTitleName("我的关注");
 		}else if(intentFlag.equals("fans")){
 			setMiddleTitleName("我的粉丝");
+		}else if(intentFlag.equals("userFocus")){
+			setMiddleTitleName("他的关注");
+		}else{
+			setMiddleTitleName("他的粉丝");
 		}
 		setBaseActivityBgColor(getResources().getColor(R.color.main_title_color));
 		
@@ -138,7 +144,11 @@ public class MyFocusActivty extends BaseActivity{
 			focusList = new ArrayList<User>();
 		}
 		RequestParams params = new RequestParams();
-		params.put("userId", Account.getUserInfo().getUserId());
+		if(userId == -1){
+			params.put("userId", Account.getUserInfo().getUserId());
+		}else{
+			params.put("userId", userId);
+		}
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		String url = C.API.GET_FOCUS_AUTHOR_LIST;
@@ -146,6 +156,10 @@ public class MyFocusActivty extends BaseActivity{
 			url = C.API.GET_FOCUS_AUTHOR_LIST;
 		}else if(intentFlag.equals("fans")){
 			url = C.API.GET_MY_FANS_LIST;
+		}else if(intentFlag.equals("userFocus")){
+			url = "";
+		}else{
+			url = "";
 		}
 		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
 			

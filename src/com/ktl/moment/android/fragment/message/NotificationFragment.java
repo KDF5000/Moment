@@ -59,10 +59,10 @@ public class NotificationFragment extends Fragment {
 			Notification tmp = new Notification();
 			tmp.setUserAvatar("");
 			tmp.setUserNickname(i + "HUST");
-			tmp.setMsgType(i);
-			tmp.setMsgTitle("一女大学生赴东南亚旅游，因衣装暴露被遣返。");
-			tmp.setMsgContent("被遣返回国的王某，抱怨飞机上的空调太冷，下机时还不顾劝阻强行裹走了一条飞机上的毛毯。王某称，她平时穿衣打扮都走性感路线，对其他人的异样目光从来不予理会。但是没想到这次出境，却因为穿衣打扮影响了自己的旅行。");
-			tmp.setMsgDate(1 + "小时前");
+			tmp.setNotifyType(i);
+			tmp.setNotifyTitle("一女大学生赴东南亚旅游，因衣装暴露被遣返。");
+			tmp.setNotifyContent("被遣返回国的王某，抱怨飞机上的空调太冷，下机时还不顾劝阻强行裹走了一条飞机上的毛毯。王某称，她平时穿衣打扮都走性感路线，对其他人的异样目光从来不予理会。但是没想到这次出境，却因为穿衣打扮影响了自己的旅行。");
+			tmp.setNotifyDate(1 + "小时前");
 			notifyList.add(tmp);
 		}
 

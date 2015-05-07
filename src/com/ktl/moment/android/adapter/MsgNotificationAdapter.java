@@ -71,11 +71,11 @@ public class MsgNotificationAdapter extends BaseAdapter {
 		ImageLoader.getInstance().displayImage(notification.getUserAvatar(),
 				notifyHolder.avatar, options);
 		notifyHolder.nickname.setText(notification.getUserNickname());
-		notifyHolder.date.setText(notification.getMsgDate());
-		notifyHolder.title.setText(notification.getMsgTitle());
-		notifyHolder.content.setText("“" + notification.getMsgContent() + "”");
+		notifyHolder.date.setText(notification.getNotifyDate());
+		notifyHolder.title.setText(notification.getNotifyTitle());
+		notifyHolder.content.setText("“" + notification.getNotifyContent() + "”");
 		CharSequence typeChar = "";
-		switch (notification.getMsgType()) {
+		switch (notification.getNotifyType()) {
 		case 0:
 			typeChar = "评论了你的灵感：";
 			break;

@@ -4,3 +4,5 @@ gen/
 *.class
 *.dex
 uml/
+src/com/ktl/moment/common/constant/interface_list.html
+src/com/ktl/moment/common/constant/interface_list.md

@@ -1,6 +1,5 @@
 package com.ktl.moment.android.component.pullzoomview;
 
-import android.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.SystemClock;

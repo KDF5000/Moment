@@ -9,12 +9,17 @@ public class C {
 		/**
 		 * url基地址
 		 */
-//		private static final String URL_BASE = "http://115.156.249.44:8080/MomentService/";
+		// private static final String URL_BASE =
+		// "http://115.156.249.44:8080/MomentService/";
 		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
 		 */
 		public static final String QINIU_BASE_URL = "http://7xigjm.com1.z0.glb.clouddn.com/";
+		/**
+		 * 获取七牛token
+		 */
+		public static final String GET_QINIU_TOKEN = "http://mymoment.sinaapp.com/qiniu_token.php";
 		/**
 		 * 手机号登录
 		 */
@@ -30,10 +35,6 @@ public class C {
 		 */
 		public static final String USER_REGISTER = URL_BASE
 				+ "UserInfoService/Registration/";
-		/**
-		 * 获取七牛token
-		 */
-		public static final String GET_QINIU_TOKEN = "http://mymoment.sinaapp.com/qiniu_token.php";
 		/**
 		 * 获取关注首页list
 		 */
@@ -55,12 +56,12 @@ public class C {
 		public static final String WATCH_MOMENT = URL_BASE
 				+ "MomentsService/MomentOperate/collectMoment";
 		/**
-		 * 获取我的粉丝列表
+		 * 获取粉丝列表
 		 */
 		public static final String GET_MY_FANS_LIST = URL_BASE
 				+ "UserInfoService/UserInfo/getFans";
 		/**
-		 * 获取关注的作者list
+		 * 获取关注的用户list
 		 */
 		public static final String GET_FOCUS_AUTHOR_LIST = URL_BASE
 				+ "UserInfoService/UserInfo/getAtentionUsers";
@@ -85,19 +86,102 @@ public class C {
 		/**
 		 * 上传信鸽token
 		 */
-		public static final String XG_UPLOAD_TOKEN = URL_BASE + "XgService/XgOperate/uploadToken";
+		public static final String XG_UPLOAD_TOKEN = URL_BASE
+				+ "XgService/XgOperate/uploadToken";
 		/**
 		 * 上传灵感
 		 */
-		public static final String UPLOAD_MOMENT = URL_BASE + "MomentsService/Attention/uploadMoment";
+		public static final String UPLOAD_MOMENT = URL_BASE
+				+ "MomentsService/Attention/uploadMoment";
 		/**
 		 * 消息中心私信列表
 		 */
-		public static final String GET_MSG_LIST = URL_BASE+"msg.php";
+		public static final String GET_MSG_LIST = URL_BASE + "msg.php";
 		/**
 		 * 消息中心通知列表
 		 */
-		public static final String GET_NOTIFICATION_LIST = URL_BASE+"notify.php";
+		public static final String GET_NOTIFICATION_LIST = URL_BASE
+				+ "notify.php";
+		/**
+		 * 消息中心新粉丝列表
+		 */
+		public static final String GET_NEW_FANS_LIST = URL_BASE + "";
+		/**
+		 * 获取我的所有灵感
+		 */
+		public static final String GET_MY_MOMENT_LIST = URL_BASE + "";
+		/**
+		 * 获取我点赞的灵感
+		 */
+		public static final String GET_MY_PRAISE_LIST = URL_BASE
+				+ "UserInfoService/UserInfo/getPraiseMoments";
+		/**
+		 * 获取我围观的灵感
+		 */
+		public static final String GET_MY_WATCH_LIST = URL_BASE
+				+ "UserInfoService/UserInfo/getCollectMoments";
+		/**
+		 * 获取我的个人信息
+		 */
+		public static final String GET_MY_INFO = URL_BASE
+				+ "UserInfoService/UserInfo/getUserOwnInfo";
+		/**
+		 * 获取用户信息
+		 */
+		public static final String GET_USER_INFO = URL_BASE
+				+ "UserInfoService/UserInfo/getOtherUserInfo";
+		/**
+		 * 获取用户的灵感
+		 */
+		public static final String GET_USER_MOMENT_LIST = URL_BASE + "";
+		/**
+		 * 获取用户围观的灵感
+		 */
+		public static final String GET_USER_WATCH_LIST = URL_BASE + "";
+		/**
+		 * 获取用户关注的作者
+		 */
+		public static final String GET_USER_FOCUS_LIST = URL_BASE + "";
+		/**
+		 * 获取用户的粉丝
+		 */
+		public static final String GET_USER_FANS_LIST = URL_BASE + "";
+		/**
+		 * 剪藏灵感
+		 */
+		public static final String CUT_COLLECT_MOMENT = URL_BASE + "";
+		/**
+		 * 分享灵感
+		 */
+		public static final String SHARE_MOMENT = URL_BASE + "";
+		/**
+		 * 私信消息
+		 */
+		public static final String PERSONAL_MSG = URL_BASE + "";
+		/**
+		 * 获取推荐灵感
+		 */
+		public static final String GET_RECOMMEND__MOMENT = URL_BASE + "";
+		/**
+		 * 频道首页list
+		 */
+		public static final String GET_CHENNAL_LIST = URL_BASE
+				+ "MomentsService/Classify/getClassifies";
+		/**
+		 * 频道详情页
+		 */
+		public static final String GET_CHANNEL_INFO_LIST = URL_BASE
+				+ "MomentsService/Classify/getClassifyMoments";
+		/**
+		 * 评论灵感
+		 */
+		public static final String COMMENT_MOMENT = URL_BASE
+				+ "MomentsService/Comment/addComment";
+		/**
+		 * 点赞评论
+		 */
+		public static final String PRAISE_COMMENT = URL_BASE
+				+ "MomentsService/MomentOperate";
 	}
 
 	/******************************************************************************
@@ -253,12 +337,12 @@ public class C {
 		public static final int QQ_LOGIN = 1;// QQ登陆
 		public static final int WEIBO_LOGIN = 2;// 微博登陆
 	}
-	
-	public static final class DbTaskId{
-		public static final int EDITOR_MOMENT_SAVE = 1;//编辑界面保存灵感到本地数据库
-		public static final int MOMENT_GET_DIRTY_MOMENT = 2;//获取灵感页面没有同步到服务端的灵感
-		public static final int MOMENT_LIST_SAVE = 3;//灵感页面保存momentlist
-		public static final int GET_MOMENT_DETAIL = 4;//获取单条灵感内容
-		public static final int GET_MOMENT_LIST = 5;//获取灵感页面list
+
+	public static final class DbTaskId {
+		public static final int EDITOR_MOMENT_SAVE = 1;// 编辑界面保存灵感到本地数据库
+		public static final int MOMENT_GET_DIRTY_MOMENT = 2;// 获取灵感页面没有同步到服务端的灵感
+		public static final int MOMENT_LIST_SAVE = 3;// 灵感页面保存momentlist
+		public static final int GET_MOMENT_DETAIL = 4;// 获取单条灵感内容
+		public static final int GET_MOMENT_LIST = 5;// 获取灵感页面list
 	}
 }

@@ -5,11 +5,13 @@ public class Notification extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public long userId;
+	public long notificationId;
 	public String userAvatar;
 	public String userNickname;
-	public String msgDate;
-	public String msgTitle;// 消息标题，对应灵感的标题或者你的评论内容
-	public String msgContent;// 消息内容，对应评论内容
+	public String notifyDate;
+	public String notifyTitle;// 消息标题，对应灵感的标题或者你的评论内容
+	public String notifyContent;// 消息内容，对应评论内容
 	/*
 	 * 消息类型 
 	 * 0：评论了 
@@ -22,8 +24,24 @@ public class Notification extends BaseEntity {
 	 * 7：关注的被评论了 
 	 * 8：赞了你的评论
 	 */
-	public int msgType;
+	public int notifyType;
 	public int isScaned;// 是否已浏览了消息0：否，1：是
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public long getNotificationId() {
+		return notificationId;
+	}
+
+	public void setNotificationId(long notificationId) {
+		this.notificationId = notificationId;
+	}
 
 	public int getIsScaned() {
 		return isScaned;
@@ -49,36 +67,38 @@ public class Notification extends BaseEntity {
 		this.userNickname = userNickname;
 	}
 
-	public String getMsgDate() {
-		return msgDate;
+	public String getNotifyDate() {
+		return notifyDate;
 	}
 
-	public void setMsgDate(String msgDate) {
-		this.msgDate = msgDate;
+	public void setNotifyDate(String notifyDate) {
+		this.notifyDate = notifyDate;
 	}
 
-	public String getMsgTitle() {
-		return msgTitle;
+	public String getNotifyTitle() {
+		return notifyTitle;
 	}
 
-	public void setMsgTitle(String msgTitle) {
-		this.msgTitle = msgTitle;
+	public void setNotifyTitle(String notifyTitle) {
+		this.notifyTitle = notifyTitle;
 	}
 
-	public String getMsgContent() {
-		return msgContent;
+	public String getNotifyContent() {
+		return notifyContent;
 	}
 
-	public void setMsgContent(String msgContent) {
-		this.msgContent = msgContent;
+	public void setNotifyContent(String notifyContent) {
+		this.notifyContent = notifyContent;
 	}
 
-	public int getMsgType() {
-		return msgType;
+	public int getNotifyType() {
+		return notifyType;
 	}
 
-	public void setMsgType(int msgType) {
-		this.msgType = msgType;
+	public void setNotifyType(int notifyType) {
+		this.notifyType = notifyType;
 	}
+
+	
 
 }
