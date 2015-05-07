@@ -20,6 +20,7 @@ import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.LogUtil;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
@@ -327,5 +328,17 @@ public class HomeActivity extends BaseActivity {
 	 */
 	public void getDbData(int taskId, DbTaskType taskType, Selector selector) {
 		getDbDataAsync(taskId, taskType, selector, dbTaskHandler);
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//跳回到主页面刷新moment页面的标志
+		boolean isSwitch2Moment =  SharedPreferencesUtil.getInstance().getBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
+		if(isSwitch2Moment == true){
+			customMenu.clickMenuItem(C.menu.FRAGMENT_MOMENT_MENU_ID);
+		}
 	}
 }
