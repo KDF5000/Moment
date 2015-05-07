@@ -18,6 +18,9 @@ import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
+import com.ktl.moment.im.entity.XgMessage;
+import com.ktl.moment.im.xg.receiver.XgMessageReceiver;
+import com.ktl.moment.im.xg.receiver.XgMessageReceiver.OnCustomMessageListener;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.LogUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
@@ -32,7 +35,7 @@ import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements OnCustomMessageListener {
 	private static final String TAG = "HomeAtivity";
 
 	private BottomMenu customMenu;// 菜单
@@ -340,5 +343,29 @@ public class HomeActivity extends BaseActivity {
 		if(isSwitch2Moment == true){
 			customMenu.clickMenuItem(C.menu.FRAGMENT_MOMENT_MENU_ID);
 		}
+		XGPushManager.onActivityStarted(this);
+		XgMessageReceiver.addCustomMessageListener(this);
 	}
+	
+	 
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		XGPushManager.onActivityStoped(this);
+		XgMessageReceiver.addCustomMessageListener(this);
+	}
+
+	@Override
+	public void OnReceive(XgMessage msg) {
+		// TODO Auto-generated method stub
+		int messageType = msg.getMessageType();
+		switch(messageType){
+		case 1://自定义消息
+			//显示小红点
+			break;
+			
+		}
+	}
+	
 }

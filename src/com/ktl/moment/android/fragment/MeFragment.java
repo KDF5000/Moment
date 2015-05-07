@@ -63,7 +63,7 @@ public class MeFragment extends BaseFragment {
 	@ViewInject(R.id.me_praise_layout)
 	private LinearLayout mePraiseLayout;
 
-	private BadgeView msgNotifyBadge;
+	private BadgeView msgNotifyBadge;//小红点
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
