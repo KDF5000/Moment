@@ -53,9 +53,8 @@
                 android:id="@+id/focus_author_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/focus_author" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true" />
         </RelativeLayout>
 
         <TextView

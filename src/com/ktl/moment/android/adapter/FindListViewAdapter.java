@@ -25,6 +25,7 @@ import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.PregUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.net.ApiManager;
@@ -86,14 +87,23 @@ public class FindListViewAdapter extends BaseAdapter {
 		final Moment moment = momentList.get(position);
 		momentHolder.tittleTv.setText(moment.getTitle());
 		momentHolder.contentTv.setText(moment.getContent());
-		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
-				momentHolder.avatar, options);
-		ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
-				momentHolder.momentImg, options);
+		if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
+			ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
+					momentHolder.avatar, options);
+		} else {
+			momentHolder.avatar.setImageResource(R.drawable.default_img);
+		}
+		if (PregUtil.pregImgUrl(moment.getMomentImgs())) {
+			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
+					momentHolder.momentImg, options);
+		} else {
+			momentHolder.momentImg.setVisibility(View.GONE);
+		}
 		momentHolder.userNameTv.setText(moment.getAuthorName());
-		momentHolder.postTime.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
+		momentHolder.postTime.setText(TimeFormatUtil.formatDate(moment
+				.getPostTime()));
 
-		if (moment.getIsFocused() == 0) {
+		if (moment.getIsFocused() == 1) {
 			momentHolder.focusAuthorImg
 					.setImageResource(R.drawable.focus_author_press);
 		} else {
@@ -170,7 +180,7 @@ public class FindListViewAdapter extends BaseAdapter {
 						R.anim.focus_img_anim);
 				momentHolder.focusAuthorImg.setAnimation(anim);
 				int isAddFocus;
-				if (moment.getIsFocused() == 0) {
+				if (moment.getIsFocused() == 1) {
 					anim.setAnimationListener(new AnimationListener() {
 
 						@Override
@@ -190,10 +200,10 @@ public class FindListViewAdapter extends BaseAdapter {
 							// TODO Auto-generated method stub
 							momentHolder.focusAuthorImg
 									.setImageResource(R.drawable.focus_author);
-							moment.setIsFocused(1);
+							moment.setIsFocused(0);
 						}
 					});
-					isAddFocus = 1;
+					isAddFocus = 0;
 				} else {
 					anim.setAnimationListener(new AnimationListener() {
 
@@ -214,10 +224,10 @@ public class FindListViewAdapter extends BaseAdapter {
 							// TODO Auto-generated method stub
 							momentHolder.focusAuthorImg
 									.setImageResource(R.drawable.focus_author_press);
-							moment.setIsFocused(0);
+							moment.setIsFocused(1);
 						}
 					});
-					isAddFocus = 0;
+					isAddFocus = 1;
 				}
 				notifyDataSetChanged();
 				requestServer(isAddFocus, "isAddFocus", user.getUserId(),

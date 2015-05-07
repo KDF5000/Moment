@@ -87,7 +87,7 @@ public class MomentPlaAdapter extends BaseAdapter {
 		Moment moment = momentList.get(position);
 		momentHolder.createDate.setText(moment.getPostTime());
 
-		if (moment.getIsCutCollect() == 1) {
+		if (moment.getIsClipper() == 1) {
 			momentHolder.publicText.setVisibility(View.GONE);
 			momentHolder.collectImg.setVisibility(View.VISIBLE);
 		} else {

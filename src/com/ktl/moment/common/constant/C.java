@@ -9,9 +9,9 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		// private static final String URL_BASE =
-		// "http://115.156.249.44:8080/MomentService/";
-		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
+//		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
+		private static final String URL_BASE ="http://115.156.249.84:8080/";
+//		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
 		 */
@@ -149,7 +149,7 @@ public class C {
 		/**
 		 * 剪藏灵感
 		 */
-		public static final String CUT_COLLECT_MOMENT = URL_BASE + "";
+		public static final String CLIPPER_MOMENT = URL_BASE + "";
 		/**
 		 * 分享灵感
 		 */

@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +24,13 @@ import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnItemClickListener;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Comment;
 import com.ktl.moment.entity.Moment;
-import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.PregUtil;
+import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -68,8 +70,24 @@ public class MomentDetailActivity extends BaseActivity {
 
 	@ViewInject(R.id.moment_comment_num)
 	private TextView commentsNum;// 灵感评论数
-	
+
 	/******************** end *********************/
+
+	/****************** foot tab ********************/
+	@ViewInject(R.id.detail_operate_comment)
+	private LinearLayout commentLayout;
+
+	@ViewInject(R.id.detail_operate_share)
+	private ImageView shareImg;
+
+	@ViewInject(R.id.detail_operate_clipper)
+	private ImageView clipperImg;
+
+	@ViewInject(R.id.detail_operate_watch)
+	private ImageView watchImg;
+
+	@ViewInject(R.id.detail_operate_praise)
+	private ImageView praiseImg;
 
 	private LayoutInflater mInflater;
 	private View headerView;
@@ -79,9 +97,11 @@ public class MomentDetailActivity extends BaseActivity {
 	private Handler handler;
 
 	private long momentId;
+	private long authorId;
 	private long userId;
-	private int pageNum = 0;
-	private int pageSize = 10;
+	private int pageNum = 1;
+	private int pageSize = 2;
+	private boolean hasMore = true;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -89,7 +109,8 @@ public class MomentDetailActivity extends BaseActivity {
 		super.onCreate(arg0);
 		Intent intent = getIntent();
 		momentId = intent.getLongExtra("momentId", 0);
-		userId = intent.getLongExtra("userId", 0);
+		authorId = intent.getLongExtra("userId", 0);
+		userId = Account.getUserInfo().getUserId();
 		Toast.makeText(this, momentId + "", Toast.LENGTH_SHORT).show();
 		initView();
 		initEvent();
@@ -105,7 +126,7 @@ public class MomentDetailActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		ViewUtils.inject(this, headerView);
 		commentsListView.addHeaderView(headerView, null, false);
-		
+
 		setMiddleTitleVisible(true);
 		setTitleBackImgVisible(true);
 		setTitleBackImg(R.drawable.title_return_white);
@@ -125,13 +146,15 @@ public class MomentDetailActivity extends BaseActivity {
 		SimpleFooter footer = new SimpleFooter(this);
 		footer.setCircleColor(0xff33bbee);
 		commentsListView.setFootable(footer);
-		
+
 		commentsListView.setOnItemClickListener(new OnItemClickListener() {
-			
+
 			@Override
-			public void onItemClick(ZrcListView parent, View view, int position, long id) {
+			public void onItemClick(ZrcListView parent, View view,
+					int position, long id) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(MomentDetailActivity.this, CommentActivity.class);
+				Intent intent = new Intent(MomentDetailActivity.this,
+						CommentActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -139,10 +162,14 @@ public class MomentDetailActivity extends BaseActivity {
 
 	private void initMomentDetail() {
 		momentTitle.setText(moment.getTitle());
-		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
-				momentUserAvatar, getDisplayImageOptions());
+		if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
+			ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
+					momentUserAvatar, getDisplayImageOptions());
+		} else {
+			momentUserAvatar.setVisibility(View.GONE);
+		}
 		momentUserName.setText(moment.getAuthorName());
-		momentPostTime.setText(moment.getPostTime());
+		momentPostTime.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
 		if (moment.getIsFocused() == 0) {
 			focusAuthor.setImageResource(R.drawable.focus_author);
 		} else {
@@ -150,7 +177,23 @@ public class MomentDetailActivity extends BaseActivity {
 		}
 		momentContent.setText(moment.getContent());
 		momentLabel.setText(moment.getLabel());
-		commentsNum.setText(moment.getCommentNum()+"");
+		commentsNum.setText(moment.getCommentNum() + "");
+
+		if (moment.getIsClipper() == 1) {
+			clipperImg.setImageResource(R.drawable.clipper_press);
+		} else {
+			clipperImg.setImageResource(R.drawable.clipper);
+		}
+		if (moment.getIsWatched() == 1) {
+			watchImg.setImageResource(R.drawable.watch_press);
+		} else {
+			watchImg.setImageResource(R.drawable.watch);
+		}
+		if (moment.getIsPraised() == 1) {
+			praiseImg.setImageResource(R.drawable.like_press);
+		} else {
+			praiseImg.setImageResource(R.drawable.like);
+		}
 	}
 
 	private void initEvent() {
@@ -166,6 +209,10 @@ public class MomentDetailActivity extends BaseActivity {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
+						if (hasMore) {
+							pageNum++;
+							getCommentData();
+						}
 						commentsListView.setLoadMoreSuccess();
 					}
 				}, 2 * 1000);
@@ -173,7 +220,10 @@ public class MomentDetailActivity extends BaseActivity {
 		});
 	}
 
-	@OnClick({ R.id.title_back_img, R.id.focus_author_icon })
+	@OnClick({ R.id.title_back_img, R.id.focus_author_icon,
+			R.id.detail_operate_comment, R.id.detail_operate_share,
+			R.id.detail_operate_clipper, R.id.detail_operate_watch,
+			R.id.detail_operate_praise, R.id.detail_operate_share })
 	private void OnClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back_img:
@@ -181,6 +231,27 @@ public class MomentDetailActivity extends BaseActivity {
 			break;
 		case R.id.focus_author_icon:
 			focusClick();
+			break;
+		case R.id.detail_operate_comment:
+			Intent commentIntent = new Intent(MomentDetailActivity.this,
+					CommentActivity.class);
+			startActivity(commentIntent);
+			break;
+		case R.id.detail_operate_share:
+			Intent shareIntent = new Intent(this, ShareActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("moment", moment);
+			shareIntent.putExtra("share", bundle);
+			this.startActivity(shareIntent);
+			break;
+		case R.id.detail_operate_clipper:
+			clipper();
+			break;
+		case R.id.detail_operate_watch:
+			watch();
+			break;
+		case R.id.detail_operate_praise:
+			praise();
 			break;
 		}
 	}
@@ -203,6 +274,12 @@ public class MomentDetailActivity extends BaseActivity {
 						List<Comment> list = (List<Comment>) res;
 						commentList.addAll(list);
 						commentListViewAdapter.notifyDataSetChanged();
+						if (list.size() < pageSize) {
+							hasMore = false;
+							ToastUtil.show(MomentDetailActivity.this, "没有更多了");
+						} else {
+							hasMore = true;
+						}
 					}
 
 					@Override
@@ -245,7 +322,7 @@ public class MomentDetailActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		Animation anim = AnimationUtils.loadAnimation(
 				MomentDetailActivity.this, R.anim.focus_img_anim);
-		focusAuthor.setAnimation(anim);
+		focusAuthor.startAnimation(anim);
 		int isAddFocus = 0;
 		if (moment.getIsFocused() == 0) {
 			anim.setAnimationListener(new AnimationListener() {
@@ -265,10 +342,11 @@ public class MomentDetailActivity extends BaseActivity {
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					// TODO Auto-generated method stub
-					focusAuthor.setImageResource(R.drawable.focus_author);
+					focusAuthor.setImageResource(R.drawable.focus_author_press);
 					moment.setIsFocused(1);
 				}
 			});
+			isAddFocus = 1;
 		} else {
 			anim.setAnimationListener(new AnimationListener() {
 
@@ -287,37 +365,102 @@ public class MomentDetailActivity extends BaseActivity {
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					// TODO Auto-generated method stub
-					focusAuthor.setImageResource(R.drawable.focus_author_press);
+					focusAuthor.setImageResource(R.drawable.focus_author);
 					moment.setIsFocused(0);
 				}
 			});
+			isAddFocus = 0;
 		}
-		
+
+		requestServer(isAddFocus, "isAddFocus", userId, moment.getAuthorId(),
+				C.API.FOCUS_AUTHOR, "User");
+	}
+
+	private void clipper() {
+		int isAddClipper = 0;
+		if (moment.getIsClipper() == 0) {
+			clipperImg.setImageResource(R.drawable.clipper_press);
+			moment.setIsClipper(1);
+			isAddClipper = 1;
+		} else {
+			clipperImg.setImageResource(R.drawable.clipper);
+			moment.setIsClipper(0);
+			isAddClipper = 1;
+		}
+		requestServer(isAddClipper, "isAddClipper", userId, momentId,
+				C.API.CLIPPER_MOMENT, "Moment");
+	}
+
+	private void watch() {
+		int isAddWatch = 0;
+		if (moment.getIsWatched() == 0) {
+			watchImg.setImageResource(R.drawable.watch_press);
+			moment.setIsWatched(1);
+			isAddWatch = 1;
+		} else {
+			watchImg.setImageResource(R.drawable.watch);
+			moment.setIsWatched(0);
+			isAddWatch = 0;
+		}
+		requestServer(isAddWatch, "isAddWatch", userId, momentId,
+				C.API.WATCH_MOMENT, "Moment");
+	}
+
+	private void praise() {
+		int isAddPraise = 0;
+		if (moment.getIsPraised() == 0) {
+			praiseImg.setImageResource(R.drawable.like_press);
+			moment.setIsPraised(1);
+			isAddPraise = 1;
+		} else {
+			praiseImg.setImageResource(R.drawable.like);
+			moment.setIsPraised(0);
+			isAddPraise = 0;
+		}
+		requestServer(isAddPraise, "isAddPraise", userId, momentId,
+				C.API.PRAISE_MOMENT, "Moment");
+	}
+
+	/**
+	 * 用于向服务端发送请求，适用于点赞、围观、关注作者、剪藏灵感
+	 * 
+	 * @param isFlag
+	 * @param flagName
+	 * @param userId
+	 * @param momentId
+	 *            当用于关注作者时，该字段为被关注用户的id
+	 * @param url
+	 */
+	public void requestServer(int isFlag, String flagName, long userId,
+			long momentId, String url, String modelName) {
 		RequestParams params = new RequestParams();
-		User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
-		params.put("userId", user.getUserId());
-		params.put("attentionUserId", moment.getAuthorId());
-		params.put("isAddFocus", isAddFocus);
-		ApiManager.getInstance().post(this, C.API.FOCUS_AUTHOR, params, new HttpCallBack() {
-			
+		params.put("userId", userId);
+		if (modelName.equals("User")) {
+			params.put("attentionUserId", momentId);
+		} else {
+			params.put("momentId", momentId);
+		}
+		params.put(flagName, isFlag);
+		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
+
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-				
+
 			}
-		}, "User");
+		}, modelName);
 	}
 
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

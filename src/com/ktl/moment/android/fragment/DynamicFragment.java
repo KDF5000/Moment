@@ -35,10 +35,12 @@ public class DynamicFragment extends BaseFragment {
 	private List<Moment> momentList;// 灵感列表
 
 	private Handler handler;
-	private int pageSize = 10;
-	private int pageNum = 0;
+	private int pageSize = 2;
+	private int pageNum = 1;
 	private FindListViewAdapter findListViewAdapter;
 	private long userId;
+
+	private boolean hasMore = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,8 +113,10 @@ public class DynamicFragment extends BaseFragment {
 			@Override
 			public void onStart() {
 				// 加载更多
-				pageNum++;
-				getDataFromServer();
+				if (hasMore) {
+					pageNum++;
+					getDataFromServer();
+				}
 				Log.i(TAG + "-->pageNum", pageNum + "");
 				handler.postDelayed(new Runnable() {
 
@@ -148,6 +152,12 @@ public class DynamicFragment extends BaseFragment {
 						List<Moment> moment = (List<Moment>) res;
 						momentList.addAll(moment);
 						findListViewAdapter.notifyDataSetChanged();
+						if (moment.size() < pageSize) {
+							hasMore = false;
+							ToastUtil.show(getActivity(), "没有更多了");
+						}else{
+							hasMore = true;
+						}
 					}
 
 					@Override

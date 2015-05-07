@@ -13,9 +13,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.common.Account;
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Comment;
+import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.TimeFormatUtil;
+import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -68,7 +74,7 @@ public class CommentListViewAdapter extends BaseAdapter {
 		ImageLoader.getInstance().displayImage(comment.getUserAvatar(),
 				holder.userAvatar, options);
 		holder.userFromName.setText(comment.getUserName());
-		holder.commentTime.setText(comment.getPostTime());
+		holder.commentTime.setText(TimeFormatUtil.formatDate(comment.getPostTime()));
 		
 		if(comment.getIsPraised() == 0){
 			holder.praiseIcon.setImageResource(R.drawable.like_small);
@@ -93,18 +99,40 @@ public class CommentListViewAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				int praiseNum = comment.getPraiseNum();
+				int isAddPraise = 0;
 				if(comment.getIsPraised() == 0){
 					comment.setPraiseNum(++praiseNum);
 					holder.praiseIcon.setImageResource(R.drawable.like_small_press);
 					holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.praise_color));
 					comment.setIsPraised(1);
+					isAddPraise = 1;
 				}else{
 					comment.setPraiseNum(--praiseNum);
 					holder.praiseIcon.setImageResource(R.drawable.like_small);
 					holder.praiseNum.setTextColor(mContext.getResources().getColor(R.color.text_color));
 					comment.setIsPraised(0);
+					isAddPraise = 0;
 				}
 				notifyDataSetChanged();
+				
+				RequestParams params = new RequestParams();
+				params.put("userId", Account.getUserInfo().getUserId());
+				params.put("commentId", comment.getCommentId());
+				params.put("isAddPraise", isAddPraise);
+				ApiManager.getInstance().post(mContext, C.API.PRAISE_COMMENT, params, new HttpCallBack() {
+					
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						
+					}
+				}, "Comment");
 			}
 		});
 		return convertView;
