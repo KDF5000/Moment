@@ -56,10 +56,13 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	private String postTime;
 	private boolean mHasRequestedMore = true;
 
-	private int pageSize = 1;
-	private int pageNum = 0;
+	private int pageSize = 10;
+	private int pageNum = 1;
 
-    
+	private boolean isSyncing = false;//是否正在同步
+	MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
+	private boolean isCancelSync = false;//是否取消同步
+	
 	private ImageView navRightImg;//同步图标
 	private AnimationDrawable syncAnimationDrawable ;
 	
@@ -114,7 +117,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 								WhereBuilder.b("dirty", "=", 1));//
 					}else{
 						if(syncAnimationDrawable.isRunning()){
+							//取消同步
+							isCancelSync = true;
 							syncAnimationDrawable.stop();
+							syncAnimationDrawable = null;
 						}else{
 							syncAnimationDrawable.start();
 						}
@@ -187,7 +193,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				break;
 			}
 			case REAUEST_CODE_LABEL:
-
+				
 				break;
 			case REQUEST_CODE_DELETE:
 
@@ -273,7 +279,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			if (dirtyMoments != null && !dirtyMoments.isEmpty()) {
 				// 上传灵感
 				int len = dirtyMoments.size();
-				MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
 				for (int i = 0; i < len; i++) {
 					MomentSyncTask task = new MomentSyncTask(
 							dirtyMoments.get(i), syncMomentManager);
@@ -295,11 +300,19 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 						//从服务端获取数据
 						if(syncAnimationDrawable!=null){
 							syncAnimationDrawable.stop();
+							//设置为图标
+							navRightImg.setImageResource(R.drawable.sync_1);
+							syncAnimationDrawable = null;
 						}
 						getDataFromServer();
 					}
 				});
-				syncMomentManager.startSync();
+				if(isCancelSync == false){
+					syncMomentManager.startSync();
+				}else{
+					syncMomentManager.killSync("取消同步");
+				}
+				
 			} else {
 				getDataFromServer();
 			}
