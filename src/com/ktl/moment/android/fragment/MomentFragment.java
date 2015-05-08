@@ -175,6 +175,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
+				@SuppressWarnings("unchecked")
 				List<Moment> list = (List<Moment>) res;
 				if(momentList==null){
 					momentList = new ArrayList<Moment>();

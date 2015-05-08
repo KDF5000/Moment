@@ -39,11 +39,10 @@ public class MyFocusActivty extends BaseActivity {
 
 	private LayoutInflater inflater;
 	private List<User> focusList;
-	private Handler handler;
 	private FansAdapter fansAdapter;
 
 	private int pageNum = 1;
-	private int pageSize = 1;
+	private int pageSize = 10;
 	private String intentFlag;
 	private long userId;
 	private boolean hasMore;
@@ -65,9 +64,10 @@ public class MyFocusActivty extends BaseActivity {
 		intentFlag = intent.getStringExtra("intentFlag");
 		userId = intent.getLongExtra("userId", -1);
 
-		getData();
+		focusList = new ArrayList<User>();
 		fansAdapter = new FansAdapter(this, focusList, getDisplayImageOptions());
 		myFocus.setAdapter(fansAdapter);
+		loadData();
 
 		setTitleBackImgVisible(true);
 		setTitleBackImg(R.drawable.title_return_white);
@@ -97,23 +97,12 @@ public class MyFocusActivty extends BaseActivity {
 	}
 
 	private void initEvent() {
-		handler = new Handler();
 		// 下拉刷新事件回调（可选）
-		myFocus.startLoadMore();// 允许加载更多
 		myFocus.setOnRefreshStartListener(new OnStartListener() {
 			@Override
 			public void onStart() {
 				// 刷新开始
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						myFocus.setRefreshSuccess("");
-					}
-				}, 2 * 1000);
-				pageNum = 1;
-				getData();
+				loadData();
 			}
 		});
 
@@ -122,33 +111,19 @@ public class MyFocusActivty extends BaseActivity {
 			@Override
 			public void onStart() {
 				// 加载更多
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						myFocus.setLoadMoreSuccess();
-					}
-				}, 2 * 1000);
-				if (hasMore) {
-					pageNum++;
-					getData();
-				}
+				loadMore();
 			}
 		});
 	}
 
-	private void getData() {
-		if (focusList == null) {
-			focusList = new ArrayList<User>();
-		}
+	private void loadData() {
 		RequestParams params = new RequestParams();
 		if (userId == -1) {
 			params.put("userId", Account.getUserInfo().getUserId());
 		} else {
 			params.put("userId", userId);
 		}
-		params.put("pageNum", pageNum);
+		params.put("pageNum", pageNum++);
 		params.put("pageSize", pageSize);
 		String url = C.API.GET_FOCUS_AUTHOR_LIST;
 		if (intentFlag.equals("focus")) {
@@ -165,17 +140,76 @@ public class MyFocusActivty extends BaseActivity {
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
-				if (pageNum == 1) {
-					focusList.clear();
+				focusList.clear();
+				@SuppressWarnings("unchecked")
+				List<User> user = (List<User>) res;
+				focusList.addAll(user);
+				myFocus.setRefreshSuccess("");
+				myFocus.startLoadMore();// 允许加载更多
+				fansAdapter.notifyDataSetChanged();
+				if (user.size() < pageSize) {
+					hasMore = false;
+				} else {
+					hasMore = true;
 				}
+			}
+
+			@Override
+			public void onFailure(Object res) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(MyFocusActivty.this, (String) res);
+				myFocus.setRefreshFail("");
+				myFocus.startLoadMore();// 允许加载更多
+			}
+		}, "User");
+	}
+
+	private void loadMore() {
+		if (!hasMore) {
+			new Handler().postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					myFocus.setLoadMoreSuccess();
+					myFocus.stopLoadMore();
+					ToastUtil.show(MyFocusActivty.this, "没有更多了~");
+				}
+			}, 500);
+			return;
+		}
+
+		RequestParams params = new RequestParams();
+		if (userId == -1) {
+			params.put("userId", Account.getUserInfo().getUserId());
+		} else {
+			params.put("userId", userId);
+		}
+		params.put("pageNum", 1);
+		params.put("pageSize", pageSize);
+		String url = C.API.GET_FOCUS_AUTHOR_LIST;
+		if (intentFlag.equals("focus")) {
+			url = C.API.GET_FOCUS_AUTHOR_LIST;
+		} else if (intentFlag.equals("fans")) {
+			url = C.API.GET_MY_FANS_LIST;
+		} else if (intentFlag.equals("userFocus")) {
+			url = "";
+		} else {
+			url = "";
+		}
+		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
+
+			@Override
+			public void onSuccess(Object res) {
+				// TODO Auto-generated method stub
+				focusList.clear();
 				@SuppressWarnings("unchecked")
 				List<User> user = (List<User>) res;
 				focusList.addAll(user);
 				fansAdapter.notifyDataSetChanged();
-
+				myFocus.setLoadMoreSuccess();
 				if (user.size() < pageSize) {
 					hasMore = false;
-					ToastUtil.show(MyFocusActivty.this, "没有更多了");
 				} else {
 					hasMore = true;
 				}

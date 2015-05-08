@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -30,7 +31,6 @@ import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Comment;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.utils.PregUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
@@ -95,13 +95,12 @@ public class MomentDetailActivity extends BaseActivity {
 	private CommentListViewAdapter commentListViewAdapter;
 	private List<Comment> commentList;
 	private Moment moment;
-	private Handler handler;
 
 	private long momentId;
 	private long authorId;
 	private long userId;
 	private int pageNum = 1;
-	private int pageSize = 2;
+	private int pageSize = 4;
 	private boolean hasMore = true;
 
 	@Override
@@ -137,8 +136,9 @@ public class MomentDetailActivity extends BaseActivity {
 		setBaseContainerBgColor(0xffffffff);
 
 		getMomentDetail();
-		getCommentData();
+		loadComments();
 
+		commentList = new ArrayList<Comment>();
 		commentListViewAdapter = new CommentListViewAdapter(this, commentList,
 				getDisplayImageOptions());
 		commentsListView.setAdapter(commentListViewAdapter);
@@ -154,13 +154,12 @@ public class MomentDetailActivity extends BaseActivity {
 			public void onItemClick(ZrcListView parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(MomentDetailActivity.this, position+"");
+				ToastUtil.show(MomentDetailActivity.this, position + "");
 				Intent intent = new Intent(MomentDetailActivity.this,
 						CommentActivity.class);
 				intent.putExtra("momentId", momentId);
-				intent.putExtra("repalyUserId", commentList.get(position-1)
+				intent.putExtra("repalyUserId", commentList.get(position - 1)
 						.getUserId());
-				// startActivity(intent);
 				startActivityForResult(intent, C.ActivityRequest.JUMPTOCOMMENT);
 			}
 		});
@@ -168,12 +167,12 @@ public class MomentDetailActivity extends BaseActivity {
 
 	private void initMomentDetail() {
 		momentTitle.setText(moment.getTitle());
-		if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
-			ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
-					momentUserAvatar, getDisplayImageOptions());
-		} else {
-			momentUserAvatar.setVisibility(View.GONE);
-		}
+		// if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
+		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
+				momentUserAvatar, getDisplayImageOptions());
+		// } else {
+		// momentUserAvatar.setImageResource(R.drawable.default_img);
+		// }
 		momentUserName.setText(moment.getAuthorName());
 		momentPostTime.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
 		if (moment.getIsFocused() == 0) {
@@ -203,25 +202,11 @@ public class MomentDetailActivity extends BaseActivity {
 	}
 
 	private void initEvent() {
-		handler = new Handler();
-		commentsListView.startLoadMore();// 允许加载更多
 		// 加载更多事件回调（可选）
 		commentsListView.setOnLoadMoreStartListener(new OnStartListener() {
 			@Override
 			public void onStart() {
-				// 加载更多
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						if (hasMore) {
-							pageNum++;
-							getCommentData();
-						}
-						commentsListView.setLoadMoreSuccess();
-					}
-				}, 2 * 1000);
+				loadMoreComments();
 			}
 		});
 	}
@@ -242,7 +227,7 @@ public class MomentDetailActivity extends BaseActivity {
 			Intent commentIntent = new Intent(MomentDetailActivity.this,
 					CommentActivity.class);
 			commentIntent.putExtra("momentId", momentId);
-			commentIntent.putExtra("repalyUserId", (long)0);
+			commentIntent.putExtra("repalyUserId", (long) 0);
 			startActivityForResult(commentIntent,
 					C.ActivityRequest.JUMPTOCOMMENT);
 			break;
@@ -265,14 +250,60 @@ public class MomentDetailActivity extends BaseActivity {
 		}
 	}
 
-	private void getCommentData() {
-		if (commentList == null) {
-			commentList = new ArrayList<Comment>();
+	private void loadComments() {
+		RequestParams params = new RequestParams();
+		params.put("momentId", momentId);
+		params.put("pageSize", pageSize);
+		params.put("pageNum", 1);
+		ApiManager.getInstance().post(this, C.API.GET_COMMENT_LIST, params,
+				new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						commentList.clear();
+						@SuppressWarnings("unchecked")
+						List<Comment> list = (List<Comment>) res;
+						commentList.addAll(list);
+						commentListViewAdapter.notifyDataSetChanged();
+						commentsListView.setRefreshSuccess("");
+						commentsListView.startLoadMore();// 允许加载更多
+						if (list.size() < pageSize) {
+							hasMore = false;
+						} else {
+							hasMore = true;
+						}
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(MomentDetailActivity.this,
+								(String)res);
+						commentsListView.setRefreshFail("");
+						commentsListView.startLoadMore();// 允许加载更多
+					}
+				}, "Comment");
+	}
+
+	private void loadMoreComments() {
+		if (!hasMore) {
+			new Handler().postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					commentsListView.setLoadMoreSuccess();
+					commentsListView.stopLoadMore();
+					ToastUtil.show(MomentDetailActivity.this, "没有更多了~");
+				}
+			}, 500);
+			return;
 		}
 		RequestParams params = new RequestParams();
 		params.put("momentId", momentId);
 		params.put("pageSize", pageSize);
-		params.put("pageNum", pageNum);
+		params.put("pageNum", pageNum++);
 		ApiManager.getInstance().post(this, C.API.GET_COMMENT_LIST, params,
 				new HttpCallBack() {
 
@@ -283,9 +314,10 @@ public class MomentDetailActivity extends BaseActivity {
 						List<Comment> list = (List<Comment>) res;
 						commentList.addAll(list);
 						commentListViewAdapter.notifyDataSetChanged();
+						commentsListView.setLoadMoreSuccess();
+						Log.i("tag", list.size()+"");
 						if (list.size() < pageSize) {
 							hasMore = false;
-							ToastUtil.show(MomentDetailActivity.this, "没有更多了");
 						} else {
 							hasMore = true;
 						}
@@ -474,8 +506,7 @@ public class MomentDetailActivity extends BaseActivity {
 			switch (requestCode) {
 			case C.ActivityRequest.JUMPTOCOMMENT:
 				pageNum = 1;
-				commentList.clear();
-				getCommentData();
+				loadComments();
 				getMomentDetail();
 				break;
 
