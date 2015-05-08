@@ -796,34 +796,6 @@ public class EditorActivity extends BaseActivity {
 	}
 
 	/**
-	 * 
-	 * @param dirty
-	 */
-	private void saveDataToDB(int dirty) {
-		// 保存到本地
-		Map<String, String> imgMap = RichEditUtils
-				.extractImg(contentRichEditText.getText().toString());
-		Moment moment = new Moment();
-		moment.setTitle("我是一条灵感");
-		/*if (!imgMap.isEmpty()) {
-			for (Map.Entry<String, String> entry : imgMap.entrySet()) {
-				moment.setMomentImgs(entry.getValue());
-				break;
-			}
-		}*/
-		moment.setTitle(articleTitle.getText().toString());
-		moment.setContent(contentRichEditText.getText().toString());
-		moment.setAuthorId(1);
-		moment.setDirty(dirty);// 本地的标志
-		moment.setAuthorName("KDF5000");
-		String postTime = TimeFormatUtil.getCurrentDateTime();
-		moment.setPostTime(postTime);
-		//用用户id，灵感标题，发布时间作为保存数据库的momentid
-		moment.setMomentUid(EncryptUtil.md5("1",articleTitle.getText().toString(), postTime).hashCode());
-		saveMomentDb(moment);
-	}
-
-	/**
 	 * 上传文件到七牛
 	 */
 	private void uploadFilte2Qiniu(String token) {
@@ -858,12 +830,18 @@ public class EditorActivity extends BaseActivity {
 				if(userInfo==null){
 					actionStart(AccountActivity.class);
 				}
+				moment.setLabel("大数据");
+				moment.setAudioUrl("http://baidu.com");
+				moment.setMomentImgs("http://baidu.com");
 				params.put("userId", userInfo.getUserId());
 				params.put("title", moment.getTitle());
 				params.put("content", moment.getContent());
 				params.put("label", moment.getLabel());
-				params.put("isPublic", moment.getIsOpen());
+//				params.put("isPublic", moment.getIsOpen());
 //				params.put("momentId", moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
+				params.put("momentImgs", moment.getMomentImgs());
+				params.put("audioUrl", moment.getAudioUrl());
+				params.put("isClipper", 0);
 				ApiManager.getInstance().post(EditorActivity.this, C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 					
 					@Override
@@ -882,7 +860,7 @@ public class EditorActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						//保存到本地数据库
 						Log.i("EditorActivity", res.toString());
-						ToastUtil.show(EditorActivity.this, "网络出错，保存到本地"+res.toString());
+						ToastUtil.show(EditorActivity.this, "网络出错，保存到本地-->"+res.toString());
 						moment.setContent(contentRichEditText.getText().toString());
 						moment.setDirty(1);
 						saveMomentDb(moment);

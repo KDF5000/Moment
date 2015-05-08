@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -229,11 +230,11 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			@Override
 			public void onSuccess(Object data, int flag) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(
+				/*ToastUtil.show(
 						HomeActivity.this,
 						"注册成功"
 								+ XGPushConfig
-										.getAccessId(getApplicationContext()));
+										.getAccessId(getApplicationContext()));*/
 				// 向服务上传token
 				RequestParams params = new RequestParams();
 				params.put("user_id", user.getUserId());
@@ -343,7 +344,14 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		if(isSwitch2Moment == true){
 			customMenu.clickMenuItem(C.menu.FRAGMENT_MOMENT_MENU_ID);
 			//需要刷新一下选中的页面
-			((BaseFragment)getFragmentByTag(currentFgTag)).refreshFragmentContent();
+			new Handler().postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					((BaseFragment)getFragmentByTag(currentFgTag)).refreshFragmentContent();
+				}
+			}, 300);
 			SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
 		}
 		XGPushManager.onActivityStarted(this);
@@ -377,5 +385,10 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		//可以做一些退出登录前进行的操作，比如清除缓存
 		actionStart(AccountActivity.class);
 	}
-	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
+	}
 }
