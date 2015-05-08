@@ -1,6 +1,7 @@
 package com.ktl.moment.qiniu;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.json.JSONObject;
 
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.QiniuToken;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.net.ApiManager;
 import com.qiniu.android.http.ResponseInfo;
@@ -54,6 +56,9 @@ public class QiniuManager {
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
+				@SuppressWarnings("unchecked")
+				ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) res;
+				token = TokenList.get(0).getToken();
 				uploadManager.put(filePath, fileType + System.currentTimeMillis(),
 						token, new UpCompletionHandler() {
 							@Override
