@@ -148,7 +148,7 @@ public class ChannelListActivity extends BaseActivity {
 		params.put("pageSize", pageSize);
 		params.put("userId", userId);
 		params.put("channelId", channelId);
-		ApiManager.getInstance().post(this, C.API.GET_HOME_FOCUS_LIST, params,
+		ApiManager.getInstance().post(this, C.API.GET_CHANNEL_INFO_LIST, params,
 				new HttpCallBack() {
 
 					@SuppressWarnings("unchecked")

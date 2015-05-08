@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,23 +29,24 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.loopj.android.http.RequestParams;
 
-public class MyFocusActivty extends BaseActivity{
-	
+public class MyFocusActivty extends BaseActivity {
+
 	@ViewInject(R.id.my_focus)
 	private ZrcListView myFocus;
-	
+
 	@ViewInject(R.id.title_back_img)
 	private ImageView titleBackImg;
-	
+
 	private LayoutInflater inflater;
 	private List<User> focusList;
 	private Handler handler;
 	private FansAdapter fansAdapter;
-	
-	private int pageNum = 0;
-	private int pageSize = 10;
+
+	private int pageNum = 1;
+	private int pageSize = 1;
 	private String intentFlag;
 	private long userId;
+	private boolean hasMore;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -55,12 +55,12 @@ public class MyFocusActivty extends BaseActivity{
 		initView();
 		initEvent();
 	}
-	
-	private void initView(){
+
+	private void initView() {
 		this.inflater = getLayoutInflater();
 		this.inflater.inflate(R.layout.activity_my_focus, contentLayout, true);
 		ViewUtils.inject(this);
-		
+
 		Intent intent = getIntent();
 		intentFlag = intent.getStringExtra("intentFlag");
 		userId = intent.getLongExtra("userId", -1);
@@ -68,21 +68,22 @@ public class MyFocusActivty extends BaseActivity{
 		getData();
 		fansAdapter = new FansAdapter(this, focusList, getDisplayImageOptions());
 		myFocus.setAdapter(fansAdapter);
-		
+
 		setTitleBackImgVisible(true);
 		setTitleBackImg(R.drawable.title_return_white);
 		setMiddleTitleVisible(true);
-		if(intentFlag.equals("focus")){
+		if (intentFlag.equals("focus")) {
 			setMiddleTitleName("我的关注");
-		}else if(intentFlag.equals("fans")){
+		} else if (intentFlag.equals("fans")) {
 			setMiddleTitleName("我的粉丝");
-		}else if(intentFlag.equals("userFocus")){
+		} else if (intentFlag.equals("userFocus")) {
 			setMiddleTitleName("他的关注");
-		}else{
+		} else {
 			setMiddleTitleName("他的粉丝");
 		}
-		setBaseActivityBgColor(getResources().getColor(R.color.main_title_color));
-		
+		setBaseActivityBgColor(getResources()
+				.getColor(R.color.main_title_color));
+
 		// 设置下拉刷新的样式（可选，但如果没有Header则无法下拉刷新）
 		SimpleHeader header = new SimpleHeader(this);
 		header.setTextColor(0xff0066aa);
@@ -94,7 +95,7 @@ public class MyFocusActivty extends BaseActivity{
 		footer.setCircleColor(0xff33bbee);
 		myFocus.setFootable(footer);
 	}
-	
+
 	private void initEvent() {
 		handler = new Handler();
 		// 下拉刷新事件回调（可选）
@@ -103,8 +104,6 @@ public class MyFocusActivty extends BaseActivity{
 			@Override
 			public void onStart() {
 				// 刷新开始
-				pageNum = 0;
-				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -113,8 +112,8 @@ public class MyFocusActivty extends BaseActivity{
 						myFocus.setRefreshSuccess("");
 					}
 				}, 2 * 1000);
+				pageNum = 1;
 				getData();
-				fansAdapter.notifyDataSetChanged();
 			}
 		});
 
@@ -123,8 +122,6 @@ public class MyFocusActivty extends BaseActivity{
 			@Override
 			public void onStart() {
 				// 加载更多
-				pageNum++;
-				Log.i("pageNum", pageNum+"");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -133,56 +130,68 @@ public class MyFocusActivty extends BaseActivity{
 						myFocus.setLoadMoreSuccess();
 					}
 				}, 2 * 1000);
-				getData();
-				fansAdapter.notifyDataSetChanged();
+				if (hasMore) {
+					pageNum++;
+					getData();
+				}
 			}
 		});
 	}
-	
-	private void getData(){
-		if(focusList == null){
+
+	private void getData() {
+		if (focusList == null) {
 			focusList = new ArrayList<User>();
 		}
 		RequestParams params = new RequestParams();
-		if(userId == -1){
+		if (userId == -1) {
 			params.put("userId", Account.getUserInfo().getUserId());
-		}else{
+		} else {
 			params.put("userId", userId);
 		}
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		String url = C.API.GET_FOCUS_AUTHOR_LIST;
-		if(intentFlag.equals("focus")){
+		if (intentFlag.equals("focus")) {
 			url = C.API.GET_FOCUS_AUTHOR_LIST;
-		}else if(intentFlag.equals("fans")){
+		} else if (intentFlag.equals("fans")) {
 			url = C.API.GET_MY_FANS_LIST;
-		}else if(intentFlag.equals("userFocus")){
+		} else if (intentFlag.equals("userFocus")) {
 			url = "";
-		}else{
+		} else {
 			url = "";
 		}
 		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
-			
+
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
+				if (pageNum == 1) {
+					focusList.clear();
+				}
 				@SuppressWarnings("unchecked")
 				List<User> user = (List<User>) res;
 				focusList.addAll(user);
 				fansAdapter.notifyDataSetChanged();
+
+				if (user.size() < pageSize) {
+					hasMore = false;
+					ToastUtil.show(MyFocusActivty.this, "没有更多了");
+				} else {
+					hasMore = true;
+				}
 			}
-			
+
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(MyFocusActivty.this, (String)res);
+				ToastUtil.show(MyFocusActivty.this, (String) res);
 			}
 		}, "User");
 	}
-	
-	@OnClick({R.id.title_back_img})
-	private void click(View v){
-		if(v.getId() == R.id.title_back_img){
+
+	@OnClick({ R.id.title_back_img })
+	private void click(View v) {
+		if (v.getId() == R.id.title_back_img) {
 			finish();
 		}
 	}
@@ -190,6 +199,6 @@ public class MyFocusActivty extends BaseActivity{
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

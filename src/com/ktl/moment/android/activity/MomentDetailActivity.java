@@ -3,6 +3,7 @@ package com.ktl.moment.android.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -153,9 +154,14 @@ public class MomentDetailActivity extends BaseActivity {
 			public void onItemClick(ZrcListView parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
+				ToastUtil.show(MomentDetailActivity.this, position+"");
 				Intent intent = new Intent(MomentDetailActivity.this,
 						CommentActivity.class);
-				startActivity(intent);
+				intent.putExtra("momentId", momentId);
+				intent.putExtra("repalyUserId", commentList.get(position-1)
+						.getUserId());
+				// startActivity(intent);
+				startActivityForResult(intent, C.ActivityRequest.JUMPTOCOMMENT);
 			}
 		});
 	}
@@ -235,7 +241,10 @@ public class MomentDetailActivity extends BaseActivity {
 		case R.id.detail_operate_comment:
 			Intent commentIntent = new Intent(MomentDetailActivity.this,
 					CommentActivity.class);
-			startActivity(commentIntent);
+			commentIntent.putExtra("momentId", momentId);
+			commentIntent.putExtra("repalyUserId", (long)0);
+			startActivityForResult(commentIntent,
+					C.ActivityRequest.JUMPTOCOMMENT);
 			break;
 		case R.id.detail_operate_share:
 			Intent shareIntent = new Intent(this, ShareActivity.class);
@@ -455,6 +464,25 @@ public class MomentDetailActivity extends BaseActivity {
 
 			}
 		}, modelName);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			switch (requestCode) {
+			case C.ActivityRequest.JUMPTOCOMMENT:
+				pageNum = 1;
+				commentList.clear();
+				getCommentData();
+				getMomentDetail();
+				break;
+
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override

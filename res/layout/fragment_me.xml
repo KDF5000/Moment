@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    tools:ignore="UseCompoundDrawables,HardcodedText,ContentDescription" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -71,9 +73,10 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/me_my_focus_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12"
+                    android:text="0"
                     android:textSize="16sp" />
 
                 <TextView
@@ -85,9 +88,10 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/me_my_fans_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6"
+                    android:text="0"
                     android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
@@ -124,7 +128,7 @@
         android:id="@+id/me_notification_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="0.6dp"
         android:background="@drawable/me_menu_item_bg"
         android:clickable="true"
         android:gravity="center_vertical"
@@ -182,9 +186,10 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/me_my_watch_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2"
+            android:text="0"
             android:textColor="#959595"
             android:textSize="12sp" />
 
@@ -200,7 +205,7 @@
         android:id="@+id/me_praise_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="0.6dp"
         android:background="@drawable/me_menu_item_bg"
         android:clickable="true"
         android:gravity="center_vertical"
@@ -231,9 +236,10 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/me_my_praise_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20"
+            android:text="0"
             android:textColor="#959595"
             android:textSize="12sp" />
 

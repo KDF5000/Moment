@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class PregUtil {
 	
 	public static boolean pregImgUrl(String imgUrl) {
-		Pattern pattern = Pattern.compile("/^http://*/");
+		Pattern pattern = Pattern.compile("/^http:\\/\\/*/");
 		Matcher matcher = pattern.matcher(imgUrl);
 		return matcher.matches();
 	}

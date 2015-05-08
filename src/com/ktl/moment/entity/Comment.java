@@ -5,6 +5,7 @@ public class Comment extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private long momentId;
 	private long commentId;// 评论id
 	private long userId;// 评论人id
 	private String userName;// 评论人昵称
@@ -16,6 +17,14 @@ public class Comment extends BaseEntity {
 
 	private long repalyUserId;// 被回复用户id
 	private String repalyUserName;// 被回复用户昵称
+
+	public long getMomentId() {
+		return momentId;
+	}
+
+	public void setMomentId(long momentId) {
+		this.momentId = momentId;
+	}
 
 	public int getIsPraised() {
 		return isPraised;

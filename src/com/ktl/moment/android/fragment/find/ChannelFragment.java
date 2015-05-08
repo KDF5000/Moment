@@ -18,7 +18,11 @@ import com.ktl.moment.android.adapter.ChannelAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.DragGridView;
 import com.ktl.moment.android.component.DragGridView.OnChanageListener;
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Channel;
+import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.net.ApiManager;
+import com.loopj.android.http.RequestParams;
 
 public class ChannelFragment extends BaseFragment {
 
@@ -36,9 +40,9 @@ public class ChannelFragment extends BaseFragment {
 		draggableGridView = (DragGridView) view
 				.findViewById(R.id.find_channel_drag_gridview);
 
-		channelList = new ArrayList<Channel>();
 		getData();
-		channelAdapter = new ChannelAdapter(getActivity(), channelList);
+		channelAdapter = new ChannelAdapter(getActivity(), channelList,
+				getDisplayImageOptions());
 		draggableGridView.setAdapter(channelAdapter);
 
 		setListener();
@@ -47,21 +51,44 @@ public class ChannelFragment extends BaseFragment {
 	}
 
 	private void getData() {
-		int[] img = { R.drawable.channel_internet, R.drawable.channel_internet,
-				R.drawable.channel_internet, R.drawable.channel_internet,
-				R.drawable.channel_internet, R.drawable.channel_internet,
-				R.drawable.channel_internet };
-
-		if (channelList == null) {
+		// int[] img = { R.drawable.channel_internet,
+		// R.drawable.channel_internet,
+		// R.drawable.channel_internet, R.drawable.channel_internet,
+		// R.drawable.channel_internet, R.drawable.channel_internet,
+		// R.drawable.channel_internet };
+		//
+		// if (channelList == null) {
+		// channelList = new ArrayList<Channel>();
+		// }
+		// for (int i = 0; i < img.length; i++) {
+		// Channel channel = new Channel();
+		// channel.setChannelId(i);
+		// channel.setChannelImgResId(img[i]);
+		// channel.setChannelName("频道" + i);
+		// channelList.add(channel);
+		// }
+		if(channelList == null){
 			channelList = new ArrayList<Channel>();
 		}
-		for (int i = 0; i < img.length; i++) {
-			Channel channel = new Channel();
-			channel.setChannelId(i);
-			channel.setChannelImgResId(img[i]);
-			channel.setChannelName("频道" + i);
-			channelList.add(channel);
-		}
+		RequestParams params = new RequestParams();
+		ApiManager.getInstance().post(getActivity(), C.API.GET_CHENNAL_LIST,
+				params, new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						@SuppressWarnings("unchecked")
+						List<Channel> list = (List<Channel>) res;
+						channelList.addAll(list);
+						channelAdapter.notifyDataSetChanged();
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+
+					}
+				}, "Channel");
 	}
 
 	private void setListener() {
@@ -73,7 +100,8 @@ public class ChannelFragment extends BaseFragment {
 						ChannelListActivity.class);
 				intent.putExtra("channelName", channelList.get(position)
 						.getChannelName());
-				intent.putExtra("channelId", channelList.get(position).getChannelId());
+				intent.putExtra("channelId", channelList.get(position)
+						.getChannelId());
 				startActivity(intent);
 			}
 		});

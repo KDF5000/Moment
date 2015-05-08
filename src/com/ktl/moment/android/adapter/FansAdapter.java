@@ -6,6 +6,7 @@ import com.ktl.moment.R;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.PregUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -30,7 +31,7 @@ public class FansAdapter extends BaseAdapter {
 	private List<User> userList;
 	private LayoutInflater inflater;
 	private DisplayImageOptions options;
-	
+
 	private final String TAG = "fansAdapter";
 
 	public FansAdapter(Context context, List<User> userList,
@@ -73,50 +74,56 @@ public class FansAdapter extends BaseAdapter {
 		}
 
 		final User fans = userList.get(position);
-		ImageLoader.getInstance().displayImage(fans.getUserAvatar(),
-				fansHolder.fansAvatar, options);
+		if(PregUtil.pregImgUrl(fans.getUserAvatar())){
+			ImageLoader.getInstance().displayImage(fans.getUserAvatar(),
+					fansHolder.fansAvatar, options);
+		}
 		fansHolder.fansNickname.setText(fans.getNickName());
 		fansHolder.fansSignature.setText(fans.getSignature());
-		if(fans.getIsFocused() == 0){
+		if (fans.getIsFocused() == 0) {
 			fansHolder.fansFocus.setImageResource(R.drawable.fans_add_focus);
-		}else{
+		} else {
 			fansHolder.fansFocus.setImageResource(R.drawable.fans_delete_focus);
 		}
-		
+
 		fansHolder.fansFocus.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				int isAddFocus;
-				if(fans.getIsFocused() == 0){
-					fansHolder.fansFocus.setImageResource(R.drawable.fans_delete_focus);
+				if (fans.getIsFocused() == 0) {
+					fansHolder.fansFocus
+							.setImageResource(R.drawable.fans_delete_focus);
 					fans.setIsFocused(1);
 					isAddFocus = 1;
-				}else{
-					fansHolder.fansFocus.setImageResource(R.drawable.fans_add_focus);
+				} else {
+					fansHolder.fansFocus
+							.setImageResource(R.drawable.fans_add_focus);
 					fans.setIsFocused(0);
 					isAddFocus = 0;
 				}
-				User user = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+				User user = (User) SharedPreferencesUtil.getInstance()
+						.getObject(C.SPKey.SPK_LOGIN_INFO);
 				RequestParams params = new RequestParams();
 				params.put("userId", user.getId());
 				params.put("attentionUserId", fans.getUserId());
 				params.put("isAddFocus", isAddFocus);
-				ApiManager.getInstance().post(context, C.API.FOCUS_AUTHOR, params, new HttpCallBack() {
-					
-					@Override
-					public void onSuccess(Object res) {
-						// TODO Auto-generated method stub
-						Log.i(TAG, "success");
-					}
-					
-					@Override
-					public void onFailure(Object res) {
-						// TODO Auto-generated method stub
-						Log.i(TAG, "fail");
-					}
-				}, "User");
+				ApiManager.getInstance().post(context, C.API.FOCUS_AUTHOR,
+						params, new HttpCallBack() {
+
+							@Override
+							public void onSuccess(Object res) {
+								// TODO Auto-generated method stub
+								Log.i(TAG, "success");
+							}
+
+							@Override
+							public void onFailure(Object res) {
+								// TODO Auto-generated method stub
+								Log.i(TAG, "fail");
+							}
+						}, "User");
 			}
 		});
 
