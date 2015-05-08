@@ -61,8 +61,8 @@ public class DynamicFragment extends BaseFragment {
 		findListViewAdapter = new FindListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
 		findListView.setAdapter(findListViewAdapter);
 		initEvent();
+		findListView.refresh();
 		// 从服务端获取数据
-		getDataFromServer();
 		return view;
 	}
 
@@ -81,6 +81,7 @@ public class DynamicFragment extends BaseFragment {
 		// 设置列表项出现动画（可选）
 		findListView.setItemAnimForTopIn(R.anim.zrc_topitem_in);
 		findListView.setItemAnimForBottomIn(R.anim.zrc_bottomitem_in);
+		findListView.stopLoadMore();
 	}
 
 	private void initEvent() {
@@ -128,7 +129,7 @@ public class DynamicFragment extends BaseFragment {
 						momentList.addAll(moments);
 						findListViewAdapter.notifyDataSetChanged();
 						findListView.setRefreshSuccess("");
-						findListView.startLoadMore();// 允许加载更多
+						findListView.startLoadMore();
 					}
 
 					@Override
@@ -136,7 +137,6 @@ public class DynamicFragment extends BaseFragment {
 						// TODO Auto-generated method stub
 						ToastUtil.show(getActivity(), (String) res);
 						findListView.setRefreshSuccess("");
-						findListView.startLoadMore();// 允许加载更多
 					}
 				}, "Moment");
 	}
