@@ -11,7 +11,7 @@ public class C {
 		 * url基地址
 		 */
 		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
-//		private static final String URL_BASE ="http://115.156.249.84:8080/";
+//		private static final String URL_BASE ="http://115.156.249.64:8080/";
 //		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
@@ -93,7 +93,7 @@ public class C {
 		 * 上传灵感
 		 */
 		public static final String UPLOAD_MOMENT = URL_BASE
-				+ "MomentsService/Attention/uploadMoment";
+				+ "MomentsService/Moment/addMoment";
 		/**
 		 * 消息中心私信列表
 		 */

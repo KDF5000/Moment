@@ -858,12 +858,18 @@ public class EditorActivity extends BaseActivity {
 				if(userInfo==null){
 					actionStart(AccountActivity.class);
 				}
+				moment.setLabel("互联网");
+				moment.setAudioUrl("http://baidu.com");
+				moment.setMomentImgs("http://baidu.com");
 				params.put("userId", userInfo.getUserId());
 				params.put("title", moment.getTitle());
 				params.put("content", moment.getContent());
 				params.put("label", moment.getLabel());
-				params.put("isPublic", moment.getIsOpen());
+//				params.put("isPublic", moment.getIsOpen());
 //				params.put("momentId", moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
+				params.put("momentImgs", moment.getMomentImgs());
+				params.put("audioUrl", moment.getAudioUrl());
+				params.put("isClipper", 0);
 				ApiManager.getInstance().post(EditorActivity.this, C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 					
 					@Override
@@ -882,7 +888,7 @@ public class EditorActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						//保存到本地数据库
 						Log.i("EditorActivity", res.toString());
-						ToastUtil.show(EditorActivity.this, "网络出错，保存到本地"+res.toString());
+						ToastUtil.show(EditorActivity.this, "网络出错，保存到本地-->"+res.toString());
 						moment.setContent(contentRichEditText.getText().toString());
 						moment.setDirty(1);
 						saveMomentDb(moment);

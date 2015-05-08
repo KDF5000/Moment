@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ public class DynamicFragment extends BaseFragment {
 	private ZrcListView findListView;
 	private List<Moment> momentList;// 灵感列表
 
-	private Handler handler;
 	private int pageSize = 2;
 	private int pageNum = 1;
 	private FindListViewAdapter findListViewAdapter;
@@ -48,8 +46,7 @@ public class DynamicFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_dynamic, container,
 				false);
-		findListView = (ZrcListView) view
-				.findViewById(R.id.fragment_dynamic_list);
+		findListView = (ZrcListView) view.findViewById(R.id.fragment_dynamic_list);
 
 		User user = Account.getUserInfo();
 		if (user == null) {
@@ -59,13 +56,13 @@ public class DynamicFragment extends BaseFragment {
 		}
 		userId = user.getUserId();
 
-		momentList = new ArrayList<Moment>();
 		initView();
-		// 从服务端获取数据
-		getDataFromServer();
+		momentList = new ArrayList<Moment>();
+		findListViewAdapter = new FindListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
 		findListView.setAdapter(findListViewAdapter);
 		initEvent();
-
+		// 从服务端获取数据
+		getDataFromServer();
 		return view;
 	}
 
@@ -87,24 +84,13 @@ public class DynamicFragment extends BaseFragment {
 	}
 
 	private void initEvent() {
-		handler = new Handler();
 		// 下拉刷新事件回调（可选）
 		findListView.startLoadMore();// 允许加载更多
 		findListView.setOnRefreshStartListener(new OnStartListener() {
 			@Override
 			public void onStart() {
 				// 刷新开始
-				pageNum = 0;
 				getDataFromServer();
-				Log.i(TAG + "-->pageNum", pageNum + "");
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						findListView.setRefreshSuccess("");
-					}
-				}, 2 * 1000);
 			}
 		});
 
@@ -113,33 +99,18 @@ public class DynamicFragment extends BaseFragment {
 			@Override
 			public void onStart() {
 				// 加载更多
-				if (hasMore) {
-					pageNum++;
-					getDataFromServer();
-				}
-				Log.i(TAG + "-->pageNum", pageNum + "");
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						findListView.setLoadMoreSuccess();
-					}
-				}, 2 * 1000);
+				loadMoreMoment();
 			}
 		});
 	}
-
+	
+	/**
+	 * 下拉刷新从服务端获取最新数据
+	 */
 	private void getDataFromServer() {
-		if (momentList == null) {
-			momentList = new ArrayList<Moment>();
-		}
-		if (findListViewAdapter == null) {
-			findListViewAdapter = new FindListViewAdapter(getActivity(),
-					momentList, getDisplayImageOptions());
-		}
+		pageNum = 1;
 		RequestParams params = new RequestParams();
-		params.put("pageNum", pageNum);
+		params.put("pageNum", pageNum++);
 		params.put("pageSize", pageSize);
 		params.put("userId", userId);
 		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST,
@@ -149,15 +120,61 @@ public class DynamicFragment extends BaseFragment {
 					@Override
 					public void onSuccess(Object res) {
 						// TODO Auto-generated method stub
-						List<Moment> moment = (List<Moment>) res;
-						momentList.addAll(moment);
+						List<Moment> moments = (List<Moment>) res;
+						if(momentList==null){
+							momentList = new ArrayList<Moment>();
+						}
+						momentList.clear();
+						momentList.addAll(moments);
 						findListViewAdapter.notifyDataSetChanged();
-						if (moment.size() < pageSize) {
+						findListView.setRefreshSuccess("");
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(getActivity(), (String) res);
+					}
+				}, "Moment");
+	}
+	/**
+	 * 上拉加载更多数据
+	 */
+	private void loadMoreMoment(){
+		if(hasMore == false){
+			new Handler().postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					findListView.setLoadMoreSuccess();
+				}
+			}, 500);
+			return ;
+		}
+		RequestParams params = new RequestParams();
+		params.put("pageNum", pageNum++);
+		params.put("pageSize", pageSize);
+		params.put("userId", userId);
+		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST,
+				params, new HttpCallBack() {
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						List<Moment> moments = (List<Moment>) res;
+						if(momentList==null){
+							momentList = new ArrayList<Moment>();
+						}
+						momentList.addAll(moments);
+						findListViewAdapter.notifyDataSetChanged();
+						if (moments.size() < pageSize) {
 							hasMore = false;
-							ToastUtil.show(getActivity(), "没有更多了");
 						}else{
 							hasMore = true;
 						}
+						findListView.setLoadMoreSuccess();
 					}
 
 					@Override

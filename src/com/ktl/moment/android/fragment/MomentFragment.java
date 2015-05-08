@@ -133,6 +133,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 								WhereBuilder.b("dirty", "=", 1));//
 					}else{
 						stopSyncAnimation();
+						//取消所有的请求
+						ApiManager.getInstance().cancelAllRequest();
 					}
 				}
 			});
