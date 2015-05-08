@@ -106,6 +106,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 					Intent editorIntent = new Intent(HomeActivity.this,
 							EditorActivity.class);
 					startActivity(editorIntent);
+					
 					return;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:
 					tag = C.menu.FRAGMENT_MOMENT_TAG;
@@ -288,7 +289,6 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 
 	/**
 	 * 保存数据到数据库
-	 * 
 	 * @param taskId
 	 * @param entityType
 	 * @param datas
@@ -342,6 +342,9 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		boolean isSwitch2Moment =  SharedPreferencesUtil.getInstance().getBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
 		if(isSwitch2Moment == true){
 			customMenu.clickMenuItem(C.menu.FRAGMENT_MOMENT_MENU_ID);
+			//需要刷新一下选中的页面
+			((BaseFragment)getFragmentByTag(currentFgTag)).refreshFragmentContent();
+			SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
 		}
 		XGPushManager.onActivityStarted(this);
 		XgMessageReceiver.addCustomMessageListener(this);
@@ -366,6 +369,13 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			break;
 			
 		}
+	}
+	/**
+	 * 
+	 */
+	public void returnLogin(){
+		//可以做一些退出登录前进行的操作，比如清除缓存
+		actionStart(AccountActivity.class);
 	}
 	
 }

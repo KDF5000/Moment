@@ -863,6 +863,7 @@ public class EditorActivity extends BaseActivity {
 				params.put("content", moment.getContent());
 				params.put("label", moment.getLabel());
 				params.put("isPublic", moment.getIsOpen());
+//				params.put("momentId", moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
 				ApiManager.getInstance().post(EditorActivity.this, C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 					
 					@Override
@@ -881,7 +882,7 @@ public class EditorActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						//保存到本地数据库
 						Log.i("EditorActivity", res.toString());
-						ToastUtil.show(EditorActivity.this, "网络出错，保存到本地");
+						ToastUtil.show(EditorActivity.this, "网络出错，保存到本地"+res.toString());
 						moment.setContent(contentRichEditText.getText().toString());
 						moment.setDirty(1);
 						saveMomentDb(moment);
@@ -960,7 +961,7 @@ public class EditorActivity extends BaseActivity {
 		int taskId = res.what;
 		switch (taskId) {
 		case C.DbTaskId.EDITOR_MOMENT_SAVE:
-			ToastUtil.show(this, "保存成功");
+			Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
 			break;
 		default:
 			break;

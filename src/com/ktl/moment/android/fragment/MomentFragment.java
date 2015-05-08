@@ -27,17 +27,21 @@ import com.ktl.moment.android.activity.ReadActivity;
 import com.ktl.moment.android.adapter.MomentPlaAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.etsy.StaggeredGridView;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
+import com.ktl.moment.entity.User;
+import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.momentstore.MomentSyncTask;
 import com.ktl.moment.momentstore.MomentSyncTaskManager;
 import com.ktl.moment.momentstore.MomentSyncTaskManager.MomentSyncCallback;
-import com.ktl.moment.utils.EncryptUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskType;
+import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.db.sqlite.WhereBuilder;
+import com.loopj.android.http.RequestParams;
 
 public class MomentFragment extends BaseFragment implements OnScrollListener,
 		OnItemClickListener, OnItemLongClickListener {
@@ -61,7 +65,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 
 	private boolean isSyncing = false;//是否正在同步
 	MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
-	private boolean isCancelSync = false;//是否取消同步
 	
 	private ImageView navRightImg;//同步图标
 	private AnimationDrawable syncAnimationDrawable ;
@@ -93,7 +96,28 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 
 		return view;
 	}
-
+	/**
+	 * 开始同步动画
+	 */
+	private void startSyncAnimation(){
+		if(syncAnimationDrawable==null || !syncAnimationDrawable.isRunning()){
+			navRightImg.setImageResource(R.anim.sync_animation);
+			syncAnimationDrawable = (AnimationDrawable) navRightImg.getDrawable();
+			syncAnimationDrawable.start();
+			isSyncing = true;
+		}
+	}
+	/**
+	 * 停止同步动画
+	 */
+	private void stopSyncAnimation(){
+		if(syncAnimationDrawable!=null && syncAnimationDrawable.isRunning()){
+			syncAnimationDrawable.stop();
+			navRightImg.setImageResource(R.drawable.sync_1);
+			isSyncing = false;
+			syncAnimationDrawable = null;
+		}
+	}
 	/**
 	 * 初始化事件
 	 */
@@ -105,25 +129,15 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 //					ToastUtil.show(getActivity(), "开始同步");
-					//2.
-					if(syncAnimationDrawable == null){
-						navRightImg.setImageResource(R.anim.sync_animation);
-						syncAnimationDrawable = (AnimationDrawable) navRightImg.getDrawable();
-						syncAnimationDrawable.start();
+					if(isSyncing == false){
+						startSyncAnimation();
 						// 1.从本地数据库查找所有没有上传到服务端的灵感
 						((HomeActivity) getActivity()).getDbData(
 								C.DbTaskId.MOMENT_GET_DIRTY_MOMENT,
 								DbTaskType.findByCondition, Moment.class,
 								WhereBuilder.b("dirty", "=", 1));//
 					}else{
-						if(syncAnimationDrawable.isRunning()){
-							//取消同步
-							isCancelSync = true;
-							syncAnimationDrawable.stop();
-							syncAnimationDrawable = null;
-						}else{
-							syncAnimationDrawable.start();
-						}
+						stopSyncAnimation();
 					}
 				}
 			});
@@ -133,7 +147,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	private void getDataFromDB() {
 		Selector selector = Selector.from(Moment.class)
 				.orderBy("postTime", true).limit(pageSize)
-				.offset(pageSize * pageNum);
+				.offset(pageSize * (pageNum-1));
 		((HomeActivity) getActivity()).getDbData(C.DbTaskId.GET_MOMENT_LIST,
 				DbTaskType.selectByCustom, selector);
 	}
@@ -142,35 +156,47 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	 * 获取取数据
 	 */
 	private void getDataFromServer() {
-		List<Moment> list = new ArrayList<Moment>();
-		for (int i = 0; i < 4; i++) {
-			Moment moment = new Moment();
-			moment.setAuthorId(i + 123);
-			moment.setMomentId(i);
-			moment.setPostTime(postTime);
-			if (i % 3 == 0) {
-				moment.setIsOpen(1);
-				moment.setDirty(1);
-			}
-			if (i % 4 == 0) {
-				moment.setIsClipper(1);
-			}
-			moment.setTitle(i + "不再懊悔 App 自动生成器");
-			String content = "隔壁小禹说，10 年前，他就有做叫车服务的想法。对面小 S 说";
-			moment.setContent(content);
-			moment.setLabel("创意、果蔬");
-			if (i % 2 == 1) {
-				moment.setMomentImgs("http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg");
-			} else {
-				moment.setMomentImgs(null);
-			}
-			list.add(moment);
-			moment.setMomentUid(EncryptUtil.md5((i + 123) + "",
-					i + "不再懊悔 App 自动生成器", postTime).hashCode());
+		   /*userId:31243,        //用户id
+		    authorId:212,        //被查看的用户id
+		    pageNum:0,
+		    pageSize:10*/
+		RequestParams params = new  RequestParams();
+		User userInfo = Account.getUserInfo();
+		if(userInfo == null){
+			ToastUtil.show(getActivity(), "用户没有登录，请重新登录");
+			((HomeActivity) getActivity()).returnLogin();
+			return ;
 		}
-
-		((HomeActivity) getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE,
-				Moment.class, list);
+		params.put("userId", userInfo.getUserId());
+		params.put("page", pageNum++);
+		params.put("pageSize", pageSize);
+		ApiManager.getInstance().post(getActivity(), C.API.GET_USER_MOMENT_LIST, params, new HttpCallBack() {
+			
+			@Override
+			public void onSuccess(Object res) {
+				// TODO Auto-generated method stub
+				List<Moment> list = (List<Moment>) res;
+				if(momentList==null){
+					momentList = new ArrayList<Moment>();
+				}
+				momentList.clear();
+				momentList.addAll(list);
+				momentPlaAdapter.notifyDataSetChanged();
+				//保存到本地数据库
+				((HomeActivity) getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE,
+						Moment.class, list);
+				stopSyncAnimation();
+				ToastUtil.show(getActivity(), "同步完成");
+			}
+			
+			@Override
+			public void onFailure(Object res) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(getActivity(), res.toString());
+				stopSyncAnimation();
+			}
+		}, "Moment");
+		
 	}
 
 	@Override
@@ -233,7 +259,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			if (lastInScreen >= totalItemCount) {
 				Log.d(TAG, "onScroll lastInScreen - so load more");
 				mHasRequestedMore = true;
-				// onLoadMoreItems();
+				getDataFromServer();
 			}
 		}
 	}
@@ -253,18 +279,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		startActivityForResult(dialogIntent, REAUEST_CODE_OPEN);
 		return true;
 	}
-
-	// private void onLoadMoreItems() {
-	// final ArrayList<String> sampleData = SampleData.generateSampleData();
-	// for (String data : sampleData) {
-	// momentPlaAdapter.add(data);
-	// }
-	// // stash all the data in our backing store
-	// momentList.addAll(sampleData);
-	// // notify the adapter that we can update now
-	// momentPlaAdapter.notifyDataSetChanged();
-	// mHasRequestedMore = false;
-	// }
 	/**
 	 * 
 	 * @param taskId
@@ -298,21 +312,14 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 						// 从服务端获取数据
 						ToastUtil.show(getActivity(), syncCount + "");
 						//从服务端获取数据
-						if(syncAnimationDrawable!=null){
-							syncAnimationDrawable.stop();
-							//设置为图标
-							navRightImg.setImageResource(R.drawable.sync_1);
-							syncAnimationDrawable = null;
-						}
 						getDataFromServer();
 					}
 				});
-				if(isCancelSync == false){
+				if(isSyncing == true){
 					syncMomentManager.startSync();
 				}else{
 					syncMomentManager.killSync("取消同步");
 				}
-				
 			} else {
 				getDataFromServer();
 			}
@@ -321,6 +328,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		case C.DbTaskId.GET_MOMENT_LIST:
 			List<Moment> list = (List<Moment>) res;
 			try {
+				if(momentList==null){
+					momentList = new ArrayList<Moment>();
+				}
+				momentList.clear();
 				momentList.addAll(list);
 				momentPlaAdapter.notifyDataSetChanged();
 			} catch (NullPointerException e) {
@@ -332,5 +343,18 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			break;
 		}
 	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.i("MomentFragment", "MomentFragment-->resum");
+	}
 
+	@Override
+	public void refreshFragmentContent() {
+		// TODO Auto-generated method stub
+		super.refreshFragmentContent();
+		getDataFromDB();
+	}
 }
