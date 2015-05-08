@@ -29,7 +29,7 @@ public class SimpleHeader implements Headable {
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Style.FILL);
         int fontSize = (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, context.getResources()
+                .applyDimension(TypedValue.COMPLEX_UNIT_SP, 20, context.getResources()
                         .getDisplayMetrics());
         mPaint.setTextSize(fontSize);
         mPaint.setTextAlign(Align.CENTER);

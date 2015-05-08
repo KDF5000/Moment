@@ -1,6 +1,5 @@
 package com.ktl.moment.android.component.listview.arc.widget;
 
-
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
@@ -20,6 +19,7 @@ import android.widget.ListAdapter;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.component.listview.arc.util.APIUtil;
+
 
 /**
  * @author Zaric

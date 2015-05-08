@@ -21,6 +21,7 @@ public class Moment extends BaseEntity {
 
 	private String label;// 灵感标签
 	private String postTime;// 发布时间
+	private String updateTime;//更新时间
 
 	private int watchNum;// 关注的用户个数
 	private int praiseNum;// 点赞的用户个数

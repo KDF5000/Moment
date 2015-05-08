@@ -1,6 +1,5 @@
 package com.ktl.moment.android.component.listview.arc.widget;
 
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -16,6 +15,7 @@ import android.widget.Adapter;
 import com.ktl.moment.android.component.listview.arc.util.APIUtil;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnItemClickListener;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnItemLongClickListener;
+
 
 abstract class ZrcAdapterView<T extends Adapter> extends ViewGroup {
     public static final int ITEM_VIEW_TYPE_IGNORE = -1;
