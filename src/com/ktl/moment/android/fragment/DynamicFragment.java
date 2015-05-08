@@ -85,7 +85,6 @@ public class DynamicFragment extends BaseFragment {
 
 	private void initEvent() {
 		// 下拉刷新事件回调（可选）
-		findListView.startLoadMore();// 允许加载更多
 		findListView.setOnRefreshStartListener(new OnStartListener() {
 			@Override
 			public void onStart() {
@@ -109,6 +108,7 @@ public class DynamicFragment extends BaseFragment {
 	 */
 	private void getDataFromServer() {
 		pageNum = 1;
+		hasMore = true;
 		RequestParams params = new RequestParams();
 		params.put("pageNum", pageNum++);
 		params.put("pageSize", pageSize);
@@ -128,12 +128,15 @@ public class DynamicFragment extends BaseFragment {
 						momentList.addAll(moments);
 						findListViewAdapter.notifyDataSetChanged();
 						findListView.setRefreshSuccess("");
+						findListView.startLoadMore();// 允许加载更多
 					}
 
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
 						ToastUtil.show(getActivity(), (String) res);
+						findListView.setRefreshSuccess("");
+						findListView.startLoadMore();// 允许加载更多
 					}
 				}, "Moment");
 	}
@@ -148,6 +151,8 @@ public class DynamicFragment extends BaseFragment {
 				public void run() {
 					// TODO Auto-generated method stub
 					findListView.setLoadMoreSuccess();
+					findListView.stopLoadMore();
+					ToastUtil.show(getActivity(), "没有更多了~");
 				}
 			}, 500);
 			return ;

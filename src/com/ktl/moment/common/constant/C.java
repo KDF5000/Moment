@@ -10,9 +10,9 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
+//		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
 //		private static final String URL_BASE ="http://115.156.249.64:8080/";
-//		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
+		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
 		 */
@@ -301,6 +301,7 @@ public class C {
 		public static final int REQUEST_SELECT_CITY_ACTIVITY = 5;// 选择所在城市
 		public static final int REQUEST_DATE_PICKER_ACTIVITY = 6;// 选择日期
 		public static final int REQUEST_DIALOG_ACTIVITY = 7;// 弹出对话框
+		public static final int JUMPTOCOMMENT = 8;//跳转到评论
 	}
 
 	/**
