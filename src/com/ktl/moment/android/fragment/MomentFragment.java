@@ -73,15 +73,13 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View view = inflater
-				.inflate(R.layout.fragment_moment, container, false);
-		initEvent();
-
+		View view = inflater.inflate(R.layout.fragment_moment, container, false);
+		navRightImg = ((HomeActivity) getActivity()).getTitleRightImg();
 		momentList = new ArrayList<Moment>();
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.moment_pla_list);
 		getDataFromDB();
-		navRightImg = ((HomeActivity) getActivity()).getTitleRightImg();
+	
 		
 		momentList = new ArrayList<Moment>();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
@@ -89,11 +87,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		momentPlaAdapter.notifyDataSetChanged();
 		staggeredGridView.setAdapter(momentPlaAdapter);
 
-		staggeredGridView.setOnScrollListener(this);
-		staggeredGridView.setOnItemClickListener(this);
-		staggeredGridView.setOnItemLongClickListener(this);
-		postTime = TimeFormatUtil.getCurrentDateTime();
-
+		
+		initEvent();
 		return view;
 	}
 	/**
@@ -142,6 +137,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				}
 			});
 		}
+		staggeredGridView.setOnScrollListener(this);
+		staggeredGridView.setOnItemClickListener(this);
+		staggeredGridView.setOnItemLongClickListener(this);
 	}
 
 	private void getDataFromDB() {
@@ -304,6 +302,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 					public void onError(String msg) {
 						// TODO Auto-generated method stub
 						ToastUtil.show(getActivity(), msg);
+						stopSyncAnimation();
 					}
 
 					@Override
