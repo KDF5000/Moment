@@ -94,9 +94,8 @@ public class DynamicFragment extends BaseFragment {
 			@Override
 			public void onStart() {
 				// 刷新开始
-				pageNum = 0;
+				pageNum = 1;
 				getDataFromServer();
-				Log.i(TAG + "-->pageNum", pageNum + "");
 				handler.postDelayed(new Runnable() {
 
 					@Override
@@ -149,13 +148,16 @@ public class DynamicFragment extends BaseFragment {
 					@Override
 					public void onSuccess(Object res) {
 						// TODO Auto-generated method stub
+						if(pageNum == 1){
+							momentList.clear();
+						}
 						List<Moment> moment = (List<Moment>) res;
 						momentList.addAll(moment);
 						findListViewAdapter.notifyDataSetChanged();
 						if (moment.size() < pageSize) {
 							hasMore = false;
 							ToastUtil.show(getActivity(), "没有更多了");
-						}else{
+						} else {
 							hasMore = true;
 						}
 					}

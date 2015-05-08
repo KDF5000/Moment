@@ -12,19 +12,25 @@ import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.entity.Channel;
+import com.ktl.moment.utils.PregUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ChannelAdapter extends BaseAdapter{
-	
+public class ChannelAdapter extends BaseAdapter {
+
 	private Context context;
 	private List<Channel> channelList;
 	private LayoutInflater inflater;
-	
-	public ChannelAdapter(Context context, List<Channel> channelList){
+	private DisplayImageOptions options;
+
+	public ChannelAdapter(Context context, List<Channel> channelList,
+			DisplayImageOptions options) {
 		this.context = context;
 		this.channelList = channelList;
-		this.inflater  = LayoutInflater.from(this.context);
+		this.inflater = LayoutInflater.from(this.context);
+		this.options = options;
 	}
 
 	@Override
@@ -44,29 +50,36 @@ public class ChannelAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		return position;
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		ChannelHolder holder = null;
-		if(convertView == null){
-			convertView = this.inflater.inflate(R.layout.fragment_find_channel_item_list, null);
+		if (convertView == null) {
+			convertView = this.inflater.inflate(
+					R.layout.fragment_find_channel_item_list, null);
 			holder = new ChannelHolder();
 			ViewUtils.inject(holder, convertView);
 			convertView.setTag(holder);
-		}else{
+		} else {
 			holder = (ChannelHolder) convertView.getTag();
 		}
 		Channel channel = channelList.get(position);
-		holder.channelImg.setImageResource(channel.getChannelImgResId());
+		// holder.channelImg.setImageResource(channel.getChannelImgResId());
+//		if (PregUtil.pregImgUrl(channel.getChannelImg())) {
+			ImageLoader.getInstance().displayImage(channel.getChannelImg(),
+					holder.channelImg, options);
+//		}else{
+//			holder.channelImg.setImageResource(R.drawable.default_img);
+//		}
 		holder.channelName.setText(channel.getChannelName());
 		return convertView;
 	}
-	
-	private static class ChannelHolder{
+
+	private static class ChannelHolder {
 		@ViewInject(R.id.find_channel_img)
 		ImageView channelImg;
-		
+
 		@ViewInject(R.id.find_channel_name)
 		TextView channelName;
 	}

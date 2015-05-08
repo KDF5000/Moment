@@ -20,8 +20,17 @@ public class User extends BaseEntity {
 
 	private int momentNum; // 用户灵感总数
 	private int watchNum; // 用户围观的灵感数
+	private int praiseNum;// 用户赞过的灵感
 	private int attentionNum; // 用户关注的作者数
 	private int FansNum; // 用户的粉丝数
+
+	public int getPraiseNum() {
+		return praiseNum;
+	}
+
+	public void setPraiseNum(int praiseNum) {
+		this.praiseNum = praiseNum;
+	}
 
 	public int getMomentNum() {
 		return momentNum;

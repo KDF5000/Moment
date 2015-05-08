@@ -9,8 +9,8 @@ public class C {
 		/**
 		 * url基地址
 		 */
-//		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
-		private static final String URL_BASE ="http://115.156.249.84:8080/";
+		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
+//		private static final String URL_BASE = "http://115.156.249.64:8080/";
 //		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
@@ -68,11 +68,13 @@ public class C {
 		/**
 		 * 更新用户信息
 		 */
-		public static final String UPDATE_USER_INFO = "http://192.168.95.1/focus.php";
+		public static final String UPDATE_USER_INFO = URL_BASE
+				+ "http://192.168.95.1/focus.php";
 		/**
 		 * 提交推荐关注用户
 		 */
-		public static final String SUBMIT_FOCUS_USER = "http://192.168.95.1/focus.php";
+		public static final String SUBMIT_FOCUS_USER = URL_BASE
+				+ "http://192.168.95.1/focus.php";
 		/**
 		 * 获取灵感详情
 		 */
@@ -181,7 +183,7 @@ public class C {
 		 * 点赞评论
 		 */
 		public static final String PRAISE_COMMENT = URL_BASE
-				+ "MomentsService/MomentOperate";
+				+ "MomentsService/MomentOperate/praiseComment";
 	}
 
 	/******************************************************************************
@@ -300,6 +302,7 @@ public class C {
 		public static final int REQUEST_SELECT_CITY_ACTIVITY = 5;// 选择所在城市
 		public static final int REQUEST_DATE_PICKER_ACTIVITY = 6;// 选择日期
 		public static final int REQUEST_DIALOG_ACTIVITY = 7;// 弹出对话框
+		public static final int JUMPTOCOMMENT = 8;//跳转至评论输入界面，需要回传评论数据
 	}
 
 	/**

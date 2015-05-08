@@ -1,5 +1,7 @@
 package com.ktl.moment.android.fragment;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -12,19 +14,22 @@ import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.EditInfoActivity;
-import com.ktl.moment.android.activity.MyFocusActivty;
 import com.ktl.moment.android.activity.MsgRemindActivity;
+import com.ktl.moment.android.activity.MyFocusActivty;
 import com.ktl.moment.android.activity.SettingActivity;
 import com.ktl.moment.android.activity.WPActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.BadgeView;
 import com.ktl.moment.android.component.CircleImageView;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
-import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MeFragment extends BaseFragment {
@@ -63,7 +68,22 @@ public class MeFragment extends BaseFragment {
 	@ViewInject(R.id.me_praise_layout)
 	private LinearLayout mePraiseLayout;
 
+	@ViewInject(R.id.me_my_focus_num)
+	private TextView focusNum;
+
+	@ViewInject(R.id.me_my_fans_num)
+	private TextView fansNum;
+
+	@ViewInject(R.id.me_my_watch_num)
+	private TextView watchNum;
+
+	@ViewInject(R.id.me_my_praise_num)
+	private TextView praiseNum;
+
 	private BadgeView msgNotifyBadge;
+
+	private User user;
+	private User spUser;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,31 +91,34 @@ public class MeFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_me, container, false);
 		ViewUtils.inject(this, view);
-		initView();
 		addBadge();
+		getDataFromServer();
 
 		return view;
 	}
 
-	private void initView() {
-		User user = (User) SharedPreferencesUtil.getInstance().getObject(
-				C.SPKey.SPK_LOGIN_INFO);
+	private void initData() {
 		if (user == null) {
 			return;
 		}
-		ImageLoader.getInstance().displayImage(user.getUserAvatar(),
+		spUser = Account.getUserInfo();//一些数据从本地获取
+		ImageLoader.getInstance().displayImage(spUser.getUserAvatar(),
 				userAvatar, getDisplayImageOptions());
-		nickname.setText(user.getNickName());
-		if (user.getSex() == 0) {
+		nickname.setText(spUser.getNickName());
+		if (spUser.getSex() == 0) {
 			sex.setImageResource(R.drawable.female);
 		} else {
 			sex.setImageResource(R.drawable.male);
 		}
-		if (user.getSignature().equals("")) {
+		if (spUser.getSignature().equals("")) {
 			signature.setText("这个童鞋TA很懒，还没有发表个性签名");
 		} else {
 			signature.setText(user.getSignature());
 		}
+		focusNum.setText(user.getAttentionNum() + "");
+		fansNum.setText(user.getFansNum() + "");
+		watchNum.setText(user.getWatchNum() + "");
+		praiseNum.setText(user.getPraiseNum() + "");
 	}
 
 	@OnClick({ R.id.me_setting_layout, R.id.me_my_focus, R.id.me_my_fans,
@@ -148,6 +171,29 @@ public class MeFragment extends BaseFragment {
 		msgNotifyBadge.setBadgeCount(8);
 		msgNotifyBadge.setTargetView(meNotificationLayout);
 		msgNotifyBadge.setBadgeMargin(0, 0, 20, 0);
-		msgNotifyBadge.setBadgeGravity(Gravity.CENTER|Gravity.RIGHT);
+		msgNotifyBadge.setBadgeGravity(Gravity.CENTER | Gravity.RIGHT);
+	}
+
+	private void getDataFromServer() {
+		RequestParams params = new RequestParams();
+		params.put("userId", Account.getUserInfo().getUserId());
+		ApiManager.getInstance().post(getActivity(), C.API.GET_MY_INFO, params,
+				new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						@SuppressWarnings("unchecked")
+						List<User> list = (List<User>) res;
+						user = list.get(0);
+						initData();
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+
+					}
+				}, "User");
 	}
 }

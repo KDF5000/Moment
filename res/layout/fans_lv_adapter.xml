@@ -12,7 +12,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/channel_fashion" />
+        android:src="@drawable/default_img" />
 
     <RelativeLayout
         android:layout_width="0dp"
