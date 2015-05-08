@@ -1,6 +1,7 @@
 package com.ktl.moment.android.component;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -128,5 +129,33 @@ public class BottomMenu extends RelativeLayout implements OnClickListener {
 	public interface OnMenuItemClickListener{
 		public void OnClick(int id);
 	}
-
+	/**
+	 * 点击菜单
+	 * @param id
+	 */
+	@SuppressLint("NewApi")
+	public void clickMenuItem(int id){
+		int viewId = 0;
+		switch(id){
+		case C.menu.FRAGMENT_FIND_MENU_ID:
+			viewId = R.id.menu_find;//换成常量
+			break;
+		case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
+			viewId = R.id.menu_foucs;
+			break;
+		case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
+			viewId = R.id.menu_add;
+			break;
+		case C.menu.FRAGMENT_MOMENT_MENU_ID:
+			viewId = R.id.menu_idea;
+			break;
+		case C.menu.FRAGMENT_ME_MENU_ID:
+			viewId = R.id.menu_me;
+			break;
+		default:
+			viewId = R.id.menu_find;
+		}
+		MenuImageText menuItem = menuItemMap.get(viewId);
+		menuItem.callOnClick();
+	}
 }

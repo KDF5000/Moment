@@ -18,8 +18,12 @@ import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
+import com.ktl.moment.im.entity.XgMessage;
+import com.ktl.moment.im.xg.receiver.XgMessageReceiver;
+import com.ktl.moment.im.xg.receiver.XgMessageReceiver.OnCustomMessageListener;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.LogUtil;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
@@ -31,7 +35,7 @@ import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements OnCustomMessageListener {
 	private static final String TAG = "HomeAtivity";
 
 	private BottomMenu customMenu;// 菜单
@@ -102,6 +106,7 @@ public class HomeActivity extends BaseActivity {
 					Intent editorIntent = new Intent(HomeActivity.this,
 							EditorActivity.class);
 					startActivity(editorIntent);
+					
 					return;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:
 					tag = C.menu.FRAGMENT_MOMENT_TAG;
@@ -284,7 +289,6 @@ public class HomeActivity extends BaseActivity {
 
 	/**
 	 * 保存数据到数据库
-	 * 
 	 * @param taskId
 	 * @param entityType
 	 * @param datas
@@ -328,4 +332,50 @@ public class HomeActivity extends BaseActivity {
 	public void getDbData(int taskId, DbTaskType taskType, Selector selector) {
 		getDbDataAsync(taskId, taskType, selector, dbTaskHandler);
 	}
+	
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//跳回到主页面刷新moment页面的标志
+		boolean isSwitch2Moment =  SharedPreferencesUtil.getInstance().getBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
+		if(isSwitch2Moment == true){
+			customMenu.clickMenuItem(C.menu.FRAGMENT_MOMENT_MENU_ID);
+			//需要刷新一下选中的页面
+			((BaseFragment)getFragmentByTag(currentFgTag)).refreshFragmentContent();
+			SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
+		}
+		XGPushManager.onActivityStarted(this);
+		XgMessageReceiver.addCustomMessageListener(this);
+	}
+	
+	 
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		XGPushManager.onActivityStoped(this);
+		XgMessageReceiver.addCustomMessageListener(this);
+	}
+
+	@Override
+	public void OnReceive(XgMessage msg) {
+		// TODO Auto-generated method stub
+		int messageType = msg.getMessageType();
+		switch(messageType){
+		case 1://自定义消息
+			//显示小红点
+			break;
+			
+		}
+	}
+	/**
+	 * 
+	 */
+	public void returnLogin(){
+		//可以做一些退出登录前进行的操作，比如清除缓存
+		actionStart(AccountActivity.class);
+	}
+	
 }

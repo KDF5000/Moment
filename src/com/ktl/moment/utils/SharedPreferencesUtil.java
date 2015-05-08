@@ -150,4 +150,23 @@ public class SharedPreferencesUtil {
 		editor.putString(key, "");
 		editor.commit();
 	}
+	/**
+	 * 设置boolean的变量
+	 * @param key
+	 * @param value
+	 */
+	public synchronized void setBoolean(String key,boolean value){
+		Editor editor = sharedPreferences.edit();
+		editor.putBoolean(key, value);
+		editor.commit();
+	}
+	 /**
+	  * 获得boolean类型的变量
+	  * @param key
+	  * @param defaultValue
+	  * @return
+	  */
+	public synchronized boolean getBoolean(String key,boolean defValue){
+		return sharedPreferences.getBoolean(key, defValue);
+	}
 }

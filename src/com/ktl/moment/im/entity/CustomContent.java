@@ -4,7 +4,6 @@ public class CustomContent {
 
 	private String userName;//用户名
 	private String message;//消息
-	
 	public String getUserName() {
 		return userName;
 	}

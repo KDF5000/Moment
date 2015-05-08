@@ -53,6 +53,7 @@ import com.ktl.moment.utils.FileUtil;
 import com.ktl.moment.utils.RecordPlaySeekbarUtil;
 import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.TimerCountUtil;
 import com.ktl.moment.utils.ToastUtil;
@@ -745,6 +746,9 @@ public class EditorActivity extends BaseActivity {
 		// 没有网络的话保存到本地
 		BasicInfoUtil basicInfoUtil = BasicInfoUtil.getInstance(this);
 		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText.getText().toString());
+		if(moment==null){
+			moment = new Moment();
+		}
 		moment.setTitle("我是一条灵感");
 		/*if (!imgMap.isEmpty()) {
 			for (Map.Entry<String, String> entry : imgMap.entrySet()) {
@@ -859,6 +863,7 @@ public class EditorActivity extends BaseActivity {
 				params.put("content", moment.getContent());
 				params.put("label", moment.getLabel());
 				params.put("isPublic", moment.getIsOpen());
+//				params.put("momentId", moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
 				ApiManager.getInstance().post(EditorActivity.this, C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 					
 					@Override
@@ -867,14 +872,23 @@ public class EditorActivity extends BaseActivity {
 						//保存数据库
 						saveMomentDb(moment);
 						//跳转到灵感页面
+						//跳回到主页面刷新moment页面的标志
+						SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, true);
 						finish();
 					}
 					
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						//
-						
+						//保存到本地数据库
+						Log.i("EditorActivity", res.toString());
+						ToastUtil.show(EditorActivity.this, "网络出错，保存到本地"+res.toString());
+						moment.setContent(contentRichEditText.getText().toString());
+						moment.setDirty(1);
+						saveMomentDb(moment);
+						//跳回到主页面刷新moment页面的标志
+						SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, true);
+						finish();
 					}
 				},"");
 			}
@@ -947,7 +961,7 @@ public class EditorActivity extends BaseActivity {
 		int taskId = res.what;
 		switch (taskId) {
 		case C.DbTaskId.EDITOR_MOMENT_SAVE:
-			ToastUtil.show(this, "保存成功");
+			Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
 			break;
 		default:
 			break;

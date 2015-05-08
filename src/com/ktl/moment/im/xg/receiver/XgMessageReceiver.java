@@ -1,18 +1,21 @@
 package com.ktl.moment.im.xg.receiver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ktl.moment.R;
 import com.ktl.moment.android.MomentApplication;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.im.entity.CustomContent;
+import com.ktl.moment.im.entity.XgMessage;
 import com.tencent.android.tpush.XGPushBaseReceiver;
 import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushRegisterResult;
@@ -24,6 +27,8 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 	private Context mContext;
 	private final int CUSTOM_MSG = 1;//自定义的消息，点赞，评论，关注，收藏，围观
 	private final int CHAT_MSG = 2;//聊天
+	private XgMessage mxgMessage;//信鸽消息
+	private static List<OnCustomMessageListener> onCustomMessageListenerList;
 	@Override
 	public void onDeleteTagResult(Context arg0, int arg1, String arg2) {
 		// TODO Auto-generated method stub
@@ -63,7 +68,10 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 //		int messageType = Integer.getInteger();//消息标题标示消息的类型，0:赞，评论，关注，剪藏，围观  1:私信
 		String content = message.getCustomContent();
 		int messageType = Integer.parseInt(message.getTitle());
-		Toast.makeText(context, messageType + "-->" +content, Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, messageType + "-->" +content, Toast.LENGTH_SHORT).show();
+		if(mxgMessage==null){
+			mxgMessage.setMessageType(messageType);
+		}
 		switch (messageType) {
 		case CUSTOM_MSG:
 			parseCustomMsg(content);
@@ -87,7 +95,15 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 	private void parseCustomMsg(String content){
 		Gson gson = new Gson();
 		CustomContent customContent = gson.fromJson(content,CustomContent.class);
+		mxgMessage.setContent(customContent);
 		showNotification("您有一条新信息",customContent.getUserName(),customContent.getMessage());
+		//通知监听的对象
+		if(onCustomMessageListenerList!=null && onCustomMessageListenerList.size()>0){
+			for(OnCustomMessageListener listener : onCustomMessageListenerList){
+				listener.OnReceive(mxgMessage);
+			}
+		}
+		
 	}
 	/**
 	 * 显示通知
@@ -107,4 +123,37 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 		builder.setContentIntent(pendingIntent);
 		manager.notify((int) System.currentTimeMillis(),builder.build());
 	}
+	
+	/**
+	 * 
+	 * @author KDF5000
+	 *
+	 */
+	public interface OnCustomMessageListener{
+		public void OnReceive(XgMessage msg);
+	}
+	/**
+	 * 添加监听
+	 * @param listener
+	 */
+	public static void addCustomMessageListener(OnCustomMessageListener listener){
+		if(listener==null){
+			return ;
+		}
+		if(onCustomMessageListenerList==null){
+			onCustomMessageListenerList = new ArrayList<XgMessageReceiver.OnCustomMessageListener>();
+		}
+		onCustomMessageListenerList.add(listener);
+	}
+	/**
+	 * 移除监听
+	 * @param listener
+	 */
+	public static void removeCustomMessageListener(OnCustomMessageListener listener){
+		if(listener==null || onCustomMessageListenerList==null){
+			return ;
+		}
+		onCustomMessageListenerList.remove(listener);
+	}
+	
 }

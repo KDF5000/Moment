@@ -38,4 +38,11 @@ public class BaseFragment extends Fragment {
 	        .considerExifParams(true).build();
 		return options;
 	}
+	
+	/**
+	 * 重新刷新页面
+	 */
+	public void refreshFragmentContent(){
+		
+	}
 }
