@@ -9,9 +9,9 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
+//		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
 //		private static final String URL_BASE = "http://115.156.249.64:8080/";
-//		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
+		private static final String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
 		 */
@@ -34,7 +34,7 @@ public class C {
 		 * 用户注册
 		 */
 		public static final String USER_REGISTER = URL_BASE
-				+ "UserInfoService/Registration/";
+				+ "UserInfoService/Registration";
 		/**
 		 * 获取关注首页list
 		 */
@@ -74,7 +74,7 @@ public class C {
 		 * 提交推荐关注用户
 		 */
 		public static final String SUBMIT_FOCUS_USER = URL_BASE
-				+ "http://192.168.95.1/focus.php";
+				+ "custom/submit.php";
 		/**
 		 * 获取灵感详情
 		 */

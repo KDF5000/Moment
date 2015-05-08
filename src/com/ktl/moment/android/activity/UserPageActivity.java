@@ -98,6 +98,9 @@ public class UserPageActivity extends Activity {
 	
 	@ViewInject(R.id.userpage_fans_num)
 	private TextView fansNum;
+	
+	@ViewInject(R.id.userpage_focus_img)
+	private ImageView focusImg;
 
 	private List<Moment> momentList;
 	private User user;
@@ -117,7 +120,7 @@ public class UserPageActivity extends Activity {
 		ViewUtils.inject(this);
 		
 		Intent intent = this.getIntent();
-		userId = intent.getLongExtra("", 0);
+		userId = intent.getLongExtra("userId", 0);
 		
 		getUserDataFromServer();
 		getMomentDataFromServer();
@@ -188,15 +191,23 @@ public class UserPageActivity extends Activity {
 		ImageLoader.getInstance().displayImage(user.getUserAvatar(), userAvatar, getDisplayImageOptions());
 		userNickName.setText(user.getNickName());
 		if(user.getSex()==1){
-			userSex.setImageResource(R.drawable.female);
+			userSex.setImageResource(R.drawable.male);
 		}else{
 			userSex.setImageResource(R.drawable.female);
 		}
-		userSignature.setText(user.getSignature());
+		if(!user.getSignature().equals("")){
+			userSignature.setText(user.getSignature());
+		}else{
+			userSignature.setText("这个童鞋TA很懒，还没有发表个性签名");
+		}
 		if(user.getIsFocused()==0){
+			cancelLy.setBackgroundResource(R.drawable.oval_shape_enable);
 			focustv.setText("关注");
+			focusImg.setImageResource(R.drawable.add);
 		}else{
 			focustv.setText("取消关注");
+			cancelLy.setBackgroundResource(R.drawable.oval_shape);
+			focusImg.setImageResource(R.drawable.cancel);
 		}
 		momentNum.setText(user.getMomentNum()+"");
 		watchNum.setText(user.getWatchNum()+"");
@@ -213,7 +224,7 @@ public class UserPageActivity extends Activity {
 			finish();
 			break;
 		case R.id.userpage_cancel_ly:
-			Toast.makeText(this, "cancel", Toast.LENGTH_SHORT).show();
+			focusAuthor();
 			break;
 		case R.id.userpage_sendmsg_ly:
 			Intent msgIntent = new Intent(this, MsgActivity.class);
@@ -313,6 +324,41 @@ public class UserPageActivity extends Activity {
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
 				ToastUtil.show(UserPageActivity.this, (String) res);
+			}
+		}, "User");
+	}
+	
+	private void focusAuthor(){
+		int isAddFocus = 0;
+		if(user.getIsFocused()==0){
+			cancelLy.setBackgroundResource(R.drawable.oval_shape);
+			focustv.setText("取消关注");
+			focusImg.setImageResource(R.drawable.cancel);
+			user.setIsFocused(1);
+			isAddFocus = 1;
+		}else{
+			cancelLy.setBackgroundResource(R.drawable.oval_shape_enable);
+			focustv.setText("关注");
+			focusImg.setImageResource(R.drawable.add);
+			user.setIsFocused(0);
+			isAddFocus = 0;
+		}
+		RequestParams params = new RequestParams();
+		params.put("userId", Account.getUserInfo().getUserId());
+		params.put("attentionUserId", userId);
+		params.put("isAddFocus", isAddFocus);
+		ApiManager.getInstance().post(this, C.API.FOCUS_AUTHOR, params, new HttpCallBack() {
+			
+			@Override
+			public void onSuccess(Object res) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onFailure(Object res) {
+				// TODO Auto-generated method stub
+				
 			}
 		}, "User");
 	}

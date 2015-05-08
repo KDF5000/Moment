@@ -30,11 +30,13 @@ import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.android.component.wheel.HoloWheelActivity;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.qiniu.QiniuManager;
+import com.ktl.moment.qiniu.QiniuManager.QiniuRequestCallbBack;
 import com.ktl.moment.utils.EditTextUtil;
-import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -74,6 +76,8 @@ public class ProfileFragment extends AccountBaseFragment {
 	private RadioButton profileRadioFamale;
 
 	private int sex;// 0:male,1:female
+	private String imgPath;
+	private String avatarUrl;
 
 	public OnBackToVerifyListener onBackToVerifyListener;
 
@@ -156,7 +160,8 @@ public class ProfileFragment extends AccountBaseFragment {
 					C.ActivityRequest.REQUEST_SELECT_CITY_ACTIVITY);
 			break;
 		case R.id.profile_complete_btn:
-			complete();
+			// complete();
+			uploadImg();
 			break;
 		default:
 			break;
@@ -192,7 +197,7 @@ public class ProfileFragment extends AccountBaseFragment {
 		params.put("nickName", nickname);
 		params.put("area", place);
 		params.put("sex", sex);
-		params.put("userAvatar", "");// 后面完善
+		params.put("userAvatar", avatarUrl);
 		ApiManager.getInstance().post(getActivity(), C.API.USER_REGISTER,
 				params, new HttpCallBack() {
 
@@ -203,14 +208,11 @@ public class ProfileFragment extends AccountBaseFragment {
 						ToastUtil.show(getActivity(), "注册成功");
 						@SuppressWarnings("unchecked")
 						List<User> list = (List<User>) res;
+						Account.saveUserInfo(list.get(0));
 						Intent intent = new Intent(getActivity(),
 								RecommendAuthorActivity.class);
 						startActivity(intent);
 						getActivity().finish();
-						SharedPreferencesUtil.getInstance().putString(
-								C.SPKey.SPK_IS_LOGIN, "true");
-						SharedPreferencesUtil.getInstance().putObject(
-								C.SPKey.SPK_LOGIN_INFO, list.get(0));
 					}
 
 					@Override
@@ -234,6 +236,7 @@ public class ProfileFragment extends AccountBaseFragment {
 				break;
 			case C.ActivityRequest.REQUEST_SELECT_CAMERA_ACTIVITY:
 				Uri cropUri = data.getParcelableExtra("cropPicUri");
+				imgPath = cropUri.getPath();
 				try {
 					Bitmap bmp = MediaStore.Images.Media.getBitmap(
 							getActivity().getContentResolver(), cropUri);
@@ -248,5 +251,25 @@ public class ProfileFragment extends AccountBaseFragment {
 				break;
 			}
 		}
+	}
+
+	private void uploadImg() {
+		QiniuManager qiniu = new QiniuManager();
+		qiniu.uploadFile(getActivity(), imgPath, "img_",
+				new QiniuRequestCallbBack() {
+
+					@Override
+					public void OnFailed(String msg) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void OnComplate(String key) {
+						// TODO Auto-generated method stub
+						avatarUrl = C.API.QINIU_BASE_URL + key;
+						complete();
+					}
+				});
 	}
 }
