@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.AccountActivity;
-import com.ktl.moment.android.adapter.FindListViewAdapter;
+import com.ktl.moment.android.adapter.MomentListViewAdapter;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
@@ -35,7 +35,7 @@ public class DynamicFragment extends BaseFragment {
 
 	private int pageSize = 2;
 	private int pageNum = 1;
-	private FindListViewAdapter findListViewAdapter;
+	private MomentListViewAdapter findListViewAdapter;
 	private long userId;
 
 	private boolean hasMore = true;
@@ -58,7 +58,7 @@ public class DynamicFragment extends BaseFragment {
 
 		initView();
 		momentList = new ArrayList<Moment>();
-		findListViewAdapter = new FindListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
+		findListViewAdapter = new MomentListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
 		findListView.setAdapter(findListViewAdapter);
 		initEvent();
 		findListView.refresh();
@@ -111,7 +111,7 @@ public class DynamicFragment extends BaseFragment {
 		pageNum = 1;
 		hasMore = true;
 		RequestParams params = new RequestParams();
-		params.put("pageNum", pageNum++);
+		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", userId);
 		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST,
@@ -158,7 +158,7 @@ public class DynamicFragment extends BaseFragment {
 			return ;
 		}
 		RequestParams params = new RequestParams();
-		params.put("pageNum", pageNum++);
+		params.put("pageNum", ++pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", userId);
 		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST,

@@ -7,20 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.adapter.FindListViewAdapter;
+import com.ktl.moment.android.adapter.MomentListViewAdapter;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnStartListener;
-import com.ktl.moment.android.fragment.DynamicFragment;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
@@ -37,14 +33,13 @@ public class WPActivity extends BaseActivity {
 	private ZrcListView wpListview;
 
 	private List<Moment> momentList;
-	private FindListViewAdapter momentAdapter;
-	private Handler handler;
+	private MomentListViewAdapter momentAdapter;
 
 	private int pageSize = 2;
 	private int pageNum = 1;
 	private boolean hasMore = true;
 
-	private String wp;
+	private String wpFlag;
 	private final String TAG = "WPActivity";
 
 	@Override
@@ -55,11 +50,11 @@ public class WPActivity extends BaseActivity {
 		ViewUtils.inject(this);
 
 		momentList = new ArrayList<Moment>();
-		initView();
-		// 从服务端获取数据
-		getDataFromServer();
+		momentAdapter = new MomentListViewAdapter(this, momentList,
+				getDisplayImageOptions());
 		wpListview.setAdapter(momentAdapter);
 
+		wpListview.refresh();
 		initView();
 		initEvent();
 
@@ -78,8 +73,8 @@ public class WPActivity extends BaseActivity {
 		setTitleBackImg(R.drawable.title_return_white);
 		setMiddleTitleVisible(true);
 		Intent intent = getIntent();
-		wp = intent.getStringExtra("wp");
-		if (wp.equals("watch")) {
+		wpFlag = intent.getStringExtra("wp");
+		if (wpFlag.equals("watch")) {
 			setMiddleTitleName("我的围观");
 		} else {
 			setMiddleTitleName("我的点赞");
@@ -104,24 +99,12 @@ public class WPActivity extends BaseActivity {
 	}
 
 	private void initEvent() {
-		handler = new Handler();
 		// 下拉刷新事件回调（可选）
-		wpListview.startLoadMore();// 允许加载更多
 		wpListview.setOnRefreshStartListener(new OnStartListener() {
 			@Override
 			public void onStart() {
 				// 刷新开始
-				pageNum = 1;
-				momentList.clear();
-				getDataFromServer();
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						wpListview.setRefreshSuccess("");
-					}
-				}, 2 * 1000);
+				refresh();
 			}
 		});
 
@@ -130,38 +113,20 @@ public class WPActivity extends BaseActivity {
 			@Override
 			public void onStart() {
 				// 加载更多
-				if (hasMore) {
-					pageNum++;
-					getDataFromServer();
-				}
-				Log.i(TAG + "-->pageNum", pageNum + "");
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						wpListview.setLoadMoreSuccess();
-					}
-				}, 2 * 1000);
+				loadMore();
 			}
 		});
 	}
 
-	private void getDataFromServer() {
-		if (momentList == null) {
-			momentList = new ArrayList<Moment>();
-		}
-		if (momentAdapter == null) {
-			momentAdapter = new FindListViewAdapter(this, momentList,
-					getDisplayImageOptions());
-		}
+	private void refresh() {
+		pageNum = 1;
 		RequestParams params = new RequestParams();
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", Account.getUserInfo().getUserId());
 
 		String url = C.API.GET_MY_WATCH_LIST;
-		if (wp.equals("watch")) {
+		if (wpFlag.equals("watch")) {
 			url = C.API.GET_MY_WATCH_LIST;
 		} else {
 			url = C.API.GET_MY_PRAISE_LIST;
@@ -174,11 +139,72 @@ public class WPActivity extends BaseActivity {
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
 				List<Moment> moment = (List<Moment>) res;
+				if (momentList == null) {
+					momentList = new ArrayList<Moment>();
+				}
+				momentList.clear();
 				momentList.addAll(moment);
 				momentAdapter.notifyDataSetChanged();
+				wpListview.setRefreshSuccess("");
+				wpListview.startLoadMore();
 				if (moment.size() < pageSize) {
 					hasMore = false;
-					ToastUtil.show(WPActivity.this, "没有更多了");
+				} else {
+					hasMore = true;
+				}
+			}
+
+			@Override
+			public void onFailure(Object res) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(WPActivity.this, (String) res);
+				wpListview.setRefreshFail("");
+			}
+		}, "Moment");
+	}
+
+	private void loadMore() {
+		if (!hasMore) {
+			new Handler().postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					ToastUtil.show(WPActivity.this, "没有更多了~");
+					wpListview.setLoadMoreSuccess();
+					wpListview.stopLoadMore();
+				}
+			}, 500);
+			return;
+		}
+
+		RequestParams params = new RequestParams();
+		params.put("pageNum", ++pageNum);
+		params.put("pageSize", pageSize);
+		params.put("userId", Account.getUserInfo().getUserId());
+
+		String url = C.API.GET_MY_WATCH_LIST;
+		if (wpFlag.equals("watch")) {
+			url = C.API.GET_MY_WATCH_LIST;
+		} else {
+			url = C.API.GET_MY_PRAISE_LIST;
+		}
+
+		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onSuccess(Object res) {
+				// TODO Auto-generated method stub
+				List<Moment> moment = (List<Moment>) res;
+				if (momentList == null) {
+					momentList = new ArrayList<Moment>();
+				}
+				momentList.addAll(moment);
+				momentAdapter.notifyDataSetChanged();
+				wpListview.setLoadMoreSuccess();
+				if (moment.size() < pageSize) {
+					hasMore = false;
 				} else {
 					hasMore = true;
 				}

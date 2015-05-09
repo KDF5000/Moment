@@ -35,7 +35,7 @@ import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class FindListViewAdapter extends BaseAdapter {
+public class MomentListViewAdapter extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater mInflater;
@@ -44,7 +44,7 @@ public class FindListViewAdapter extends BaseAdapter {
 
 	// private User user;
 
-	public FindListViewAdapter(Context context, List<Moment> momentList,
+	public MomentListViewAdapter(Context context, List<Moment> momentList,
 			DisplayImageOptions options) {
 		this.momentList = momentList;
 		this.context = context;
@@ -87,12 +87,12 @@ public class FindListViewAdapter extends BaseAdapter {
 		final Moment moment = momentList.get(position);
 		momentHolder.tittleTv.setText(moment.getTitle());
 		momentHolder.contentTv.setText(moment.getContent());
-		if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
+//		if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
 			ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
 					momentHolder.avatar, options);
-		} else {
-			momentHolder.avatar.setImageResource(R.drawable.default_img);
-		}
+//		} else {
+//			momentHolder.avatar.setImageResource(R.drawable.default_img);
+//		}
 		if (PregUtil.pregImgUrl(moment.getMomentImgs())) {
 			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
 					momentHolder.momentImg, options);

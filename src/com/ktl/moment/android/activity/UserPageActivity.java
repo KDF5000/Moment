@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.adapter.FindListViewAdapter;
+import com.ktl.moment.android.adapter.MomentListViewAdapter;
 import com.ktl.moment.android.component.CustomListViewPullZoom;
 import com.ktl.moment.android.component.CustomListViewPullZoom.OnScrollListener;
 import com.ktl.moment.common.Account;
@@ -104,7 +104,7 @@ public class UserPageActivity extends Activity {
 
 	private List<Moment> momentList;
 	private User user;
-	private FindListViewAdapter momentListAdapter;
+	private MomentListViewAdapter momentListAdapter;
 	private int pageNum = 0;
 	private int pageSize = 10;
 	private long userId;
@@ -120,7 +120,7 @@ public class UserPageActivity extends Activity {
 		ViewUtils.inject(this);
 		
 		Intent intent = this.getIntent();
-		userId = intent.getLongExtra("userId", 0);
+		userId = intent.getLongExtra("userId", -1);
 		
 		getUserDataFromServer();
 		getMomentDataFromServer();
@@ -243,13 +243,13 @@ public class UserPageActivity extends Activity {
 			getMomentDataFromServer();
 			break;
 		case R.id.user_focus_nav:
-			Intent focusIntent = new Intent(this, MyFocusActivty.class);
+			Intent focusIntent = new Intent(this, FocusActivty.class);
 			focusIntent.putExtra("intentFlag", "userFocus");
 			focusIntent.putExtra("userId", userId);
 			startActivity(focusIntent);
 			break;
 		case R.id.user_fans_nav:
-			Intent fansIntent = new Intent(this, MyFocusActivty.class);
+			Intent fansIntent = new Intent(this, FocusActivty.class);
 			fansIntent.putExtra("intentFlag", "userFans");
 			fansIntent.putExtra("userId", userId);
 			startActivity(fansIntent);
@@ -272,7 +272,7 @@ public class UserPageActivity extends Activity {
 			momentList = new ArrayList<Moment>();
 		}
 		if (momentListAdapter == null) {
-			momentListAdapter = new FindListViewAdapter(this, momentList,
+			momentListAdapter = new MomentListViewAdapter(this, momentList,
 					getDisplayImageOptions());
 		}
 		RequestParams params = new RequestParams();

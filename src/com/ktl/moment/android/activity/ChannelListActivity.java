@@ -7,11 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 
 import com.ktl.moment.R;
-import com.ktl.moment.android.adapter.FindListViewAdapter;
+import com.ktl.moment.android.adapter.MomentListViewAdapter;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
@@ -33,14 +32,14 @@ public class ChannelListActivity extends BaseActivity {
 	@ViewInject(R.id.channellist_listview)
 	private ZrcListView channelListView;
 
-	private Handler handler;
-	private FindListViewAdapter channelListAdapter;
+	private MomentListViewAdapter channelListAdapter;
 
 	private List<Moment> channelList;
 
-	private int pageNum = 0;
+	private int pageNum = 1;
 	private int pageSize = 10;
 	private long userId;
+	private boolean hasMore = true;
 
 	private CharSequence channelName;
 	private long channelId;
@@ -65,8 +64,10 @@ public class ChannelListActivity extends BaseActivity {
 		initEvent();
 
 		channelList = new ArrayList<Moment>();
-		getDataFromServer();
+		channelListAdapter = new MomentListViewAdapter(this, channelList,
+				getDisplayImageOptions());
 		channelListView.setAdapter(channelListAdapter);
+		loadData();
 	}
 
 	private void initView() {
@@ -94,24 +95,13 @@ public class ChannelListActivity extends BaseActivity {
 	}
 
 	private void initEvent() {
-		handler = new Handler();
 		// 下拉刷新事件回调（可选）
 		channelListView.startLoadMore();// 允许加载更多
 		channelListView.setOnRefreshStartListener(new OnStartListener() {
 			@Override
 			public void onStart() {
 				// 刷新开始
-				pageNum = 0;
-				getDataFromServer();
-				Log.i(TAG + "-->pageNum", pageNum + "");
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						channelListView.setRefreshSuccess("");
-					}
-				}, 2 * 1000);
+				loadData();
 			}
 		});
 
@@ -120,36 +110,68 @@ public class ChannelListActivity extends BaseActivity {
 			@Override
 			public void onStart() {
 				// 加载更多
-				pageNum++;
-				getDataFromServer();
-				Log.i(TAG + "-->pageNum", pageNum + "");
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						channelListView.setLoadMoreSuccess();
-					}
-				}, 2 * 1000);
+				loadMoreData();
 			}
 		});
 	}
 
-	private void getDataFromServer() {
-		if (channelList == null) {
-			channelList = new ArrayList<Moment>();
-		}
-		if (channelListAdapter == null) {
-			channelListAdapter = new FindListViewAdapter(this, channelList,
-					getDisplayImageOptions());
-		}
+	private void loadData() {
 		RequestParams params = new RequestParams();
-		params.put("pageNum", pageNum);
+		params.put("pageNum", 1);
 		params.put("pageSize", pageSize);
 		params.put("userId", userId);
 		params.put("channelId", channelId);
-		ApiManager.getInstance().post(this, C.API.GET_CHANNEL_INFO_LIST, params,
-				new HttpCallBack() {
+		ApiManager.getInstance().post(this, C.API.GET_CHANNEL_INFO_LIST,
+				params, new HttpCallBack() {
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						List<Moment> moment = (List<Moment>) res;
+						channelList.clear();
+						channelList.addAll(moment);
+						channelListAdapter.notifyDataSetChanged();
+						channelListView.setRefreshSuccess("");
+						channelListView.startLoadMore();
+						if (moment.size() < pageSize) {
+							hasMore = false;
+						} else {
+							hasMore = true;
+						}
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(ChannelListActivity.this, (String) res);
+						channelListView.setRefreshFail("");
+					}
+				}, "Moment");
+	}
+
+	private void loadMoreData() {
+		if (!hasMore) {
+			new Handler().postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method
+					// stubfindListView.setLoadMoreSuccess();
+					channelListView.stopLoadMore();
+					ToastUtil.show(ChannelListActivity.this, "没有更多了~");
+				}
+			}, 500);
+			return;
+		}
+
+		RequestParams params = new RequestParams();
+		params.put("pageNum", ++pageNum);
+		params.put("pageSize", pageSize);
+		params.put("userId", userId);
+		params.put("channelId", channelId);
+		ApiManager.getInstance().post(this, C.API.GET_CHANNEL_INFO_LIST,
+				params, new HttpCallBack() {
 
 					@SuppressWarnings("unchecked")
 					@Override
@@ -158,6 +180,12 @@ public class ChannelListActivity extends BaseActivity {
 						List<Moment> moment = (List<Moment>) res;
 						channelList.addAll(moment);
 						channelListAdapter.notifyDataSetChanged();
+						channelListView.setLoadMoreSuccess();
+						if (moment.size() < pageSize) {
+							hasMore = false;
+						} else {
+							hasMore = true;
+						}
 					}
 
 					@Override

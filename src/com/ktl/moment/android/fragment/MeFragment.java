@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.EditInfoActivity;
 import com.ktl.moment.android.activity.MsgRemindActivity;
-import com.ktl.moment.android.activity.MyFocusActivty;
+import com.ktl.moment.android.activity.FocusActivty;
 import com.ktl.moment.android.activity.SettingActivity;
 import com.ktl.moment.android.activity.WPActivity;
 import com.ktl.moment.android.base.BaseFragment;
@@ -132,12 +132,12 @@ public class MeFragment extends BaseFragment {
 			startActivity(settingIntent);
 			break;
 		case R.id.me_my_focus:
-			Intent focusIntent = new Intent(getActivity(), MyFocusActivty.class);
+			Intent focusIntent = new Intent(getActivity(), FocusActivty.class);
 			focusIntent.putExtra("intentFlag", "focus");
 			startActivity(focusIntent);
 			break;
 		case R.id.me_my_fans:
-			Intent fansIntent = new Intent(getActivity(), MyFocusActivty.class);
+			Intent fansIntent = new Intent(getActivity(), FocusActivty.class);
 			fansIntent.putExtra("intentFlag", "fans");
 			startActivity(fansIntent);
 			break;

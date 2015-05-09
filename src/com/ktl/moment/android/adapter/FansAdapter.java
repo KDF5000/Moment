@@ -3,6 +3,7 @@ package com.ktl.moment.android.adapter;
 import java.util.List;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.UserPageActivity;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
@@ -16,6 +17,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,6 +126,17 @@ public class FansAdapter extends BaseAdapter {
 								Log.i(TAG, "fail");
 							}
 						}, "User");
+			}
+		});
+		
+		fansHolder.fansAvatar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(context, UserPageActivity.class);
+				intent.putExtra("userId", fans.getUserId());
+				context.startActivity(intent);
 			}
 		});
 

@@ -215,7 +215,7 @@
             android:theme="@style/activity_transparent" >
         </activity>
         <!-- 我关注的用户页面 -->
-        <activity android:name="com.ktl.moment.android.activity.MyFocusActivty" >
+        <activity android:name="com.ktl.moment.android.activity.FocusActivty" >
         </activity>
         <!-- 推荐用户页面 -->
         <activity android:name="com.ktl.moment.android.activity.RecommendAuthorActivity" >

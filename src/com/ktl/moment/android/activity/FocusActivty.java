@@ -29,7 +29,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.loopj.android.http.RequestParams;
 
-public class MyFocusActivty extends BaseActivity {
+public class FocusActivty extends BaseActivity {
 
 	@ViewInject(R.id.my_focus)
 	private ZrcListView myFocus;
@@ -117,13 +117,14 @@ public class MyFocusActivty extends BaseActivity {
 	}
 
 	private void loadData() {
+		pageNum = 1;
 		RequestParams params = new RequestParams();
 		if (userId == -1) {
 			params.put("userId", Account.getUserInfo().getUserId());
 		} else {
 			params.put("userId", userId);
 		}
-		params.put("pageNum", pageNum++);
+		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		String url = C.API.GET_FOCUS_AUTHOR_LIST;
 		if (intentFlag.equals("focus")) {
@@ -131,9 +132,9 @@ public class MyFocusActivty extends BaseActivity {
 		} else if (intentFlag.equals("fans")) {
 			url = C.API.GET_MY_FANS_LIST;
 		} else if (intentFlag.equals("userFocus")) {
-			url = "";
+			url = C.API.GET_USER_FOCUS_LIST;
 		} else {
-			url = "";
+			url = C.API.GET_USER_FANS_LIST;
 		}
 		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
 
@@ -143,6 +144,7 @@ public class MyFocusActivty extends BaseActivity {
 				focusList.clear();
 				@SuppressWarnings("unchecked")
 				List<User> user = (List<User>) res;
+				focusList.clear();
 				focusList.addAll(user);
 				myFocus.setRefreshSuccess("");
 				myFocus.startLoadMore();// 允许加载更多
@@ -157,7 +159,7 @@ public class MyFocusActivty extends BaseActivity {
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(MyFocusActivty.this, (String) res);
+				ToastUtil.show(FocusActivty.this, (String) res);
 				myFocus.setRefreshFail("");
 				myFocus.startLoadMore();// 允许加载更多
 			}
@@ -173,7 +175,7 @@ public class MyFocusActivty extends BaseActivity {
 					// TODO Auto-generated method stub
 					myFocus.setLoadMoreSuccess();
 					myFocus.stopLoadMore();
-					ToastUtil.show(MyFocusActivty.this, "没有更多了~");
+					ToastUtil.show(FocusActivty.this, "没有更多了~");
 				}
 			}, 500);
 			return;
@@ -185,7 +187,7 @@ public class MyFocusActivty extends BaseActivity {
 		} else {
 			params.put("userId", userId);
 		}
-		params.put("pageNum", 1);
+		params.put("pageNum", ++pageNum);
 		params.put("pageSize", pageSize);
 		String url = C.API.GET_FOCUS_AUTHOR_LIST;
 		if (intentFlag.equals("focus")) {
@@ -193,16 +195,15 @@ public class MyFocusActivty extends BaseActivity {
 		} else if (intentFlag.equals("fans")) {
 			url = C.API.GET_MY_FANS_LIST;
 		} else if (intentFlag.equals("userFocus")) {
-			url = "";
+			url = C.API.GET_USER_FOCUS_LIST;
 		} else {
-			url = "";
+			url = C.API.GET_USER_FANS_LIST;
 		}
 		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
 
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
-				focusList.clear();
 				@SuppressWarnings("unchecked")
 				List<User> user = (List<User>) res;
 				focusList.addAll(user);
@@ -218,7 +219,7 @@ public class MyFocusActivty extends BaseActivity {
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(MyFocusActivty.this, (String) res);
+				ToastUtil.show(FocusActivty.this, (String) res);
 			}
 		}, "User");
 	}

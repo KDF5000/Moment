@@ -51,34 +51,18 @@ public class ChannelFragment extends BaseFragment {
 	}
 
 	private void getData() {
-		// int[] img = { R.drawable.channel_internet,
-		// R.drawable.channel_internet,
-		// R.drawable.channel_internet, R.drawable.channel_internet,
-		// R.drawable.channel_internet, R.drawable.channel_internet,
-		// R.drawable.channel_internet };
-		//
-		// if (channelList == null) {
-		// channelList = new ArrayList<Channel>();
-		// }
-		// for (int i = 0; i < img.length; i++) {
-		// Channel channel = new Channel();
-		// channel.setChannelId(i);
-		// channel.setChannelImgResId(img[i]);
-		// channel.setChannelName("频道" + i);
-		// channelList.add(channel);
-		// }
 		if(channelList == null){
 			channelList = new ArrayList<Channel>();
 		}
-		RequestParams params = new RequestParams();
 		ApiManager.getInstance().post(getActivity(), C.API.GET_CHENNAL_LIST,
-				params, new HttpCallBack() {
+				null, new HttpCallBack() {
 
 					@Override
 					public void onSuccess(Object res) {
 						// TODO Auto-generated method stub
 						@SuppressWarnings("unchecked")
 						List<Channel> list = (List<Channel>) res;
+						channelList.clear();
 						channelList.addAll(list);
 						channelAdapter.notifyDataSetChanged();
 					}

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -251,10 +250,11 @@ public class MomentDetailActivity extends BaseActivity {
 	}
 
 	private void loadComments() {
+		pageNum = 1;
 		RequestParams params = new RequestParams();
 		params.put("momentId", momentId);
 		params.put("pageSize", pageSize);
-		params.put("pageNum", 1);
+		params.put("pageNum", pageNum);
 		ApiManager.getInstance().post(this, C.API.GET_COMMENT_LIST, params,
 				new HttpCallBack() {
 
@@ -264,6 +264,7 @@ public class MomentDetailActivity extends BaseActivity {
 						commentList.clear();
 						@SuppressWarnings("unchecked")
 						List<Comment> list = (List<Comment>) res;
+						commentList.clear();
 						commentList.addAll(list);
 						commentListViewAdapter.notifyDataSetChanged();
 						commentsListView.setRefreshSuccess("");
@@ -303,7 +304,7 @@ public class MomentDetailActivity extends BaseActivity {
 		RequestParams params = new RequestParams();
 		params.put("momentId", momentId);
 		params.put("pageSize", pageSize);
-		params.put("pageNum", pageNum++);
+		params.put("pageNum", ++pageNum);
 		ApiManager.getInstance().post(this, C.API.GET_COMMENT_LIST, params,
 				new HttpCallBack() {
 
@@ -315,7 +316,6 @@ public class MomentDetailActivity extends BaseActivity {
 						commentList.addAll(list);
 						commentListViewAdapter.notifyDataSetChanged();
 						commentsListView.setLoadMoreSuccess();
-						Log.i("tag", list.size()+"");
 						if (list.size() < pageSize) {
 							hasMore = false;
 						} else {
