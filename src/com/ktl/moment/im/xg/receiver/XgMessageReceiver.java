@@ -9,6 +9,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ktl.moment.R;
@@ -68,8 +70,9 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 //		int messageType = Integer.getInteger();//消息标题标示消息的类型，0:赞，评论，关注，剪藏，围观  1:私信
 		String content = message.getCustomContent();
 		int messageType = Integer.parseInt(message.getTitle());
-//		Toast.makeText(context, messageType + "-->" +content, Toast.LENGTH_SHORT).show();
+		Log.i("XgReceiveMessage", messageType + "-->" +content);
 		if(mxgMessage==null){
+			mxgMessage = new XgMessage();
 			mxgMessage.setMessageType(messageType);
 		}
 		switch (messageType) {

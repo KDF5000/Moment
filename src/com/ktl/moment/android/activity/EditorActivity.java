@@ -46,6 +46,8 @@ import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
+import com.ktl.moment.qiniu.QiniuManager;
+import com.ktl.moment.qiniu.QiniuManager.QiniuRequestCallbBack;
 import com.ktl.moment.qiniu.QiniuTask;
 import com.ktl.moment.utils.BasicInfoUtil;
 import com.ktl.moment.utils.EncryptUtil;
@@ -790,8 +792,31 @@ public class EditorActivity extends BaseActivity {
 							// TODO Auto-generated method stub
 							@SuppressWarnings("unchecked")
 							ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) res;
-							String token = TokenList.get(0).getToken();
-							uploadFilte2Qiniu(token);
+							final String token = TokenList.get(0).getToken();
+							//如果有音频上传音频
+							if(recordAudioPath!=null){
+								//上传音频
+								QiniuManager.getInstance().uploadFile(EditorActivity.this, recordAudioPath, "audio", new QiniuRequestCallbBack() {
+									
+									@Override
+									public void OnFailed(String msg) {
+										// TODO Auto-generated method stub
+										moment.setDirty(1);
+										moment.setAudioUrl(recordAudioPath);
+										saveMomentDb(moment);
+									}
+									
+									@Override
+									public void OnComplate(String key) {
+										// TODO Auto-generated method stub
+										moment.setAudioUrl(C.API.QINIU_BASE_URL+key);
+										uploadFilte2Qiniu(token);
+									}
+								});
+							}else{
+								uploadFilte2Qiniu(token);
+							}
+						
 						}
 
 						@Override

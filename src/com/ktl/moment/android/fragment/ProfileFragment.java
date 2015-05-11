@@ -260,8 +260,8 @@ public class ProfileFragment extends AccountBaseFragment {
 			ToastUtil.show(getActivity(), "请选择头像");
 			return;
 		}
-		QiniuManager qiniu = new QiniuManager();
-		qiniu.uploadFile(getActivity(), imgPath, "img_",
+		QiniuManager qiniu = QiniuManager.getInstance();
+		qiniu.uploadFile(getActivity(), imgPath, "img",
 				new QiniuRequestCallbBack() {
 
 					@Override

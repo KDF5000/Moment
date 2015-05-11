@@ -22,20 +22,22 @@ public class QiniuManager {
 	private UploadManager uploadManager;
 	private static QiniuManager qiniuManager = null;
 	
-	public QiniuManager getInstance(){
+	
+	public static QiniuManager  getInstance(){
 		if(qiniuManager==null){
 			qiniuManager = new QiniuManager();
 		}
-		return null;
+		return qiniuManager;
 	}
 	
 	public void setToken(String token){
 		this.token = token;
 	}
 	
-	public QiniuManager(){
+	private QiniuManager(){
 		this.uploadManager = new UploadManager();
 	}
+	
 	public interface QiniuRequestCallbBack{
 		public void OnComplate(String key);
 		public void OnFailed(String msg);
@@ -59,7 +61,7 @@ public class QiniuManager {
 				@SuppressWarnings("unchecked")
 				ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) res;
 				token = TokenList.get(0).getToken();
-				uploadManager.put(filePath, fileType + System.currentTimeMillis(),
+				uploadManager.put(filePath, fileType +"_"+ System.currentTimeMillis(),
 						token, new UpCompletionHandler() {
 							@Override
 							public void complete(String fileName, ResponseInfo info,
