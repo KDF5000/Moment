@@ -64,7 +64,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
                 android:background="#0000"
-                android:text="HUST"
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -98,7 +97,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
                 android:background="#0000"
-                android:text="男"
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -132,7 +130,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
                 android:background="#0000"
-                android:text="武汉"
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -166,7 +163,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
                 android:background="#0000"
-                android:text="2001-01-01"
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -200,7 +196,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:background="#0000"
-                android:text="梦里遇见秋一样的你，是我文艺好青年"
+                android:hint="快来发表你的个性签名吧~"
+                android:textColorHint="#959595"
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </LinearLayout>

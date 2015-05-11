@@ -54,7 +54,7 @@ public class ChannelFragment extends BaseFragment {
 		if(channelList == null){
 			channelList = new ArrayList<Channel>();
 		}
-		ApiManager.getInstance().post(getActivity(), C.API.GET_CHENNAL_LIST,
+		ApiManager.getInstance().get(getActivity(), C.API.GET_CHENNAL_LIST,
 				null, new HttpCallBack() {
 
 					@Override

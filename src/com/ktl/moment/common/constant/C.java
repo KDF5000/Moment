@@ -9,10 +9,10 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		// private static final String URL_BASE
-		// ="http://yfmoment.tiger.mopaas.com/";
-		// private static final String URL_BASE = "http://115.156.249.64:8080/";
-		private static String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
+		 private static final String URL_BASE = "http://yfmoment.tiger.mopaas.com/";
+//		private static final String URL_BASE = "http://115.156.249.25:8080/";
+		// private static String URL_BASE =
+		// "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
 		 */
@@ -70,12 +70,17 @@ public class C {
 		 * 更新用户信息
 		 */
 		public static final String UPDATE_USER_INFO = URL_BASE
-				+ "http://192.168.95.1/focus.php";
+				+ "UserInfoService/Registration/updateUserInfo";
+		/**
+		 * 获取推荐关注用户列表
+		 */
+		public static final String GET_RECOMMEND_FOCUS_USER_LIST = URL_BASE
+				+ "UserInfoService/FriendRelationship/getRecommendFriends";
 		/**
 		 * 提交推荐关注用户
 		 */
-		public static final String SUBMIT_FOCUS_USER = URL_BASE
-				+ "custom/submit.php";
+		public static final String SUBMIT_RECOMMEND_FOCUS_USER = URL_BASE
+				+ "UserInfoService/FriendRelationship/addNewFriends";
 		/**
 		 * 获取灵感详情
 		 */
@@ -112,7 +117,8 @@ public class C {
 		/**
 		 * 获取我的所有灵感
 		 */
-		public static final String GET_MY_MOMENT_LIST = URL_BASE + "";
+		public static final String GET_MY_MOMENT_LIST = URL_BASE
+				+ "UserInfoService/UserInfo/getMyOwnMoments";
 		/**
 		 * 获取我点赞的灵感
 		 */
@@ -137,28 +143,32 @@ public class C {
 		 * 获取用户的灵感
 		 */
 		public static final String GET_USER_MOMENT_LIST = URL_BASE
-				+ "custom/getMoment.php";
+				+ "UserInfoService/FriendRelationship/getOtherUserMoments";
 		/**
 		 * 获取用户围观的灵感
 		 */
 		public static final String GET_USER_WATCH_LIST = URL_BASE
-				+ "custom/getWatchMoment.php";
+				+ "UserInfoService/FriendRelationship/getOtherUserWatchedMoments";
 		/**
 		 * 获取用户关注的作者
 		 */
-		public static final String GET_USER_FOCUS_LIST = URL_BASE + "";
+		public static final String GET_USER_FOCUS_LIST = URL_BASE
+				+ "UserInfoService/UserInfo/getOtherUserAttentions";
 		/**
 		 * 获取用户的粉丝
 		 */
-		public static final String GET_USER_FANS_LIST = URL_BASE + "";
+		public static final String GET_USER_FANS_LIST = URL_BASE
+				+ "UserInfoService/UserInfo/getOtherUserFans";
 		/**
 		 * 剪藏灵感
 		 */
-		public static final String CLIPPER_MOMENT = URL_BASE + "";
+		public static final String CLIPPER_MOMENT = URL_BASE
+				+ "MomentsService/MomentOperate/clipperMoment";
 		/**
 		 * 分享灵感
 		 */
-		public static final String SHARE_MOMENT = URL_BASE + "";
+		public static final String SHARE_MOMENT = URL_BASE
+				+ "MomentsService/MomentOperate/shareMoment";
 		/**
 		 * 私信消息
 		 */
@@ -166,7 +176,8 @@ public class C {
 		/**
 		 * 获取推荐灵感
 		 */
-		public static final String GET_RECOMMEND__MOMENT = URL_BASE + "";
+		public static final String GET_RECOMMEND_MOMENT = URL_BASE
+				+ "custom/getMoment.php";
 		/**
 		 * 频道首页list
 		 */
@@ -187,11 +198,6 @@ public class C {
 		 */
 		public static final String PRAISE_COMMENT = URL_BASE
 				+ "MomentsService/MomentOperate/praiseComment";
-		/**
-		 * 获取推荐灵感
-		 */
-		public static final String GET_RECOMMEND_MOMENT = URL_BASE
-				+ "custom/getMoment.php";
 	}
 
 	/******************************************************************************

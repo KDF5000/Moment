@@ -2,6 +2,7 @@ package com.ktl.moment.android.activity;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,15 +23,21 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.android.component.wheel.HoloWheelActivity;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.qiniu.QiniuManager;
+import com.ktl.moment.qiniu.QiniuManager.QiniuRequestCallbBack;
 import com.ktl.moment.utils.EditTextUtil;
+import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.lidroid.xutils.view.annotation.event.OnTouch;
 import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class EditInfoActivity extends BaseActivity {
 
@@ -55,6 +62,9 @@ public class EditInfoActivity extends BaseActivity {
 	@ViewInject(R.id.edit_base_layout)
 	private LinearLayout editBaseLayout;
 
+	private String avatar;
+	private String imgPath = "";
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -63,6 +73,7 @@ public class EditInfoActivity extends BaseActivity {
 				true);
 
 		ViewUtils.inject(this);
+		initUser();
 		initView();
 	}
 
@@ -79,6 +90,31 @@ public class EditInfoActivity extends BaseActivity {
 		EditTextUtil.setEditable(editNickname, false);
 		EditTextUtil.setEditable(editSex, false);
 		EditTextUtil.setEditable(editSignature, false);
+	}
+
+	private void initUser() {
+		User spUser = Account.getUserInfo();
+		ImageLoader.getInstance().displayImage(spUser.getUserAvatar(),
+				editAvatar, getDisplayImageOptions());
+		editNickname.setText(spUser.getNickName());
+		if (spUser.getSex() == 0) {
+			editSex.setText("女");
+		} else {
+			editSex.setText("男");
+		}
+		if (spUser.getUserArea().equals("") || spUser.getUserArea() == null) {
+			editArea.setText("北京市 北京市");
+		} else {
+			editArea.setText(spUser.getUserArea());
+		}
+		if (spUser.getBirthday().equals("") || spUser.getBirthday() == null) {
+			editBirthday.setText("2000-01-01");
+		} else {
+			editBirthday.setText(spUser.getBirthday());
+		}
+		if (!spUser.getSignature().equals("") && spUser.getSignature() != null) {
+			editSignature.setText(spUser.getSignature());
+		}
 	}
 
 	@OnClick({ R.id.title_back_img, R.id.title_right_tv, R.id.edit_area,
@@ -160,6 +196,9 @@ public class EditInfoActivity extends BaseActivity {
 
 	private void editBirthday() {
 		String birthday = editBirthday.getText().toString().trim();
+		if (birthday.equals("") || birthday == null) {
+			birthday = "2000-01-01";
+		}
 		String[] dateArray = birthday.split("-");
 		int year = Integer.parseInt(dateArray[0]);
 		int month = Integer.parseInt(dateArray[1]);
@@ -173,8 +212,7 @@ public class EditInfoActivity extends BaseActivity {
 				C.ActivityRequest.REQUEST_DATE_PICKER_ACTIVITY);
 	}
 
-	private void complete() {
-		String avatar = "";// 七牛地址
+	private void submit() {
 		String nickname = editNickname.getText().toString().trim();
 		String tmpSex = editNickname.getText().toString().trim();
 		String area = editArea.getText().toString().trim();
@@ -188,10 +226,11 @@ public class EditInfoActivity extends BaseActivity {
 		}
 
 		RequestParams params = new RequestParams();
-		params.put("avatar", avatar);
-		params.put("nickname", nickname);
+		params.put("userId", Account.getUserInfo().getUserId());
+		params.put("nickName", nickname);
+		params.put("userAvatar", avatar);
 		params.put("sex", sex);
-		params.put("area", area);
+		params.put("userArea", area);
 		params.put("birthday", birthday);
 		params.put("signature", signature);
 		ApiManager.getInstance().post(this, C.API.UPDATE_USER_INFO, params,
@@ -200,13 +239,17 @@ public class EditInfoActivity extends BaseActivity {
 					@Override
 					public void onSuccess(Object res) {
 						// TODO Auto-generated method stub
+						@SuppressWarnings("unchecked")
+						List<User> list = (List<User>) res;
+						User user = list.get(0);
+						Account.saveUserInfo(user);
 						finish();
 					}
 
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-
+						ToastUtil.show(EditInfoActivity.this, (String) res);
 					}
 				}, "User");
 
@@ -224,6 +267,7 @@ public class EditInfoActivity extends BaseActivity {
 				break;
 			case C.ActivityRequest.REQUEST_SELECT_CAMERA_ACTIVITY:
 				Uri cropUri = data.getParcelableExtra("cropPicUri");
+				imgPath = cropUri.getPath();
 				try {
 					Bitmap bmp = MediaStore.Images.Media.getBitmap(
 							this.getContentResolver(), cropUri);
@@ -242,6 +286,29 @@ public class EditInfoActivity extends BaseActivity {
 				break;
 			}
 		}
+	}
+
+	private void complete() {
+		if (imgPath.equals("") || imgPath == null) {
+			ToastUtil.show(this, "请选择头像");
+			return;
+		}
+		QiniuManager qiniu = new QiniuManager();
+		qiniu.uploadFile(this, imgPath, "img_", new QiniuRequestCallbBack() {
+
+			@Override
+			public void OnFailed(String msg) {
+				// TODO Auto-generated method stub
+				ToastUtil.show(EditInfoActivity.this, msg);
+			}
+
+			@Override
+			public void OnComplate(String key) {
+				// TODO Auto-generated method stub
+				avatar = C.API.QINIU_BASE_URL + key;
+				submit();
+			}
+		});
 	}
 
 	@Override

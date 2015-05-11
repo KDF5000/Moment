@@ -12,10 +12,10 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.RecommendAuthorAdapter;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.component.LoadingDialog;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -54,9 +54,7 @@ public class RecommendAuthorActivity extends BaseActivity {
 				.getColor(R.color.main_title_color));
 
 		// 从SP获取用户id
-		User spUser = (User) SharedPreferencesUtil.getInstance().getObject(
-				C.SPKey.SPK_LOGIN_INFO);
-		userId = spUser.getId();
+		userId = Account.getUserInfo().getUserId();
 
 		getData();
 		recommendAuthorAdapter = new RecommendAuthorAdapter(this, userList,
@@ -72,8 +70,9 @@ public class RecommendAuthorActivity extends BaseActivity {
 		params.put("userId", userId);
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
-		ApiManager.getInstance().post(this, C.API.GET_FOCUS_AUTHOR_LIST,
-				params, new HttpCallBack() {
+		ApiManager.getInstance().post(this,
+				C.API.GET_RECOMMEND_FOCUS_USER_LIST, params,
+				new HttpCallBack() {
 
 					@Override
 					public void onSuccess(Object res) {
@@ -101,12 +100,22 @@ public class RecommendAuthorActivity extends BaseActivity {
 	}
 
 	private void complete() {
+		String focusIds = "";
+		List<Long> tmpIds = new ArrayList<Long>();
+		for (int i = 0; i < userList.size(); i++) {
+			User tmpUser = (User) recommendAuthorAdapter.getItem(i);
+			if (tmpUser.getIsFocused() == 1) {
+				tmpIds.add(tmpUser.getUserId());
+			}
+		}
+		focusIds = list2String(tmpIds);
 		RequestParams params = new RequestParams();
-		params.put("user", userList);
+		params.put("userId", userId);
+		params.put("focusList", focusIds);
 		final LoadingDialog dialog = new LoadingDialog(this);
 		dialog.show();
-		ApiManager.getInstance().post(this, C.API.SUBMIT_FOCUS_USER, params,
-				new HttpCallBack() {
+		ApiManager.getInstance().post(this, C.API.SUBMIT_RECOMMEND_FOCUS_USER,
+				params, new HttpCallBack() {
 
 					@Override
 					public void onSuccess(Object res) {
@@ -127,6 +136,23 @@ public class RecommendAuthorActivity extends BaseActivity {
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
-		
+
+	}
+	
+	private String list2String(List<Long> list){
+		if(list == null){
+			return null;
+		}
+		StringBuilder sb = new StringBuilder();
+		boolean flag = false;
+		for (long id : list) {
+			if(flag){
+				sb.append(",");
+			}else{
+				flag = true;
+			}
+			sb.append(id);
+		}
+		return sb.toString();
 	}
 }

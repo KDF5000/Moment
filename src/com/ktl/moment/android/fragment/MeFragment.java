@@ -185,7 +185,11 @@ public class MeFragment extends BaseFragment {
 						// TODO Auto-generated method stub
 						@SuppressWarnings("unchecked")
 						List<User> list = (List<User>) res;
-						user = list.get(0);
+						try {
+							user = list.get(0);
+						} catch (NullPointerException e) {
+							// TODO: handle exception
+						}
 						initData();
 					}
 

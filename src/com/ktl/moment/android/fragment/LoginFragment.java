@@ -200,6 +200,8 @@ public class LoginFragment extends AccountBaseFragment {
 		RequestParams params = new RequestParams();
 		params.put("mobilePhone", phone);
 		params.put("password", pass);
+		params.put("packname", "");
+		params.put("deviceId", "");
 		ApiManager.getInstance().post(getActivity(), C.API.USER_LOGIN, params,
 				new HttpCallBack() {
 

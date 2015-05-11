@@ -44,7 +44,7 @@ public class FocusActivty extends BaseActivity {
 	private int pageNum = 1;
 	private int pageSize = 10;
 	private String intentFlag;
-	private long userId;
+	private long otherUserId;
 	private boolean hasMore;
 
 	@Override
@@ -62,7 +62,7 @@ public class FocusActivty extends BaseActivity {
 
 		Intent intent = getIntent();
 		intentFlag = intent.getStringExtra("intentFlag");
-		userId = intent.getLongExtra("userId", -1);
+		otherUserId = intent.getLongExtra("otherUserId", -1);
 
 		focusList = new ArrayList<User>();
 		fansAdapter = new FansAdapter(this, focusList, getDisplayImageOptions());
@@ -119,11 +119,7 @@ public class FocusActivty extends BaseActivity {
 	private void loadData() {
 		pageNum = 1;
 		RequestParams params = new RequestParams();
-		if (userId == -1) {
-			params.put("userId", Account.getUserInfo().getUserId());
-		} else {
-			params.put("userId", userId);
-		}
+		params.put("userId", Account.getUserInfo().getUserId());
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		String url = C.API.GET_FOCUS_AUTHOR_LIST;
@@ -133,8 +129,10 @@ public class FocusActivty extends BaseActivity {
 			url = C.API.GET_MY_FANS_LIST;
 		} else if (intentFlag.equals("userFocus")) {
 			url = C.API.GET_USER_FOCUS_LIST;
+			params.put("otherUserId", otherUserId);
 		} else {
 			url = C.API.GET_USER_FANS_LIST;
+			params.put("otherUserId", otherUserId);
 		}
 		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
 
@@ -182,11 +180,7 @@ public class FocusActivty extends BaseActivity {
 		}
 
 		RequestParams params = new RequestParams();
-		if (userId == -1) {
-			params.put("userId", Account.getUserInfo().getUserId());
-		} else {
-			params.put("userId", userId);
-		}
+		params.put("userId", Account.getUserInfo().getUserId());
 		params.put("pageNum", ++pageNum);
 		params.put("pageSize", pageSize);
 		String url = C.API.GET_FOCUS_AUTHOR_LIST;
@@ -196,8 +190,10 @@ public class FocusActivty extends BaseActivity {
 			url = C.API.GET_MY_FANS_LIST;
 		} else if (intentFlag.equals("userFocus")) {
 			url = C.API.GET_USER_FOCUS_LIST;
+			params.put("otherUserId", otherUserId);
 		} else {
 			url = C.API.GET_USER_FANS_LIST;
+			params.put("otherUserId", otherUserId);
 		}
 		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
 

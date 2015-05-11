@@ -107,7 +107,7 @@ public class UserPageActivity extends Activity {
 	private MomentListViewAdapter momentListAdapter;
 	private int pageNum = 0;
 	private int pageSize = 2;
-	private long userId;
+	private long otherUserId;
 
 	private String currentNavSelect = "灵感";// 当前选中的菜单
 	private String currentNavFlag = "moment";
@@ -122,7 +122,7 @@ public class UserPageActivity extends Activity {
 		ViewUtils.inject(this);
 
 		Intent intent = this.getIntent();
-		userId = intent.getLongExtra("userId", -1);
+		otherUserId = intent.getLongExtra("userId", -1);
 
 		momentList = new ArrayList<Moment>();
 		momentListAdapter = new MomentListViewAdapter(this, momentList,
@@ -279,18 +279,20 @@ public class UserPageActivity extends Activity {
 		case R.id.user_focus_nav:
 			Intent focusIntent = new Intent(this, FocusActivty.class);
 			focusIntent.putExtra("intentFlag", "userFocus");
-			focusIntent.putExtra("userId", userId);
+			focusIntent.putExtra("otherUserId", otherUserId);
 			startActivity(focusIntent);
 			break;
 		case R.id.user_fans_nav:
 			Intent fansIntent = new Intent(this, FocusActivty.class);
 			fansIntent.putExtra("intentFlag", "userFans");
-			fansIntent.putExtra("userId", userId);
+			fansIntent.putExtra("otherUserId", otherUserId);
 			startActivity(fansIntent);
 			break;
 		case R.id.userpage_more_iv:
 			Intent moreIntent = new Intent(this, UserInfoActivity.class);
-			moreIntent.putExtra("userId", userId);
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("user", user);
+			moreIntent.putExtra("user", bundle);
 			startActivity(moreIntent);
 			break;
 		}
@@ -311,7 +313,8 @@ public class UserPageActivity extends Activity {
 		RequestParams params = new RequestParams();
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
-		params.put("userId", userId);
+		params.put("userId", Account.getUserInfo().getUserId());
+		params.put("otherUserId", otherUserId);
 		String url = C.API.GET_USER_MOMENT_LIST;
 		if (currentNavFlag.equals("moment")) {
 			url = C.API.GET_USER_MOMENT_LIST;
@@ -351,7 +354,8 @@ public class UserPageActivity extends Activity {
 		RequestParams params = new RequestParams();
 		params.put("pageNum", ++pageNum);
 		params.put("pageSize", pageSize);
-		params.put("userId", userId);
+		params.put("userId", Account.getUserInfo().getUserId());
+		params.put("otherUserId", otherUserId);
 		String url = C.API.GET_USER_MOMENT_LIST;
 		if (currentNavFlag.equals("moment")) {
 			url = C.API.GET_USER_MOMENT_LIST;
@@ -385,7 +389,7 @@ public class UserPageActivity extends Activity {
 	private void getUserData() {
 		RequestParams params = new RequestParams();
 		params.put("userId", Account.getUserInfo().getUserId());
-		params.put("otherUserId", userId);
+		params.put("otherUserId", otherUserId);
 		ApiManager.getInstance().post(this, C.API.GET_USER_INFO, params,
 				new HttpCallBack() {
 
@@ -423,7 +427,7 @@ public class UserPageActivity extends Activity {
 		}
 		RequestParams params = new RequestParams();
 		params.put("userId", Account.getUserInfo().getUserId());
-		params.put("attentionUserId", userId);
+		params.put("attentionUserId", otherUserId);
 		params.put("isAddFocus", isAddFocus);
 		ApiManager.getInstance().post(this, C.API.FOCUS_AUTHOR, params,
 				new HttpCallBack() {

@@ -76,7 +76,7 @@ public class ProfileFragment extends AccountBaseFragment {
 	private RadioButton profileRadioFamale;
 
 	private int sex;// 0:male,1:female
-	private String imgPath;
+	private String imgPath = "";
 	private String avatarUrl;
 
 	public OnBackToVerifyListener onBackToVerifyListener;
@@ -198,6 +198,8 @@ public class ProfileFragment extends AccountBaseFragment {
 		params.put("area", place);
 		params.put("sex", sex);
 		params.put("userAvatar", avatarUrl);
+		params.put("packname", "");
+		params.put("deviceId", "");
 		ApiManager.getInstance().post(getActivity(), C.API.USER_REGISTER,
 				params, new HttpCallBack() {
 
@@ -254,6 +256,10 @@ public class ProfileFragment extends AccountBaseFragment {
 	}
 
 	private void uploadImg() {
+		if (imgPath.equals("") || imgPath == null) {
+			ToastUtil.show(getActivity(), "请选择头像");
+			return;
+		}
 		QiniuManager qiniu = new QiniuManager();
 		qiniu.uploadFile(getActivity(), imgPath, "img_",
 				new QiniuRequestCallbBack() {
@@ -261,7 +267,7 @@ public class ProfileFragment extends AccountBaseFragment {
 					@Override
 					public void OnFailed(String msg) {
 						// TODO Auto-generated method stub
-
+						ToastUtil.show(getActivity(), msg);
 					}
 
 					@Override
