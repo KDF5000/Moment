@@ -254,8 +254,8 @@ public class ProfileFragment extends AccountBaseFragment {
 	}
 
 	private void uploadImg() {
-		QiniuManager qiniu = new QiniuManager();
-		qiniu.uploadFile(getActivity(), imgPath, "img_",
+		QiniuManager qiniu = QiniuManager.getInstance();
+		qiniu.uploadFile(getActivity(), imgPath, "img",
 				new QiniuRequestCallbBack() {
 
 					@Override
