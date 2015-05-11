@@ -8,6 +8,9 @@
         android:id="@+id/user_page_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@color/main_content_container_color"
+        android:dividerHeight="10dp"
+        android:scrollbars="none"
         custom:headerView="@layout/activity_user_page_header"
         custom:zoomView="@layout/user_page_zoom_view" />
 

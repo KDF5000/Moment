@@ -11,6 +11,7 @@ public class CustomListViewPullZoom extends PullToZoomListViewEx {
  
 	private static final String TAG = "CustomListViewPullZoom";
 	private OnScrollListener mOnScrollListener = null;
+	private OnScrollStateChangedListener mOnScrollStateChangedListener = null;
 	/**
 	 * 滑动监听接口
 	 * @author KDF5000
@@ -25,6 +26,19 @@ public class CustomListViewPullZoom extends PullToZoomListViewEx {
 	public void setOnScrollListener(OnScrollListener onScrollListener){
 		this.mOnScrollListener =  onScrollListener;
 	}
+	/**
+	 * 
+	 * @author HUST_LH
+	 *
+	 */
+	public interface OnScrollStateChangedListener{
+		public void onScrollStateChanged(AbsListView view, int scrollState);
+	}
+	
+	public void setOnScrollStateChangedListener(OnScrollStateChangedListener mOnScrollStateChangedListener){
+		this.mOnScrollStateChangedListener = mOnScrollStateChangedListener;
+	}
+	
 	public CustomListViewPullZoom(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -39,6 +53,9 @@ public class CustomListViewPullZoom extends PullToZoomListViewEx {
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
 		super.onScrollStateChanged(view, scrollState);
+		if(this.mOnScrollStateChangedListener != null){
+			mOnScrollStateChangedListener.onScrollStateChanged(view, scrollState);
+		}
 	}
 	
 	@Override

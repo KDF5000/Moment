@@ -9,8 +9,9 @@ public class C {
 		/**
 		 * url基地址
 		 */
-//		private static final String URL_BASE ="http://yfmoment.tiger.mopaas.com/";
-//		private static final String URL_BASE = "http://115.156.249.64:8080/";
+		// private static final String URL_BASE
+		// ="http://yfmoment.tiger.mopaas.com/";
+		// private static final String URL_BASE = "http://115.156.249.64:8080/";
 		private static String URL_BASE = "http://mymoment.sinaapp.com/MomentService/";
 		/**
 		 * 七牛基地址
@@ -135,11 +136,13 @@ public class C {
 		/**
 		 * 获取用户的灵感
 		 */
-		public static final String GET_USER_MOMENT_LIST = URL_BASE + "";
+		public static final String GET_USER_MOMENT_LIST = URL_BASE
+				+ "custom/getMoment.php";
 		/**
 		 * 获取用户围观的灵感
 		 */
-		public static final String GET_USER_WATCH_LIST = URL_BASE + "";
+		public static final String GET_USER_WATCH_LIST = URL_BASE
+				+ "custom/getWatchMoment.php";
 		/**
 		 * 获取用户关注的作者
 		 */
@@ -184,6 +187,11 @@ public class C {
 		 */
 		public static final String PRAISE_COMMENT = URL_BASE
 				+ "MomentsService/MomentOperate/praiseComment";
+		/**
+		 * 获取推荐灵感
+		 */
+		public static final String GET_RECOMMEND_MOMENT = URL_BASE
+				+ "custom/getMoment.php";
 	}
 
 	/******************************************************************************
@@ -302,7 +310,7 @@ public class C {
 		public static final int REQUEST_SELECT_CITY_ACTIVITY = 5;// 选择所在城市
 		public static final int REQUEST_DATE_PICKER_ACTIVITY = 6;// 选择日期
 		public static final int REQUEST_DIALOG_ACTIVITY = 7;// 弹出对话框
-		public static final int JUMPTOCOMMENT = 8;//跳转至评论输入界面，需要回传评论数据
+		public static final int JUMPTOCOMMENT = 8;// 跳转至评论输入界面，需要回传评论数据
 	}
 
 	/**
@@ -348,8 +356,8 @@ public class C {
 		public static final int GET_MOMENT_DETAIL = 4;// 获取单条灵感内容
 		public static final int GET_MOMENT_LIST = 5;// 获取灵感页面list
 	}
-	
-	public static final class SharedPreferencesKey{
-		public static final String SWITCH_TO_MOMENT_FG = "SwitchToMomentFragment";//切换到moment页面
+
+	public static final class SharedPreferencesKey {
+		public static final String SWITCH_TO_MOMENT_FG = "SwitchToMomentFragment";// 切换到moment页面
 	}
 }

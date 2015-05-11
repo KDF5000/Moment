@@ -61,12 +61,11 @@ public class RecordPlaySeekbarUtil {
 	/**
 	 * 停止seekbar
 	 */
-	public boolean stopSeekBar() {
+	public void stopSeekBar() {
 		isSeekBarPause = true;
 		isNewStart = true;
 
 		TimerCountUtil.getInstance().stopTimerCount();
-		return false;
 	}
 
 	public class SeekBarThread extends Thread {

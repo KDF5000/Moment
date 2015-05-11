@@ -17,12 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.MomentListViewAdapter;
 import com.ktl.moment.android.component.CustomListViewPullZoom;
 import com.ktl.moment.android.component.CustomListViewPullZoom.OnScrollListener;
+import com.ktl.moment.android.component.CustomListViewPullZoom.OnScrollStateChangedListener;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
@@ -68,7 +68,7 @@ public class UserPageActivity extends Activity {
 
 	@ViewInject(R.id.userpage_cancel_ly)
 	private LinearLayout cancelLy;// 取消关注
-	
+
 	@ViewInject(R.id.userpage_focus_tv)
 	private TextView focustv;
 
@@ -77,28 +77,28 @@ public class UserPageActivity extends Activity {
 
 	@ViewInject(R.id.user_moment_nav)
 	private LinearLayout momentNav;
-	
+
 	@ViewInject(R.id.userpage_moment_num)
 	private TextView momentNum;
 
 	@ViewInject(R.id.user_watch_nav)
 	private LinearLayout watchNav;
-	
+
 	@ViewInject(R.id.userpage_watch_num)
 	private TextView watchNum;
 
 	@ViewInject(R.id.user_focus_nav)
 	private LinearLayout focusNav;
-	
+
 	@ViewInject(R.id.userpage_focus_num)
 	private TextView focusNum;
 
 	@ViewInject(R.id.user_fans_nav)
 	private LinearLayout fansNav;
-	
+
 	@ViewInject(R.id.userpage_fans_num)
 	private TextView fansNum;
-	
+
 	@ViewInject(R.id.userpage_focus_img)
 	private ImageView focusImg;
 
@@ -106,11 +106,13 @@ public class UserPageActivity extends Activity {
 	private User user;
 	private MomentListViewAdapter momentListAdapter;
 	private int pageNum = 0;
-	private int pageSize = 10;
+	private int pageSize = 2;
 	private long userId;
 
 	private String currentNavSelect = "灵感";// 当前选中的菜单
 	private String currentNavFlag = "moment";
+	private boolean isLastRow = false;
+	private boolean hasMore = true;
 
 	@Override
 	protected void onCreate(Bundle saveInstanceBundle) {
@@ -118,22 +120,19 @@ public class UserPageActivity extends Activity {
 		super.onCreate(saveInstanceBundle);
 		setContentView(R.layout.activity_user_page);
 		ViewUtils.inject(this);
-		
+
 		Intent intent = this.getIntent();
 		userId = intent.getLongExtra("userId", -1);
-		
-		getUserDataFromServer();
-		getMomentDataFromServer();
+
+		momentList = new ArrayList<Moment>();
+		momentListAdapter = new MomentListViewAdapter(this, momentList,
+				getDisplayImageOptions());
 		userPageListView.setAdapter(momentListAdapter);
 
-		userPageListView
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						Log.e("zhuwenwu", "position = " + position);
-					}
-				});
+		getUserData();
+		initEvent();
+		refresh();
+
 		DisplayMetrics localDisplayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
 		// int mScreenHeight = localDisplayMetrics.heightPixels;
@@ -147,6 +146,19 @@ public class UserPageActivity extends Activity {
 				"http://7sbpmg.com1.z0.glb.clouddn.com/1.jpg", userAvatar,
 				getDisplayImageOptions());
 		topNavRl.getBackground().setAlpha(0);// 设置title背景色透明
+
+	}
+
+	private void initEvent() {
+
+		userPageListView
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						Log.e("zhuwenwu", "position = " + position);
+					}
+				});
 
 		userPageListView.setOnScrollListener(new OnScrollListener() {
 
@@ -183,41 +195,63 @@ public class UserPageActivity extends Activity {
 					topNavRl.getBackground().setAlpha(0);
 					topNavTitle.setVisibility(View.GONE);
 				}
+
+				// 判断是否滚到最后一行
+				if (firstVisibleItem + visibleItemCount == totalItemCount
+						&& totalItemCount > 0) {
+					isLastRow = true;
+				}
 			}
 		});
+		userPageListView
+				.setOnScrollStateChangedListener(new OnScrollStateChangedListener() {
+
+					@Override
+					public void onScrollStateChanged(AbsListView view,
+							int scrollState) {
+						// TODO Auto-generated method stub
+						if (isLastRow
+								&& scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+							loadMore();
+						}
+					}
+				});
+
 	}
-	
-	private void initUserData(){
-		ImageLoader.getInstance().displayImage(user.getUserAvatar(), userAvatar, getDisplayImageOptions());
+
+	private void initUserData() {
+		ImageLoader.getInstance().displayImage(user.getUserAvatar(),
+				userAvatar, getDisplayImageOptions());
 		userNickName.setText(user.getNickName());
-		if(user.getSex()==1){
+		if (user.getSex() == 1) {
 			userSex.setImageResource(R.drawable.male);
-		}else{
+		} else {
 			userSex.setImageResource(R.drawable.female);
 		}
-		if(!user.getSignature().equals("")){
+		if (!user.getSignature().equals("")) {
 			userSignature.setText(user.getSignature());
-		}else{
+		} else {
 			userSignature.setText("这个童鞋TA很懒，还没有发表个性签名");
 		}
-		if(user.getIsFocused()==0){
+		if (user.getIsFocused() == 0) {
 			cancelLy.setBackgroundResource(R.drawable.oval_shape_enable);
 			focustv.setText("关注");
 			focusImg.setImageResource(R.drawable.add);
-		}else{
+		} else {
 			focustv.setText("取消关注");
 			cancelLy.setBackgroundResource(R.drawable.oval_shape);
 			focusImg.setImageResource(R.drawable.cancel);
 		}
-		momentNum.setText(user.getMomentNum()+"");
-		watchNum.setText(user.getWatchNum()+"");
-		focusNum.setText(user.getAttentionNum()+"");
-		fansNum.setText(user.getFansNum()+"");
+		momentNum.setText(user.getMomentNum() + "");
+		watchNum.setText(user.getWatchNum() + "");
+		focusNum.setText(user.getAttentionNum() + "");
+		fansNum.setText(user.getFansNum() + "");
 	}
 
 	@OnClick({ R.id.userpage_back_iv, R.id.userpage_cancel_ly,
 			R.id.userpage_sendmsg_ly, R.id.user_moment_nav,
-			R.id.user_watch_nav, R.id.user_focus_nav, R.id.user_fans_nav })
+			R.id.user_watch_nav, R.id.user_focus_nav, R.id.user_fans_nav,
+			R.id.userpage_more_iv })
 	public void OnClick(View v) {
 		switch (v.getId()) {
 		case R.id.userpage_back_iv:
@@ -235,12 +269,12 @@ public class UserPageActivity extends Activity {
 		case R.id.user_moment_nav:
 			currentNavFlag = "moment";
 			currentNavSelect = "灵感";
-			getMomentDataFromServer();
+			refresh();
 			break;
 		case R.id.user_watch_nav:
 			currentNavFlag = "watch";
 			currentNavSelect = "围观";
-			getMomentDataFromServer();
+			refresh();
 			break;
 		case R.id.user_focus_nav:
 			Intent focusIntent = new Intent(this, FocusActivty.class);
@@ -253,6 +287,11 @@ public class UserPageActivity extends Activity {
 			fansIntent.putExtra("intentFlag", "userFans");
 			fansIntent.putExtra("userId", userId);
 			startActivity(fansIntent);
+			break;
+		case R.id.userpage_more_iv:
+			Intent moreIntent = new Intent(this, UserInfoActivity.class);
+			moreIntent.putExtra("userId", userId);
+			startActivity(moreIntent);
 			break;
 		}
 	}
@@ -267,24 +306,18 @@ public class UserPageActivity extends Activity {
 		return options;
 	}
 
-	private void getMomentDataFromServer() {
-		if (momentList == null) {
-			momentList = new ArrayList<Moment>();
-		}
-		if (momentListAdapter == null) {
-			momentListAdapter = new MomentListViewAdapter(this, momentList,
-					getDisplayImageOptions());
-		}
+	private void refresh() {
+		pageNum = 1;
 		RequestParams params = new RequestParams();
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", userId);
-		String url = C.API.GET_HOME_FOCUS_LIST;
-//		if (currentNavFlag.equals("moment")) {
-//			url = C.API.GET_USER_MOMENT_LIST;
-//		} else {
-//			url = C.API.GET_USER_WATCH_LIST;
-//		}
+		String url = C.API.GET_USER_MOMENT_LIST;
+		if (currentNavFlag.equals("moment")) {
+			url = C.API.GET_USER_MOMENT_LIST;
+		} else {
+			url = C.API.GET_USER_WATCH_LIST;
+		}
 		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
 
 			@SuppressWarnings("unchecked")
@@ -292,8 +325,14 @@ public class UserPageActivity extends Activity {
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
 				List<Moment> moment = (List<Moment>) res;
+				momentList.clear();
 				momentList.addAll(moment);
 				momentListAdapter.notifyDataSetChanged();
+				if (moment.size() < pageSize) {
+					hasMore = false;
+				} else {
+					hasMore = true;
+				}
 			}
 
 			@Override
@@ -303,40 +342,79 @@ public class UserPageActivity extends Activity {
 			}
 		}, "Moment");
 	}
-	
-	private void getUserDataFromServer(){
+
+	private void loadMore() {
+		if (!hasMore) {
+			ToastUtil.show(this, "没有更多了~");
+			return;
+		}
 		RequestParams params = new RequestParams();
-		params.put("userId", Account.getUserInfo().getUserId());
-		params.put("otherUserId", userId);
-		ApiManager.getInstance().post(this, C.API.GET_USER_INFO, params, new HttpCallBack() {
-			
+		params.put("pageNum", ++pageNum);
+		params.put("pageSize", pageSize);
+		params.put("userId", userId);
+		String url = C.API.GET_USER_MOMENT_LIST;
+		if (currentNavFlag.equals("moment")) {
+			url = C.API.GET_USER_MOMENT_LIST;
+		} else {
+			url = C.API.GET_USER_WATCH_LIST;
+		}
+		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
+
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
-				@SuppressWarnings("unchecked")
-				List <User> list = (List<User>) res;
-				user = list.get(0);
-				initUserData();
-				Log.i("user", user.getNickName());
+				List<Moment> moment = (List<Moment>) res;
+				momentList.addAll(moment);
+				momentListAdapter.notifyDataSetChanged();
+				if (moment.size() < pageSize) {
+					hasMore = false;
+				} else {
+					hasMore = true;
+				}
 			}
-			
+
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
 				ToastUtil.show(UserPageActivity.this, (String) res);
 			}
-		}, "User");
+		}, "Moment");
 	}
-	
-	private void focusAuthor(){
+
+	private void getUserData() {
+		RequestParams params = new RequestParams();
+		params.put("userId", Account.getUserInfo().getUserId());
+		params.put("otherUserId", userId);
+		ApiManager.getInstance().post(this, C.API.GET_USER_INFO, params,
+				new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						@SuppressWarnings("unchecked")
+						List<User> list = (List<User>) res;
+						user = list.get(0);
+						initUserData();
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(UserPageActivity.this, (String) res);
+					}
+				}, "User");
+	}
+
+	private void focusAuthor() {
 		int isAddFocus = 0;
-		if(user.getIsFocused()==0){
+		if (user.getIsFocused() == 0) {
 			cancelLy.setBackgroundResource(R.drawable.oval_shape);
 			focustv.setText("取消关注");
 			focusImg.setImageResource(R.drawable.cancel);
 			user.setIsFocused(1);
 			isAddFocus = 1;
-		}else{
+		} else {
 			cancelLy.setBackgroundResource(R.drawable.oval_shape_enable);
 			focustv.setText("关注");
 			focusImg.setImageResource(R.drawable.add);
@@ -347,19 +425,20 @@ public class UserPageActivity extends Activity {
 		params.put("userId", Account.getUserInfo().getUserId());
 		params.put("attentionUserId", userId);
 		params.put("isAddFocus", isAddFocus);
-		ApiManager.getInstance().post(this, C.API.FOCUS_AUTHOR, params, new HttpCallBack() {
-			
-			@Override
-			public void onSuccess(Object res) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onFailure(Object res) {
-				// TODO Auto-generated method stub
-				
-			}
-		}, "User");
+		ApiManager.getInstance().post(this, C.API.FOCUS_AUTHOR, params,
+				new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+
+					}
+				}, "User");
 	}
 }

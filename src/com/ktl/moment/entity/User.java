@@ -13,6 +13,7 @@ public class User extends BaseEntity {
 	private String userAvatar;// 用户头像
 	private String userArea;// 用户所在城市
 	private String signature;// 用户飞人签名
+	private String birthday;
 	private int sex;// 性别
 
 	private int isFocused;// 用户是否被关注 0：否，1：是
@@ -23,6 +24,14 @@ public class User extends BaseEntity {
 	private int praiseNum;// 用户赞过的灵感
 	private int attentionNum; // 用户关注的作者数
 	private int FansNum; // 用户的粉丝数
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
 
 	public int getPraiseNum() {
 		return praiseNum;

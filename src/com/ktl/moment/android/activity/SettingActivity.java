@@ -6,6 +6,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
@@ -37,6 +38,9 @@ public class SettingActivity extends BaseActivity {
 
 	@ViewInject(R.id.setting_wecaht_binding_img)
 	private ImageView wechatBindingImg;
+
+	@ViewInject(R.id.setting_about_us_layout)
+	private RelativeLayout aboutUsLayout;
 
 	private boolean isBindingWeibo = false;
 
@@ -87,7 +91,8 @@ public class SettingActivity extends BaseActivity {
 
 	@OnClick({ R.id.setting_logout, R.id.title_back_img, R.id.setting_save,
 			R.id.setting_push, R.id.setting_wecaht_binding_img,
-			R.id.setting_weibo_binding_img, R.id.setting_qq_binding_img })
+			R.id.setting_weibo_binding_img, R.id.setting_qq_binding_img,
+			R.id.setting_about_us_layout })
 	public void click(View v) {
 		switch (v.getId()) {
 		case R.id.setting_logout:
@@ -107,6 +112,10 @@ public class SettingActivity extends BaseActivity {
 			break;
 		case R.id.setting_weibo_binding_img:
 			weiboBinding();
+			break;
+		case R.id.setting_about_us_layout:
+			Intent aboutUsIntent = new Intent(this, AboutUsActivity.class);
+			startActivity(aboutUsIntent);
 			break;
 		default:
 			break;
@@ -154,6 +163,6 @@ public class SettingActivity extends BaseActivity {
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

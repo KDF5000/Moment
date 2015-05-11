@@ -106,7 +106,7 @@ public class RecomendFragment extends BaseFragment {
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", Account.getUserInfo().getUserId());
-		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST,
+		ApiManager.getInstance().post(getActivity(), C.API.GET_RECOMMEND_MOMENT,
 				params, new HttpCallBack() {
 
 					@SuppressWarnings("unchecked")
@@ -156,11 +156,11 @@ public class RecomendFragment extends BaseFragment {
 			return;
 		}
 		RequestParams params = new RequestParams();
-		params.put("pageNum", pageNum++);
+		params.put("pageNum", ++pageNum);
 		params.put("pageSize", pageSize);
 		params.put("userId", Account.getUserInfo().getUserId());
 		Log.i("pageNum", pageNum+"");
-		ApiManager.getInstance().post(getActivity(), C.API.GET_HOME_FOCUS_LIST,
+		ApiManager.getInstance().post(getActivity(), C.API.GET_RECOMMEND_MOMENT,
 				params, new HttpCallBack() {
 
 					@SuppressWarnings("unchecked")

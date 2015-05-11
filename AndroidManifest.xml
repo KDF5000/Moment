@@ -253,6 +253,14 @@
         <activity 
             android:name="com.ktl.moment.android.activity.ReadActivity">
         </activity>
+        <!-- 用户资料页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.UserInfoActivity">
+        </activity>
+        <!-- 关于我们页面 -->
+        <activity 
+            android:name="com.ktl.moment.android.activity.AboutUsActivity">
+        </activity>
     </application>
 
 </manifest>

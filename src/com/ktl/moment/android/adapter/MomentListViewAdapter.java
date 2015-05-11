@@ -25,7 +25,6 @@ import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
-import com.ktl.moment.utils.PregUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.net.ApiManager;
@@ -93,12 +92,12 @@ public class MomentListViewAdapter extends BaseAdapter {
 //		} else {
 //			momentHolder.avatar.setImageResource(R.drawable.default_img);
 //		}
-		if (PregUtil.pregImgUrl(moment.getMomentImgs())) {
+//		if (PregUtil.pregImgUrl(moment.getMomentImgs())) {
 			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
 					momentHolder.momentImg, options);
-		} else {
-			momentHolder.momentImg.setVisibility(View.GONE);
-		}
+//		} else {
+//			momentHolder.momentImg.setVisibility(View.GONE);
+//		}
 		momentHolder.userNameTv.setText(moment.getAuthorName());
 		momentHolder.postTime.setText(TimeFormatUtil.formatDate(moment
 				.getPostTime()));

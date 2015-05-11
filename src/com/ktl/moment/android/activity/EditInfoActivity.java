@@ -215,7 +215,6 @@ public class EditInfoActivity extends BaseActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-		Log.i("tag", "1");
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case C.ActivityRequest.REQUEST_SELECT_CITY_ACTIVITY:
@@ -238,9 +237,7 @@ public class EditInfoActivity extends BaseActivity {
 				}
 				break;
 			case C.ActivityRequest.REQUEST_DATE_PICKER_ACTIVITY:
-				Log.i("tag", "2");
 				String birthday = data.getStringExtra("birthday");
-				Log.i("birthday", birthday);
 				editBirthday.setText(birthday);
 				break;
 			}

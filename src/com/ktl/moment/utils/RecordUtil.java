@@ -129,16 +129,16 @@ public class RecordUtil{
 		}
 	}
 	
-	/**
-	 * 播放、暂停、停止录音，第一次播放时返回音频时长
-	 * @param recordName	录音文件名称
-	 * @param status 0：开始播放，1：暂停播放，2：停止播放
-	 */
-	public int play(String recordPath, int status){
-		Log.i("tag", recordPath);
-//		String recordPath = recordDir.getPath() + recordName;
-		return playRecord(recordPath, status);
-	}
+//	/**
+//	 * 播放、暂停、停止录音，第一次播放时返回音频时长
+//	 * @param recordName	录音文件名称
+//	 * @param status 0：开始播放，1：暂停播放，2：停止播放
+//	 */
+//	public int play(String recordPath, int status){
+//		Log.i("tag", recordPath);
+////		String recordPath = recordDir.getPath() + recordName;
+//		return playRecord(recordPath, status);
+//	}
 
 	/**
 	 * 返回录音文件的路径名称
@@ -352,56 +352,56 @@ public class RecordUtil{
 		}
 	}
 	
-	/***************************************以下为音频播放*********************************************/
-	
-	/**
-	 * 播放录音文件，并获取录音文件时长
-	 * @param recordPath
-	 * @param status
-	 */
-	private int playRecord(String recordPath, int status){
-		if (player == null) {
-			player = new MediaPlayer();
-		}
-		try {
-			player.setDataSource(recordPath);
-			player.prepare();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		/**
-		 * 获取音频时长
-		 */
-		int recordDuration = player.getDuration();
-		
-		/*
-		 * 播放控制
-		 */
-		switch (status) {
-		case 0:	//播放
-			player.start();
-			break;
-		case 1:
-			player.pause();
-			break;
-		case 2:
-			player.stop();
-			player.release();
-			player = null;
-		default:
-			break;
-		}
-		
-		return recordDuration;
-	}
+//	/***************************************以下为音频播放*********************************************/
+//	
+//	/**
+//	 * 播放录音文件，并获取录音文件时长
+//	 * @param recordPath
+//	 * @param status
+//	 */
+//	private int playRecord(String recordPath, int status){
+//		if (player == null) {
+//			player = new MediaPlayer();
+//		}
+//		try {
+//			player.setDataSource(recordPath);
+//			player.prepare();
+//		} catch (IllegalArgumentException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SecurityException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IllegalStateException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		/**
+//		 * 获取音频时长
+//		 */
+//		int recordDuration = player.getDuration();
+//		
+//		/*
+//		 * 播放控制
+//		 */
+//		switch (status) {
+//		case 0:	//播放
+//			player.start();
+//			break;
+//		case 1:
+//			player.pause();
+//			break;
+//		case 2:
+//			player.stop();
+//			player.release();
+//			player = null;
+//		default:
+//			break;
+//		}
+//		
+//		return recordDuration;
+//	}
 }

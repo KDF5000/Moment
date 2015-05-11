@@ -2,12 +2,13 @@ package com.ktl.moment.android.activity;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,9 +16,9 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.CommentListViewAdapter;
 import com.ktl.moment.android.base.BaseActivity;
@@ -30,7 +31,9 @@ import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Comment;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.PlayUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
+import com.ktl.moment.utils.TimerCountUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -89,11 +92,28 @@ public class MomentDetailActivity extends BaseActivity {
 	@ViewInject(R.id.detail_operate_praise)
 	private ImageView praiseImg;
 
+	/*********** audio play *************/
+	@ViewInject(R.id.detail_audio_layout)
+	private LinearLayout audioLayout;
+
+	@ViewInject(R.id.detail_play_seekbar)
+	private SeekBar seekbar;
+
+	@ViewInject(R.id.detail_play_status)
+	private TextView playStatus;
+
+	@ViewInject(R.id.detail_play_time)
+	private TextView playTime;
+
+	@ViewInject(R.id.detail_play_start)
+	private ImageView playStart;
+
 	private LayoutInflater mInflater;
 	private View headerView;
 	private CommentListViewAdapter commentListViewAdapter;
 	private List<Comment> commentList;
 	private Moment moment;
+	private PlayUtil play;
 
 	private long momentId;
 	private long authorId;
@@ -101,6 +121,10 @@ public class MomentDetailActivity extends BaseActivity {
 	private int pageNum = 1;
 	private int pageSize = 4;
 	private boolean hasMore = true;
+
+	private boolean isPlaying = false;
+	private boolean isPause = false;
+	private boolean isReplay = false;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -198,7 +222,51 @@ public class MomentDetailActivity extends BaseActivity {
 		} else {
 			praiseImg.setImageResource(R.drawable.like);
 		}
+		if (moment.getAudioUrl().equals("") || moment.getAudioUrl() == null) {
+			audioLayout.setVisibility(View.GONE);
+		} else {
+			loadAudio();
+		}
 	}
+
+	private void loadAudio() {
+		seekbar.setEnabled(false);
+		play = new PlayUtil(seekbar, handler, moment.getAudioUrl());
+		// 开启新的线程从网络加载音频数据
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				play.initPlayer();
+			}
+		}).start();
+
+		TimerCountUtil.getInstance().setTextView(playStatus);
+
+		// playStart.setClickable(true);
+	}
+
+	/**
+	 * 用于通知主线程更新播放界面UI
+	 */
+	@SuppressLint("HandlerLeak")
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1: {
+				playStart
+						.setImageResource(R.drawable.editor_record_replay_selector);
+				play.stopSeekbar();
+				isPlaying = false;
+				isReplay = true;
+				break;
+			}
+			}
+			super.handleMessage(msg);
+		};
+	};
 
 	private void initEvent() {
 		// 加载更多事件回调（可选）
@@ -213,10 +281,14 @@ public class MomentDetailActivity extends BaseActivity {
 	@OnClick({ R.id.title_back_img, R.id.focus_author_icon,
 			R.id.detail_operate_comment, R.id.detail_operate_share,
 			R.id.detail_operate_clipper, R.id.detail_operate_watch,
-			R.id.detail_operate_praise, R.id.detail_operate_share })
+			R.id.detail_operate_praise, R.id.detail_operate_share,
+			R.id.detail_play_start })
 	private void OnClick(View v) {
 		switch (v.getId()) {
 		case R.id.title_back_img:
+			if (play != null) {
+				play.stopPlay();
+			}
 			finish();
 			break;
 		case R.id.focus_author_icon:
@@ -246,6 +318,48 @@ public class MomentDetailActivity extends BaseActivity {
 		case R.id.detail_operate_praise:
 			praise();
 			break;
+		case R.id.detail_play_start:
+			play();
+			break;
+		}
+	}
+
+	private void start() {
+		int duration = play.getDuration();
+		Log.i("detail", duration + "");
+		String time = TimerCountUtil.getInstance().turnInt2Time(
+				duration / 1000 + 1);
+		playTime.setText(time);
+
+		play.startPlay();
+		playStart.setImageResource(R.drawable.editor_record_pause);
+	}
+
+	private void play() {
+		if (!isPlaying && !isPause) { // 没有播放,那就播放
+			start();
+			isPlaying = true;
+			isPause = false;
+			Log.i("tag", "start");
+		} else if (isPlaying && !isPause) { // 没有暂停，那就暂停
+			play.pausePlay();
+			playStart.setImageResource(R.drawable.editor_record_start);
+			isPlaying = false;
+			isPause = true;
+			Log.i("tag", "pause");
+		} else if (isPause) {
+			play.continuePlay();
+			playStart.setImageResource(R.drawable.editor_record_pause);
+			isPlaying = true;
+			isPause = false;
+			Log.i("tag", "continue");
+		} else if (!isPlaying && isReplay) {
+			// play.startPlay();
+			start();
+			playStart.setImageResource(R.drawable.editor_record_pause);
+			isPlaying = true;
+			isReplay = false;
+			Log.i("tag", "replay");
 		}
 	}
 
@@ -279,8 +393,7 @@ public class MomentDetailActivity extends BaseActivity {
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(MomentDetailActivity.this,
-								(String)res);
+						ToastUtil.show(MomentDetailActivity.this, (String) res);
 						commentsListView.setRefreshFail("");
 						commentsListView.startLoadMore();// 允许加载更多
 					}

@@ -50,7 +50,7 @@ import com.ktl.moment.qiniu.QiniuTask;
 import com.ktl.moment.utils.BasicInfoUtil;
 import com.ktl.moment.utils.EncryptUtil;
 import com.ktl.moment.utils.FileUtil;
-import com.ktl.moment.utils.RecordPlaySeekbarUtil;
+import com.ktl.moment.utils.PlayUtil;
 import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
 import com.ktl.moment.utils.SharedPreferencesUtil;
@@ -169,16 +169,17 @@ public class EditorActivity extends BaseActivity {
 	private boolean isOpen = false;// 表示是否公开灵感
 
 	private String recordAudioPath = null;
-	private static final int PLAY_START = 0;
-	private static final int PLAY_PAUSE = 1;
-	private static final int PLAY_STOP = 2;
+	// private static final int PLAY_START = 0;
+	// private static final int PLAY_PAUSE = 1;
+	// private static final int PLAY_STOP = 2;
 	private boolean isClickPlayer = false;// 控制录音播放按钮不被重复点击，原则上只允许点击一次，除非退出播放界面
 	private boolean isPlaying = false; // 是否播放中
 	private boolean isReplay = false;// 是否重新播放
 
 	private boolean isConfirmDelete; // 录音播放栏删除音频的标识
 
-	private RecordPlaySeekbarUtil recordPlaySeekbarUtil;// seekbar工具类
+	// private RecordPlaySeekbarUtil recordPlaySeekbarUtil;// seekbar工具类
+	private PlayUtil playUtil;
 
 	private InputHandler inputHandler = new InputHandler();
 
@@ -419,8 +420,9 @@ public class EditorActivity extends BaseActivity {
 					C.ActivityRequest.REQUEST_DIALOG_ACTIVITY);
 
 			// 先暂停音频播放
-			RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
-			recordPlaySeekbarUtil.pauseSeekBar();
+			// RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
+			// recordPlaySeekbarUtil.pauseSeekBar();
+			playUtil.pausePlay();
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
 			break;
 		}
@@ -594,7 +596,9 @@ public class EditorActivity extends BaseActivity {
 				editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 				editorPlayStartImg
 						.setImageResource(R.drawable.editor_record_replay_selector);
-				isPlaying = recordPlaySeekbarUtil.stopSeekBar();
+//				 isPlaying = recordPlaySeekbarUtil.stopSeekBar();
+				playUtil.stopSeekbar();
+				isPlaying = false;
 				isReplay = true; // 播放完录音时将重播表示置为true
 				break;
 			}
@@ -607,6 +611,9 @@ public class EditorActivity extends BaseActivity {
 	 * 进入录音播放栏,同时播放录音
 	 */
 	public void player() {
+		editorPlaySeekbar.setEnabled(false);
+		playUtil = new PlayUtil(editorPlaySeekbar, handler, recordAudioPath);
+		playUtil.initPlayer();
 		if (!isClickPlayer) {
 			Animation animLeftOut = AnimationUtils.loadAnimation(this,
 					R.anim.left_out);
@@ -619,9 +626,9 @@ public class EditorActivity extends BaseActivity {
 			audioPlayLayout.setAnimation(animRightIn);
 
 			// 初始化seekbar
-			editorPlaySeekbar.setEnabled(false);
-			recordPlaySeekbarUtil = new RecordPlaySeekbarUtil(
-					editorPlaySeekbar, handler);
+			// editorPlaySeekbar.setEnabled(false);
+			// recordPlaySeekbarUtil = new RecordPlaySeekbarUtil(
+			// editorPlaySeekbar, handler);
 
 			// 没有播放，那就开始播放
 			if (!isPlaying) {
@@ -643,12 +650,14 @@ public class EditorActivity extends BaseActivity {
 
 		editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
 
-		int duration = RecordUtil.getInstance().play(recordAudioPath,
-				PLAY_START);
+		// int duration = RecordUtil.getInstance().play(recordAudioPath,
+		// PLAY_START);
+		int duration = playUtil.getDuration();
 		String recordTime = TimerCountUtil.getInstance().turnInt2Time(
 				duration / 1000 + 1);
-		recordPlaySeekbarUtil.startSeekBar(duration / 1000);
+		// recordPlaySeekbarUtil.startSeekBar(duration / 1000);
 		editorPlayTimeTv.setText(recordTime);
+		playUtil.startPlay();
 
 		TimerCountUtil.getInstance().setTextView(editorPlayStatusTv);
 		isPlaying = true;
@@ -661,15 +670,17 @@ public class EditorActivity extends BaseActivity {
 		// 播放中
 		if (isPlaying) {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
-			RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
-			recordPlaySeekbarUtil.pauseSeekBar();
+			// RecordUtil.getInstance().play(recordAudioPath, PLAY_PAUSE);
+			// recordPlaySeekbarUtil.pauseSeekBar();
+			playUtil.pausePlay();
 			animationDrawable.stop();
 			isPlaying = false;
 		} else {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_pause);
-			int duration = RecordUtil.getInstance().play(recordAudioPath,
-					PLAY_START);
-			recordPlaySeekbarUtil.restartSeekBar(duration / 1000);
+			// int duration = RecordUtil.getInstance().play(recordAudioPath,
+			// PLAY_START);
+			// recordPlaySeekbarUtil.restartSeekBar(duration / 1000);
+			playUtil.continuePlay();
 			animationDrawable.start();
 			isPlaying = true;
 		}
@@ -724,7 +735,7 @@ public class EditorActivity extends BaseActivity {
 	 * 关闭录音播放栏
 	 */
 	public void closePlayer() {
-		RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
+		// RecordUtil.getInstance().play(recordAudioPath, PLAY_STOP);
 
 		toolsLayout.setVisibility(View.VISIBLE);
 		Animation animLeftIn = AnimationUtils.loadAnimation(this,
@@ -738,32 +749,35 @@ public class EditorActivity extends BaseActivity {
 
 		editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 
-		isPlaying = recordPlaySeekbarUtil.stopSeekBar();
+		// recordPlaySeekbarUtil.stopSeekBar();
+		playUtil.stopPlay();
+		isPlaying = false;
 		isClickPlayer = false;
 	}
 
 	private void saveContent() {
 		// 没有网络的话保存到本地
 		BasicInfoUtil basicInfoUtil = BasicInfoUtil.getInstance(this);
-		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText.getText().toString());
-		if(moment==null){
+		Map<String, String> imgMap = RichEditUtils
+				.extractImg(contentRichEditText.getText().toString());
+		if (moment == null) {
 			moment = new Moment();
 		}
 		moment.setTitle("我是一条灵感");
-		/*if (!imgMap.isEmpty()) {
-			for (Map.Entry<String, String> entry : imgMap.entrySet()) {
-				moment.setMomentImgs(entry.getValue());
-				break;
-			}
-		}*/
+		/*
+		 * if (!imgMap.isEmpty()) { for (Map.Entry<String, String> entry :
+		 * imgMap.entrySet()) { moment.setMomentImgs(entry.getValue()); break; }
+		 * }
+		 */
 		moment.setTitle(articleTitle.getText().toString());
 		moment.setContent(contentRichEditText.getText().toString());
 		moment.setAuthorId(1);
 		moment.setAuthorName("KDF5000");
 		String postTime = TimeFormatUtil.getCurrentDateTime();
 		moment.setPostTime(postTime);
-		//用用户id，灵感标题，发布时间作为保存数据库的momentid
-		moment.setMomentUid(EncryptUtil.md5("1",articleTitle.getText().toString(), postTime).hashCode());
+		// 用用户id，灵感标题，发布时间作为保存数据库的momentid
+		moment.setMomentUid(EncryptUtil.md5("1",
+				articleTitle.getText().toString(), postTime).hashCode());
 
 		if (basicInfoUtil.isNetworkConnected()) {// 有网
 			moment.setDirty(1);// 本地的标志
@@ -817,17 +831,20 @@ public class EditorActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				String content = contentRichEditText.getText().toString();
 				for (Map.Entry<String, String> entry : resMap.entrySet()) {
-					Log.i("URL","-->" + entry.getKey() + "=" + entry.getValue());
+					Log.i("URL",
+							"-->" + entry.getKey() + "=" + entry.getValue());
 					// 替换et内容
-					content = content.replaceAll(entry.getKey(), "<img src=\""+ C.API.QINIU_BASE_URL + entry.getValue() + "\"/>");
+					content = content.replaceAll(entry.getKey(), "<img src=\""
+							+ C.API.QINIU_BASE_URL + entry.getValue() + "\"/>");
 					// 最好取第一个
-					moment.setMomentImgs(C.API.QINIU_BASE_URL + entry.getValue());
+					moment.setMomentImgs(C.API.QINIU_BASE_URL
+							+ entry.getValue());
 				}
 				// 上传到服务器 上传成功后保存到本地
 				moment.setDirty(0);
 				RequestParams params = new RequestParams();
 				User userInfo = Account.getUserInfo();
-				if(userInfo==null){
+				if (userInfo == null) {
 					actionStart(AccountActivity.class);
 				}
 				moment.setLabel("大数据");
@@ -837,38 +854,50 @@ public class EditorActivity extends BaseActivity {
 				params.put("title", moment.getTitle());
 				params.put("content", moment.getContent());
 				params.put("label", moment.getLabel());
-//				params.put("isPublic", moment.getIsOpen());
-//				params.put("momentId", moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
+				// params.put("isPublic", moment.getIsOpen());
+				// params.put("momentId",
+				// moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
 				params.put("momentImgs", moment.getMomentImgs());
 				params.put("audioUrl", moment.getAudioUrl());
 				params.put("isClipper", 0);
-				ApiManager.getInstance().post(EditorActivity.this, C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
-					
-					@Override
-					public void onSuccess(Object res) {
-						// TODO Auto-generated method stub
-						//保存数据库
-						saveMomentDb(moment);
-						//跳转到灵感页面
-						//跳回到主页面刷新moment页面的标志
-						SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, true);
-						finish();
-					}
-					
-					@Override
-					public void onFailure(Object res) {
-						// TODO Auto-generated method stub
-						//保存到本地数据库
-						Log.i("EditorActivity", res.toString());
-						ToastUtil.show(EditorActivity.this, "网络出错，保存到本地-->"+res.toString());
-						moment.setContent(contentRichEditText.getText().toString());
-						moment.setDirty(1);
-						saveMomentDb(moment);
-						//跳回到主页面刷新moment页面的标志
-						SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, true);
-						finish();
-					}
-				},"");
+				ApiManager.getInstance().post(EditorActivity.this,
+						C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
+
+							@Override
+							public void onSuccess(Object res) {
+								// TODO Auto-generated method stub
+								// 保存数据库
+								saveMomentDb(moment);
+								// 跳转到灵感页面
+								// 跳回到主页面刷新moment页面的标志
+								SharedPreferencesUtil
+										.getInstance()
+										.setBoolean(
+												C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG,
+												true);
+								finish();
+							}
+
+							@Override
+							public void onFailure(Object res) {
+								// TODO Auto-generated method stub
+								// 保存到本地数据库
+								Log.i("EditorActivity", res.toString());
+								ToastUtil.show(EditorActivity.this,
+										"网络出错，保存到本地-->" + res.toString());
+								moment.setContent(contentRichEditText.getText()
+										.toString());
+								moment.setDirty(1);
+								saveMomentDb(moment);
+								// 跳回到主页面刷新moment页面的标志
+								SharedPreferencesUtil
+										.getInstance()
+										.setBoolean(
+												C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG,
+												true);
+								finish();
+							}
+						}, "");
 			}
 		});
 		for (Map.Entry<String, String> entry : imgMap.entrySet()) {
