@@ -1,34 +1,12 @@
-/*
- * BadgeView.java
- * BadgeView
- * 
- * Copyright (c) 2012 Stefan Jauker.
- * https://github.com/kodex83/BadgeView
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.ktl.moment.android.component;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,19 +15,19 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
-public class BadgeView extends TextView {
+public class RedDot extends TextView {
 
 	private boolean mHideOnNull = true;
 
-	public BadgeView(Context context) {
+	public RedDot(Context context) {
 		this(context, null);
 	}
 
-	public BadgeView(Context context, AttributeSet attrs) {
+	public RedDot(Context context, AttributeSet attrs) {
 		this(context, attrs, android.R.attr.textViewStyle);
 	}
 
-	public BadgeView(Context context, AttributeSet attrs, int defStyle) {
+	public RedDot(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 
 		init();
@@ -57,34 +35,31 @@ public class BadgeView extends TextView {
 
 	private void init() {
 		if (!(getLayoutParams() instanceof LayoutParams)) {
-			LayoutParams layoutParams = new LayoutParams(
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-					Gravity.RIGHT | Gravity.TOP);
+			LayoutParams layoutParams = new LayoutParams(dip2Px(2),dip2Px(2),Gravity.RIGHT | Gravity.TOP);
 			setLayoutParams(layoutParams);
 		}
 
 		// set default font
-		setTextColor(Color.WHITE);
+	/*	setTextColor(Color.WHITE);
 		setTypeface(Typeface.DEFAULT_BOLD);
-		setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
-		setPadding(dip2Px(5), dip2Px(1), dip2Px(5), dip2Px(1));
+		setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);*/
+//		setPadding(dip2Px(2), dip2Px(2), dip2Px(2), dip2Px(2));
 
 		// set default background
-		setBackground(9, Color.parseColor("#ec584d"));
+		setBackground(8, Color.parseColor("#ec584d"));
 
-		setGravity(Gravity.CENTER);
+//		setGravity(Gravity.CENTER);
 
 		// default values
-		setHideOnNull(true);
-		setBadgeCount(0);
+	/*	setHideOnNull(true);
+		setBadgeCount(0);*/
 	}
 
 	@SuppressWarnings("deprecation")
 	public void setBackground(int dipRadius, int badgeColor) {
 		int radius = dip2Px(dipRadius);
 		if (dipRadius >= 9) {
-			Log.i("rect", radius+"");
+			Log.i("rect", radius + "");
 			float[] radiusArray = new float[] { radius, radius, radius, radius,
 					radius, radius, radius, radius };
 
@@ -95,8 +70,8 @@ public class BadgeView extends TextView {
 			setBackgroundDrawable(bgDrawable);
 		} else {
 			android.graphics.drawable.shapes.OvalShape oval = new OvalShape();
-			oval.resize(radius, radius);
-			Log.i("oval", radius+"");
+			oval.resize(dip2Px(12), dip2Px(12));
+			Log.i("oval", radius + "");
 			ShapeDrawable bgOval = new ShapeDrawable(oval);
 			bgOval.getPaint().setColor(badgeColor);
 			setBackgroundDrawable(bgOval);
@@ -260,14 +235,13 @@ public class BadgeView extends TextView {
 		return (int) (dip
 				* getContext().getResources().getDisplayMetrics().density + 0.5f);
 	}
-	
 	/**
 	 * 
 	 * @param width
 	 * @param height
 	 */
 	public void setLayoutSize(int width,int height){
-		LayoutParams layoutParams = new LayoutParams(dip2Px(width),dip2Px(height),Gravity.RIGHT | Gravity.TOP);
+		LayoutParams layoutParams = new LayoutParams(width,height,Gravity.RIGHT | Gravity.TOP);
 		setLayoutParams(layoutParams);
 	}
 }

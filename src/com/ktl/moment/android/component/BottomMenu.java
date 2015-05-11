@@ -158,4 +158,32 @@ public class BottomMenu extends RelativeLayout implements OnClickListener {
 		MenuImageText menuItem = menuItemMap.get(viewId);
 		menuItem.callOnClick();
 	}
+	/**
+	 * 通过id获取菜单
+	 * @param menuId
+	 * @return
+	 */
+	public MenuImageText getMenuIem(int menuId){
+		int viewId = 0;
+		switch(menuId){
+		case C.menu.FRAGMENT_FIND_MENU_ID:
+			viewId = R.id.menu_find;//换成常量
+			break;
+		case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
+			viewId = R.id.menu_foucs;
+			break;
+		case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
+			viewId = R.id.menu_add;
+			break;
+		case C.menu.FRAGMENT_MOMENT_MENU_ID:
+			viewId = R.id.menu_idea;
+			break;
+		case C.menu.FRAGMENT_ME_MENU_ID:
+			viewId = R.id.menu_me;
+			break;
+		default:
+			viewId = R.id.menu_find;
+		}
+		return menuItemMap.get(viewId);
+	}
 }

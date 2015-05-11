@@ -9,12 +9,18 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.base.BaseFragment;
 import com.ktl.moment.android.component.BottomMenu;
 import com.ktl.moment.android.component.BottomMenu.OnMenuItemClickListener;
+import com.ktl.moment.android.component.MenuImageText;
 import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
@@ -23,6 +29,7 @@ import com.ktl.moment.im.entity.XgMessage;
 import com.ktl.moment.im.xg.receiver.XgMessageReceiver;
 import com.ktl.moment.im.xg.receiver.XgMessageReceiver.OnCustomMessageListener;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.DensityUtil;
 import com.ktl.moment.utils.LogUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
@@ -59,6 +66,9 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 
 		// 注册信鸽
 		registXgPush();
+		
+//		//显示红点
+//		showNotifyDot();
 	}
 
 	/**
@@ -230,11 +240,11 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			@Override
 			public void onSuccess(Object data, int flag) {
 				// TODO Auto-generated method stub
-				/*ToastUtil.show(
+				ToastUtil.show(
 						HomeActivity.this,
 						"注册成功"
 								+ XGPushConfig
-										.getAccessId(getApplicationContext()));*/
+										.getAccessId(getApplicationContext()));
 				// 向服务上传token
 				RequestParams params = new RequestParams();
 				params.put("user_id", user.getUserId());
@@ -371,11 +381,12 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	public void OnReceive(XgMessage msg) {
 		// TODO Auto-generated method stub
 		int messageType = msg.getMessageType();
+		ToastUtil.show(this, msg.getContent().getMessage());
 		switch(messageType){
 		case 1://自定义消息
 			//显示小红点
+			showNotifyDot();
 			break;
-			
 		}
 	}
 	/**
@@ -391,4 +402,38 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		super.onStop();
 		SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
 	}
+	/**
+	 * 显示小红点
+	 */
+	private void showNotifyDot(){
+		//显示小红点
+		MenuImageText notifyMenu = customMenu.getMenuIem(C.menu.FRAGMENT_ME_MENU_ID);
+		View view = getLayoutInflater().inflate(R.layout.reddot, null);
+		
+		ViewGroup parentContainer = (ViewGroup) notifyMenu.getParent();
+		int groupIndex = parentContainer.indexOfChild(notifyMenu);
+		parentContainer.removeView(notifyMenu);
+
+		FrameLayout badgeContainer = new FrameLayout(this);
+		ViewGroup.LayoutParams parentlayoutParams = notifyMenu.getLayoutParams();
+
+		badgeContainer.setLayoutParams(parentlayoutParams);
+		notifyMenu.setLayoutParams(new ViewGroup.LayoutParams(
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.MATCH_PARENT));
+
+		parentContainer.addView(badgeContainer, groupIndex,
+				parentlayoutParams);
+		badgeContainer.addView(notifyMenu);
+
+		badgeContainer.addView(view);
+		FrameLayout.LayoutParams params = (LayoutParams) view.getLayoutParams();
+		params.leftMargin = DensityUtil.dip2px(this, 45);
+		params.topMargin = DensityUtil.dip2px(this, 10);
+		params.rightMargin = DensityUtil.dip2px(this, 10);
+		params.bottomMargin = DensityUtil.dip2px(this, 10);
+		view.setLayoutParams(params);
+		
+	}
+			
 }
