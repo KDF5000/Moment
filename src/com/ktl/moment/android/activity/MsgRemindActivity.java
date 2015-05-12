@@ -3,7 +3,6 @@ package com.ktl.moment.android.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Message;
@@ -14,9 +13,11 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,10 +26,10 @@ import android.widget.TextView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.CustomViewPagerAdapter;
 import com.ktl.moment.android.base.BaseActivity;
-import com.ktl.moment.android.component.BadgeView;
 import com.ktl.moment.android.fragment.message.NewFansFragment;
 import com.ktl.moment.android.fragment.message.NotificationFragment;
 import com.ktl.moment.android.fragment.message.PersonalLetterFragment;
+import com.ktl.moment.utils.DensityUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -55,16 +56,20 @@ public class MsgRemindActivity extends BaseActivity {
 
 	@ViewInject(R.id.msg_menu_layout)
 	private LinearLayout menuLayout;
-	
+
 	private List<Fragment> fragmentList;
 	private int width;// 下方的小滑块的宽度
 	private int currentItem = 0;
 
 	private boolean isShow = false;
-	
-	private BadgeView fansBadge;
-	private BadgeView msgBadge;
 
+	/*
+	 * private BadgeView fansBadge; private BadgeView msgBadge;
+	 */
+	private View notifyRedDotView = null;
+	private View fansRedDotView = null;
+	private View msgRedDotView = null;
+	
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -76,7 +81,6 @@ public class MsgRemindActivity extends BaseActivity {
 		initView();
 		initTab();
 		initViewPager();
-		addBadge();
 	}
 
 	private void initView() {
@@ -103,7 +107,7 @@ public class MsgRemindActivity extends BaseActivity {
 		DisplayMetrics ds = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(ds);
 		width = ds.widthPixels / 3;
-		LayoutParams params = underTag.getLayoutParams();
+		ViewGroup.LayoutParams params = underTag.getLayoutParams();
 		params.width = width;
 		Log.i("width", width + "");
 		underTag.setLayoutParams(params);
@@ -129,6 +133,9 @@ public class MsgRemindActivity extends BaseActivity {
 				getSupportFragmentManager(), fragmentList));
 		msgViewPager.setCurrentItem(0, true);
 		msgViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
+		notifyRedDotView = showNotifyDot(notifyRedDotView,tabNotification);
+		msgRedDotView = showNotifyDot(msgRedDotView,tabPersonalMsg);
+		fansRedDotView = showNotifyDot(fansRedDotView,tabNewFans);
 	}
 
 	@OnClick({ R.id.title_back_img, R.id.title_right_img, R.id.msg_main_layout,
@@ -160,20 +167,17 @@ public class MsgRemindActivity extends BaseActivity {
 			break;
 		}
 	}
-	
-	private void addBadge(){
-		fansBadge = new BadgeView(this);
-		fansBadge.setBackground(1, Color.parseColor("#ec584d"));
-		fansBadge.setTargetView(tabNewFans);
-		fansBadge.setBadgeMargin(0, 10, 28, 0);
-		fansBadge.setText("");
-		
-		msgBadge = new BadgeView(this);
-//		msgBadge.setBackground(3, Color.parseColor("#ec584d"));
-		msgBadge.setTargetView(tabPersonalMsg);
-		msgBadge.setBadgeMargin(0, 10, 28, 0);
-		msgBadge.setBadgeCount(10);
-	}
+
+	/*
+	 * private void addBadge(){ fansBadge = new BadgeView(this);
+	 * fansBadge.setBackground(1, Color.parseColor("#ec584d"));
+	 * fansBadge.setTargetView(tabNewFans); fansBadge.setBadgeMargin(0, 10, 28,
+	 * 0); fansBadge.setText("");
+	 * 
+	 * msgBadge = new BadgeView(this); // msgBadge.setBackground(3,
+	 * Color.parseColor("#ec584d")); msgBadge.setTargetView(tabPersonalMsg);
+	 * msgBadge.setBadgeMargin(0, 10, 28, 0); msgBadge.setBadgeCount(10); }
+	 */
 
 	/**
 	 * title_tab点击监听
@@ -187,6 +191,25 @@ public class MsgRemindActivity extends BaseActivity {
 
 		@Override
 		public void onClick(View v) {
+			switch (index) {
+			case 0:
+				if(tabNotification!=null && notifyRedDotView != null && notifyRedDotView.getVisibility() == View.VISIBLE){
+					notifyRedDotView.setVisibility(View.GONE);
+				}
+				break;
+			case 1:
+				if(tabNewFans!=null && fansRedDotView != null && fansRedDotView.getVisibility() == View.VISIBLE){
+					fansRedDotView.setVisibility(View.GONE);
+				}
+				 break;
+			case 2:
+				if(tabPersonalMsg!=null && msgRedDotView != null && msgRedDotView.getVisibility() == View.VISIBLE){
+					msgRedDotView.setVisibility(View.GONE);
+				}
+				break;
+			default:
+				break;
+			}
 			msgViewPager.setCurrentItem(index);
 		}
 	};
@@ -269,6 +292,45 @@ public class MsgRemindActivity extends BaseActivity {
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * 显示小红点
+	 */
+	private View showNotifyDot(View redDot,TextView textView) {
+		// 显示小红点
+		if (redDot == null) {
+			redDot = getLayoutInflater().inflate(R.layout.reddot, null);
+		}
+
+		redDot.setVisibility(View.VISIBLE);
+		ViewGroup parentContainer = (ViewGroup) textView.getParent();
+		int groupIndex = parentContainer.indexOfChild(textView);
+		parentContainer.removeView(textView);
+
+		FrameLayout badgeContainer = new FrameLayout(this);
+		ViewGroup.LayoutParams parentlayoutParams = textView.getLayoutParams();
+
+		badgeContainer.setLayoutParams(parentlayoutParams);
+		textView.setLayoutParams(new ViewGroup.LayoutParams(
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.MATCH_PARENT));
+
+		parentContainer.addView(badgeContainer, groupIndex, parentlayoutParams);
+		badgeContainer.addView(textView);
 		
+		badgeContainer.addView(redDot);
+		FrameLayout.LayoutParams params = (LayoutParams) redDot.getLayoutParams();
+		
+		Log.i("Position","-->" + width+"-->"+ textView.getTextSize()*textView.getText().length());
+		float left = (width + textView.getTextSize()*textView.getText().length())/2;
+//		params.leftMargin = (int) (left+DensityUtil.dip2px(this, 1));
+		params.leftMargin = (int) (left);
+		params.topMargin = DensityUtil.dip2px(this, 10);
+		params.rightMargin = DensityUtil.dip2px(this, 10);
+		params.bottomMargin = DensityUtil.dip2px(this, 10);
+		redDot.setLayoutParams(params);
+		return redDot;
 	}
 }
