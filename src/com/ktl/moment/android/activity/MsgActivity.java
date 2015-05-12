@@ -10,6 +10,8 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -19,9 +21,11 @@ import com.ktl.moment.android.adapter.MsgAdapter;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.entity.Message;
+import com.ktl.moment.utils.ToastUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.lidroid.xutils.view.annotation.event.OnScroll;
 
 public class MsgActivity extends BaseActivity {
 
@@ -78,8 +82,27 @@ public class MsgActivity extends BaseActivity {
 
 		initView();
 		addTextChanged();
+		
+		msgListview.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				// TODO Auto-generated method stub
+				if(firstVisibleItem == 0){
+					ToastUtil.show(MsgActivity.this, "顶部");
+				}
+			}
+		});
 	}
-
+	
+	
 	private void initView() {
 		/**
 		 * init title
@@ -91,6 +114,7 @@ public class MsgActivity extends BaseActivity {
 		setBaseActivityBgColor(getResources()
 				.getColor(R.color.main_title_color));
 	}
+	
 
 	@OnClick({ R.id.title_back_img, R.id.msg_listview, R.id.msg_send_btn })
 	public void click(View v) {

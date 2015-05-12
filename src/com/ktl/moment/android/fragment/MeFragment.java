@@ -2,6 +2,7 @@ package com.ktl.moment.android.fragment;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -101,7 +102,7 @@ public class MeFragment extends BaseFragment {
 		if (user == null) {
 			return;
 		}
-		spUser = Account.getUserInfo();//一些数据从本地获取
+		spUser = Account.getUserInfo();// 一些数据从本地获取
 		ImageLoader.getInstance().displayImage(spUser.getUserAvatar(),
 				userAvatar, getDisplayImageOptions());
 		nickname.setText(spUser.getNickName());
@@ -144,7 +145,8 @@ public class MeFragment extends BaseFragment {
 		case R.id.me_edit_info_layout:
 			Intent editInfoIntent = new Intent(getActivity(),
 					EditInfoActivity.class);
-			startActivity(editInfoIntent);
+			startActivityForResult(editInfoIntent,
+					C.ActivityRequest.REQUEST_UPDATE_INFO);
 			break;
 		case R.id.me_notification_layout:
 			Intent notificationIntent = new Intent(getActivity(),
@@ -199,5 +201,16 @@ public class MeFragment extends BaseFragment {
 
 					}
 				}, "User");
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == C.ActivityRequest.REQUEST_UPDATE_INFO) {
+				getDataFromServer();
+			}
+		}
 	}
 }
