@@ -214,7 +214,7 @@ public class EditInfoActivity extends BaseActivity {
 
 	private void submit() {
 		String nickname = editNickname.getText().toString().trim();
-		String tmpSex = editNickname.getText().toString().trim();
+		String tmpSex = editSex.getText().toString().trim();
 		String area = editArea.getText().toString().trim();
 		String birthday = editBirthday.getText().toString().trim();
 		String signature = editSignature.getText().toString().trim();
@@ -243,6 +243,8 @@ public class EditInfoActivity extends BaseActivity {
 						List<User> list = (List<User>) res;
 						User user = list.get(0);
 						Account.saveUserInfo(user);
+
+						setResult(RESULT_OK);
 						finish();
 					}
 
@@ -290,25 +292,26 @@ public class EditInfoActivity extends BaseActivity {
 
 	private void complete() {
 		if (imgPath.equals("") || imgPath == null) {
-			ToastUtil.show(this, "请选择头像");
-			return;
+			avatar = Account.getUserInfo().getUserAvatar();
+			submit();
+		} else {
+			QiniuManager.getInstance().uploadFile(this, imgPath, "img_",
+					new QiniuRequestCallbBack() {
+
+						@Override
+						public void OnFailed(String msg) {
+							// TODO Auto-generated method stub
+							ToastUtil.show(EditInfoActivity.this, msg);
+						}
+
+						@Override
+						public void OnComplate(String key) {
+							// TODO Auto-generated method stub
+							avatar = C.API.QINIU_BASE_URL + key;
+							submit();
+						}
+					});
 		}
-		QiniuManager qiniu = QiniuManager.getInstance();
-		qiniu.uploadFile(this, imgPath, "img_", new QiniuRequestCallbBack() {
-
-			@Override
-			public void OnFailed(String msg) {
-				// TODO Auto-generated method stub
-				ToastUtil.show(EditInfoActivity.this, msg);
-			}
-
-			@Override
-			public void OnComplate(String key) {
-				// TODO Auto-generated method stub
-				avatar = C.API.QINIU_BASE_URL + key;
-				submit();
-			}
-		});
 	}
 
 	@Override

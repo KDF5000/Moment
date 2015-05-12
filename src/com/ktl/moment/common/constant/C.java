@@ -317,6 +317,7 @@ public class C {
 		public static final int REQUEST_DATE_PICKER_ACTIVITY = 6;// 选择日期
 		public static final int REQUEST_DIALOG_ACTIVITY = 7;// 弹出对话框
 		public static final int JUMPTOCOMMENT = 8;// 跳转至评论输入界面，需要回传评论数据
+		public static final int REQUEST_UPDATE_INFO = 9;//更新用户信息回传
 	}
 
 	/**

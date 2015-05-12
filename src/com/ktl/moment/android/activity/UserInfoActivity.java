@@ -49,7 +49,7 @@ public class UserInfoActivity extends Activity {
 		ViewUtils.inject(this);
 
 		Intent intent = this.getIntent();
-		Bundle bundle = intent.getBundleExtra("bundle");
+		Bundle bundle = intent.getBundleExtra("user");
 		user = (User) bundle.getSerializable("user");
 		initUser();
 
@@ -75,7 +75,11 @@ public class UserInfoActivity extends Activity {
 		} else {
 			sex.setImageResource(R.drawable.female);
 		}
-		signature.setText(user.getSignature());
+		if (user.getSignature().equals("") || user.getSignature() == null) {
+			signature.setText("这个同学他很懒，还没有发表个性签名~");
+		} else {
+			signature.setText(user.getSignature());
+		}
 		place.setText(user.getUserArea());
 		birthday.setText(user.getBirthday());
 	}
