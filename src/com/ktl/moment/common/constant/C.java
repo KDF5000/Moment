@@ -174,7 +174,8 @@ public class C {
 		/**
 		 * 获取推荐灵感
 		 */
-		public static final String GET_RECOMMEND_MOMENT = URL_BASE + "MomentsService/MomentRecommend/getRecommendMoment";
+		public static final String GET_RECOMMEND_MOMENT = URL_BASE
+				+ "MomentsService/MomentRecommend/getRecommendMoment";
 		/**
 		 * 频道首页list
 		 */
@@ -365,5 +366,9 @@ public class C {
 		public static final int MOMENT_LIST_SAVE = 3;// 灵感页面保存momentlist
 		public static final int GET_MOMENT_DETAIL = 4;// 获取单条灵感内容
 		public static final int GET_MOMENT_LIST = 5;// 获取灵感页面list
+	}
+
+	public static final class SharedPreferencesKey {
+		public static final String SWITCH_TO_MOMENT_FG = "SwitchToMomentFragment";// 切换到moment页面
 	}
 }

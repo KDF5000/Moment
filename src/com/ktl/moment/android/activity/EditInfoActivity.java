@@ -102,17 +102,17 @@ public class EditInfoActivity extends BaseActivity {
 		} else {
 			editSex.setText("男");
 		}
-		if (spUser.getUserArea().equals("") || spUser.getUserArea() == null) {
+		if (spUser.getUserArea() == null || spUser.getUserArea().equals("")) {
 			editArea.setText("北京市 北京市");
 		} else {
 			editArea.setText(spUser.getUserArea());
 		}
-		if (spUser.getBirthday().equals("") || spUser.getBirthday() == null) {
+		if (spUser.getBirthday() == null || spUser.getBirthday().equals("")) {
 			editBirthday.setText("2000-01-01");
 		} else {
 			editBirthday.setText(spUser.getBirthday());
 		}
-		if (!spUser.getSignature().equals("") && spUser.getSignature() != null) {
+		if (spUser.getSignature() != null && !spUser.getSignature().equals("")) {
 			editSignature.setText(spUser.getSignature());
 		}
 	}
