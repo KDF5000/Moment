@@ -10,7 +10,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ktl.moment.R;
@@ -18,17 +17,20 @@ import com.ktl.moment.android.MomentApplication;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.im.entity.CustomContent;
 import com.ktl.moment.im.entity.XgMessage;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.tencent.android.tpush.XGPushBaseReceiver;
 import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushRegisterResult;
 import com.tencent.android.tpush.XGPushShowedResult;
 import com.tencent.android.tpush.XGPushTextMessage;
+import com.ktl.moment.common.constant.C;
 
 public class XgMessageReceiver extends XGPushBaseReceiver {
 
 	private Context mContext;
-	private final int CUSTOM_MSG = 1;//自定义的消息，点赞，评论，关注，收藏，围观
-	private final int CHAT_MSG = 2;//聊天
+	private final int CUSTOM_MSG_NOTIFICATION = 1;//自定义的消息，点赞，评论，关注，收藏，围观
+	private final int CUSTOM_MSG_NEW_FANS = 2;//新的粉丝
+	private final int CHAT_MSG = 3;//聊天
 	private XgMessage mxgMessage;//信鸽消息
 	private static List<OnCustomMessageListener> onCustomMessageListenerList;
 	@Override
@@ -76,7 +78,12 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 		}
 		mxgMessage.setMessageType(messageType);
 		switch (messageType) {
-		case CUSTOM_MSG:
+		case CUSTOM_MSG_NOTIFICATION:
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_HAS_NOTIFY_MESSAGE, true);//有通知到来
+			parseCustomMsg(content);
+			break;
+		case CUSTOM_MSG_NEW_FANS:
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_HAS_NEWFANS_MESSAGE, true);//有新的粉丝
 			parseCustomMsg(content);
 			break;
 		case CHAT_MSG:
@@ -100,6 +107,9 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 		CustomContent customContent = gson.fromJson(content,CustomContent.class);
 		mxgMessage.setContent(customContent);
 		showNotification("您有一条新信息",customContent.getUserName(),customContent.getMessage());
+		int count = SharedPreferencesUtil.getInstance().getInt(C.SPKey.SPK_MESSAEG_COUNT,0);
+		SharedPreferencesUtil.getInstance().setInt(C.SPKey.SPK_MESSAEG_COUNT, count+1);//消息数加1
+		Log.i("XGMessageCount", (count+1)+ "");
 		//通知监听的对象
 		if(onCustomMessageListenerList!=null && onCustomMessageListenerList.size()>0){
 			for(OnCustomMessageListener listener : onCustomMessageListenerList){
@@ -158,5 +168,4 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 		}
 		onCustomMessageListenerList.remove(listener);
 	}
-	
 }

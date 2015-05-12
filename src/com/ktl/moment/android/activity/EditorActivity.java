@@ -227,6 +227,10 @@ public class EditorActivity extends BaseActivity {
 		if (moment != null) {
 			articleTitle.setText(moment.getTitle());
 			contentRichEditText.setText(moment.getContent());
+			recordAudioPath = moment.getAudioUrl();
+			if(recordAudioPath != null){
+				editorRecordAudio.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 
@@ -898,7 +902,7 @@ public class EditorActivity extends BaseActivity {
 								SharedPreferencesUtil
 										.getInstance()
 										.setBoolean(
-												C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG,
+												C.SPKey.SWITCH_TO_MOMENT_FG,
 												true);
 								finish();
 							}
@@ -915,11 +919,7 @@ public class EditorActivity extends BaseActivity {
 								moment.setDirty(1);
 								saveMomentDb(moment);
 								// 跳回到主页面刷新moment页面的标志
-								SharedPreferencesUtil
-										.getInstance()
-										.setBoolean(
-												C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG,
-												true);
+								SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
 								finish();
 							}
 						}, "");

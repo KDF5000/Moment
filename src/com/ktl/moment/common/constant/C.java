@@ -342,6 +342,12 @@ public class C {
 		public static final String SPK_IS_SAVE_DATA = "save_data"; // 是否开启省流量模式
 																	// true：是，false：否
 		public static final String SPK_LOGIN_INFO = "Account"; // 用户使用登陆时的个人信息
+		public static final String SPK_HAS_NOTIFY_MESSAGE = "NotifyMessage";//是否有通知的消息，true | false
+		public static final String SPK_HAS_NEWFANS_MESSAGE = "HasNewMessage";//是否有新的粉丝的消息，true | false
+		public static final String SPK_HAS_IM_MESSAGE = "HasNewMessage";//是否有聊天的消息，true | false
+		public static final String SPK_NEW_DYNAMIC_MESSAGE = "NewDynamic";//是否有新的动态 true | false
+		public static final String SPK_MESSAEG_COUNT = "MessageCount";//消息提醒的总条数
+		public static final String SWITCH_TO_MOMENT_FG = "SwitchToMomentFragment";// 切换到moment页面
 	}
 
 	/**
@@ -362,9 +368,5 @@ public class C {
 		public static final int MOMENT_LIST_SAVE = 3;// 灵感页面保存momentlist
 		public static final int GET_MOMENT_DETAIL = 4;// 获取单条灵感内容
 		public static final int GET_MOMENT_LIST = 5;// 获取灵感页面list
-	}
-
-	public static final class SharedPreferencesKey {
-		public static final String SWITCH_TO_MOMENT_FG = "SwitchToMomentFragment";// 切换到moment页面
 	}
 }

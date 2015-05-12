@@ -169,4 +169,25 @@ public class SharedPreferencesUtil {
 	public synchronized boolean getBoolean(String key,boolean defValue){
 		return sharedPreferences.getBoolean(key, defValue);
 	}
+	/**
+	 * 保存int类型
+	 * @param key
+	 * @param value
+	 */
+	public synchronized void setInt(String key,int value){
+		Editor editor = sharedPreferences.edit();
+		editor.putInt(key, value);
+		editor.commit();
+	}
+	 /**
+	  * 获得int类型的变量
+	  * @param key
+	  * @param defaultValue
+	  * @return
+	  */
+	public synchronized int getInt(String key,int defValue){
+		return sharedPreferences.getInt(key, defValue);
+	}
+	
+	
 }

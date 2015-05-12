@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.EditInfoActivity;
-import com.ktl.moment.android.activity.MsgRemindActivity;
 import com.ktl.moment.android.activity.FocusActivty;
+import com.ktl.moment.android.activity.HomeActivity;
+import com.ktl.moment.android.activity.MsgRemindActivity;
 import com.ktl.moment.android.activity.SettingActivity;
 import com.ktl.moment.android.activity.WPActivity;
 import com.ktl.moment.android.base.BaseFragment;
@@ -25,15 +26,20 @@ import com.ktl.moment.android.component.CircleImageView;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
+import com.ktl.moment.im.entity.XgMessage;
+import com.ktl.moment.im.xg.receiver.XgMessageReceiver;
+import com.ktl.moment.im.xg.receiver.XgMessageReceiver.OnCustomMessageListener;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tencent.android.tpush.XGPushManager;
 
-public class MeFragment extends BaseFragment {
+public class MeFragment extends BaseFragment implements OnCustomMessageListener{
 	private static final String TAG = "MeFragment";
 
 	@ViewInject(R.id.me_user_avatar)
@@ -92,9 +98,8 @@ public class MeFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_me, container, false);
 		ViewUtils.inject(this, view);
-		addBadge();
+//		addBadge(8);
 		getDataFromServer();
-
 		return view;
 	}
 
@@ -149,6 +154,11 @@ public class MeFragment extends BaseFragment {
 					C.ActivityRequest.REQUEST_UPDATE_INFO);
 			break;
 		case R.id.me_notification_layout:
+			SharedPreferencesUtil.getInstance().setInt(C.SPKey.SPK_MESSAEG_COUNT, 0);//设置为0
+			//移除红点
+			msgNotifyBadge.setVisibility(View.GONE);
+			//移除菜单栏的小红点
+			((HomeActivity)getActivity()).hideRedDot(C.menu.FRAGMENT_ME_MENU_ID);//隐藏菜单的小红点
 			Intent notificationIntent = new Intent(getActivity(),
 					MsgRemindActivity.class);
 			startActivity(notificationIntent);
@@ -168,12 +178,14 @@ public class MeFragment extends BaseFragment {
 		}
 	}
 
-	private void addBadge() {
-		msgNotifyBadge = new BadgeView(getActivity());
-		msgNotifyBadge.setBadgeCount(8);
-		msgNotifyBadge.setTargetView(meNotificationLayout);
-		msgNotifyBadge.setBadgeMargin(0, 0, 20, 0);
-		msgNotifyBadge.setBadgeGravity(Gravity.CENTER | Gravity.RIGHT);
+	private void addBadge(int count) {
+		if(msgNotifyBadge == null){
+			msgNotifyBadge = new BadgeView(getActivity());
+			msgNotifyBadge.setTargetView(meNotificationLayout);
+			msgNotifyBadge.setBadgeMargin(0, 0, 20, 0);
+			msgNotifyBadge.setBadgeGravity(Gravity.CENTER | Gravity.RIGHT);
+		}
+		msgNotifyBadge.setBadgeCount(count);
 	}
 
 	private void getDataFromServer() {
@@ -212,5 +224,35 @@ public class MeFragment extends BaseFragment {
 				getDataFromServer();
 			}
 		}
+	}
+	/**
+	 * 显示消息提醒的条数
+	 */
+	private void showMessageRedDot(){
+		int count = SharedPreferencesUtil.getInstance().getInt(C.SPKey.SPK_MESSAEG_COUNT, 0);
+		if(count > 0){
+			addBadge(count);
+		}
+	}
+	@Override
+	public void OnReceive(XgMessage msg) {
+		// TODO Auto-generated method stub
+		showMessageRedDot();
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		showMessageRedDot();
+		XGPushManager.onActivityStarted(getActivity());
+		XgMessageReceiver.addCustomMessageListener(this);
+	}
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		XGPushManager.onActivityStoped(getActivity());
+		XgMessageReceiver.removeCustomMessageListener(this);
 	}
 }
