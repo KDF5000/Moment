@@ -227,6 +227,10 @@ public class EditorActivity extends BaseActivity {
 		if (moment != null) {
 			articleTitle.setText(moment.getTitle());
 			contentRichEditText.setText(moment.getContent());
+			recordAudioPath = moment.getAudioUrl();
+			if(recordAudioPath != null){
+				editorRecordAudio.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 
@@ -884,8 +888,6 @@ public class EditorActivity extends BaseActivity {
 					actionStart(AccountActivity.class);
 				}
 				moment.setLabel("大数据");
-				moment.setAudioUrl("http://7xj00n.com1.z0.glb.clouddn.com/20150510221052.amr");
-				moment.setMomentImgs("http://baidu.com");
 				params.put("userId", userInfo.getUserId());
 				params.put("title", moment.getTitle());
 				params.put("content", moment.getContent());
@@ -909,7 +911,7 @@ public class EditorActivity extends BaseActivity {
 								SharedPreferencesUtil
 										.getInstance()
 										.setBoolean(
-												C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG,
+												C.SPKey.SWITCH_TO_MOMENT_FG,
 												true);
 								finish();
 							}
@@ -926,11 +928,7 @@ public class EditorActivity extends BaseActivity {
 								moment.setDirty(1);
 								saveMomentDb(moment);
 								// 跳回到主页面刷新moment页面的标志
-								SharedPreferencesUtil
-										.getInstance()
-										.setBoolean(
-												C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG,
-												true);
+								SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
 								finish();
 							}
 						}, "");

@@ -342,6 +342,12 @@ public class C {
 		public static final String SPK_IS_SAVE_DATA = "save_data"; // 是否开启省流量模式
 																	// true：是，false：否
 		public static final String SPK_LOGIN_INFO = "Account"; // 用户使用登陆时的个人信息
+		public static final String SPK_HAS_NOTIFY_MESSAGE = "NotifyMessage";//是否有通知的消息，true | false
+		public static final String SPK_HAS_NEWFANS_MESSAGE = "HasNewMessage";//是否有新的粉丝的消息，true | false
+		public static final String SPK_HAS_IM_MESSAGE = "HasNewMessage";//是否有聊天的消息，true | false
+		public static final String SPK_NEW_DYNAMIC_MESSAGE = "NewDynamic";//是否有新的动态 true | false
+		public static final String SPK_MESSAEG_COUNT = "MessageCount";//消息提醒的总条数
+		public static final String SWITCH_TO_MOMENT_FG = "SwitchToMomentFragment";// 切换到moment页面
 	}
 
 	/**

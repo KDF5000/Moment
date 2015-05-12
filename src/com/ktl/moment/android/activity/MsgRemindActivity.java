@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -29,7 +30,9 @@ import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.fragment.message.NewFansFragment;
 import com.ktl.moment.android.fragment.message.NotificationFragment;
 import com.ktl.moment.android.fragment.message.PersonalLetterFragment;
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.utils.DensityUtil;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -132,10 +135,36 @@ public class MsgRemindActivity extends BaseActivity {
 		msgViewPager.setAdapter(new CustomViewPagerAdapter(
 				getSupportFragmentManager(), fragmentList));
 		msgViewPager.setCurrentItem(0, true);
+		//通知小红点
+		if(SharedPreferencesUtil.getInstance().getBoolean(C.SPKey.SPK_HAS_NOTIFY_MESSAGE, false) == true){
+			notifyRedDotView = showNotifyDot(notifyRedDotView,tabNotification);
+			//500ms后消失
+			new Handler().postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					if(notifyRedDotView!=null){
+						notifyRedDotView.setVisibility(View.GONE);
+					}
+				}
+			}, 500);
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_HAS_NOTIFY_MESSAGE, false);
+		}
+		//新的粉丝小红点
+		if(SharedPreferencesUtil.getInstance().getBoolean(C.SPKey.SPK_HAS_NEWFANS_MESSAGE,false) == true ){
+			fansRedDotView = showNotifyDot(fansRedDotView,tabNewFans);
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_HAS_NEWFANS_MESSAGE, false);
+		}
+		//私信
+		if(SharedPreferencesUtil.getInstance().getBoolean(C.SPKey.SPK_HAS_IM_MESSAGE,false) == true ){
+			msgRedDotView = showNotifyDot(msgRedDotView,tabNewFans);
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_HAS_IM_MESSAGE, false);
+		}
 		msgViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
-		notifyRedDotView = showNotifyDot(notifyRedDotView,tabNotification);
-		msgRedDotView = showNotifyDot(msgRedDotView,tabPersonalMsg);
-		fansRedDotView = showNotifyDot(fansRedDotView,tabNewFans);
+//		notifyRedDotView = showNotifyDot(notifyRedDotView,tabNotification);
+//		msgRedDotView = showNotifyDot(msgRedDotView,tabPersonalMsg);
+//		fansRedDotView = showNotifyDot(fansRedDotView,tabNewFans);
 	}
 
 	@OnClick({ R.id.title_back_img, R.id.title_right_img, R.id.msg_main_layout,
@@ -284,7 +313,6 @@ public class MsgRemindActivity extends BaseActivity {
 			animation.setFillAfter(true);// True:图片停在动画结束位置
 			animation.setDuration(250);
 			underTag.startAnimation(animation);
-
 		}
 
 	}

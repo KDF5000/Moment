@@ -114,15 +114,22 @@ public class MomentPlaAdapter extends BaseAdapter {
 			momentHolder.articleImg.setVisibility(View.GONE);
 		} else {
 			momentHolder.articleImg.setVisibility(View.VISIBLE);
+			Log.i("MomentImage", "-->" + moment.getMomentImgs());
 			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
 					momentHolder.articleImg, this.options);
 		}
 		momentHolder.articleTitle.setText(moment.getTitle());
 		momentHolder.articleContent.setText(moment.getContent());
 		momentHolder.label.setImageResource(R.drawable.label);
-		momentHolder.labelText.setText(moment.getLabel());
-		if (!moment.getAudioUrl().equals("") && moment.getAudioUrl() != null) {
+
+		if (moment.getAudioUrl() != null && !moment.getAudioUrl().equals("")) {
 			momentHolder.recordImg.setVisibility(View.VISIBLE);
+		}
+		if (moment.getLabel() == "" || moment.getLabel().equals("")
+				|| moment.getLabel() == null) {
+			momentHolder.labelText.setText("暂无标签");
+		} else {
+			momentHolder.labelText.setText(moment.getLabel());
 		}
 
 		return convertView;

@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -49,7 +50,9 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
 	private String currentFgTag = "";// 一定要和需要默认显示的fragment 不一样
-	private View redDotView = null;
+	private View meRedDotView = null;//我的界面小红点
+	private View dynamicRedDotView = null;//动态小红点
+	
 	private DbTaskHandler dbTaskHandler = new DbTaskHandler(this);
 
 	@Override
@@ -66,10 +69,13 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		// 注册信鸽
 		registXgPush();
 		
-//		//显示红点
-//		showNotifyDot(C.menu.FRAGMENT_ME_MENU_ID);
+		//初始化小红点
+		meRedDotView = initRedDotView(C.menu.FRAGMENT_ME_MENU_ID);
+		dynamicRedDotView = initRedDotView(C.menu.FRAGMENT_DYNAMIC_MENU_ID);
+		meRedDotView.setVisibility(View.GONE);
+		dynamicRedDotView.setVisibility(View.GONE);
 	}
-
+	
 	/**
 	 * 初始化view
 	 */
@@ -111,6 +117,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 					setTitleTvName(R.string.attention_text_view);
 					setTitleRightImgVisible(false);
 					setMiddleFindTabVisible(false);
+					hideRedDot(dynamicRedDotView);
 					break;
 				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
 					Intent editorIntent = new Intent(HomeActivity.this,
@@ -130,7 +137,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 					setTitleTvName(R.string.me_text_view);
 					setMiddleFindTabVisible(false);
 					setTitleRightImgVisible(false);
-					hideRedDot();
+					hideRedDot(meRedDotView);
 					break;
 				}
 				switchMenuByTag(tag);
@@ -240,11 +247,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			@Override
 			public void onSuccess(Object data, int flag) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(
-						HomeActivity.this,
-						"注册成功"
-								+ XGPushConfig
-										.getAccessId(getApplicationContext()));
+				Log.i(TAG,"注册成功"+ XGPushConfig.getAccessId(getApplicationContext()));
 				// 向服务上传token
 				RequestParams params = new RequestParams();
 				params.put("user_id", user.getUserId());
@@ -270,7 +273,6 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			public void onFail(Object data, int errCode, String msg) {
 				// TODO Auto-generated method stub
 				ToastUtil.show(HomeActivity.this, "注册失败" + msg);
-
 			}
 		});
 	}
@@ -350,7 +352,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		// TODO Auto-generated method stub
 		super.onResume();
 		//跳回到主页面刷新moment页面的标志
-		boolean isSwitch2Moment =  SharedPreferencesUtil.getInstance().getBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
+		boolean isSwitch2Moment =  SharedPreferencesUtil.getInstance().getBoolean(C.SPKey.SWITCH_TO_MOMENT_FG, false);
 		if(isSwitch2Moment == true){
 			customMenu.clickMenuItem(C.menu.FRAGMENT_MOMENT_MENU_ID);
 			//需要刷新一下选中的页面
@@ -362,7 +364,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 					((BaseFragment)getFragmentByTag(currentFgTag)).refreshFragmentContent();
 				}
 			}, 300);
-			SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG, false);
 		}
 		XGPushManager.onActivityStarted(this);
 		XgMessageReceiver.addCustomMessageListener(this);
@@ -374,7 +376,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		// TODO Auto-generated method stub
 		super.onPause();
 		XGPushManager.onActivityStoped(this);
-		XgMessageReceiver.addCustomMessageListener(this);
+		XgMessageReceiver.removeCustomMessageListener(this);
 	}
 
 	@Override
@@ -383,12 +385,12 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		int messageType = msg.getMessageType();
 		ToastUtil.show(this, msg.getContent().getMessage());
 		switch(messageType){
-		case 1://自定义消息
+		case 1://我的消息
 			//显示小红点
-			showNotifyDot(C.menu.FRAGMENT_ME_MENU_ID);
+			showRedDot(meRedDotView);
 			break;
-		case 2:
-			showNotifyDot(C.menu.FRAGMENT_DYNAMIC_MENU_ID);
+		case 2://动态
+			showRedDot(dynamicRedDotView);
 		}
 	}
 	/**
@@ -402,19 +404,15 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		SharedPreferencesUtil.getInstance().setBoolean(C.SharedPreferencesKey.SWITCH_TO_MOMENT_FG, false);
+		SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG, false);
 	}
 	/**
-	 * 显示小红点
+	 * 初始化小红点
 	 */
-	private void showNotifyDot(int menuId){
+	private View initRedDotView(int menuId){
 		//显示小红点
 		MenuImageText notifyMenu = customMenu.getMenuIem(menuId);
-		if(redDotView==null){
-			redDotView = getLayoutInflater().inflate(R.layout.reddot, null);
-		}
-		
-		redDotView.setVisibility(View.VISIBLE);
+		View redDotView = getLayoutInflater().inflate(R.layout.reddot, null);
 		ViewGroup parentContainer = (ViewGroup) notifyMenu.getParent();
 		int groupIndex = parentContainer.indexOfChild(notifyMenu);
 		parentContainer.removeView(notifyMenu);
@@ -426,10 +424,11 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		notifyMenu.setLayoutParams(new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT));
-
+		
+		badgeContainer.addView(notifyMenu);
 		parentContainer.addView(badgeContainer, groupIndex,
 				parentlayoutParams);
-		badgeContainer.addView(notifyMenu);
+		
 
 		badgeContainer.addView(redDotView);
 		FrameLayout.LayoutParams params = (LayoutParams) redDotView.getLayoutParams();
@@ -438,11 +437,44 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		params.rightMargin = DensityUtil.dip2px(this, 10);
 		params.bottomMargin = DensityUtil.dip2px(this, 10);
 		redDotView.setLayoutParams(params);
+		return redDotView;
 	}
-	
-	private void hideRedDot(){
-		if(redDotView!=null){
-			redDotView.setVisibility(View.GONE);
+	/**
+	 * 隐藏小红点
+	 * @param redView
+	 */
+	private void hideRedDot(View redView){
+		if(redView!=null && redView.getVisibility() == View.VISIBLE){
+			redView.setVisibility(View.GONE);
+		}
+	}
+	/**
+	 * 显示小红点
+	 * @param redView
+	 */
+	private void showRedDot(View redView){
+		if(redView!=null){
+			redView.setVisibility(View.VISIBLE);
+		}
+	}
+	/**
+	 * 通过菜单id隐藏红点
+	 * @param menuId
+	 */
+	public void hideRedDot(int menuId){
+		switch (menuId) {
+		case C.menu.FRAGMENT_ME_MENU_ID:
+			if(meRedDotView!=null && meRedDotView.getVisibility() == View.VISIBLE){
+				meRedDotView.setVisibility(View.GONE);
+			}
+			break;
+		case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
+			if(dynamicRedDotView != null && dynamicRedDotView.getVisibility() == View.VISIBLE){
+				dynamicRedDotView.setVisibility(View.GONE);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 }
