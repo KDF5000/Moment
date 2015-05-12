@@ -9,6 +9,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class PlayUtil implements OnBufferingUpdateListener, OnPreparedListener {
 	private SeekBar seekbar;
@@ -18,12 +19,17 @@ public class PlayUtil implements OnBufferingUpdateListener, OnPreparedListener {
 	private MediaPlayer player;
 	private int duration;
 	private boolean isAuto = false;
-	private boolean isPrepared;
 
-	public PlayUtil(SeekBar seekbar, Handler handler, String path) {
+	private TextView playStatusTv;
+	private TextView playTime;
+
+	public PlayUtil(SeekBar seekbar, Handler handler, String path,
+			TextView playStatusTv, TextView playTime) {
 		this.seekbar = seekbar;
 		this.handler = handler;
 		this.path = path;
+		this.playStatusTv = playStatusTv;
+		this.playTime = playTime;
 
 		// this.seekbar.setEnabled(false);
 		seekbarUtil = new RecordPlaySeekbarUtil(this.seekbar, this.handler);
@@ -62,12 +68,12 @@ public class PlayUtil implements OnBufferingUpdateListener, OnPreparedListener {
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		// TODO Auto-generated method stub
 		seekbar.setSecondaryProgress(percent);
-		Log.i("percent", percent+"");
+		Log.i("percent", percent + "");
 	}
 
 	public void startPlay() {
 		player.start();
-		Log.i("start duration", duration+"");
+		Log.i("start duration", duration + "");
 		seekbarUtil.startSeekBar(duration / 1000);
 	}
 
@@ -91,7 +97,7 @@ public class PlayUtil implements OnBufferingUpdateListener, OnPreparedListener {
 	}
 
 	public int getDuration() {
-		Log.i("get duration",  duration+"");
+		Log.i("get duration", duration + "");
 		return duration;
 	}
 
@@ -102,16 +108,16 @@ public class PlayUtil implements OnBufferingUpdateListener, OnPreparedListener {
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-//		duration = mp.getDuration();
-//		Log.i("duration", duration + "");
-		isPrepared = true;
+		// duration = mp.getDuration();
+		String time = TimerCountUtil.getInstance().turnInt2Time(
+				duration / 1000 + 1);
+		playTime.setText(time);
+		playStatusTv.setText("加载完成");
+
+		Log.i("prepare", "prepare ok" + duration);
 		if (isAuto && mp == player) {
 			startPlay();
 		}
-	}
-	
-	public boolean getIsPrepared(){
-		return isPrepared;
 	}
 
 	public void setIsAutoPlay(boolean isAuto) {

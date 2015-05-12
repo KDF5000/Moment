@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/start_bg"
     android:orientation="vertical" >
 
     <ImageView
@@ -46,8 +45,9 @@
                 android:inputType="phone"
                 android:maxLength="11"
                 android:singleLine="true"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
-            	android:textSize="@dimen/account_text_size"  >
+                android:textSize="@dimen/account_text_size" >
 
                 <requestFocus />
             </EditText>
@@ -55,11 +55,11 @@
             <Button
                 android:id="@+id/verify_resend_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/verify_resend_btn_on_finish_shape"
                 android:text="@string/verify_resend"
-                android:textColor="#a1a19f"
+                android:textColor="#535353"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.66dp"
             android:layout_marginTop="5dp"
-            android:background="#959595" />
+            android:background="#ffffff" />
 
         <Button
             android:id="@+id/verify_next_btn"
@@ -83,10 +83,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="23dp"
         android:layout_weight="1"
         android:gravity="bottom|center_horizontal"
         android:text="@string/accept_agreement"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 
 </LinearLayout>
