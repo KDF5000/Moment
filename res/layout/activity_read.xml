@@ -62,14 +62,15 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/read_layout"
+                android:id="@+id/read_audio_layout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="14dp"
                 android:background="#f7f7f7"
-                android:gravity="center" >
+                android:gravity="center"
+                android:visibility="gone" >
 
                 <ImageView
                     android:id="@+id/read_audio"
@@ -103,7 +104,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="4dp"
                             android:layout_marginTop="6dp"
-                            android:text="已暂停"
+                            android:text="加载中"
                             android:textColor="#676666"
                             android:textSize="10sp" />
 

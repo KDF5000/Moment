@@ -225,13 +225,15 @@ public class MomentDetailActivity extends BaseActivity {
 		if (moment.getAudioUrl().equals("") || moment.getAudioUrl() == null) {
 			audioLayout.setVisibility(View.GONE);
 		} else {
+			audioLayout.setVisibility(View.VISIBLE);
 			loadAudio();
 		}
 	}
 
 	private void loadAudio() {
 		seekbar.setEnabled(false);
-		play = new PlayUtil(seekbar, handler, moment.getAudioUrl());
+		play = new PlayUtil(seekbar, handler, moment.getAudioUrl(), playStatus,
+				playTime);
 		// 开启新的线程从网络加载音频数据
 		new Thread(new Runnable() {
 
@@ -319,18 +321,14 @@ public class MomentDetailActivity extends BaseActivity {
 			praise();
 			break;
 		case R.id.detail_play_start:
-			play();
+			if (!playStatus.getText().equals("加载中")) {
+				play();
+			}
 			break;
 		}
 	}
 
 	private void start() {
-		int duration = play.getDuration();
-		Log.i("detail", duration + "");
-		String time = TimerCountUtil.getInstance().turnInt2Time(
-				duration / 1000 + 1);
-		playTime.setText(time);
-
 		play.startPlay();
 		playStart.setImageResource(R.drawable.editor_record_pause);
 	}

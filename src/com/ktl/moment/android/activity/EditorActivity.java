@@ -602,7 +602,7 @@ public class EditorActivity extends BaseActivity {
 				editorRecordAudio.setImageResource(R.drawable.editor_audio3);
 				editorPlayStartImg
 						.setImageResource(R.drawable.editor_record_replay_selector);
-//				 isPlaying = recordPlaySeekbarUtil.stopSeekBar();
+				// isPlaying = recordPlaySeekbarUtil.stopSeekBar();
 				playUtil.stopSeekbar();
 				isPlaying = false;
 				isReplay = true; // 播放完录音时将重播表示置为true
@@ -618,7 +618,8 @@ public class EditorActivity extends BaseActivity {
 	 */
 	public void player() {
 		editorPlaySeekbar.setEnabled(false);
-		playUtil = new PlayUtil(editorPlaySeekbar, handler, recordAudioPath);
+		playUtil = new PlayUtil(editorPlaySeekbar, handler, recordAudioPath,
+				editorPlayStatusTv, editorPlayTimeTv);
 		playUtil.initPlayer();
 		if (!isClickPlayer) {
 			Animation animLeftOut = AnimationUtils.loadAnimation(this,
@@ -797,30 +798,35 @@ public class EditorActivity extends BaseActivity {
 							@SuppressWarnings("unchecked")
 							ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) res;
 							final String token = TokenList.get(0).getToken();
-							//如果有音频上传音频
-							if(recordAudioPath!=null){
-								//上传音频
-								QiniuManager.getInstance().uploadFile(EditorActivity.this, recordAudioPath, "audio", new QiniuRequestCallbBack() {
-									
-									@Override
-									public void OnFailed(String msg) {
-										// TODO Auto-generated method stub
-										moment.setDirty(1);
-										moment.setAudioUrl(recordAudioPath);
-										saveMomentDb(moment);
-									}
-									
-									@Override
-									public void OnComplate(String key) {
-										// TODO Auto-generated method stub
-										moment.setAudioUrl(C.API.QINIU_BASE_URL+key);
-										uploadFilte2Qiniu(token);
-									}
-								});
-							}else{
+							// 如果有音频上传音频
+							if (recordAudioPath != null) {
+								// 上传音频
+								QiniuManager.getInstance().uploadFile(
+										EditorActivity.this, recordAudioPath,
+										"audio", new QiniuRequestCallbBack() {
+
+											@Override
+											public void OnFailed(String msg) {
+												// TODO Auto-generated method
+												// stub
+												moment.setDirty(1);
+												moment.setAudioUrl(recordAudioPath);
+												saveMomentDb(moment);
+											}
+
+											@Override
+											public void OnComplate(String key) {
+												// TODO Auto-generated method
+												// stub
+												moment.setAudioUrl(C.API.QINIU_BASE_URL
+														+ key);
+												uploadFilte2Qiniu(token);
+											}
+										});
+							} else {
 								uploadFilte2Qiniu(token);
 							}
-						
+
 						}
 
 						@Override
@@ -877,7 +883,7 @@ public class EditorActivity extends BaseActivity {
 					actionStart(AccountActivity.class);
 				}
 				moment.setLabel("大数据");
-				moment.setAudioUrl("http://baidu.com");
+				moment.setAudioUrl("http://7xj00n.com1.z0.glb.clouddn.com/20150510221052.amr");
 				moment.setMomentImgs("http://baidu.com");
 				params.put("userId", userInfo.getUserId());
 				params.put("title", moment.getTitle());

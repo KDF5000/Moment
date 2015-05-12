@@ -7,7 +7,7 @@
     
     <color name="verify_resend_on_tick_text_color">#ffffff</color>
     <color name="verify_resend_btn_on_tick_color">#b4cfaa</color>
-    <color name="verify_resend_on_finish_text_color">#8db67d</color>
+    <color name="verify_resend_on_finish_text_color">#535353</color>
     <color name="verify_resend_btn_on_finish_color">#ffffff</color>
     
     <color name="bocop_dialog_bg">#77000000</color>

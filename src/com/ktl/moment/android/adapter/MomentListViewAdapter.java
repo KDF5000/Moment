@@ -255,6 +255,8 @@ public class MomentListViewAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(context, MomentDetailActivity.class);
+				intent.putExtra("momentId", moment.getMomentId());
+				intent.putExtra("userId", moment.getAuthorId());
 				context.startActivity(intent);
 			}
 		});

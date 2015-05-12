@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.entity.Moment;
+import com.ktl.moment.utils.TimeFormatUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -85,7 +86,7 @@ public class MomentPlaAdapter extends BaseAdapter {
 			momentHolder = (MomentPlaHolder) convertView.getTag();
 		}
 		Moment moment = momentList.get(position);
-		momentHolder.createDate.setText(moment.getPostTime());
+		momentHolder.createDate.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
 
 		if (moment.getIsClipper() == 1) {
 			momentHolder.publicText.setVisibility(View.GONE);
