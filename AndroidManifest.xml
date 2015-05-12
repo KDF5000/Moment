@@ -265,6 +265,12 @@
         <!-- 用户查看自己的灵感评论界面 -->
         <activity android:name="com.ktl.moment.android.activity.MomentCommentActivity" >
         </activity>
+        <!-- 标签选择对话框 -->
+        <activity
+            android:name="com.ktl.moment.android.activity.LabelSelectAcvity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
+        </activity>
+        
     </application>
 
 </manifest>
