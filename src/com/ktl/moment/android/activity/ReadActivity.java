@@ -88,10 +88,14 @@ public class ReadActivity extends BaseActivity {
 
 	}
 
-	@OnClick({ R.id.read_edit, R.id.title_back_img, R.id.title_right_img_left,R.id.read_play_start })
+	@OnClick({ R.id.read_edit, R.id.title_back_img, R.id.title_right_img_left,
+			R.id.read_play_start })
 	public void click(View v) {
 		switch (v.getId()) {
 		case R.id.title_back_img:
+			if(play != null){
+				play.stopPlay();
+			}
 			finish();
 			break;
 		case R.id.read_edit:
@@ -99,13 +103,17 @@ public class ReadActivity extends BaseActivity {
 				ToastUtil.show(this, "获取详情失败");
 				break;
 			}
+			if(play != null){
+				play.stopPlay();
+			}
 			Intent editIntent = new Intent(this, EditorActivity.class);
 			editIntent.putExtra("moment", momentDetail);
 			startActivity(editIntent);
 			break;
 		case R.id.title_right_img_left:
-			Intent detailIntent = new Intent(this, MomentDetailActivity.class);
-			startActivity(detailIntent);
+			Intent commentIntent = new Intent(this, MomentCommentActivity.class);
+			commentIntent.putExtra("momentId", momentDetail.getMomentId());
+			startActivity(commentIntent);
 			break;
 		case R.id.read_play_start:
 			if (!playStatus.getText().equals("加载中")) {
@@ -148,6 +156,11 @@ public class ReadActivity extends BaseActivity {
 		title.setText(momentDetail.getTitle());
 		content.setText(momentDetail.getContent());
 
+		if (momentDetail.getIsOpen() == 0) {
+			titleRightImg.setImageResource(R.drawable.editor_open_enable);
+		} else {
+			titleRightImg.setImageResource(R.drawable.editor_open_unable);
+		}
 		audioUrl = momentDetail.getAudioUrl();
 		if (!audioUrl.equals("") && audioUrl != null) {
 			audioLayout.setVisibility(View.VISIBLE);

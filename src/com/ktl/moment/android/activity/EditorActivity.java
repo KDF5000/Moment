@@ -766,7 +766,7 @@ public class EditorActivity extends BaseActivity {
 		if (moment == null) {
 			moment = new Moment();
 		}
-		moment.setTitle("我是一条灵感");
+//		moment.setTitle("我是一条灵感");
 		/*
 		 * if (!imgMap.isEmpty()) { for (Map.Entry<String, String> entry :
 		 * imgMap.entrySet()) { moment.setMomentImgs(entry.getValue()); break; }
@@ -776,6 +776,11 @@ public class EditorActivity extends BaseActivity {
 		moment.setContent(contentRichEditText.getText().toString());
 		moment.setAuthorId(1);
 		moment.setAuthorName("KDF5000");
+		if(isOpen){
+			moment.setIsOpen(1);
+		}else{
+			moment.setIsOpen(0);
+		}
 		String postTime = TimeFormatUtil.getCurrentDateTime();
 		moment.setPostTime(postTime);
 		// 用用户id，灵感标题，发布时间作为保存数据库的momentid

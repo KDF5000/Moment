@@ -80,13 +80,16 @@ public class MomentPlaAdapter extends BaseAdapter {
 					.findViewById(R.id.moment_label_text);
 			momentHolder.momentItemLayout = (LinearLayout) convertView
 					.findViewById(R.id.moment_item_layout);
+			momentHolder.recordImg = (ImageView) convertView
+					.findViewById(R.id.moment_record_img);
 
 			convertView.setTag(momentHolder);
 		} else {
 			momentHolder = (MomentPlaHolder) convertView.getTag();
 		}
 		Moment moment = momentList.get(position);
-		momentHolder.createDate.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
+		momentHolder.createDate.setText(TimeFormatUtil.formatDate(moment
+				.getPostTime()));
 
 		if (moment.getIsClipper() == 1) {
 			momentHolder.publicText.setVisibility(View.GONE);
@@ -96,12 +99,14 @@ public class MomentPlaAdapter extends BaseAdapter {
 			momentHolder.publicText.setVisibility(View.VISIBLE);
 			if (moment.getIsOpen() == 1) {
 				momentHolder.publicText.setText("公开");
-				momentHolder.publicText.setTextColor(this.context.getResources().getColor(
+				momentHolder.publicText.setTextColor(this.context
+						.getResources().getColor(
 								R.color.moment_etsy_public_color));
 			} else {
 				momentHolder.publicText.setText("不公开");
-				momentHolder.publicText.setTextColor(this.context.getResources().getColor(
-						R.color.moment_etsy_text_color));
+				momentHolder.publicText.setTextColor(this.context
+						.getResources()
+						.getColor(R.color.moment_etsy_text_color));
 			}
 		}
 		if (moment.getMomentImgs() == null || moment.getMomentImgs().equals("")
@@ -116,6 +121,9 @@ public class MomentPlaAdapter extends BaseAdapter {
 		momentHolder.articleContent.setText(moment.getContent());
 		momentHolder.label.setImageResource(R.drawable.label);
 		momentHolder.labelText.setText(moment.getLabel());
+		if (!moment.getAudioUrl().equals("") && moment.getAudioUrl() != null) {
+			momentHolder.recordImg.setVisibility(View.VISIBLE);
+		}
 
 		return convertView;
 	}
@@ -130,5 +138,6 @@ public class MomentPlaAdapter extends BaseAdapter {
 		ImageView label;
 		TextView labelText;
 		LinearLayout momentItemLayout;
+		ImageView recordImg;
 	}
 }
