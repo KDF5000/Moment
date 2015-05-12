@@ -65,7 +65,7 @@ public class ChannelAdapter extends BaseAdapter {
 			holder = (ChannelHolder) convertView.getTag();
 		}
 		Channel channel = channelList.get(position);
-		// holder.channelImg.setImageResource(channel.getChannelImgResId());
+//		 holder.channelImg.setImageResource(R.drawable.img__1431395925288);
 //		if (PregUtil.pregImgUrl(channel.getChannelImg())) {
 			ImageLoader.getInstance().displayImage(channel.getChannelImg(),
 					holder.channelImg, options);

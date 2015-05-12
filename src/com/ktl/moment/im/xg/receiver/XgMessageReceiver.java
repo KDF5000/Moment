@@ -73,8 +73,8 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 		Log.i("XgReceiveMessage", messageType + "-->" +content);
 		if(mxgMessage==null){
 			mxgMessage = new XgMessage();
-			mxgMessage.setMessageType(messageType);
 		}
+		mxgMessage.setMessageType(messageType);
 		switch (messageType) {
 		case CUSTOM_MSG:
 			parseCustomMsg(content);

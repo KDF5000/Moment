@@ -9,7 +9,6 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -50,7 +49,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	private FragmentManager fragmentManager;// 管理器
 	private FragmentTransaction fragmentTransaction;// fragment事务
 	private String currentFgTag = "";// 一定要和需要默认显示的fragment 不一样
-
+	private View redDotView = null;
 	private DbTaskHandler dbTaskHandler = new DbTaskHandler(this);
 
 	@Override
@@ -68,7 +67,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		registXgPush();
 		
 //		//显示红点
-//		showNotifyDot();
+//		showNotifyDot(C.menu.FRAGMENT_ME_MENU_ID);
 	}
 
 	/**
@@ -131,6 +130,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 					setTitleTvName(R.string.me_text_view);
 					setMiddleFindTabVisible(false);
 					setTitleRightImgVisible(false);
+					hideRedDot();
 					break;
 				}
 				switchMenuByTag(tag);
@@ -385,8 +385,10 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		switch(messageType){
 		case 1://自定义消息
 			//显示小红点
-			showNotifyDot();
+			showNotifyDot(C.menu.FRAGMENT_ME_MENU_ID);
 			break;
+		case 2:
+			showNotifyDot(C.menu.FRAGMENT_DYNAMIC_MENU_ID);
 		}
 	}
 	/**
@@ -405,11 +407,14 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	/**
 	 * 显示小红点
 	 */
-	private void showNotifyDot(){
+	private void showNotifyDot(int menuId){
 		//显示小红点
-		MenuImageText notifyMenu = customMenu.getMenuIem(C.menu.FRAGMENT_ME_MENU_ID);
-		View view = getLayoutInflater().inflate(R.layout.reddot, null);
+		MenuImageText notifyMenu = customMenu.getMenuIem(menuId);
+		if(redDotView==null){
+			redDotView = getLayoutInflater().inflate(R.layout.reddot, null);
+		}
 		
+		redDotView.setVisibility(View.VISIBLE);
 		ViewGroup parentContainer = (ViewGroup) notifyMenu.getParent();
 		int groupIndex = parentContainer.indexOfChild(notifyMenu);
 		parentContainer.removeView(notifyMenu);
@@ -426,14 +431,18 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 				parentlayoutParams);
 		badgeContainer.addView(notifyMenu);
 
-		badgeContainer.addView(view);
-		FrameLayout.LayoutParams params = (LayoutParams) view.getLayoutParams();
-		params.leftMargin = DensityUtil.dip2px(this, 45);
-		params.topMargin = DensityUtil.dip2px(this, 10);
+		badgeContainer.addView(redDotView);
+		FrameLayout.LayoutParams params = (LayoutParams) redDotView.getLayoutParams();
+		params.leftMargin = DensityUtil.dip2px(this, 53);
+		params.topMargin = DensityUtil.dip2px(this,5);
 		params.rightMargin = DensityUtil.dip2px(this, 10);
 		params.bottomMargin = DensityUtil.dip2px(this, 10);
-		view.setLayoutParams(params);
-		
+		redDotView.setLayoutParams(params);
 	}
-			
+	
+	private void hideRedDot(){
+		if(redDotView!=null){
+			redDotView.setVisibility(View.GONE);
+		}
+	}
 }
