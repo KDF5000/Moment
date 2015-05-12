@@ -293,7 +293,7 @@ public class EditInfoActivity extends BaseActivity {
 			ToastUtil.show(this, "请选择头像");
 			return;
 		}
-		QiniuManager qiniu = new QiniuManager();
+		QiniuManager qiniu = QiniuManager.getInstance();
 		qiniu.uploadFile(this, imgPath, "img_", new QiniuRequestCallbBack() {
 
 			@Override
