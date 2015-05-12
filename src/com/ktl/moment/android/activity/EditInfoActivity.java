@@ -214,7 +214,7 @@ public class EditInfoActivity extends BaseActivity {
 
 	private void submit() {
 		String nickname = editNickname.getText().toString().trim();
-		String tmpSex = editNickname.getText().toString().trim();
+		String tmpSex = editSex.getText().toString().trim();
 		String area = editArea.getText().toString().trim();
 		String birthday = editBirthday.getText().toString().trim();
 		String signature = editSignature.getText().toString().trim();
@@ -243,7 +243,7 @@ public class EditInfoActivity extends BaseActivity {
 						List<User> list = (List<User>) res;
 						User user = list.get(0);
 						Account.saveUserInfo(user);
-						
+
 						setResult(RESULT_OK);
 						finish();
 					}
