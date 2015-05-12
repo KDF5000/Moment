@@ -176,8 +176,7 @@ public class C {
 		/**
 		 * 获取推荐灵感
 		 */
-		public static final String GET_RECOMMEND_MOMENT = URL_BASE
-				+ "custom/getMoment.php";
+		public static final String GET_RECOMMEND_MOMENT = URL_BASE + "MomentsService/MomentRecommend/getRecommendMoment";
 		/**
 		 * 频道首页list
 		 */

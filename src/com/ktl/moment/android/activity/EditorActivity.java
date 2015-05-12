@@ -883,8 +883,6 @@ public class EditorActivity extends BaseActivity {
 					actionStart(AccountActivity.class);
 				}
 				moment.setLabel("大数据");
-				moment.setAudioUrl("http://7xj00n.com1.z0.glb.clouddn.com/20150510221052.amr");
-				moment.setMomentImgs("http://baidu.com");
 				params.put("userId", userInfo.getUserId());
 				params.put("title", moment.getTitle());
 				params.put("content", moment.getContent());
