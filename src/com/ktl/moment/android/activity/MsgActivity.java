@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,6 +28,7 @@ import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.lidroid.xutils.view.annotation.event.OnItemClick;
 import com.loopj.android.http.RequestParams;
 
 public class MsgActivity extends BaseActivity {
@@ -51,6 +53,7 @@ public class MsgActivity extends BaseActivity {
 
 	private int page = 1;
 	private int pageSize = 10;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -86,6 +89,7 @@ public class MsgActivity extends BaseActivity {
 
 		initView();
 		addTextChanged();
+
 	}
 
 	private void initView() {
@@ -100,7 +104,7 @@ public class MsgActivity extends BaseActivity {
 				.getColor(R.color.main_title_color));
 	}
 
-	@OnClick({ R.id.title_back_img, R.id.msg_listview, R.id.msg_send_btn })
+	@OnClick({ R.id.title_back_img, R.id.msg_send_btn })
 	public void click(View v) {
 		switch (v.getId()) {
 		case R.id.title_back_img:
@@ -109,13 +113,17 @@ public class MsgActivity extends BaseActivity {
 		case R.id.msg_send_btn:
 			sendMsg();
 			break;
-		case R.id.msg_listview:
-			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-			break;
 		default:
 			break;
 		}
+	}
+
+	@OnItemClick({ R.id.msg_listview })
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 	}
 
 	private void sendMsg() {
@@ -136,29 +144,24 @@ public class MsgActivity extends BaseActivity {
 		if (msgList == null) {
 			msgList = new ArrayList<Message>();
 		}
-		/*for (int i = 0; i < 15; i++) {
-			Message msg = new Message();
-			msg.setRecieveUserAvatar(Account.getUserInfo().getUserAvatar());
-			msg.setSendUserAvatar("http://q.qlogo.cn/qqapp/1104435237/965E0D969A95D4D9C383B44FEBC76A2B/100");
-			if (i % 3 == 0) {
-				msg.setMsgType(0);
-				msg.setMsgContent("隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。");
-			} else if (i % 5 == 0) {
-				msg.setMsgType(2);
-				msg.setSendTime("5-2 15:56");
-			} else {
-				msg.setMsgType(1);
-				msg.setMsgContent("隔壁小禹说");
-			}
-			msgList.add(msg);
-		}*/
-		/*userId:31243,        //用户id
-	    otherUserId:213,            //私信对象用户id
-	    pageNum:0,
-	    pageSize:10*/
-	
+		/*
+		 * for (int i = 0; i < 15; i++) { Message msg = new Message();
+		 * msg.setRecieveUserAvatar(Account.getUserInfo().getUserAvatar());
+		 * msg.setSendUserAvatar(
+		 * "http://q.qlogo.cn/qqapp/1104435237/965E0D969A95D4D9C383B44FEBC76A2B/100"
+		 * ); if (i % 3 == 0) { msg.setMsgType(0); msg.setMsgContent(
+		 * "隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。隔壁小禹说，10 年前，他就有做叫车服务的想法。"
+		 * ); } else if (i % 5 == 0) { msg.setMsgType(2);
+		 * msg.setSendTime("5-2 15:56"); } else { msg.setMsgType(1);
+		 * msg.setMsgContent("隔壁小禹说"); } msgList.add(msg); }
+		 */
+		/*
+		 * userId:31243, //用户id otherUserId:213, //私信对象用户id pageNum:0,
+		 * pageSize:10
+		 */
+
 		User user = Account.getUserInfo();
-		if(user == null){
+		if (user == null) {
 			ToastUtil.show(this, "请先登录!");
 			actionStart(AccountActivity.class);
 			return;
@@ -167,28 +170,29 @@ public class MsgActivity extends BaseActivity {
 		RequestParams params = new RequestParams();
 		params.put("userId", userId);
 		params.put("otherUserId", sendUserId);
-		params.put("pageNum",page++);
-		params.put("pageSize",pageSize);
-		ApiManager.getInstance().post(this,C.API.GET_PERSONAL_MSG , params, new HttpCallBack() {
-			
-			@Override
-			public void onSuccess(Object res) {
-				// TODO Auto-generated method stub
-				@SuppressWarnings("unchecked")
-				List<Message> list =  (List<Message>) res;
-				if (msgList == null) {
-					msgList = new ArrayList<Message>();
-				}
-				msgList.addAll(0, list);//添加到头部
-				msgAdapter.notifyDataSetChanged();
-			}
-			
-			@Override
-			public void onFailure(Object res) {
-				// TODO Auto-generated method stub
-				
-			}
-		}, "Message");
+		params.put("pageNum", page++);
+		params.put("pageSize", pageSize);
+		ApiManager.getInstance().post(this, C.API.GET_PERSONAL_MSG, params,
+				new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						@SuppressWarnings("unchecked")
+						List<Message> list = (List<Message>) res;
+						if (msgList == null) {
+							msgList = new ArrayList<Message>();
+						}
+						msgList.addAll(0, list);// 添加到头部
+						msgAdapter.notifyDataSetChanged();
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+
+					}
+				}, "Message");
 	}
 
 	private void addTextChanged() {

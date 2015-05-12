@@ -38,13 +38,18 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.ktl.moment.android.activity.AccountActivity"
-            android:label="@string/app_name" >
+            android:name="com.ktl.moment.android.activity.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- 账户体系activity -->
+        <activity android:name="com.ktl.moment.android.activity.AccountActivity" >
         </activity>
 
         <!-- **************************** 信鸽服务  ************************ -->
@@ -112,6 +117,7 @@
 
         <receiver android:name="com.ktl.moment.im.xg.receiver.XgMessageReceiver" >
             <intent-filter>
+
                 <!-- 接收消息透传 -->
                 <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE" />
                 <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
@@ -237,33 +243,27 @@
             android:windowSoftInputMode="adjustResize" >
         </activity>
         <!-- 我关注的和我点赞的灵感页面 -->
-        <activity 
-            android:name="com.ktl.moment.android.activity.WPActivity">
+        <activity android:name="com.ktl.moment.android.activity.WPActivity" >
         </activity>
         <!-- 频道详情页 -->
-        <activity 
-            android:name="com.ktl.moment.android.activity.ChannelListActivity">
+        <activity android:name="com.ktl.moment.android.activity.ChannelListActivity" >
         </activity>
         <!-- 私信页面 -->
-        <activity 
+        <activity
             android:name="com.ktl.moment.android.activity.MsgActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <!-- 阅读灵感页面 -->
-        <activity 
-            android:name="com.ktl.moment.android.activity.ReadActivity">
+        <activity android:name="com.ktl.moment.android.activity.ReadActivity" >
         </activity>
         <!-- 用户资料页面 -->
-        <activity 
-            android:name="com.ktl.moment.android.activity.UserInfoActivity">
+        <activity android:name="com.ktl.moment.android.activity.UserInfoActivity" >
         </activity>
         <!-- 关于我们页面 -->
-        <activity 
-            android:name="com.ktl.moment.android.activity.AboutUsActivity">
+        <activity android:name="com.ktl.moment.android.activity.AboutUsActivity" >
         </activity>
         <!-- 用户查看自己的灵感评论界面 -->
-        <activity 
-            android:name="com.ktl.moment.android.activity.MomentCommentActivity">
+        <activity android:name="com.ktl.moment.android.activity.MomentCommentActivity" >
         </activity>
     </application>
 

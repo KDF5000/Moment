@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="ContentDescription" >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/splash_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </android.support.v4.view.ViewPager>
+
+    <ImageView
+        android:id="@+id/splash_base_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/splash_base_line" />
+
+    <ImageView
+        android:id="@+id/splash_move_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/splash_base_line"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="39dp"
+        android:src="@drawable/splash_move_line" />
+
+</RelativeLayout>

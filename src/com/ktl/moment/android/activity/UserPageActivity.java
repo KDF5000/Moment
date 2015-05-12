@@ -262,8 +262,8 @@ public class UserPageActivity extends Activity {
 			break;
 		case R.id.userpage_sendmsg_ly:
 			Intent msgIntent = new Intent(this, MsgActivity.class);
-			msgIntent.putExtra("userName", "TEST");
-			msgIntent.putExtra("userId", 0);
+			msgIntent.putExtra("userName", user.getNickName());
+			msgIntent.putExtra("userId", (long) 0);
 			startActivity(msgIntent);
 			break;
 		case R.id.user_moment_nav:
