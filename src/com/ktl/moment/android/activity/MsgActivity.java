@@ -10,8 +10,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,12 +18,16 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.MsgAdapter;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.common.Account;
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Message;
+import com.ktl.moment.entity.User;
+import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.lidroid.xutils.view.annotation.event.OnScroll;
+import com.loopj.android.http.RequestParams;
 
 public class MsgActivity extends BaseActivity {
 
@@ -47,6 +49,8 @@ public class MsgActivity extends BaseActivity {
 	private String sendUserName;
 	private long sendUserId;
 
+	private int page = 1;
+	private int pageSize = 10;
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -82,27 +86,8 @@ public class MsgActivity extends BaseActivity {
 
 		initView();
 		addTextChanged();
-		
-		msgListview.setOnScrollListener(new OnScrollListener() {
-			
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {
-				// TODO Auto-generated method stub
-				if(firstVisibleItem == 0){
-					ToastUtil.show(MsgActivity.this, "顶部");
-				}
-			}
-		});
 	}
-	
-	
+
 	private void initView() {
 		/**
 		 * init title
@@ -114,7 +99,6 @@ public class MsgActivity extends BaseActivity {
 		setBaseActivityBgColor(getResources()
 				.getColor(R.color.main_title_color));
 	}
-	
 
 	@OnClick({ R.id.title_back_img, R.id.msg_listview, R.id.msg_send_btn })
 	public void click(View v) {
@@ -152,7 +136,7 @@ public class MsgActivity extends BaseActivity {
 		if (msgList == null) {
 			msgList = new ArrayList<Message>();
 		}
-		for (int i = 0; i < 15; i++) {
+		/*for (int i = 0; i < 15; i++) {
 			Message msg = new Message();
 			msg.setRecieveUserAvatar(Account.getUserInfo().getUserAvatar());
 			msg.setSendUserAvatar("http://q.qlogo.cn/qqapp/1104435237/965E0D969A95D4D9C383B44FEBC76A2B/100");
@@ -167,7 +151,44 @@ public class MsgActivity extends BaseActivity {
 				msg.setMsgContent("隔壁小禹说");
 			}
 			msgList.add(msg);
+		}*/
+		/*userId:31243,        //用户id
+	    otherUserId:213,            //私信对象用户id
+	    pageNum:0,
+	    pageSize:10*/
+	
+		User user = Account.getUserInfo();
+		if(user == null){
+			ToastUtil.show(this, "请先登录!");
+			actionStart(AccountActivity.class);
+			return;
 		}
+		long userId = user.getUserId();
+		RequestParams params = new RequestParams();
+		params.put("userId", userId);
+		params.put("otherUserId", sendUserId);
+		params.put("pageNum",page++);
+		params.put("pageSize",pageSize);
+		ApiManager.getInstance().post(this,C.API.GET_PERSONAL_MSG , params, new HttpCallBack() {
+			
+			@Override
+			public void onSuccess(Object res) {
+				// TODO Auto-generated method stub
+				@SuppressWarnings("unchecked")
+				List<Message> list =  (List<Message>) res;
+				if (msgList == null) {
+					msgList = new ArrayList<Message>();
+				}
+				msgList.addAll(0, list);//添加到头部
+				msgAdapter.notifyDataSetChanged();
+			}
+			
+			@Override
+			public void onFailure(Object res) {
+				// TODO Auto-generated method stub
+				
+			}
+		}, "Message");
 	}
 
 	private void addTextChanged() {

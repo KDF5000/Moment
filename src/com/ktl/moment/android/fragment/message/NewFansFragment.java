@@ -31,6 +31,8 @@ public class NewFansFragment extends Fragment {
 	private List<User> fansList;
 	private MsgNewFansAdapter newFansAdapter;
 
+	private int page =1;
+	private int pageSize = 10;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -55,23 +57,15 @@ public class NewFansFragment extends Fragment {
 		if (fansList == null) {
 			fansList = new ArrayList<User>();
 		}
-		for (int i = 0; i < 10; i++) {
-			User tmp = new User();
-			tmp.setUserAvatar("");
-			tmp.setNickName("张三");
-			tmp.setFocusedTime("2015-04-28");
-			tmp.setIsFocused(0);
-			fansList.add(tmp);
-		}
-
 		User spUser = (User) SharedPreferencesUtil.getInstance().getObject(
 				C.SPKey.SPK_LOGIN_INFO);
+		
 		RequestParams params = new RequestParams();
 		params.put("userId", spUser.getUserId());
-		params.put("pageNum", 0);
-		params.put("pageSize", 10);
+		params.put("pageNum", page++);
+		params.put("pageSize", pageSize);
 		ApiManager.getInstance().post(getActivity(),
-				C.API.GET_FOCUS_AUTHOR_LIST, params, new HttpCallBack() {
+				C.API.GET_MY_FANS_LIST, params, new HttpCallBack() {
 
 					@Override
 					public void onSuccess(Object res) {
