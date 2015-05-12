@@ -86,7 +86,11 @@ public class MomentPlaAdapter extends BaseAdapter {
 			momentHolder = (MomentPlaHolder) convertView.getTag();
 		}
 		Moment moment = momentList.get(position);
-		momentHolder.createDate.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
+		if(moment.getPostTime() == null || moment.getPostTime() == "" || moment.getPostTime().equals("")){
+			momentHolder.createDate.setText("未知");
+		}else{
+			momentHolder.createDate.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
+		}
 
 		if (moment.getIsClipper() == 1) {
 			momentHolder.publicText.setVisibility(View.GONE);

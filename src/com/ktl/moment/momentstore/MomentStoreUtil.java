@@ -7,9 +7,12 @@ import java.util.Map;
 import android.util.Log;
 
 import com.ktl.moment.android.MomentApplication;
+import com.ktl.moment.android.activity.AccountActivity;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.QiniuToken;
+import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.manager.TaskManager;
 import com.ktl.moment.manager.TaskManager.TaskCallback;
@@ -124,6 +127,31 @@ public class MomentStoreUtil {
 	 */
 	private void upload2Server(Moment moment,final syncLocalCallback callback){
 		RequestParams params = new RequestParams();
+		User userInfo = Account.getUserInfo();
+		if (userInfo == null) {
+			callback.OnFailed("请先登录");
+			return ;
+		}
+		params.put("userId", userInfo.getUserId());
+		params.put("title", moment.getTitle());
+		params.put("content", moment.getContent());
+		if(moment.getLabel()==null || moment.getLabel().equals("") || moment.getLabel() == ""){
+			moment.setLabel("");
+		}
+		params.put("label", moment.getLabel());
+		params.put("isPublic", moment.getIsOpen());
+		if(moment.getMomentId() != 0){
+			params.put("momentId",moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
+		}
+		if(moment.getMomentImgs() == null){
+			moment.setMomentImgs("");
+		}
+		params.put("momentImgs", moment.getMomentImgs());
+		if( moment.getAudioUrl() == null){
+			 moment.setAudioUrl("");
+		}
+		params.put("audioUrl", moment.getAudioUrl());
+		params.put("isClipper", 0);
 		//设置参数
 		ApiManager.getInstance().post(MomentApplication.getApplication(), C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 			

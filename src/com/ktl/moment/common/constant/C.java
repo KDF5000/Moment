@@ -10,7 +10,7 @@ public class C {
 		 * url基地址
 		 */
 		 private static final String URL_BASE = "http://yfmoment.tiger.mopaas.com/";
-//		private static final String URL_BASE = "http://115.156.249.25:8080/";
+//		private static final String URL_BASE = "http://222.20.57.33:8080/";
 		// private static String URL_BASE =
 		// "http://mymoment.sinaapp.com/MomentService/";
 		/**
@@ -99,8 +99,7 @@ public class C {
 		/**
 		 * 上传灵感
 		 */
-		public static final String UPLOAD_MOMENT = URL_BASE
-				+ "MomentsService/Attention/uploadMoment";
+		public static final String UPLOAD_MOMENT = URL_BASE + "MomentsService/Moment/addMoment";
 		/**
 		 * 消息中心私信列表
 		 */
@@ -142,8 +141,7 @@ public class C {
 		/**
 		 * 获取用户的灵感
 		 */
-		public static final String GET_USER_MOMENT_LIST = URL_BASE
-				+ "UserInfoService/FriendRelationship/getOtherUserMoments";
+		public static final String GET_USER_MOMENT_LIST = URL_BASE +  "UserInfoService/UserInfo/getMyOwnMoments";
 		/**
 		 * 获取用户围观的灵感
 		 */

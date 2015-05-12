@@ -770,14 +770,19 @@ public class EditorActivity extends BaseActivity {
 		if (moment == null) {
 			moment = new Moment();
 		}
-		moment.setTitle("我是一条灵感");
-		/*
-		 * if (!imgMap.isEmpty()) { for (Map.Entry<String, String> entry :
-		 * imgMap.entrySet()) { moment.setMomentImgs(entry.getValue()); break; }
-		 * }
-		 */
-		moment.setTitle(articleTitle.getText().toString());
-		moment.setContent(contentRichEditText.getText().toString());
+		//需要判断一下标题内容是否为空
+		String title = articleTitle.getText().toString();
+		String content = contentRichEditText.getText().toString();
+		if(content == null || content == "" || content.equals("")){
+			ToastUtil.show(this, "内容不能为空");
+			return ;
+		}
+		if(title == null || title == "" || title.equals("")){
+			title = content.substring(0, 10);
+		}
+			
+		moment.setTitle(title);
+		moment.setContent(content);
 		moment.setAuthorId(1);
 		moment.setAuthorName("KDF5000");
 		String postTime = TimeFormatUtil.getCurrentDateTime();
@@ -886,13 +891,24 @@ public class EditorActivity extends BaseActivity {
 				params.put("userId", userInfo.getUserId());
 				params.put("title", moment.getTitle());
 				params.put("content", moment.getContent());
+				if(moment.getLabel()==null || moment.getLabel().equals("") || moment.getLabel() == ""){
+					moment.setLabel("");
+				}
 				params.put("label", moment.getLabel());
-				// params.put("isPublic", moment.getIsOpen());
-				// params.put("momentId",
-				// moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
+				params.put("isPublic", moment.getIsOpen());
+				if(moment.getMomentId() != 0){
+					params.put("momentId",moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
+				}
+				if(moment.getMomentImgs() == null){
+					moment.setMomentImgs("");
+				}
 				params.put("momentImgs", moment.getMomentImgs());
+				if( moment.getAudioUrl() == null){
+					 moment.setAudioUrl("");
+				}
 				params.put("audioUrl", moment.getAudioUrl());
 				params.put("isClipper", 0);
+				
 				ApiManager.getInstance().post(EditorActivity.this,
 						C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 

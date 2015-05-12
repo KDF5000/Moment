@@ -168,7 +168,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			return ;
 		}
 		params.put("userId", userInfo.getUserId());
-		params.put("page", pageNum++);
+		params.put("pageNum", pageNum++);
 		params.put("pageSize", pageSize);
 		ApiManager.getInstance().post(getActivity(), C.API.GET_USER_MOMENT_LIST, params, new HttpCallBack() {
 			
@@ -323,6 +323,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 					syncMomentManager.killSync("取消同步");
 				}
 			} else {
+				pageNum =1;
 				getDataFromServer();
 			}
 			break;
