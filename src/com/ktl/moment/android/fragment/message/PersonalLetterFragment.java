@@ -34,7 +34,9 @@ public class PersonalLetterFragment extends Fragment {
 
 	private List<Message> msgList;
 	private MsgPersonalAdapter msgPersonalAdapter;
-
+	private int page = 1;
+	private int pageSize = 10;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -78,8 +80,8 @@ public class PersonalLetterFragment extends Fragment {
 
 		RequestParams params = new RequestParams();
 		params.put("userId", Account.getUserInfo().getUserId());
-		params.put("pageNum", 0);
-		params.put("pageSize", 10);
+		params.put("pageNum", page++);
+		params.put("pageSize", pageSize);
 		ApiManager.getInstance().post(getActivity(), C.API.GET_MSG_LIST,
 				params, new HttpCallBack() {
 

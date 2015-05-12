@@ -78,12 +78,13 @@ public class MsgPersonalAdapter extends BaseAdapter {
 		ImageLoader.getInstance().displayImage(msg.getSendUserAvatar(),
 				msgHolder.sendUserAvatar, options);
 		msgHolder.sendUserNickname.setText(msg.getSendUserName());
-		msgHolder.sendTime
-				.setText(TimeFormatUtil.formatDate(msg.getSendTime()));
+		msgHolder.sendTime.setText(TimeFormatUtil.formatDate(msg.getSendTime()));
 		msgHolder.msgContent.setText(msg.getMsgContent());
-		
-		msgHolder.badge.setText("99+");
-
+		if(msg.getMsgCount()>99){
+			msgHolder.badge.setText("99+");
+		}else{
+			msgHolder.badge.setText(msg.getMsgCount()+"");
+		}
 		return convertView;
 	}
 

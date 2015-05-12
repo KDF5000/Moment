@@ -104,16 +104,16 @@ public class C {
 		/**
 		 * 消息中心私信列表
 		 */
-		public static final String GET_MSG_LIST = URL_BASE + "msg.php";
+		public static final String GET_MSG_LIST = URL_BASE + "UserInfoService/SecreteMessage/getSecreteMessage";
 		/**
 		 * 消息中心通知列表
 		 */
 		public static final String GET_NOTIFICATION_LIST = URL_BASE
-				+ "notify.php";
+				+ "UserInfoService/Notification/getNotification";
 		/**
 		 * 消息中心新粉丝列表
 		 */
-		public static final String GET_NEW_FANS_LIST = URL_BASE + "";
+		public static final String GET_NEW_FANS_LIST = URL_BASE + "UserInfoService/UserInfo/getNewFans";
 		/**
 		 * 获取我的所有灵感
 		 */
@@ -170,9 +170,9 @@ public class C {
 		public static final String SHARE_MOMENT = URL_BASE
 				+ "MomentsService/MomentOperate/shareMoment";
 		/**
-		 * 私信消息
+		 * 获取私信消息
 		 */
-		public static final String PERSONAL_MSG = URL_BASE + "";
+		public static final String GET_PERSONAL_MSG = URL_BASE + "UserInfoService/SecreteMessage/getAllSecreteMessage";
 		/**
 		 * 获取推荐灵感
 		 */
