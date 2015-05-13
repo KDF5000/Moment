@@ -238,10 +238,9 @@ public class StartFragment extends AccountBaseFragment {
 				// 调用 User#parse 将JSON串解析成User对象
 				com.sina.weibo.sdk.openapi.models.User user = com.sina.weibo.sdk.openapi.models.User.parse(response);
 				if (user != null) {
-					Toast.makeText(getActivity(),
+					/*Toast.makeText(getActivity(),
 							"获取User信息成功，用户ID：" + user.id + "  用户昵称:"
-									+ user.name, Toast.LENGTH_LONG).show();
-
+									+ user.name, Toast.LENGTH_LONG).show();*/
 					//此处写微博登陆成功逻辑
 					RequestParams params = new RequestParams();
 					params.put("identifier", "weibo_"+user.id);
