@@ -37,6 +37,7 @@
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <!-- SplashActivity -->
         <activity
             android:name="com.ktl.moment.android.activity.SplashActivity"
             android:label="@string/app_name"

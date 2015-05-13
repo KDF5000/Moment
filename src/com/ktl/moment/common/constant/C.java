@@ -9,8 +9,8 @@ public class C {
 		/**
 		 * url基地址
 		 */
-		 private static final String URL_BASE = "http://yfmoment.tiger.mopaas.com/";
-//		private static final String URL_BASE = "http://222.20.57.33:8080/";
+//		 private static final String URL_BASE = "http://yfmoment.tiger.mopaas.com/";
+		private static final String URL_BASE = "http://115.156.249.72:8080/";
 		// private static String URL_BASE =
 		// "http://mymoment.sinaapp.com/MomentService/";
 		/**
