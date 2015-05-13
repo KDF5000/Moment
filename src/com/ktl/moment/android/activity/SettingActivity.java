@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.manager.AppManager;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -99,7 +100,7 @@ public class SettingActivity extends BaseActivity {
 			SharedPreferencesUtil.getInstance().delete(C.SPKey.SPK_LOGIN_INFO);
 			Intent intent = new Intent(this, AccountActivity.class);
 			startActivity(intent);
-			finish();
+			AppManager.getInstance().finishAll();
 			break;
 		case R.id.title_back_img:
 			finish();
