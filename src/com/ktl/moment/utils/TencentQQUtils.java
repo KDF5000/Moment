@@ -14,7 +14,9 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.ktl.moment.android.activity.HomeActivity;
+import com.ktl.moment.android.activity.RecommendAuthorActivity;
 import com.ktl.moment.android.component.LoadingDialog;
+import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.User;
@@ -247,11 +249,23 @@ public class TencentQQUtils {
 						 */
 						// 将用户基本信息写入SP
 						@SuppressWarnings("unchecked")
-						List<User> user = (List<User>) res;
-						SharedPreferencesUtil.getInstance().putObject(
-								C.SPKey.SPK_LOGIN_INFO, user.get(0));
+						List<User> list = (List<User>) res;
+						// SharedPreferencesUtil.getInstance().putObject(
+						// C.SPKey.SPK_LOGIN_INFO, user.get(0));
+						if (list == null || list.isEmpty()) {
+							ToastUtil.show(activity, "登陆失败");
+							return;
+						}
+						User user = list.get(0);
+						Account.saveUserInfo(user);
 
-						Intent intent = new Intent(activity, HomeActivity.class);
+						Intent intent;
+						if (user.getIsNewUser() == 1) {
+							intent = new Intent(activity,
+									RecommendAuthorActivity.class);
+						} else {
+							intent = new Intent(activity, HomeActivity.class);
+						}
 						activity.startActivity(intent);
 						activity.finish();
 						dialog.dismiss();
@@ -298,7 +312,7 @@ public class TencentQQUtils {
 		params.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL,
 				"http://www.hao123.com/?tn=90681109_hao_pg");// 必填
 		params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL,
-				new ArrayList<String>());//暂时这样写，这行不能删除，否则分享至Qzone不能正常工作
+				new ArrayList<String>());// 暂时这样写，这行不能删除，否则分享至Qzone不能正常工作
 		doShareAsync(params, "qzone");
 	}
 

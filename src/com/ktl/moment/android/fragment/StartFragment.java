@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
+import com.ktl.moment.android.activity.RecommendAuthorActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.common.Account;
@@ -236,21 +237,24 @@ public class StartFragment extends AccountBaseFragment {
 		public void onComplete(String response) {
 			if (!TextUtils.isEmpty(response)) {
 				// 调用 User#parse 将JSON串解析成User对象
-				com.sina.weibo.sdk.openapi.models.User user = com.sina.weibo.sdk.openapi.models.User.parse(response);
+				com.sina.weibo.sdk.openapi.models.User user = com.sina.weibo.sdk.openapi.models.User
+						.parse(response);
 				if (user != null) {
-					/*Toast.makeText(getActivity(),
-							"获取User信息成功，用户ID：" + user.id + "  用户昵称:"
-									+ user.name, Toast.LENGTH_LONG).show();*/
-					//此处写微博登陆成功逻辑
+					/*
+					 * Toast.makeText(getActivity(), "获取User信息成功，用户ID：" +
+					 * user.id + "  用户昵称:" + user.name,
+					 * Toast.LENGTH_LONG).show();
+					 */
+					// 此处写微博登陆成功逻辑
 					RequestParams params = new RequestParams();
-					params.put("identifier", "weibo_"+user.id);
+					params.put("identifier", "weibo_" + user.id);
 					params.put("logintype", C.ThirdLoginType.WEIBO_LOGIN);
 					params.put("nickName", user.name);
 					params.put("userAvatar", user.avatar_hd);
-					int sex = 1;//未知
-					if(user.gender == "f"){
+					int sex = 1;// 未知
+					if (user.gender == "f") {
 						sex = 0;
-					} 
+					}
 					params.put("sex", sex);
 					thirdPartyLogin(params);
 				} else {
@@ -300,16 +304,21 @@ public class StartFragment extends AccountBaseFragment {
 						/**
 						 * 登陆成功跳转
 						 */
-						//保存用户信息
+						// 保存用户信息
 						@SuppressWarnings("unchecked")
 						List<User> user = (List<User>) res;
-						if(user==null || user.isEmpty()){
+						if (user == null || user.isEmpty()) {
 							ToastUtil.show(getActivity(), "登陆失败");
-							return ;
+							return;
 						}
-						//保存用户信息
+						// 保存用户信息
 						Account.saveUserInfo(user.get(0));
-						actionStart(HomeActivity.class);
+
+						if (user.get(0).getIsNewUser() == 1) {
+							actionStart(RecommendAuthorActivity.class);
+						} else {
+							actionStart(HomeActivity.class);
+						}
 						dialog.dismiss();
 					}
 
