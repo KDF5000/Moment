@@ -35,6 +35,7 @@ import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.momentstore.MomentSyncTask;
 import com.ktl.moment.momentstore.MomentSyncTaskManager;
 import com.ktl.moment.momentstore.MomentSyncTaskManager.MomentSyncCallback;
+import com.ktl.moment.utils.EncryptUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskType;
@@ -57,10 +58,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	private static final int REAUEST_CODE_LABEL = 1001;
 	private static final int REQUEST_CODE_DELETE = 1002;
 
-	private String postTime;
 	private boolean mHasRequestedMore = true;
 
-	private int pageSize = 10;
+	private int pageSize = 20;
 	private int pageNum = 1;
 
 	private boolean isSyncing = false;//是否正在同步
@@ -145,6 +145,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	}
 
 	private void getDataFromDB() {
+		pageNum = 1;
 		Selector selector = Selector.from(Moment.class)
 				.orderBy("postTime", true).limit(pageSize)
 				.offset(pageSize * (pageNum-1));
@@ -177,15 +178,25 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				// TODO Auto-generated method stub
 				@SuppressWarnings("unchecked")
 				List<Moment> list = (List<Moment>) res;
+				if(list==null){
+					ToastUtil.show(getActivity(), "同步完成");
+					return;
+				}
 				if(momentList==null){
 					momentList = new ArrayList<Moment>();
 				}
+				List<Moment> loacalList = new ArrayList<Moment>();
+				for(Moment moment : list){
+					moment.setMomentUid(EncryptUtil.md5(moment.getAuthorId()+"",moment.getTitle(), moment.getPostTime()).hashCode());
+					loacalList.add(moment);
+				}
 				momentList.clear();
-				momentList.addAll(list);
+				momentList.addAll(loacalList);
 				momentPlaAdapter.notifyDataSetChanged();
 				//保存到本地数据库
+				
 				((HomeActivity) getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE,
-						Moment.class, list);
+						Moment.class, loacalList);
 				stopSyncAnimation();
 				ToastUtil.show(getActivity(), "同步完成");
 			}
@@ -330,6 +341,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		}
 		case C.DbTaskId.GET_MOMENT_LIST:
 			List<Moment> list = (List<Moment>) res;
+			if(list == null){
+				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT).show();
+				return ;
+			}
 			try {
 				if(momentList==null){
 					momentList = new ArrayList<Moment>();
