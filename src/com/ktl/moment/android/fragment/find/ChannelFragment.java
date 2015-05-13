@@ -22,7 +22,6 @@ import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Channel;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.net.ApiManager;
-import com.loopj.android.http.RequestParams;
 
 public class ChannelFragment extends BaseFragment {
 
