@@ -7,7 +7,12 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.fragment.splash.FirstFragment;
 import com.ktl.moment.android.fragment.splash.SecondFragment;
 import com.ktl.moment.android.fragment.splash.ThirdFragment;
+import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.User;
+import com.ktl.moment.utils.FileUtil;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -34,6 +39,23 @@ public class SplashActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
+
+		FileUtil.createAppRootDir();// 在磁盘上创建应用文件夹
+
+		// 初始化sharedPreferences
+		SharedPreferencesUtil.initSharedPreferences(getApplicationContext());
+
+		// 是否浏览过引导页
+		boolean isScanSplash = SharedPreferencesUtil.getInstance().getBoolean(
+				C.SPKey.SPK_IS_SCAN_SPLASH, false);
+		// 是否登陆了
+		User userInfo = (User) SharedPreferencesUtil.getInstance().getObject(
+				C.SPKey.SPK_LOGIN_INFO);
+		if (isScanSplash && userInfo != null) {
+			actionStart(HomeActivity.class);
+		} else if (isScanSplash && userInfo == null) {
+			actionStart(AccountActivity.class);
+		}
 
 		viewPager = (ViewPager) findViewById(R.id.splash_viewpager);
 		moveLine = (ImageView) findViewById(R.id.splash_move_line);
@@ -65,6 +87,18 @@ public class SplashActivity extends FragmentActivity implements
 		});
 		viewPager.setCurrentItem(0, true);
 		viewPager.setOnPageChangeListener(this);
+	}
+
+	/**
+	 * 销毁当前界面跳到指定界面
+	 * 
+	 * @param classObj
+	 */
+	protected void actionStart(Class<?> classObj) {
+		Intent intent = new Intent(this, classObj);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		this.startActivity(intent);
+		this.finish();
 	}
 
 	@Override

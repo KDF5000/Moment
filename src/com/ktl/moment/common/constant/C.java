@@ -346,6 +346,8 @@ public class C {
 		public static final String SPK_NEW_DYNAMIC_MESSAGE = "NewDynamic";//是否有新的动态 true | false
 		public static final String SPK_MESSAEG_COUNT = "MessageCount";//消息提醒的总条数
 		public static final String SWITCH_TO_MOMENT_FG = "SwitchToMomentFragment";// 切换到moment页面
+		
+		public static final String SPK_IS_SCAN_SPLASH = "splash";//是否浏览过引导页 true | false;
 	}
 
 	/**

@@ -60,16 +60,16 @@ public class AccountActivity extends BaseActivity implements OnLoginListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_account);
 
-		FileUtil.createAppRootDir();// 在磁盘上创建应用文件夹
-
-		// 初始化sharedPreferences,暂时放在这里，后续会迁移至第一次打开的那个页面
-		SharedPreferencesUtil.initSharedPreferences(getApplicationContext());
-		// 是否登陆了
-		 User userInfo = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
-		 
-		if(userInfo!=null){
-			actionStart(HomeActivity.class);
-		}
+//		FileUtil.createAppRootDir();// 在磁盘上创建应用文件夹
+//
+//		// 初始化sharedPreferences,暂时放在这里，后续会迁移至第一次打开的那个页面
+//		SharedPreferencesUtil.initSharedPreferences(getApplicationContext());
+//		// 是否登陆了
+//		 User userInfo = (User) SharedPreferencesUtil.getInstance().getObject(C.SPKey.SPK_LOGIN_INFO);
+//		 
+//		if(userInfo!=null){
+//			actionStart(HomeActivity.class);
+//		}
 		// 初始为登陆界面
 		fragmentManager = getSupportFragmentManager();// 获取fragment的管理器
 		switchFragmentByTag(C.Account.FRAGMENT_START, ANIMATION_NO_ANIM);// 设置默认的界面
