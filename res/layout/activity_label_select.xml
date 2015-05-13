@@ -3,6 +3,7 @@
     android:layout_width="287dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
+    android:background="#ffffff"
     android:orientation="vertical" >
 
     <TextView
@@ -11,11 +12,12 @@
         android:padding="20dp"
         android:text="选择标签"
         android:textColor="#41aaf2"
+        android:background="#dcdcdc"
         android:textSize="18sp" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="#41aaf2" />
 
     <LinearLayout
@@ -45,7 +47,11 @@
             android:layout_marginTop="10dp" >
         </ListView>
     </LinearLayout>
-
+	<View 
+	    android:layout_width="match_parent"
+	    android:layout_height="1dp" 
+	    android:background="#acacac"/>
+	
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="46dp"
@@ -62,7 +68,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="#dcdcdc" />
+            android:background="#acacac" />
 
         <Button
             android:layout_width="0dp"

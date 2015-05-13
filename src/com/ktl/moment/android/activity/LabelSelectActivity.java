@@ -42,6 +42,18 @@ public class LabelSelectActivity extends Activity{
 		labelList.add("互联网");
 		labelList.add("物联网");
 		labelList.add("通信");
+		labelList.add("大数据");
+		labelList.add("互联网");
+		labelList.add("物联网");
+		labelList.add("通信");
+		labelList.add("大数据");
+		labelList.add("互联网");
+		labelList.add("物联网");
+		labelList.add("通信");
+		labelList.add("大数据");
+		labelList.add("互联网");
+		labelList.add("物联网");
+		labelList.add("通信");
 		labelListAdapter = new LabelListAdapter(this, labelList);
 		
 		labelListView.setAdapter(labelListAdapter);
