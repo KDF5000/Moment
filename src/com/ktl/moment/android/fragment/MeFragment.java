@@ -156,7 +156,9 @@ public class MeFragment extends BaseFragment implements OnCustomMessageListener{
 		case R.id.me_notification_layout:
 			SharedPreferencesUtil.getInstance().setInt(C.SPKey.SPK_MESSAEG_COUNT, 0);//设置为0
 			//移除红点
-			msgNotifyBadge.setVisibility(View.GONE);
+			if(msgNotifyBadge!=null && msgNotifyBadge.getVisibility() == View.VISIBLE){
+				msgNotifyBadge.setVisibility(View.GONE);
+			}
 			//移除菜单栏的小红点
 			((HomeActivity)getActivity()).hideRedDot(C.menu.FRAGMENT_ME_MENU_ID);//隐藏菜单的小红点
 			Intent notificationIntent = new Intent(getActivity(),
