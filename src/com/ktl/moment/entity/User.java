@@ -15,6 +15,7 @@ public class User extends BaseEntity {
 	private String signature;// 用户飞人签名
 	private String birthday;
 	private int sex;// 性别
+	private int isNewUser;//标识该用户是否是新用户
 
 	private int isFocused;// 用户是否被关注 0：否，1：是
 	private String focusedTime;// 用户被关注的时间
@@ -24,6 +25,14 @@ public class User extends BaseEntity {
 	private int praiseNum;// 用户赞过的灵感
 	private int attentionNum; // 用户关注的作者数
 	private int FansNum; // 用户的粉丝数
+
+	public int getIsNewUser() {
+		return isNewUser;
+	}
+
+	public void setIsNewUser(int isNewUser) {
+		this.isNewUser = isNewUser;
+	}
 
 	public String getBirthday() {
 		return birthday;

@@ -537,7 +537,7 @@ public class MomentDetailActivity extends BaseActivity {
 		} else {
 			clipperImg.setImageResource(R.drawable.clipper);
 			moment.setIsClipper(0);
-			isAddClipper = 1;
+			isAddClipper = 0;
 		}
 		requestServer(isAddClipper, "isAddClipper", userId, momentId,
 				C.API.CLIPPER_MOMENT, "Moment");
