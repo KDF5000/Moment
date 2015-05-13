@@ -80,16 +80,20 @@ public class MomentPlaAdapter extends BaseAdapter {
 					.findViewById(R.id.moment_label_text);
 			momentHolder.momentItemLayout = (LinearLayout) convertView
 					.findViewById(R.id.moment_item_layout);
+			momentHolder.audioImg = (ImageView) convertView
+					.findViewById(R.id.moment_record_img);
 
 			convertView.setTag(momentHolder);
 		} else {
 			momentHolder = (MomentPlaHolder) convertView.getTag();
 		}
 		Moment moment = momentList.get(position);
-		if(moment.getPostTime() == null || moment.getPostTime() == "" || moment.getPostTime().equals("")){
+		if (moment.getPostTime() == null || moment.getPostTime() == ""
+				|| moment.getPostTime().equals("")) {
 			momentHolder.createDate.setText("未知");
-		}else{
-			momentHolder.createDate.setText(TimeFormatUtil.formatDate(moment.getPostTime()));
+		} else {
+			momentHolder.createDate.setText(TimeFormatUtil.formatDate(moment
+					.getPostTime()));
 		}
 
 		if (moment.getIsClipper() == 1) {
@@ -100,12 +104,14 @@ public class MomentPlaAdapter extends BaseAdapter {
 			momentHolder.publicText.setVisibility(View.VISIBLE);
 			if (moment.getIsOpen() == 1) {
 				momentHolder.publicText.setText("公开");
-				momentHolder.publicText.setTextColor(this.context.getResources().getColor(
+				momentHolder.publicText.setTextColor(this.context
+						.getResources().getColor(
 								R.color.moment_etsy_public_color));
 			} else {
 				momentHolder.publicText.setText("不公开");
-				momentHolder.publicText.setTextColor(this.context.getResources().getColor(
-						R.color.moment_etsy_text_color));
+				momentHolder.publicText.setTextColor(this.context
+						.getResources()
+						.getColor(R.color.moment_etsy_text_color));
 			}
 		}
 		if (moment.getMomentImgs() == null || moment.getMomentImgs().equals("")
@@ -113,17 +119,21 @@ public class MomentPlaAdapter extends BaseAdapter {
 			momentHolder.articleImg.setVisibility(View.GONE);
 		} else {
 			momentHolder.articleImg.setVisibility(View.VISIBLE);
-			Log.i("MomentImage", "-->"+moment.getMomentImgs());
+			Log.i("MomentImage", "-->" + moment.getMomentImgs());
 			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
 					momentHolder.articleImg, this.options);
 		}
 		momentHolder.articleTitle.setText(moment.getTitle());
 		momentHolder.articleContent.setText(moment.getContent());
 		momentHolder.label.setImageResource(R.drawable.label);
-		if(moment.getLabel() == "" || moment.getLabel().equals("") || moment.getLabel() == null){
+		if (moment.getLabel() == "" || moment.getLabel().equals("")
+				|| moment.getLabel() == null) {
 			momentHolder.labelText.setText("暂无标签");
-		}else{
+		} else {
 			momentHolder.labelText.setText(moment.getLabel());
+		}
+		if (moment.getAudioUrl() != null && !moment.getAudioUrl().equals("")) {
+			momentHolder.audioImg.setVisibility(View.VISIBLE);
 		}
 
 		return convertView;
@@ -139,5 +149,6 @@ public class MomentPlaAdapter extends BaseAdapter {
 		ImageView label;
 		TextView labelText;
 		LinearLayout momentItemLayout;
+		ImageView audioImg;
 	}
 }
