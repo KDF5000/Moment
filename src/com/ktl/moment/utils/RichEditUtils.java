@@ -9,29 +9,30 @@ import java.util.regex.Pattern;
 public class RichEditUtils {
 	
 	public static Map<String,String> extractImg(String content){
-		//通过七牛sdk将文本里含有的图片上传，获取七牛的图片外链
-		//<momentimg\s+src="([\w/\\]+)"\s*/>
-//		String str ="<momentimg src=\"(/[\\w/\\/.]+)\"\\s*/>";
-		String str ="<img src=\"(/[\\w/\\/.]+)\"\\s*/>";
+		String str ="<img src = \"(/[\\w/\\/.]+)\"\\s*/>";
 		Pattern pattern = Pattern.compile(str);
 		Matcher matcher = pattern.matcher(content);
-//	    String res = "";
-//	    int start = 0;
 	    Map<String, String> fileMap = new HashMap<String, String>();
 		while(matcher.find()){
 			String localFilePath = matcher.group(1);
 			String matchString = matcher.group();
 			fileMap.put(matchString, localFilePath);
 			
-			//将该文件上传到图片存储服务器
-			//获得外链
-			//替换本地地址
-//			res += content.substring(start,matcher.start()) + "<img src=\"" + localFilePath +  " \"/>";
-//			start = matcher.end();
 		}
-//		res += content.substring(start);
 		return fileMap;
 	}
-	
+	/**
+	 * 提取内容摘要
+	 * @param content
+	 * @return
+	 */
+	public static String extactAbstract(String content,int count){
+		String str ="<img src = \"(/[\\w/\\/.]+)\"\\s*/>";
+		String abstractContent = content.replaceAll(str, "");
+		if(abstractContent.length() < count){
+			return abstractContent;
+		}
+		return abstractContent.substring(0, count);
+	}
 	
 }

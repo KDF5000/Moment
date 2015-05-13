@@ -242,7 +242,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		}
 		XGPushConfig.enableDebug(this, true);
 		XGPushManager.registerPush(getApplicationContext(), user.getUserId()
-				+ "1", new XGIOperateCallback() {
+				+ "", new XGIOperateCallback() {
 
 			@Override
 			public void onSuccess(Object data, int flag) {

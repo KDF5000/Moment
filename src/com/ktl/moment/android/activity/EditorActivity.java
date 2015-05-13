@@ -56,6 +56,7 @@ import com.ktl.moment.utils.PlayUtil;
 import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
 import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.StrUtils;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.TimerCountUtil;
 import com.ktl.moment.utils.ToastUtil;
@@ -765,8 +766,6 @@ public class EditorActivity extends BaseActivity {
 	private void saveContent() {
 		// 没有网络的话保存到本地
 		BasicInfoUtil basicInfoUtil = BasicInfoUtil.getInstance(this);
-		Map<String, String> imgMap = RichEditUtils
-				.extractImg(contentRichEditText.getText().toString());
 		if (moment == null) {
 			moment = new Moment();
 		}
@@ -777,8 +776,11 @@ public class EditorActivity extends BaseActivity {
 			ToastUtil.show(this, "内容不能为空");
 			return ;
 		}
-		if(title == null || title == "" || title.equals("")){
-			title = content.substring(0, 10);
+		if(StrUtils.isEmpty(title)){
+			title = RichEditUtils.extactAbstract(content, 10);
+			 if(StrUtils.isEmpty(title)){
+				 title = "一张图片";
+			 }
 		}
 			
 		moment.setTitle(title);
@@ -853,8 +855,7 @@ public class EditorActivity extends BaseActivity {
 	 * 上传文件到七牛
 	 */
 	private void uploadFilte2Qiniu(String token) {
-		Map<String, String> imgMap = RichEditUtils
-				.extractImg(contentRichEditText.getText().toString());
+		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText.getText().toString());
 		TaskManager manager = new TaskManager();
 		manager.setTaskCallBack(new TaskCallback() {
 
@@ -871,16 +872,16 @@ public class EditorActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				String content = contentRichEditText.getText().toString();
 				for (Map.Entry<String, String> entry : resMap.entrySet()) {
-					Log.i("URL",
-							"-->" + entry.getKey() + "=" + entry.getValue());
+					Log.i("URL","-->" + entry.getKey() + "=" + entry.getValue());
 					// 替换et内容
-					content = content.replaceAll(entry.getKey(), "<img src=\""
+					content = content.replaceAll(entry.getKey(), "<img src = \""
 							+ C.API.QINIU_BASE_URL + entry.getValue() + "\"/>");
 					// 最好取第一个
-					moment.setMomentImgs(C.API.QINIU_BASE_URL
-							+ entry.getValue());
+					moment.setMomentImgs(C.API.QINIU_BASE_URL + entry.getValue());
 				}
+				
 				// 上传到服务器 上传成功后保存到本地
+				moment.setContent(content);
 				moment.setDirty(0);
 				RequestParams params = new RequestParams();
 				User userInfo = Account.getUserInfo();

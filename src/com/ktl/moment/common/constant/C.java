@@ -141,7 +141,7 @@ public class C {
 		/**
 		 * 获取用户的灵感
 		 */
-		public static final String GET_USER_MOMENT_LIST = URL_BASE +  "UserInfoService/UserInfo/getMyOwnMoments";
+		public static final String GET_USER_MOMENT_LIST = URL_BASE +  "UserInfoService/FriendRelationship/getOtherUserMoments";
 		/**
 		 * 获取用户围观的灵感
 		 */

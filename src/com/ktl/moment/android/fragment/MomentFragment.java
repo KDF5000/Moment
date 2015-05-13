@@ -79,14 +79,12 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.moment_pla_list);
 		getDataFromDB();
-	
 		
 		momentList = new ArrayList<Moment>();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
 		momentPlaAdapter.notifyDataSetChanged();
 		staggeredGridView.setAdapter(momentPlaAdapter);
-
 		
 		initEvent();
 		return view;
@@ -171,7 +169,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		params.put("userId", userInfo.getUserId());
 		params.put("pageNum", pageNum++);
 		params.put("pageSize", pageSize);
-		ApiManager.getInstance().post(getActivity(), C.API.GET_USER_MOMENT_LIST, params, new HttpCallBack() {
+		ApiManager.getInstance().post(getActivity(), C.API.GET_MY_MOMENT_LIST, params, new HttpCallBack() {
 			
 			@Override
 			public void onSuccess(Object res) {

@@ -13,6 +13,7 @@ public class Moment extends BaseEntity {
 	private long momentUid;
 	private long momentId;// 灵感id
 	private String title;// 标题
+	private String contentAbstract;//内容摘要
 	private String content;// 内容
 	private int dirty;// 是否同步，1:本地，0:同步过
 
@@ -205,5 +206,23 @@ public class Moment extends BaseEntity {
 	public void setMomentUid(long momentUid) {
 		this.momentUid = momentUid;
 	}
+	public String getContentAbstract() {
+		return contentAbstract;
+	}
 
+	public void setContentAbstract(String contentAbstract) {
+		this.contentAbstract = contentAbstract;
+	}
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public void setWatchNum(int watchNum) {
+		this.watchNum = watchNum;
+	}
 }
