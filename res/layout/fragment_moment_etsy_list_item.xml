@@ -82,7 +82,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/moment_article_content"
+                android:id="@+id/moment_article_abstract"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -131,6 +131,15 @@
                 android:layout_toRightOf="@+id/moment_label_text"
                 android:src="@drawable/record"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/moment_dirty_moment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/moment_dirty"
+                android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 

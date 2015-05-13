@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.entity.Moment;
+import com.ktl.moment.utils.StrUtils;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -62,27 +63,17 @@ public class MomentPlaAdapter extends BaseAdapter {
 			convertView = this.layoutInflater.inflate(
 					R.layout.fragment_moment_etsy_list_item, null, false);
 			momentHolder = new MomentPlaHolder();
-			momentHolder.createDate = (TextView) convertView
-					.findViewById(R.id.moment_create_date);
-			momentHolder.publicText = (TextView) convertView
-					.findViewById(R.id.moment_is_public);
-			momentHolder.collectImg = (ImageView) convertView
-					.findViewById(R.id.moment_is_collect_img);
-			momentHolder.articleImg = (ImageView) convertView
-					.findViewById(R.id.moment_article_img);
-			momentHolder.articleTitle = (TextView) convertView
-					.findViewById(R.id.moment_article_title);
-			momentHolder.articleContent = (TextView) convertView
-					.findViewById(R.id.moment_article_content);
-			momentHolder.label = (ImageView) convertView
-					.findViewById(R.id.moment_label_img);
-			momentHolder.labelText = (TextView) convertView
-					.findViewById(R.id.moment_label_text);
-			momentHolder.momentItemLayout = (LinearLayout) convertView
-					.findViewById(R.id.moment_item_layout);
-			momentHolder.audioImg = (ImageView) convertView
-					.findViewById(R.id.moment_record_img);
-
+			momentHolder.createDate = (TextView) convertView.findViewById(R.id.moment_create_date);
+			momentHolder.publicText = (TextView) convertView.findViewById(R.id.moment_is_public);
+			momentHolder.collectImg = (ImageView) convertView.findViewById(R.id.moment_is_collect_img);
+			momentHolder.articleImg = (ImageView) convertView.findViewById(R.id.moment_article_img);
+			momentHolder.articleTitle = (TextView) convertView.findViewById(R.id.moment_article_title);
+			momentHolder.articleAbstract = (TextView) convertView.findViewById(R.id.moment_article_abstract);
+			momentHolder.label = (ImageView) convertView.findViewById(R.id.moment_label_img);
+			momentHolder.labelText = (TextView) convertView.findViewById(R.id.moment_label_text);
+			momentHolder.momentItemLayout = (LinearLayout) convertView.findViewById(R.id.moment_item_layout);
+			momentHolder.audioImg = (ImageView) convertView.findViewById(R.id.moment_record_img);
+			momentHolder.dirtyImg = (ImageView) convertView.findViewById(R.id.moment_dirty_moment);
 			convertView.setTag(momentHolder);
 		} else {
 			momentHolder = (MomentPlaHolder) convertView.getTag();
@@ -124,18 +115,24 @@ public class MomentPlaAdapter extends BaseAdapter {
 					momentHolder.articleImg, this.options);
 		}
 		momentHolder.articleTitle.setText(moment.getTitle());
-		momentHolder.articleContent.setText(moment.getContent());
+		momentHolder.articleAbstract.setText(moment.getContentAbstract());
 		momentHolder.label.setImageResource(R.drawable.label);
-		if (moment.getLabel() == "" || moment.getLabel().equals("")
-				|| moment.getLabel() == null) {
+		if (StrUtils.isEmpty(moment.getLabel())) {
 			momentHolder.labelText.setText("暂无标签");
 		} else {
-			momentHolder.labelText.setText(moment.getLabel());
+			momentHolder.labelText.setText(StrUtils.subString(moment.getLabel(),8));
 		}
-		if (moment.getAudioUrl() != null && !moment.getAudioUrl().equals("")) {
+		if (!StrUtils.isEmpty(moment.getAudioUrl())) {
 			momentHolder.audioImg.setVisibility(View.VISIBLE);
+		}else{
+			momentHolder.audioImg.setVisibility(View.GONE);
 		}
-
+		//本地图标
+		if(moment.getDirty() == 1){
+			momentHolder.dirtyImg.setVisibility(View.VISIBLE);
+		}else{
+			momentHolder.dirtyImg.setVisibility(View.GONE);
+		}
 		return convertView;
 	}
 
@@ -145,10 +142,11 @@ public class MomentPlaAdapter extends BaseAdapter {
 		ImageView collectImg;
 		ImageView articleImg;
 		TextView articleTitle;
-		TextView articleContent;
+		TextView articleAbstract;
 		ImageView label;
 		TextView labelText;
 		LinearLayout momentItemLayout;
 		ImageView audioImg;
+		ImageView dirtyImg;
 	}
 }

@@ -73,7 +73,9 @@ public class ApiManager {
 			public void onFailure(int statusCode, Header[] headers,
 					byte[] responseBody, Throwable error) {
 				// TODO Auto-generated method stub
-				callBack.onFailure(error.getMessage());
+				if(callBack != null){
+					callBack.onFailure(error.getMessage());
+				}
 			}
 		});
 	}
@@ -107,7 +109,10 @@ public class ApiManager {
 			public void onFailure(int statusCode, Header[] headers,
 					byte[] responseBody, Throwable error) {
 				// TODO Auto-generated method stub
-				callBack.onFailure(error.getMessage());
+				if(callBack != null){
+					callBack.onFailure(error.getMessage());
+				}
+				
 			}
 		});
 	}
@@ -141,12 +146,16 @@ public class ApiManager {
 					}
 					mapList.put(modelName, (ArrayList<? extends BaseEntity>) result);
 				}
-				callBack.onSuccess(mapList);
+				if(callBack != null){
+					callBack.onSuccess(mapList);
+				}
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			callBack.onFailure("JSON解析出现异常");
+			if(callBack != null){
+				callBack.onFailure("JSON解析出现异常");
+			}
 		}
 	}
 	/**

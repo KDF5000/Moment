@@ -272,7 +272,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			@Override
 			public void onFail(Object data, int errCode, String msg) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(HomeActivity.this, "注册失败" + msg);
+				Log.i(TAG, "注册失败" + msg);
 			}
 		});
 	}
