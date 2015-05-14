@@ -7,6 +7,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,15 +16,16 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ import com.ktl.moment.android.component.clickimagespan.TouchLinkMovementMethod;
 import com.ktl.moment.utils.StrUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 public class LabelSelectActivity extends Activity{
 
@@ -84,9 +87,44 @@ public class LabelSelectActivity extends Activity{
 		labelListView.setAdapter(labelListAdapter);
 		
 		selectedLabel = new HashMap<String,LabelPosition>();
+		inputLabelEt.setOnKeyListener(new OnKeyListener() {
+			
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
 	}
 	
-	
+	@OnClick({R.id.label_select_confirm,R.id.label_select_cancel})
+	public void OnClick(View v){
+		switch (v.getId()) {
+		case R.id.label_select_confirm:
+			Spanned s = inputLabelEt.getText();
+			ImageSpan[] imageSpans = s.getSpans(0, s.length(), ImageSpan.class);
+			List<String> labelList = new ArrayList<String>();
+			for (ImageSpan span : imageSpans) {
+				int start = s.getSpanStart(span);
+				int end = s.getSpanEnd(span);
+				String text = inputLabelEt.getText().toString();
+				String name = text.substring(start+6, end-7);
+				labelList.add(name);
+			}
+//			String inputLable = inputLabelEt.getEditableText().toString();
+//			List<String> labelList = StrUtils.extractString("<name>([\\W\\w]+)</name>", inputLable);
+			Intent intent = new Intent();
+			intent.putStringArrayListExtra("labelList", (ArrayList<String>) labelList);
+			setResult(RESULT_OK, intent);
+			finish();
+			break;
+		case R.id.label_select_cancel:
+			finish();
+			break;
+		default:
+			break;
+		}
+	}
 	
 	
 	public class LabelListAdapter extends BaseAdapter {
@@ -94,7 +132,7 @@ public class LabelSelectActivity extends Activity{
 		private LayoutInflater mInflater;
 		private List<String> mLabelList;
 		private Context mContext;
-		private List<Integer> checkedBox = new ArrayList<Integer>();
+		private Map<Integer,Boolean> checkBoxState;
 		
 		private Map<Integer,CheckBox> checkBoxMap = new HashMap<Integer, CheckBox>();
 		
@@ -103,6 +141,7 @@ public class LabelSelectActivity extends Activity{
 			this.mInflater = LayoutInflater.from(context);
 			this.mContext = context;
 			this.mLabelList = labelList;
+			this.checkBoxState = new HashMap<Integer, Boolean>();
 		}
 
 		@Override
@@ -130,6 +169,24 @@ public class LabelSelectActivity extends Activity{
 		public CheckBox getChechBox(int position){
 			return checkBoxMap.get(position);
 		}
+		/**
+		 * 设置checkbox的状态
+		 * @param position
+		 * @param state
+		 */
+		public void setCheckboxState(int position,boolean state){
+			CheckBox box = checkBoxMap.get(position);
+			if(box!=null){
+				box.setChecked(state);
+				if(state==false){
+					if(checkBoxState.containsKey(position)){
+						checkBoxState.remove(position);
+					}else{
+						checkBoxState.put(position, true);
+					}
+				}
+			}
+		}
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
@@ -146,24 +203,38 @@ public class LabelSelectActivity extends Activity{
 			final int mPosition = position;
 			String label = mLabelList.get(position);
 			holder.labelTv.setText(label);
-			holder.labelCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			holder.labelCheckBox.setOnClickListener(new OnClickListener() {
+				
 				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					String label = mLabelList.get(mPosition);
-					if(isChecked == true){
-						if(!checkedBox.contains(Integer.valueOf(mPosition))){
-							insertEditText(label,mPosition);
-							checkedBox.add(Integer.valueOf(mPosition));
-						}
+					if(!checkBoxState.containsKey(mPosition)){
+						checkBoxState.put(mPosition,true);
+						insertEditText(label,mPosition);
 					}else{
 						//移除标签
 						removeEdittextLabel(label,mPosition);
-						checkedBox.remove(Integer.valueOf(mPosition));
+						checkBoxState.remove(mPosition);
 					}
 				}
 			});
-			if(checkedBox.contains(Integer.valueOf(mPosition))){
+//			holder.labelCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+//				@Override
+//				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//					// TODO Auto-generated method stub
+//					String label = mLabelList.get(mPosition);
+//					if(isChecked == true){
+//						checkBoxState.put(mPosition,true);
+//						insertEditText(label,mPosition);
+//					}else{
+//						//移除标签
+//						removeEdittextLabel(label,mPosition);
+//						checkBoxState.remove(mPosition);
+//					}
+//				}
+//			});
+			if(checkBoxState.containsKey(mPosition)){
 				holder.labelCheckBox.setChecked(true);
 			}else{
 				holder.labelCheckBox.setChecked(false);
@@ -194,10 +265,7 @@ public class LabelSelectActivity extends Activity{
 		selectedLabel.remove(str);
 		updateSelectLabel();
 		if(listPosition>=0){
-			CheckBox checkBox = labelListAdapter.getChechBox(listPosition);
-			if(checkBox != null){
-				checkBox.setChecked(false);
-			}
+			labelListAdapter.setCheckboxState(listPosition, false);
 		}
 	}
 	/**
@@ -213,11 +281,11 @@ public class LabelSelectActivity extends Activity{
 			// 根据Bitmap对象创建ImageSpan对象
 			ImageSpan imageSpan = new ImageSpan(this, roundBitmap);
 			// 创建一个SpannableString对象，以便插入用ImageSpan对象封装的图像
-			SpannableString spannableString = new SpannableString("[name]"
-					+ str + "[/name]");
+			SpannableString spannableString = new SpannableString("<name>"
+					+ str + "</name>");
 			// 用ImageSpan对象替换face
 			spannableString.setSpan(imageSpan, 0,
-					("[name]" + str + "[/name]").length(),
+					("<name>" + str + "</name>").length(),
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			// 将选择的图片追加到EditText中光标所在位置
 			int index = inputLabelEt.getSelectionStart(); // 获取光标所在位置
@@ -260,7 +328,7 @@ public class LabelSelectActivity extends Activity{
 	/**
 	 * 设置可以点击
 	 */
-	private void setSpanClickable(final int listPosition) {
+	private void setSpanClickable( int listPosition) {
 		// 此方法比较靠谱
 		Spanned s = inputLabelEt.getText();
 		// setMovementMethod很重要，不然ClickableSpan无法获取点击事件。
@@ -282,7 +350,8 @@ public class LabelSelectActivity extends Activity{
 					int end = s.getSpanEnd(span);
 					String text = inputLabelEt.getText().toString();
 					String name = text.substring(start+6, end-7);
-					removeEdittextLabel(name, listPosition);
+					LabelPosition position = selectedLabel.get(name);
+					removeEdittextLabel(name, position.getmListPosition());
 				}
 			};
 

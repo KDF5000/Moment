@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -991,6 +992,18 @@ public class EditorActivity extends BaseActivity {
 				}
 				break;
 			}
+			case C.ActivityRequest.REQUEST_SELECT_LABEL:
+				List<String> labelList= data.getStringArrayListExtra("labelList");
+				String strLabel = "";
+				for(int i=0;i<labelList.size();i++){
+					if(i==labelList.size()-1){
+						strLabel += labelList.get(i);
+					}else{
+						strLabel += labelList.get(i) +",";
+					}
+				}
+				ToastUtil.show(this, strLabel);
+				break;
 			default:
 				break;
 			}

@@ -1,5 +1,10 @@
 package com.ktl.moment.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -104,5 +109,22 @@ public class StrUtils {
 		} catch (Exception e) {
 			return bitmap;
 		}
+	}
+	
+	/**
+	 * 根据一定的模式找到字符串W
+	 * @param pattern
+	 * @param str
+	 * @return
+	 */
+	public static List<String> extractString(String pattern,String str){
+		Pattern patternReg = Pattern.compile(pattern);
+		Matcher matcher = patternReg.matcher(str);
+	    List<String> strList = new ArrayList<String>();
+		while(matcher.find()){
+			String name = matcher.group(1);
+			strList.add(name);
+		}
+		return strList;
 	}
 }

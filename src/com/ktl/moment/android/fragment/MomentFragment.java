@@ -244,7 +244,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 
 				break;
 			case REQUEST_CODE_DELETE:
-
+				
 				break;
 			default:
 				break;

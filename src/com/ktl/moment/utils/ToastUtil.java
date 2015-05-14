@@ -1,6 +1,5 @@
 package com.ktl.moment.utils;
 
-import com.ktl.moment.android.MomentApplication;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -15,7 +14,7 @@ public class ToastUtil {
             if (context == null) {
                 return;
             }
-            toast = Toast.makeText(MomentApplication.getApplication(), text, duration);
+            toast = Toast.makeText(context, text, duration);
         }
         toast.setText("" + text); // 为安全起见，此处转换成string类型，防止text为int时出错
         toast.setDuration(duration);
