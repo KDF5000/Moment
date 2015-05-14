@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
-import com.ktl.moment.android.component.LoadingDialog;
+import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
@@ -195,7 +195,7 @@ public class LoginFragment extends AccountBaseFragment {
 				return;
 			}
 		}
-		final LoadingDialog dialog = new LoadingDialog(getActivity());
+		final LoginDialog dialog = new LoginDialog(getActivity());
 		dialog.setText("登陆中");
 		dialog.show();
 		RequestParams params = new RequestParams();

@@ -11,7 +11,7 @@ import android.widget.ListView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.RecommendAuthorAdapter;
 import com.ktl.moment.android.base.BaseActivity;
-import com.ktl.moment.android.component.LoadingDialog;
+import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
@@ -112,7 +112,7 @@ public class RecommendAuthorActivity extends BaseActivity {
 		RequestParams params = new RequestParams();
 		params.put("userId", userId);
 		params.put("focusList", focusIds);
-		final LoadingDialog dialog = new LoadingDialog(this);
+		final LoginDialog dialog = new LoginDialog(this);
 		dialog.show();
 		ApiManager.getInstance().post(this, C.API.SUBMIT_RECOMMEND_FOCUS_USER,
 				params, new HttpCallBack() {

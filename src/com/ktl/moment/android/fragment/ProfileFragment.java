@@ -28,7 +28,7 @@ import com.ktl.moment.android.activity.CameraSelectActivity;
 import com.ktl.moment.android.activity.RecommendAuthorActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.component.CircleImageView;
-import com.ktl.moment.android.component.LoadingDialog;
+import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.android.component.wheel.HoloWheelActivity;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
@@ -188,7 +188,7 @@ public class ProfileFragment extends AccountBaseFragment {
 			registerData = accountActivity.getRegisterData();
 		}
 
-		final LoadingDialog dialog = new LoadingDialog(getActivity());
+		final LoginDialog dialog = new LoginDialog(getActivity());
 		dialog.show();
 
 		RequestParams params = new RequestParams();

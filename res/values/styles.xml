@@ -18,7 +18,7 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
-    <!-- loading对话框 -->
+    <!-- dialog style -->
     <style name="dialog_style">
         <item name="android:windowBackground">@color/loding_bg</item>
         <item name="android:windowNoTitle">true</item>

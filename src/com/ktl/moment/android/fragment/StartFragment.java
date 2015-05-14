@@ -21,6 +21,7 @@ import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.activity.RecommendAuthorActivity;
 import com.ktl.moment.android.base.AccountBaseFragment;
 import com.ktl.moment.android.component.LoadingDialog;
+import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
@@ -119,6 +120,10 @@ public class StartFragment extends AccountBaseFragment {
 			break;
 		case R.id.start_register:
 			startAnim(false);
+			break;
+		case R.id.start_wechat_img:
+			LoadingDialog loading = new LoadingDialog(getActivity());
+			loading.show();
 			break;
 		default:
 			break;
@@ -293,7 +298,7 @@ public class StartFragment extends AccountBaseFragment {
 	 * @param params
 	 */
 	public void thirdPartyLogin(RequestParams params) {
-		final LoadingDialog dialog = new LoadingDialog(getActivity());
+		final LoginDialog dialog = new LoginDialog(getActivity());
 		dialog.setText("登录中");
 		dialog.show();
 		ApiManager.getInstance().post(getActivity(),
