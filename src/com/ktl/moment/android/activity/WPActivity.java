@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.MomentListViewAdapter;
@@ -31,6 +32,9 @@ public class WPActivity extends BaseActivity {
 
 	@ViewInject(R.id.wp_list_view)
 	private ZrcListView wpListview;
+
+	@ViewInject(R.id.wp_blank)
+	private ImageView blankImg;
 
 	private List<Moment> momentList;
 	private MomentListViewAdapter momentAdapter;
@@ -139,6 +143,9 @@ public class WPActivity extends BaseActivity {
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
 				List<Moment> moment = (List<Moment>) res;
+				if (momentList == null || momentList.isEmpty()) {
+					blankImg.setVisibility(View.VISIBLE);
+				}
 				if (momentList == null) {
 					momentList = new ArrayList<Moment>();
 				}

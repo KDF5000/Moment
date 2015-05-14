@@ -7,7 +7,7 @@
     <com.ktl.moment.android.component.CustomListViewPullZoom
         android:id="@+id/user_page_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:divider="@color/main_content_container_color"
         android:dividerHeight="10dp"
         android:scrollbars="none"
@@ -36,8 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/userpage_more_iv"
@@ -46,5 +46,15 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/more" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/userpage_blank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="112dp"
+        android:src="@drawable/blank_small"
+        android:visibility="gone" />
 
 </RelativeLayout>
