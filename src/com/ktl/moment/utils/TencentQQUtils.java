@@ -15,7 +15,7 @@ import android.text.TextUtils;
 
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.activity.RecommendAuthorActivity;
-import com.ktl.moment.android.component.LoadingDialog;
+import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
@@ -236,7 +236,8 @@ public class TencentQQUtils {
 	 * @param params
 	 */
 	public void thirdPartyLogin(RequestParams params) {
-		final LoadingDialog dialog = new LoadingDialog(activity);
+		final LoginDialog dialog = new LoginDialog(activity);
+		dialog.setText("登录中");
 		dialog.show();
 		ApiManager.getInstance().post(activity, C.API.USER_THIRD_PARTY_LOGIN,
 				params, new HttpCallBack() {

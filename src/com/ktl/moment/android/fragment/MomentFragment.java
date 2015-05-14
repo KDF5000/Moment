@@ -50,10 +50,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 
 	private static final String TAG = "MomentFragment";
 
-	
 	private StaggeredGridView staggeredGridView;
 	private List<Moment> momentList;
 	private MomentPlaAdapter momentPlaAdapter;
+	private ImageView blankImg;
 
 	private static final int REAUEST_CODE_OPEN = 1000;
 	private static final int REAUEST_CODE_LABEL = 1001;
@@ -64,54 +64,60 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	private int pageSize = 20;
 	private int pageNum = 1;
 
-	private boolean isSyncing = false;//是否正在同步
+	private boolean isSyncing = false;// 是否正在同步
 	MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
-	
-	private ImageView navRightImg;//同步图标
-	private AnimationDrawable syncAnimationDrawable ;
-	
+
+	private ImageView navRightImg;// 同步图标
+	private AnimationDrawable syncAnimationDrawable;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View view = inflater.inflate(R.layout.fragment_moment, container, false);
+		View view = inflater
+				.inflate(R.layout.fragment_moment, container, false);
 		navRightImg = ((HomeActivity) getActivity()).getTitleRightImg();
 		momentList = new ArrayList<Moment>();
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.moment_pla_list);
+		blankImg = (ImageView) view.findViewById(R.id.moment_blank);
 		getDataFromDB();
-		
+
 		momentList = new ArrayList<Moment>();
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
 		momentPlaAdapter.notifyDataSetChanged();
 		staggeredGridView.setAdapter(momentPlaAdapter);
-		
+
 		initEvent();
 		return view;
 	}
+
 	/**
 	 * 开始同步动画
 	 */
-	private void startSyncAnimation(){
-		if(syncAnimationDrawable==null || !syncAnimationDrawable.isRunning()){
+	private void startSyncAnimation() {
+		if (syncAnimationDrawable == null || !syncAnimationDrawable.isRunning()) {
 			navRightImg.setImageResource(R.anim.sync_animation);
-			syncAnimationDrawable = (AnimationDrawable) navRightImg.getDrawable();
+			syncAnimationDrawable = (AnimationDrawable) navRightImg
+					.getDrawable();
 			syncAnimationDrawable.start();
 			isSyncing = true;
 		}
 	}
+
 	/**
 	 * 停止同步动画
 	 */
-	private void stopSyncAnimation(){
-		if(syncAnimationDrawable!=null && syncAnimationDrawable.isRunning()){
+	private void stopSyncAnimation() {
+		if (syncAnimationDrawable != null && syncAnimationDrawable.isRunning()) {
 			syncAnimationDrawable.stop();
 			navRightImg.setImageResource(R.drawable.sync_1);
 			isSyncing = false;
 			syncAnimationDrawable = null;
 		}
 	}
+
 	/**
 	 * 初始化事件
 	 */
@@ -122,17 +128,17 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-//					ToastUtil.show(getActivity(), "开始同步");
-					if(isSyncing == false){
+					// ToastUtil.show(getActivity(), "开始同步");
+					if (isSyncing == false) {
 						startSyncAnimation();
 						// 1.从本地数据库查找所有没有上传到服务端的灵感
 						((HomeActivity) getActivity()).getDbData(
 								C.DbTaskId.MOMENT_GET_DIRTY_MOMENT,
 								DbTaskType.findByCondition, Moment.class,
 								WhereBuilder.b("dirty", "=", 1));//
-					}else{
+					} else {
 						stopSyncAnimation();
-						//取消所有的请求
+						// 取消所有的请求
 						ApiManager.getInstance().cancelAllRequest();
 					}
 				}
@@ -147,7 +153,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		pageNum = 1;
 		Selector selector = Selector.from(Moment.class)
 				.orderBy("postTime", true).limit(pageSize)
-				.offset(pageSize * (pageNum-1));
+				.offset(pageSize * (pageNum - 1));
 		((HomeActivity) getActivity()).getDbData(C.DbTaskId.GET_MOMENT_LIST,
 				DbTaskType.selectByCustom, selector);
 	}
@@ -156,58 +162,63 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	 * 获取取数据
 	 */
 	private void getDataFromServer() {
-		if(!BasicInfoUtil.getInstance(getActivity()).isNetworkConnected()){
+		if (!BasicInfoUtil.getInstance(getActivity()).isNetworkConnected()) {
 			ToastUtil.show(getActivity(), "请检查您的网络连接~");
-			return ;
+			return;
 		}
-		RequestParams params = new  RequestParams();
+		RequestParams params = new RequestParams();
 		User userInfo = Account.getUserInfo();
-		if(userInfo == null){
+		if (userInfo == null) {
 			ToastUtil.show(getActivity(), "用户没有登录，请重新登录");
 			((HomeActivity) getActivity()).returnLogin();
-			return ;
+			return;
 		}
 		params.put("userId", userInfo.getUserId());
 		params.put("pageNum", pageNum++);
 		params.put("pageSize", pageSize);
-		ApiManager.getInstance().post(getActivity(), C.API.GET_MY_MOMENT_LIST, params, new HttpCallBack() {
-			
-			@Override
-			public void onSuccess(Object res) {
-				// TODO Auto-generated method stub
-				@SuppressWarnings("unchecked")
-				List<Moment> list = (List<Moment>) res;
-				if(list==null || list.isEmpty()){
-					ToastUtil.show(getActivity(), "同步完成");
-					stopSyncAnimation();
-					return;
-				}
-				if(momentList==null){
-					momentList = new ArrayList<Moment>();
-				}
-				List<Moment> loacalList = new ArrayList<Moment>();
-				for(Moment moment : list){
-					moment.setMomentUid(EncryptUtil.md5(moment.getAuthorId()+"",moment.getTitle(), moment.getPostTime()).hashCode());
-					loacalList.add(moment);
-				}
-				momentList.clear();
-				momentList.addAll(loacalList);
-				momentPlaAdapter.notifyDataSetChanged();
-				//保存到本地数据库
-				((HomeActivity) getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE,
-						Moment.class, loacalList);
-				//继续获取数据
-				getDataFromServer();
-			}
-			
-			@Override
-			public void onFailure(Object res) {
-				// TODO Auto-generated method stub
-				ToastUtil.show(getActivity(), res.toString());
-				stopSyncAnimation();
-			}
-		}, "Moment");
-		
+		ApiManager.getInstance().post(getActivity(), C.API.GET_MY_MOMENT_LIST,
+				params, new HttpCallBack() {
+
+					@Override
+					public void onSuccess(Object res) {
+						// TODO Auto-generated method stub
+						@SuppressWarnings("unchecked")
+						List<Moment> list = (List<Moment>) res;
+						if (list == null || list.isEmpty()) {
+							ToastUtil.show(getActivity(), "同步完成");
+							stopSyncAnimation();
+							return;
+						}
+						if (momentList == null) {
+							momentList = new ArrayList<Moment>();
+						}
+						List<Moment> loacalList = new ArrayList<Moment>();
+						for (Moment moment : list) {
+							moment.setMomentUid(EncryptUtil.md5(
+									moment.getAuthorId() + "",
+									moment.getTitle(), moment.getPostTime())
+									.hashCode());
+							loacalList.add(moment);
+						}
+						momentList.clear();
+						momentList.addAll(loacalList);
+						momentPlaAdapter.notifyDataSetChanged();
+						// 保存到本地数据库
+						((HomeActivity) getActivity()).saveDbData(
+								C.DbTaskId.MOMENT_LIST_SAVE, Moment.class,
+								loacalList);
+						// 继续获取数据
+						getDataFromServer();
+					}
+
+					@Override
+					public void onFailure(Object res) {
+						// TODO Auto-generated method stub
+						ToastUtil.show(getActivity(), res.toString());
+						stopSyncAnimation();
+					}
+				}, "Moment");
+
 	}
 
 	@Override
@@ -230,7 +241,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				break;
 			}
 			case REAUEST_CODE_LABEL:
-				
+
 				break;
 			case REQUEST_CODE_DELETE:
 
@@ -290,6 +301,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		startActivityForResult(dialogIntent, REAUEST_CODE_OPEN);
 		return true;
 	}
+
 	/**
 	 * 
 	 * @param taskId
@@ -323,29 +335,31 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 						// TODO Auto-generated method stub
 						// 从服务端获取数据
 						ToastUtil.show(getActivity(), syncCount + "");
-						//从服务端获取数据
+						// 从服务端获取数据
 						getDataFromServer();
 					}
 				});
-				if(isSyncing == true){
+				if (isSyncing == true) {
 					syncMomentManager.startSync();
-				}else{
+				} else {
 					syncMomentManager.killSync("取消同步");
 				}
 			} else {
-				pageNum =1;
+				pageNum = 1;
 				getDataFromServer();
 			}
 			break;
 		}
 		case C.DbTaskId.GET_MOMENT_LIST:
 			List<Moment> list = (List<Moment>) res;
-			if(list == null){
-				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT).show();
-				return ;
+			if (list == null) {
+				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT)
+						.show();
+				blankImg.setVisibility(View.VISIBLE);
+				return;
 			}
 			try {
-				if(momentList==null){
+				if (momentList == null) {
 					momentList = new ArrayList<Moment>();
 				}
 				momentList.clear();
@@ -360,7 +374,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			break;
 		}
 	}
-	
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub

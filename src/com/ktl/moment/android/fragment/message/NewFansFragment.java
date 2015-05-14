@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 public class NewFansFragment extends Fragment {
@@ -28,11 +29,15 @@ public class NewFansFragment extends Fragment {
 	@ViewInject(R.id.msg_new_fans_listview)
 	private ListView fansListView;
 
+	@ViewInject(R.id.fans_blank_img)
+	private ImageView blankImg;
+
 	private List<User> fansList;
 	private MsgNewFansAdapter newFansAdapter;
 
-	private int page =1;
+	private int page = 1;
 	private int pageSize = 10;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -59,19 +64,22 @@ public class NewFansFragment extends Fragment {
 		}
 		User spUser = (User) SharedPreferencesUtil.getInstance().getObject(
 				C.SPKey.SPK_LOGIN_INFO);
-		
+
 		RequestParams params = new RequestParams();
 		params.put("userId", spUser.getUserId());
 		params.put("pageNum", page++);
 		params.put("pageSize", pageSize);
-		ApiManager.getInstance().post(getActivity(),
-				C.API.GET_MY_FANS_LIST, params, new HttpCallBack() {
+		ApiManager.getInstance().post(getActivity(), C.API.GET_MY_FANS_LIST,
+				params, new HttpCallBack() {
 
 					@Override
 					public void onSuccess(Object res) {
 						// TODO Auto-generated method stub
 						@SuppressWarnings("unchecked")
 						List<User> user = (List<User>) res;
+						if (user == null || user.isEmpty()) {
+							blankImg.setVisibility(View.VISIBLE);
+						}
 						fansList.addAll(user);
 						newFansAdapter.notifyDataSetChanged();
 					}

@@ -101,6 +101,9 @@ public class UserPageActivity extends Activity {
 
 	@ViewInject(R.id.userpage_focus_img)
 	private ImageView focusImg;
+	
+	@ViewInject(R.id.userpage_blank)
+	private ImageView blankImg;
 
 	private List<Moment> momentList;
 	private User user;
@@ -269,11 +272,13 @@ public class UserPageActivity extends Activity {
 		case R.id.user_moment_nav:
 			currentNavFlag = "moment";
 			currentNavSelect = "灵感";
+			blankImg.setVisibility(View.GONE);
 			refresh();
 			break;
 		case R.id.user_watch_nav:
 			currentNavFlag = "watch";
 			currentNavSelect = "围观";
+			blankImg.setVisibility(View.GONE);
 			refresh();
 			break;
 		case R.id.user_focus_nav:
@@ -328,6 +333,9 @@ public class UserPageActivity extends Activity {
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
 				List<Moment> moment = (List<Moment>) res;
+				if(moment == null || moment.isEmpty()){
+					blankImg.setVisibility(View.VISIBLE);
+				}
 				momentList.clear();
 				momentList.addAll(moment);
 				momentListAdapter.notifyDataSetChanged();

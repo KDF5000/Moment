@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 public class NotificationFragment extends Fragment {
@@ -28,12 +29,15 @@ public class NotificationFragment extends Fragment {
 	@ViewInject(R.id.msg_notify_listview)
 	private ListView notifyListview;
 
+	@ViewInject(R.id.notification_blank_img)
+	private ImageView blankImg;
+
 	private List<Notification> notifyList;
 	private MsgNotificationAdapter notifyAdapter;
 
 	private int page = 1;
 	private int pageSize = 10;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -70,6 +74,9 @@ public class NotificationFragment extends Fragment {
 						// TODO Auto-generated method stub
 						@SuppressWarnings("unchecked")
 						List<Notification> notify = (List<Notification>) res;
+						if (notify == null || notify.isEmpty()) {
+							blankImg.setVisibility(View.VISIBLE);
+						}
 						notifyList.addAll(notify);
 						notifyAdapter.notifyDataSetChanged();
 					}

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.ktl.moment.R;
@@ -32,11 +33,14 @@ public class PersonalLetterFragment extends Fragment {
 	@ViewInject(R.id.personal_msg_listview)
 	private ListView msgListview;
 
+	@ViewInject(R.id.personal_msg_blank_img)
+	private ImageView blankImg;
+
 	private List<Message> msgList;
 	private MsgPersonalAdapter msgPersonalAdapter;
 	private int page = 1;
 	private int pageSize = 10;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -57,8 +61,8 @@ public class PersonalLetterFragment extends Fragment {
 				ImageManager.getInstance().getDisplayImageOptions());
 		msgListview.setAdapter(msgPersonalAdapter);
 	}
-	
-	private void initEvent(){
+
+	private void initEvent() {
 		msgListview.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -67,7 +71,8 @@ public class PersonalLetterFragment extends Fragment {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(getActivity(), MsgActivity.class);
 				intent.putExtra("userId", msgList.get(position).getSendUserId());
-				intent.putExtra("userName", msgList.get(position).getSendUserName());
+				intent.putExtra("userName", msgList.get(position)
+						.getSendUserName());
 				startActivity(intent);
 			}
 		});
@@ -90,6 +95,9 @@ public class PersonalLetterFragment extends Fragment {
 						// TODO Auto-generated method stub
 						@SuppressWarnings("unchecked")
 						List<Message> msg = (List<Message>) res;
+						if (msg == null || msg.isEmpty()) {
+							blankImg.setVisibility(View.VISIBLE);
+						}
 						msgList.addAll(msg);
 						msgPersonalAdapter.notifyDataSetChanged();
 					}
