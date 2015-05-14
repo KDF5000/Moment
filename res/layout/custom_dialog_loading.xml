@@ -1,68 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:gravity="center" >
-    
-    <LinearLayout 
+    tools:ignore="UselessParent,ContentDescription" >
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/dialog_loading_bg"
-        android:orientation="vertical"
-        android:gravity="center">
-        
-        <RelativeLayout 
+        android:layout_centerInParent="true"
+        android:background="@drawable/loading_bg_shape"
+        android:paddingBottom="3dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="22dp"
+        android:paddingTop="3dp" >
+
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal">
-            
-<!--             <ImageView 
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" >
+
+            <ImageView
+                android:id="@+id/loading_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:padding="3dp"
-                android:src="@drawable/dialog_logo"/> -->
-            
-            <ImageView 
-                android:id="@+id/route_img"
+                android:src="@drawable/loading_frame_anim_draw" />
+
+            <TextView
+                android:id="@+id/loading_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/dialog_loading_rotate_anim_img"/>
+                android:layout_toRightOf="@+id/loading_img"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
         </RelativeLayout>
-        
-        <LinearLayout 
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_horizontal">
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:singleLine="true"
-                android:text="@string/dialog_is_loading"
-                android:textColor="#6F6868"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tv_point"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:text="@string/dialog_suffix"
-                android:textColor="#6F6868"
-                android:textSize="12sp" />
-        </LinearLayout>
-        
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

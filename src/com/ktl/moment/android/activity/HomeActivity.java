@@ -83,8 +83,8 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		getLayoutInflater()
 				.inflate(R.layout.activity_home, contentLayout, true);
 
-		setHomeTitleVisible(true);
-		setTitleTvName(R.string.attention_text_view);
+		setMiddleTitleVisible(true);
+		setMiddleTitleName(R.string.attention_text_view);
 		setBaseActivityBgColor(getResources()
 				.getColor(R.color.main_title_color));// 设置title颜色
 		setBaseContainerBgColor(getResources().getColor(
@@ -111,12 +111,15 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 					setTitleTvNameEmpty();
 					setMiddleFindTabVisible(true);
 					setTitleRightImgVisible(false);
+					setMiddleTitleVisible(false);
 					break;
 				case C.menu.FRAGMENT_DYNAMIC_MENU_ID:
 					tag = C.menu.FRAGMENT_DYNAMIC_TAG;
-					setTitleTvName(R.string.attention_text_view);
+					setMiddleTitleVisible(true);
+					setMiddleTitleName(R.string.attention_text_view);
 					setTitleRightImgVisible(false);
 					setMiddleFindTabVisible(false);
+					setTitleTvNameEmpty();
 					hideRedDot(dynamicRedDotView);
 					break;
 				case C.menu.FRAGMENT_ADD_MOMENT_MENU_ID:
@@ -127,16 +130,20 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 					return;
 				case C.menu.FRAGMENT_MOMENT_MENU_ID:
 					tag = C.menu.FRAGMENT_MOMENT_TAG;
+					setHomeTitleVisible(true);
 					setTitleTvName(R.string.moment_text_view);
-					setMiddleFindTabVisible(false);
 					setTitleRightImgVisible(true);
 					setTitleRightImg(R.drawable.sync_1);
+					setMiddleTitleVisible(false);
+					setMiddleFindTabVisible(false);
 					break;
 				case C.menu.FRAGMENT_ME_MENU_ID:
 					tag = C.menu.FRAGMENT_ME_TAG;
-					setTitleTvName(R.string.me_text_view);
+					setMiddleTitleVisible(true);
+					setMiddleTitleName(R.string.me_text_view);
 					setMiddleFindTabVisible(false);
 					setTitleRightImgVisible(false);
+					setTitleTvNameEmpty();
 					hideRedDot(meRedDotView);
 					break;
 				}

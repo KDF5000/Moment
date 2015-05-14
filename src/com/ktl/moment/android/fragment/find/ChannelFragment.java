@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.ktl.moment.android.component.DragGridView.OnChanageListener;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Channel;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.net.ApiManager;
 
 public class ChannelFragment extends BaseFragment {
@@ -50,7 +52,7 @@ public class ChannelFragment extends BaseFragment {
 	}
 
 	private void getData() {
-		if(channelList == null){
+		if (channelList == null) {
 			channelList = new ArrayList<Channel>();
 		}
 		ApiManager.getInstance().get(getActivity(), C.API.GET_CHENNAL_LIST,
@@ -61,9 +63,13 @@ public class ChannelFragment extends BaseFragment {
 						// TODO Auto-generated method stub
 						@SuppressWarnings("unchecked")
 						List<Channel> list = (List<Channel>) res;
+						List<Channel> channel = getChannelList(list);
 						channelList.clear();
-						channelList.addAll(list);
+						channelList.addAll(channel);
 						channelAdapter.notifyDataSetChanged();
+
+						SharedPreferencesUtil.getInstance().putList(
+								C.SPKey.SPK_CHANNEL_LIST, channel);
 					}
 
 					@Override
@@ -111,8 +117,22 @@ public class ChannelFragment extends BaseFragment {
 
 				channelList.set(to, temp);
 				channelAdapter.notifyDataSetChanged();
+
+				// 每次移动了顺序后保存list到SP
+				SharedPreferencesUtil.getInstance().putList(
+						C.SPKey.SPK_CHANNEL_LIST, channelList);
 			}
 		});
 
+	}
+
+	private List<Channel> getChannelList(List<Channel> list) {
+		// 从SP取list
+		List<Channel> spChannelList = SharedPreferencesUtil.getInstance()
+				.getList(C.SPKey.SPK_CHANNEL_LIST);
+		if (spChannelList == null || spChannelList.isEmpty()) {
+			return list;
+		}
+		return spChannelList;
 	}
 }

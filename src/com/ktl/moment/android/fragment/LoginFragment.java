@@ -196,6 +196,7 @@ public class LoginFragment extends AccountBaseFragment {
 			}
 		}
 		final LoadingDialog dialog = new LoadingDialog(getActivity());
+		dialog.setText("登陆中");
 		dialog.show();
 		RequestParams params = new RequestParams();
 		params.put("mobilePhone", phone);

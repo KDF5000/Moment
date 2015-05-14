@@ -294,6 +294,7 @@ public class StartFragment extends AccountBaseFragment {
 	 */
 	public void thirdPartyLogin(RequestParams params) {
 		final LoadingDialog dialog = new LoadingDialog(getActivity());
+		dialog.setText("登录中");
 		dialog.show();
 		ApiManager.getInstance().post(getActivity(),
 				C.API.USER_THIRD_PARTY_LOGIN, params, new HttpCallBack() {

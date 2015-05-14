@@ -10,7 +10,7 @@ public class C {
 		 * url基地址
 		 */
 		 private static final String URL_BASE = "http://yfmoment.tiger.mopaas.com/";
-//		private static final String URL_BASE = "http://222.20.57.33:8080/";
+//		private static final String URL_BASE = "http://115.156.249.72:8080/";
 		// private static String URL_BASE =
 		// "http://mymoment.sinaapp.com/MomentService/";
 		/**
@@ -348,6 +348,7 @@ public class C {
 		public static final String SWITCH_TO_MOMENT_FG = "SwitchToMomentFragment";// 切换到moment页面
 		
 		public static final String SPK_IS_SCAN_SPLASH = "splash";//是否浏览过引导页 true | false;
+		public static final String SPK_CHANNEL_LIST = "channelList";//保存用户自定义的channel顺序
 	}
 
 	/**

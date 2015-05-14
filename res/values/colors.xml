@@ -10,7 +10,7 @@
     <color name="verify_resend_on_finish_text_color">#535353</color>
     <color name="verify_resend_btn_on_finish_color">#ffffff</color>
     
-    <color name="bocop_dialog_bg">#77000000</color>
+    <color name="loding_bg">#00000000</color>
     
     <!-- 大众色系 -->
     <color name="white">#ffffff</color>
