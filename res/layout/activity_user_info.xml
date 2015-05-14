@@ -24,7 +24,7 @@
             android:layout_width="83dp"
             android:layout_height="83dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/login_forget" />
+            android:src="@drawable/default_img" />
 
         <LinearLayout
             android:id="@+id/user_page_nickname"

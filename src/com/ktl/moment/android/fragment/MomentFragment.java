@@ -35,6 +35,7 @@ import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.momentstore.MomentSyncTask;
 import com.ktl.moment.momentstore.MomentSyncTaskManager;
 import com.ktl.moment.momentstore.MomentSyncTaskManager.MomentSyncCallback;
+import com.ktl.moment.utils.BasicInfoUtil;
 import com.ktl.moment.utils.EncryptUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.ToastUtil;
@@ -155,10 +156,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	 * 获取取数据
 	 */
 	private void getDataFromServer() {
-		   /*userId:31243,        //用户id
-		    authorId:212,        //被查看的用户id
-		    pageNum:0,
-		    pageSize:10*/
+		if(!BasicInfoUtil.getInstance(getActivity()).isNetworkConnected()){
+			ToastUtil.show(getActivity(), "请检查您的网络连接~");
+			return ;
+		}
 		RequestParams params = new  RequestParams();
 		User userInfo = Account.getUserInfo();
 		if(userInfo == null){
@@ -176,8 +177,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				// TODO Auto-generated method stub
 				@SuppressWarnings("unchecked")
 				List<Moment> list = (List<Moment>) res;
-				if(list==null){
+				if(list==null || list.isEmpty()){
 					ToastUtil.show(getActivity(), "同步完成");
+					stopSyncAnimation();
 					return;
 				}
 				if(momentList==null){
@@ -192,11 +194,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				momentList.addAll(loacalList);
 				momentPlaAdapter.notifyDataSetChanged();
 				//保存到本地数据库
-				
 				((HomeActivity) getActivity()).saveDbData(C.DbTaskId.MOMENT_LIST_SAVE,
 						Moment.class, loacalList);
-				stopSyncAnimation();
-				ToastUtil.show(getActivity(), "同步完成");
+				//继续获取数据
+				getDataFromServer();
 			}
 			
 			@Override

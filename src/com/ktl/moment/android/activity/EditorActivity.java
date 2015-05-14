@@ -764,6 +764,12 @@ public class EditorActivity extends BaseActivity {
 	}
 
 	private void saveContent() {
+		User user = Account.getUserInfo();
+		if( user == null){
+			ToastUtil.show(this, "请先登录");
+			actionStart(AccountActivity.class);
+			return;
+		}
 		// 没有网络的话保存到本地
 		BasicInfoUtil basicInfoUtil = BasicInfoUtil.getInstance(this);
 		if (moment == null) {
@@ -790,8 +796,7 @@ public class EditorActivity extends BaseActivity {
 		String postTime = TimeFormatUtil.getCurrentDateTime();
 		moment.setPostTime(postTime);
 		// 用用户id，灵感标题，发布时间作为保存数据库的momentid
-		moment.setMomentUid(EncryptUtil.md5("1",
-				articleTitle.getText().toString(), postTime).hashCode());
+		moment.setMomentUid(EncryptUtil.md5(user.getUserId()+"",articleTitle.getText().toString(), postTime).hashCode());
 
 		if (basicInfoUtil.isNetworkConnected()) {// 有网
 			moment.setDirty(1);// 本地的标志
@@ -825,8 +830,7 @@ public class EditorActivity extends BaseActivity {
 											public void OnComplate(String key) {
 												// TODO Auto-generated method
 												// stub
-												moment.setAudioUrl(C.API.QINIU_BASE_URL
-														+ key);
+												moment.setAudioUrl(C.API.QINIU_BASE_URL+ key);
 												uploadFilte2Qiniu(token);
 											}
 										});
@@ -847,6 +851,7 @@ public class EditorActivity extends BaseActivity {
 					}, "QiniuToken");
 
 		} else {
+			moment.setDirty(1);
 			saveMomentDb(moment);
 		}
 	}
@@ -862,8 +867,7 @@ public class EditorActivity extends BaseActivity {
 			@Override
 			public void onError(String msg) {
 				// TODO Auto-generated method stub
-				Toast.makeText(EditorActivity.this, msg, Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(EditorActivity.this, msg, Toast.LENGTH_SHORT).show();
 				saveMomentDb(moment);
 			}
 
@@ -918,14 +922,9 @@ public class EditorActivity extends BaseActivity {
 								// TODO Auto-generated method stub
 								// 保存数据库
 								saveMomentDb(moment);
-								// 跳转到灵感页面
 								// 跳回到主页面刷新moment页面的标志
-								SharedPreferencesUtil
-										.getInstance()
-										.setBoolean(
-												C.SPKey.SWITCH_TO_MOMENT_FG,
-												true);
-								finish();
+//								SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
+//								finish();
 							}
 
 							@Override
@@ -933,15 +932,14 @@ public class EditorActivity extends BaseActivity {
 								// TODO Auto-generated method stub
 								// 保存到本地数据库
 								Log.i("EditorActivity", res.toString());
-								ToastUtil.show(EditorActivity.this,
-										"网络出错，保存到本地-->" + res.toString());
+								ToastUtil.show(EditorActivity.this,"网络出错，保存到本地-->" + res.toString());
 								moment.setContent(contentRichEditText.getText()
 										.toString());
 								moment.setDirty(1);
 								saveMomentDb(moment);
-								// 跳回到主页面刷新moment页面的标志
-								SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
-								finish();
+//								// 跳回到主页面刷新moment页面的标志
+//								SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
+//								finish();
 							}
 						}, "");
 			}
@@ -1015,6 +1013,9 @@ public class EditorActivity extends BaseActivity {
 		switch (taskId) {
 		case C.DbTaskId.EDITOR_MOMENT_SAVE:
 			Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
+			// 跳回到主页面刷新moment页面的标志
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
+			finish();
 			break;
 		default:
 			break;

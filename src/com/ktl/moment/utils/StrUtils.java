@@ -13,5 +13,16 @@ public class StrUtils {
 		}
 		return false;
 	}
-	
+	/**
+	 * 截取指定长度的字符串
+	 * @param str
+	 * @param count
+	 * @return
+	 */
+	public static String subString(String str,int count){
+		if(str.length() <= count-2){
+			return str;
+		}
+		return str.substring(0, count-2)+"...";
+	}
 }

@@ -131,7 +131,7 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 		builder.setTicker(Ticker);
 		builder.setContentTitle(title);
 		builder.setContentText(content);
-		builder.setSmallIcon(R.drawable.ic_launcher);
+		builder.setSmallIcon(R.drawable.logo);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this.mContext, 1, intent,PendingIntent.FLAG_ONE_SHOT);
 		builder.setContentIntent(pendingIntent);
 		manager.notify((int) System.currentTimeMillis(),builder.build());
