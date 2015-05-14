@@ -255,6 +255,8 @@ public class EditorActivity extends BaseActivity {
 
 		setTitleBackImgVisible(true);
 		setTitleRightImgVisible(true);
+		setTitleRightImgLeftVisible(true);
+		setTitleRightImgLeft(R.drawable.label_big);
 		setTitleBackImg(R.drawable.title_return_black);
 		if (isOpen) {
 			setTitleRightImg(R.drawable.editor_open_enable);
@@ -371,7 +373,7 @@ public class EditorActivity extends BaseActivity {
 			R.id.editor_record_delete, R.id.editor_record_pause,
 			R.id.editor_record_over, R.id.editor_record_audio,
 			R.id.editor_play_close, R.id.editor_play_start,
-			R.id.title_right_img, R.id.editor_play_delete })
+			R.id.title_right_img, R.id.editor_play_delete ,R.id.title_right_img_left})
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -433,6 +435,10 @@ public class EditorActivity extends BaseActivity {
 			editorPlayStartImg.setImageResource(R.drawable.editor_record_start);
 			break;
 		}
+		case R.id.title_right_img_left:
+			//弹出标签选择
+			Intent intent = new Intent(this,LabelSelectActivity.class);
+			startActivityForResult(intent, C.ActivityRequest.REQUEST_SELECT_LABEL);
 		default:
 			break;
 		}

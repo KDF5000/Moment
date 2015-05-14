@@ -268,7 +268,7 @@
         </activity>
         <!-- 标签选择对话框 -->
         <activity
-            android:name="com.ktl.moment.android.activity.LabelSelectAcvity"
+            android:name="com.ktl.moment.android.activity.LabelSelectActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>
         
