@@ -234,6 +234,9 @@ public class EditorActivity extends BaseActivity {
 				editorRecordAudio.setVisibility(View.VISIBLE);
 			}
 		}
+		if(moment==null){
+			moment = new Moment();
+		}
 	}
 
 	private void init() {
