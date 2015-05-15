@@ -105,7 +105,20 @@ public class LabelSelectActivity extends Activity{
 					insertEditText(newStr.trim(), -1);//插入
 					break;
 				case KeyEvent.KEYCODE_DEL://删除
-					updateSelectLabel();
+					String deleteAfterStr = inputLabelEt.getEditableText().toString();
+					//如果删除之后的长度小于之前的说明删除了标签
+					if(deleteAfterStr.length() < afterInsertEditString.length()){
+						String deleteStr = afterInsertEditString.substring(deleteAfterStr.length());
+						List<String> list = StrUtils.extractString("<name>([\\w\\W]+)</name>", deleteStr);
+						Log.i(TAG,"-->" + list.size());
+						afterInsertEditString = inputLabelEt.getEditableText().toString();
+						for(String label:list){
+							int listPosition = StrUtils.findPositionInList(labelList, new String(label));
+							if(listPosition>=0){//说明存在list中
+								labelListAdapter.setCheckboxState(listPosition, false);
+							}
+						}
+					}
 					break;
 				default:
 					break;
@@ -272,7 +285,6 @@ public class LabelSelectActivity extends Activity{
 	 * @param listPosition
 	 */
 	private void removeEdittextLabel(String str,int listPosition){
-		Spanned s = inputLabelEt.getText();
 		LabelPosition labelLosition = selectedLabel.get(str);
 		if(labelLosition==null){
 			return ;
@@ -319,6 +331,7 @@ public class LabelSelectActivity extends Activity{
 			int end = edit_text.getSpanEnd(imageSpan);
 			LabelPosition labelPosition = new LabelPosition(start,end, listPosition);
 			selectedLabel.put(str, labelPosition);
+			inputLabelEt.getEditableText().append(" ");
 			afterInsertEditString = inputLabelEt.getEditableText().toString();
 		} else {
 			Log.i("MainActivity", "插入失败");

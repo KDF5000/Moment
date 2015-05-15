@@ -1002,7 +1002,7 @@ public class EditorActivity extends BaseActivity {
 						strLabel += labelList.get(i) +",";
 					}
 				}
-				ToastUtil.show(this, strLabel);
+				moment.setLabel(strLabel);
 				break;
 			default:
 				break;

@@ -127,4 +127,21 @@ public class StrUtils {
 		}
 		return strList;
 	}
+	/**
+	 * 知道对象在list中的位置
+	 * @param list
+	 * @param obj
+	 * @return
+	 */
+	public static <T> int findPositionInList(List<T> list,Object obj){
+		if(list==null){
+			return -1;
+		}
+		for(int i=0;i<list.size();i++){
+			if(list.get(i) == obj || list.get(i).equals(obj)){
+				return i;
+			}
+		}
+		return -1;
+	}
 }
