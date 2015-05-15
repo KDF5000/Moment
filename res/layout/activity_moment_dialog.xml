@@ -54,7 +54,7 @@
         android:layout_height="0.5dp"
         android:background="#dcdcdc" />
 
-    <Button
+    <!-- <Button
         android:id="@+id/moment_dialog_label"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -68,7 +68,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#dcdcdc" />
+        android:background="#dcdcdc" /> -->
 
     <Button
         android:id="@+id/moment_dialog_delete"

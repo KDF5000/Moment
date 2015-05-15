@@ -53,7 +53,7 @@ public class StrUtils {
 		Canvas c = new Canvas(bp);
 		Paint paint1 = new Paint();
 		paint1.setColor(Color.BLACK);
-		c.drawColor(Color.RED);// 画布颜色
+		c.drawColor(Color.parseColor("#41aaf2"));// 画布颜色 
 
 		Paint paint2 = new Paint();// 画姓名前边的间隔
 		paint2.setColor(Color.WHITE);
@@ -72,7 +72,7 @@ public class StrUtils {
 		
 		//画取消按钮
 		Paint paint3 = new Paint();// 画姓名前边的间隔
-		paint3.setColor(Color.BLACK);
+		paint3.setColor(Color.parseColor("#dcdcdc"));
 		paint3.setStrokeWidth(3f);
 		c.drawLine(len*40 + 15, 15, len*40 + 40, 40, paint3);
 		c.drawLine(len*40 + 40, 15,len*40 + 15, 40, paint3);

@@ -60,6 +60,7 @@ public class LabelSelectActivity extends Activity{
 	
 	private Map<String,LabelPosition> selectedLabel;
 	private String afterInsertEditString = "";
+	private Map<Integer,Boolean> checkBoxstate;
 	@Override 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -83,51 +84,83 @@ public class LabelSelectActivity extends Activity{
 		labelList.add("互联网14");
 		labelList.add("物联网15");
 		labelList.add("通信16");
-		labelListAdapter = new LabelListAdapter(this, labelList);
-		
-		labelListView.setAdapter(labelListAdapter);
+		checkBoxstate = new HashMap<Integer, Boolean>();
 		
 		selectedLabel = new HashMap<String,LabelPosition>();
-		inputLabelEt.setOnKeyListener(new OnKeyListener() {
-			
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				// TODO Auto-generated method stub
-				switch (keyCode) {
-				case KeyEvent.KEYCODE_ENTER://回车
-					String str = inputLabelEt.getEditableText().toString();
-					String newStr = str.substring(afterInsertEditString.length());
-					Log.i(TAG, "newStr-->"+newStr.length()+"-->bool"+StrUtils.isEmpty(newStr));
-					if(StrUtils.isEmpty(newStr) || newStr=="\n" || newStr.endsWith("\n")){
-						break;
-					}
-					inputLabelEt.getEditableText().delete(afterInsertEditString.length(),str.length());
-					insertEditText(newStr.trim(), -1);//插入
-					break;
-				case KeyEvent.KEYCODE_DEL://删除
-					String deleteAfterStr = inputLabelEt.getEditableText().toString();
-					//如果删除之后的长度小于之前的说明删除了标签
-					if(deleteAfterStr.length() < afterInsertEditString.length()){
-						String deleteStr = afterInsertEditString.substring(deleteAfterStr.length());
-						List<String> list = StrUtils.extractString("<name>([\\w\\W]+)</name>", deleteStr);
-						Log.i(TAG,"-->" + list.size());
-						afterInsertEditString = inputLabelEt.getEditableText().toString();
-						for(String label:list){
-							int listPosition = StrUtils.findPositionInList(labelList, new String(label));
-							if(listPosition>=0){//说明存在list中
-								labelListAdapter.setCheckboxState(listPosition, false);
-							}
-						}
-					}
-					break;
-				default:
+		inputLabelEt.setOnKeyListener(editOnkeyListener);
+		Intent intent = getIntent();
+		String labelStr = intent.getStringExtra("label");
+		recoverLabel(labelStr);
+		
+		labelListAdapter = new LabelListAdapter(this, labelList,checkBoxstate);
+		labelListView.setAdapter(labelListAdapter);
+	}
+	/**
+	 * 还原标签
+	 * @param str
+	 */
+	private void recoverLabel(String str){
+		if(StrUtils.isEmpty(str)){
+			return ;
+		}
+		String []labelList = str.split(",");
+		if(labelList!=null){
+			Log.i(TAG,"label-->"+labelList.length);
+			int labelCount = labelList.length;
+			for(int i=0;i<labelCount;i++){
+				int position = StrUtils.findPositionInList(this.labelList, labelList[i]);
+				if(position>=0){
+					checkBoxstate.put(position, true);
+				}
+				insertEditText(labelList[i],position);
+			}
+		}
+	}
+	/**
+	 * 标签输入框的事件监听
+	 */
+	private OnKeyListener editOnkeyListener = new OnKeyListener() {
+		
+		@Override
+		public boolean onKey(View v, int keyCode, KeyEvent event) {
+			// TODO Auto-generated method stub
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_ENTER://回车
+				String str = inputLabelEt.getEditableText().toString();
+				String newStr = str.substring(afterInsertEditString.length());
+				Log.i(TAG, "newStr-->"+newStr.length()+"-->bool"+StrUtils.isEmpty(newStr));
+				if(StrUtils.isEmpty(newStr) || newStr=="\n" || newStr.endsWith("\n")){
 					break;
 				}
-				return false;
+				inputLabelEt.getEditableText().delete(afterInsertEditString.length(),str.length());
+				insertEditText(newStr.trim(), -1);//插入
+				int listPosition = StrUtils.findPositionInList(labelList, new String(newStr.trim()));
+				if(listPosition>=0){//说明存在list中
+					labelListAdapter.setCheckboxState(listPosition, true);
+				}
+				break;
+			case KeyEvent.KEYCODE_DEL://删除
+				String deleteAfterStr = inputLabelEt.getEditableText().toString();
+				//如果删除之后的长度小于之前的说明删除了标签
+				if(deleteAfterStr.length() < afterInsertEditString.length()){
+					String deleteStr = afterInsertEditString.substring(deleteAfterStr.length());
+					List<String> list = StrUtils.extractString("<name>([\\w\\W]+)</name>", deleteStr);
+					Log.i(TAG,"-->" + list.size());
+					afterInsertEditString = inputLabelEt.getEditableText().toString();
+					for(String label:list){
+						int position = StrUtils.findPositionInList(labelList, new String(label));
+						if(position>=0){//说明存在list中
+							labelListAdapter.setCheckboxState(position, false);
+						}
+					}
+				}
+				break;
+			default:
+				break;
 			}
-		});
-	}
-	
+			return false;
+		}
+	};
 	@OnClick({R.id.label_select_confirm,R.id.label_select_cancel})
 	public void OnClick(View v){
 		switch (v.getId()) {
@@ -162,17 +195,18 @@ public class LabelSelectActivity extends Activity{
 		
 		private LayoutInflater mInflater;
 		private List<String> mLabelList;
+		
 		private Context mContext;
 		private Map<Integer,Boolean> checkBoxState;
 		
 		private Map<Integer,CheckBox> checkBoxMap = new HashMap<Integer, CheckBox>();
 		
-		public LabelListAdapter(Context context,List<String> labelList) {
+		public LabelListAdapter(Context context,List<String> labelList,Map<Integer,Boolean> checkBoxState) {
 			// TODO Auto-generated constructor stub
 			this.mInflater = LayoutInflater.from(context);
 			this.mContext = context;
 			this.mLabelList = labelList;
-			this.checkBoxState = new HashMap<Integer, Boolean>();
+			this.checkBoxState = checkBoxState;
 		}
 
 		@Override
@@ -333,6 +367,9 @@ public class LabelSelectActivity extends Activity{
 			selectedLabel.put(str, labelPosition);
 			inputLabelEt.getEditableText().append(" ");
 			afterInsertEditString = inputLabelEt.getEditableText().toString();
+//			if(StrUtils.findPositionInList(labelList, str)>=0){
+//				labelListAdapter.setCheckboxState(listPosition, true);
+//			}
 		} else {
 			Log.i("MainActivity", "插入失败");
 		}

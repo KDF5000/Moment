@@ -22,8 +22,8 @@ public class MomentDialogActivity extends Activity{
 	@ViewInject(R.id.moment_dialog_share)
 	private Button shareBtn;
 	
-	@ViewInject(R.id.moment_dialog_label)
-	private Button labelBtn;
+//	@ViewInject(R.id.moment_dialog_label)
+//	private Button labelBtn;
 	
 	@ViewInject(R.id.moment_dialog_delete)
 	private Button deleteBtn;
@@ -51,7 +51,7 @@ public class MomentDialogActivity extends Activity{
 		}
 	}
 	
-	@OnClick({R.id.moment_dialog_edit,R.id.moment_dialog_open,R.id.moment_dialog_share,R.id.moment_dialog_label,R.id.moment_dialog_delete})
+	@OnClick({R.id.moment_dialog_edit,R.id.moment_dialog_open,R.id.moment_dialog_share,R.id.moment_dialog_delete})
 	public void onClick(View v){
 		switch (v.getId()) {
 		case R.id.moment_dialog_edit:
@@ -61,9 +61,6 @@ public class MomentDialogActivity extends Activity{
 			open();
 			break;
 		case R.id.moment_dialog_share:
-			
-			break;
-		case R.id.moment_dialog_label:
 			
 			break;
 		case R.id.moment_dialog_delete:

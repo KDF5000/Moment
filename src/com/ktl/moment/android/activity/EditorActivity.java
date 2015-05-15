@@ -218,7 +218,6 @@ public class EditorActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		getLayoutInflater().inflate(R.layout.activity_editor, contentLayout,
 				true);
-
 		init();
 		FileUtil.createDir("record");
 
@@ -230,9 +229,15 @@ public class EditorActivity extends BaseActivity {
 			articleTitle.setText(moment.getTitle());
 			contentRichEditText.setText(moment.getContent());
 			recordAudioPath = moment.getAudioUrl();
-			if(recordAudioPath != null){
-				editorRecordAudio.setVisibility(View.VISIBLE);
-			}
+			isOpen = moment.getIsOpen() == 0 ? false : true;
+		}
+		if (isOpen) {
+			setTitleRightImg(R.drawable.editor_open_enable);
+		} else {
+			setTitleRightImg(R.drawable.editor_open_unable);
+		}
+		if(recordAudioPath != null){
+			editorRecordAudio.setVisibility(View.VISIBLE);
 		}
 		if(moment==null){
 			moment = new Moment();
@@ -262,11 +267,11 @@ public class EditorActivity extends BaseActivity {
 		setTitleRightImgLeftVisible(true);
 		setTitleRightImgLeft(R.drawable.label_big);
 		setTitleBackImg(R.drawable.title_return_black);
-		if (isOpen) {
+		/*if (isOpen) {
 			setTitleRightImg(R.drawable.editor_open_enable);
 		} else {
 			setTitleRightImg(R.drawable.editor_open_unable);
-		}
+		}*/
 		setBaseActivityBgColor(getResources().getColor(
 				R.color.editor_main_color));
 
@@ -442,6 +447,9 @@ public class EditorActivity extends BaseActivity {
 		case R.id.title_right_img_left:
 			//弹出标签选择
 			Intent intent = new Intent(this,LabelSelectActivity.class);
+			if(moment != null && !StrUtils.isEmpty(moment.getLabel())){
+				intent.putExtra("label", moment.getLabel());
+			}
 			startActivityForResult(intent, C.ActivityRequest.REQUEST_SELECT_LABEL);
 		default:
 			break;
@@ -801,6 +809,7 @@ public class EditorActivity extends BaseActivity {
 			
 		moment.setTitle(title);
 		moment.setContent(content);
+		moment.setContentAbstract(RichEditUtils.extactAbstract(content, 40));
 		moment.setAuthorId(1);
 		moment.setAuthorName("KDF5000");
 		String postTime = TimeFormatUtil.getCurrentDateTime();
@@ -902,7 +911,7 @@ public class EditorActivity extends BaseActivity {
 				if (userInfo == null) {
 					actionStart(AccountActivity.class);
 				}
-				moment.setLabel("大数据");
+				moment.setLabel((moment.getLabel()==null) ? "" : moment.getLabel());
 				params.put("userId", userInfo.getUserId());
 				params.put("title", moment.getTitle());
 				params.put("content", moment.getContent());
@@ -923,7 +932,7 @@ public class EditorActivity extends BaseActivity {
 				}
 				params.put("audioUrl", moment.getAudioUrl());
 				params.put("isClipper", 0);
-				
+				params.put("contentAbstract",moment.getContentAbstract());
 				ApiManager.getInstance().post(EditorActivity.this,
 						C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 

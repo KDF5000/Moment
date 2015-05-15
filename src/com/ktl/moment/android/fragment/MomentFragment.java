@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
+import com.ktl.moment.android.activity.LabelSelectActivity;
 import com.ktl.moment.android.activity.MomentDialogActivity;
 import com.ktl.moment.android.activity.ReadActivity;
 import com.ktl.moment.android.adapter.MomentPlaAdapter;
@@ -246,7 +247,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				break;
 			}
 			case REAUEST_CODE_LABEL:
-
+				
 				break;
 			case REQUEST_CODE_DELETE:
 				
