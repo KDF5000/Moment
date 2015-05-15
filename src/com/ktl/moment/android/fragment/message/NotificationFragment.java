@@ -85,6 +85,7 @@ public class NotificationFragment extends Fragment {
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
 						ToastUtil.show(getActivity(), (String) res);
+						blankImg.setVisibility(View.VISIBLE);
 					}
 				}, "Notification");
 	}

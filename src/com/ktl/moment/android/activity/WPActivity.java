@@ -143,8 +143,10 @@ public class WPActivity extends BaseActivity {
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
 				List<Moment> moment = (List<Moment>) res;
-				if (momentList == null || momentList.isEmpty()) {
+				if (moment == null || moment.isEmpty()) {
 					blankImg.setVisibility(View.VISIBLE);
+				}else{
+					blankImg.setVisibility(View.GONE);
 				}
 				if (momentList == null) {
 					momentList = new ArrayList<Moment>();
@@ -166,6 +168,7 @@ public class WPActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				ToastUtil.show(WPActivity.this, (String) res);
 				wpListview.setRefreshFail("");
+				blankImg.setVisibility(View.VISIBLE);
 			}
 		}, "Moment");
 	}
