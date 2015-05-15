@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.MomentListViewAdapter;
 import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
@@ -45,6 +46,8 @@ public class WPActivity extends BaseActivity {
 
 	private String wpFlag;
 	private final String TAG = "WPActivity";
+	
+	private LoadingDialog loading;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -52,6 +55,9 @@ public class WPActivity extends BaseActivity {
 		super.onCreate(arg0);
 		getLayoutInflater().inflate(R.layout.activity_wp, contentLayout, true);
 		ViewUtils.inject(this);
+		
+		loading = new LoadingDialog(this);
+		loading.show();
 
 		momentList = new ArrayList<Moment>();
 		momentAdapter = new MomentListViewAdapter(this, momentList,
@@ -144,7 +150,15 @@ public class WPActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				List<Moment> moment = (List<Moment>) res;
 				if (moment == null || moment.isEmpty()) {
-					blankImg.setVisibility(View.VISIBLE);
+					new Handler().postDelayed(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							loading.dismiss();
+							blankImg.setVisibility(View.VISIBLE);
+						}
+					}, 1000);
 				}else{
 					blankImg.setVisibility(View.GONE);
 				}
@@ -153,9 +167,17 @@ public class WPActivity extends BaseActivity {
 				}
 				momentList.clear();
 				momentList.addAll(moment);
-				momentAdapter.notifyDataSetChanged();
-				wpListview.setRefreshSuccess("");
-				wpListview.startLoadMore();
+				new Handler().postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						momentAdapter.notifyDataSetChanged();
+						wpListview.setRefreshSuccess("");
+						wpListview.startLoadMore();
+						loading.dismiss();
+					}
+				}, 500);
 				if (moment.size() < pageSize) {
 					hasMore = false;
 				} else {
@@ -166,9 +188,18 @@ public class WPActivity extends BaseActivity {
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(WPActivity.this, (String) res);
-				wpListview.setRefreshFail("");
-				blankImg.setVisibility(View.VISIBLE);
+				final String str = (String) res;
+				new Handler().postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						loading.dismiss();
+						ToastUtil.show(WPActivity.this, str);
+						wpListview.setRefreshFail("");
+						blankImg.setVisibility(View.VISIBLE);
+					}
+				}, 1000);
 			}
 		}, "Moment");
 	}

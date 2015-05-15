@@ -14,7 +14,6 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -316,7 +315,7 @@ public class LabelSelectActivity extends Activity{
 			// 用ImageSpan对象替换face
 			spannableString.setSpan(imageSpan, 0,
 					("<name>" + str + "</name>").length(),
-					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			// 将选择的图片追加到EditText中光标所在位置
 			int index = inputLabelEt.getSelectionStart(); // 获取光标所在位置
 			Editable edit_text = inputLabelEt.getEditableText();

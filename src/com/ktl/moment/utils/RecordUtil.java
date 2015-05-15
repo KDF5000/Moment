@@ -13,7 +13,6 @@ import java.util.Locale;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.util.Log;
 
 /**
  * 录音工具类

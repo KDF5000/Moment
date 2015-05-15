@@ -29,9 +29,6 @@ import com.ktl.moment.android.fragment.StartFragment.OnRegisterListener;
 import com.ktl.moment.android.fragment.VerifyFragment.OnBackToRegisterListener;
 import com.ktl.moment.android.fragment.VerifyFragment.OnNextToProfileListener;
 import com.ktl.moment.common.constant.C;
-import com.ktl.moment.entity.User;
-import com.ktl.moment.utils.FileUtil;
-import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnTouch;
 

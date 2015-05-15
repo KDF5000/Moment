@@ -12,7 +12,6 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
-import com.ktl.moment.entity.Comment;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;

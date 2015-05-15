@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.FansAdapter;
 import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
@@ -46,6 +47,8 @@ public class FocusActivty extends BaseActivity {
 	private String intentFlag;
 	private long otherUserId;
 	private boolean hasMore;
+	
+	private LoadingDialog loading;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -59,6 +62,9 @@ public class FocusActivty extends BaseActivity {
 		this.inflater = getLayoutInflater();
 		this.inflater.inflate(R.layout.activity_my_focus, contentLayout, true);
 		ViewUtils.inject(this);
+		
+		loading = new LoadingDialog(this);
+		loading.show();
 
 		Intent intent = getIntent();
 		intentFlag = intent.getStringExtra("intentFlag");
@@ -144,9 +150,17 @@ public class FocusActivty extends BaseActivity {
 				List<User> user = (List<User>) res;
 				focusList.clear();
 				focusList.addAll(user);
-				myFocus.setRefreshSuccess("");
-				myFocus.startLoadMore();// 允许加载更多
-				fansAdapter.notifyDataSetChanged();
+				new Handler().postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						loading.dismiss();
+						myFocus.setRefreshSuccess("");
+						myFocus.startLoadMore();// 允许加载更多
+						fansAdapter.notifyDataSetChanged();
+					}
+				}, 500);
 				if (user.size() < pageSize) {
 					hasMore = false;
 				} else {
@@ -157,9 +171,18 @@ public class FocusActivty extends BaseActivity {
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(FocusActivty.this, (String) res);
-				myFocus.setRefreshFail("");
-				myFocus.startLoadMore();// 允许加载更多
+				final String str = (String)res;
+				new Handler().postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						loading.dismiss();
+						ToastUtil.show(FocusActivty.this, str);
+						myFocus.setRefreshFail("");
+						myFocus.startLoadMore();// 允许加载更多
+					}
+				}, 1000);
 			}
 		}, "User");
 	}
