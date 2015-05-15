@@ -21,6 +21,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="155dp"
         android:src="@drawable/blank_large"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 </RelativeLayout>

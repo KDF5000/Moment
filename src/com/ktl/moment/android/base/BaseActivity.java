@@ -189,6 +189,9 @@ public abstract class BaseActivity extends FragmentActivity {
 		titleRightImg.setImageResource(resId);
 	}
 
+	protected void setTitleRightImgLeft(int resId){
+		titleRightImgLeft.setImageResource(resId);
+	}
 	protected void setTitleRightTv(int resId) {
 		titleRightTv.setText(resId);
 	}
