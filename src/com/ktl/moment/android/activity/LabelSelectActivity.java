@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -58,7 +59,7 @@ public class LabelSelectActivity extends Activity{
 	private Button confirmSelectBt;
 	
 	private Map<String,LabelPosition> selectedLabel;
-	
+	private String afterInsertEditString = "";
 	@Override 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -92,6 +93,23 @@ public class LabelSelectActivity extends Activity{
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				// TODO Auto-generated method stub
+				switch (keyCode) {
+				case KeyEvent.KEYCODE_ENTER://回车
+					String str = inputLabelEt.getEditableText().toString();
+					String newStr = str.substring(afterInsertEditString.length());
+					Log.i(TAG, "newStr-->"+newStr.length()+"-->bool"+StrUtils.isEmpty(newStr));
+					if(StrUtils.isEmpty(newStr) || newStr=="\n" || newStr.endsWith("\n")){
+						break;
+					}
+					inputLabelEt.getEditableText().delete(afterInsertEditString.length(),str.length());
+					insertEditText(newStr.trim(), -1);//插入
+					break;
+				case KeyEvent.KEYCODE_DEL://删除
+					updateSelectLabel();
+					break;
+				default:
+					break;
+				}
 				return false;
 			}
 		});
@@ -301,6 +319,7 @@ public class LabelSelectActivity extends Activity{
 			int end = edit_text.getSpanEnd(imageSpan);
 			LabelPosition labelPosition = new LabelPosition(start,end, listPosition);
 			selectedLabel.put(str, labelPosition);
+			afterInsertEditString = inputLabelEt.getEditableText().toString();
 		} else {
 			Log.i("MainActivity", "插入失败");
 		}
