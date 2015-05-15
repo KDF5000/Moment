@@ -14,6 +14,7 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.activity.AccountActivity;
 import com.ktl.moment.android.adapter.MomentListViewAdapter;
 import com.ktl.moment.android.base.BaseFragment;
+import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
@@ -39,6 +40,7 @@ public class DynamicFragment extends BaseFragment {
 	private long userId;
 
 	private boolean hasMore = true;
+	private LoadingDialog loading;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +49,9 @@ public class DynamicFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.fragment_dynamic, container,
 				false);
 		findListView = (ZrcListView) view.findViewById(R.id.fragment_dynamic_list);
+		//show loading dialog after fragment create
+		loading = new LoadingDialog(getActivity());
+		loading.show();
 
 		User user = Account.getUserInfo();
 		if (user == null) {
@@ -127,16 +132,33 @@ public class DynamicFragment extends BaseFragment {
 						}
 						momentList.clear();
 						momentList.addAll(moments);
-						findListViewAdapter.notifyDataSetChanged();
-						findListView.setRefreshSuccess("");
-						findListView.startLoadMore();
+						new Handler().postDelayed(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								findListViewAdapter.notifyDataSetChanged();
+								findListView.setRefreshSuccess("");
+								findListView.startLoadMore();
+								loading.dismiss();
+							}
+						}, 500);
 					}
 
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(getActivity(), (String) res);
-						findListView.setRefreshSuccess("");
+						final String str = (String)res;
+						new Handler().postDelayed(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								findListView.setRefreshSuccess("");
+								loading.dismiss();
+								ToastUtil.show(getActivity(), str);
+							}
+						}, 1000);
 					}
 				}, "Moment");
 	}

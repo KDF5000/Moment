@@ -12,6 +12,7 @@ import android.view.View;
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.MomentListViewAdapter;
 import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleHeader;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
@@ -43,6 +44,7 @@ public class ChannelListActivity extends BaseActivity {
 
 	private CharSequence channelName;
 	private long channelId;
+	private LoadingDialog loading;
 
 	private final String TAG = "ChannalListActivity";
 
@@ -53,6 +55,9 @@ public class ChannelListActivity extends BaseActivity {
 		getLayoutInflater().inflate(R.layout.activity_channel_list,
 				contentLayout, true);
 		ViewUtils.inject(this);
+		
+		loading = new LoadingDialog(this);
+		loading.show();
 
 		Intent intent = this.getIntent();
 		channelName = intent.getCharSequenceExtra("channelName");
@@ -131,9 +136,17 @@ public class ChannelListActivity extends BaseActivity {
 						List<Moment> moment = (List<Moment>) res;
 						channelList.clear();
 						channelList.addAll(moment);
-						channelListAdapter.notifyDataSetChanged();
-						channelListView.setRefreshSuccess("");
-						channelListView.startLoadMore();
+						new Handler().postDelayed(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								loading.dismiss();
+								channelListAdapter.notifyDataSetChanged();
+								channelListView.setRefreshSuccess("");
+								channelListView.startLoadMore();
+							}
+						}, 500);
 						if (moment.size() < pageSize) {
 							hasMore = false;
 						} else {
@@ -144,8 +157,17 @@ public class ChannelListActivity extends BaseActivity {
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(ChannelListActivity.this, (String) res);
-						channelListView.setRefreshFail("");
+						final String str = (String)res;
+						new Handler().postDelayed(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								loading.dismiss();
+								ToastUtil.show(ChannelListActivity.this, str);
+								channelListView.setRefreshFail("");
+							}
+						}, 1000);
 					}
 				}, "Moment");
 	}

@@ -38,7 +38,6 @@ import com.ktl.moment.momentstore.MomentSyncTaskManager;
 import com.ktl.moment.momentstore.MomentSyncTaskManager.MomentSyncCallback;
 import com.ktl.moment.utils.BasicInfoUtil;
 import com.ktl.moment.utils.EncryptUtil;
-import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.ktl.moment.utils.net.ApiManager;

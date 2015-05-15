@@ -7,7 +7,6 @@ import java.util.Map;
 import android.util.Log;
 
 import com.ktl.moment.android.MomentApplication;
-import com.ktl.moment.android.activity.AccountActivity;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;

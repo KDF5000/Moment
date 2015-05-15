@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.ktl.moment.R;
 import com.ktl.moment.entity.Channel;
-import com.ktl.moment.utils.PregUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
