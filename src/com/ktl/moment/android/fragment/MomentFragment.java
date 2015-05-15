@@ -61,9 +61,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 
 	private boolean mHasRequestedMore = true;
 
-	private int pageSize = 20;
+	private int pageSize = 10;
 	private int pageNum = 1;
-
+    private int dbPageNum = 1;
 	private boolean isSyncing = false;// 是否正在同步
 	MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
 
@@ -81,6 +81,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.moment_pla_list);
 		blankImg = (ImageView) view.findViewById(R.id.moment_blank);
+		pageSize = 10;
+		pageNum = 1;
+	    dbPageNum = 1;
+		isSyncing = false;// 是否正在同步
 		getDataFromDB();
 
 		momentList = new ArrayList<Moment>();
@@ -150,10 +154,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	}
 
 	private void getDataFromDB() {
-		pageNum = 1;
 		Selector selector = Selector.from(Moment.class)
 				.orderBy("postTime", true).limit(pageSize)
-				.offset(pageSize * (pageNum - 1));
+				.offset(pageSize * ((dbPageNum++) - 1));
 		((HomeActivity) getActivity()).getDbData(C.DbTaskId.GET_MOMENT_LIST,
 				DbTaskType.selectByCustom, selector);
 	}
@@ -200,7 +203,9 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 									.hashCode());
 							loacalList.add(moment);
 						}
-						momentList.clear();
+						if(pageNum == 2){
+							momentList.clear();
+						}
 						momentList.addAll(loacalList);
 						momentPlaAdapter.notifyDataSetChanged();
 						// 保存到本地数据库
@@ -352,19 +357,25 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		}
 		case C.DbTaskId.GET_MOMENT_LIST:
 			List<Moment> list = (List<Moment>) res;
-			if (list == null) {
-				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT)
-						.show();
-				blankImg.setVisibility(View.VISIBLE);
+			if (list == null || list.isEmpty()) {
+				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT).show();
+				if(momentList == null || momentList.isEmpty()){
+					blankImg.setVisibility(View.VISIBLE);
+				}else{
+					blankImg.setVisibility(View.GONE);
+				}
 				return;
 			}
 			try {
 				if (momentList == null) {
 					momentList = new ArrayList<Moment>();
 				}
-				momentList.clear();
+				if(dbPageNum == 2){
+					momentList.clear();
+				}
 				momentList.addAll(list);
 				momentPlaAdapter.notifyDataSetChanged();
+				getDataFromDB();
 			} catch (NullPointerException e) {
 				// TODO: handle exception
 				e.printStackTrace();
