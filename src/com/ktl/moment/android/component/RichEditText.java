@@ -59,7 +59,7 @@ public class RichEditText extends EditText {
 	public void addImage(Bitmap bitmap, String filePath) {
 		Log.i("imgpath", filePath);
 		// String pathTag = "<momentimg src=\"" + filePath + "\"/>";
-		String pathTag = "<img src = \"" + filePath + "\"/>";
+		String pathTag = "<img src=\"" + filePath + "\"/>";
 		SpannableString spanString = new SpannableString(pathTag);
 		// 获取屏幕的宽高
 		int paddingLeft = getPaddingLeft();

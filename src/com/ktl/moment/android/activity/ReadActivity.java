@@ -154,7 +154,7 @@ public class ReadActivity extends BaseActivity {
 		}
 		momentDetail = list.get(0);
 		title.setText(momentDetail.getTitle());
-		content.setText(momentDetail.getContent());
+		content.setRichText(momentDetail.getContent());
 
 		if (momentDetail.getIsOpen() == 0) {
 			titleRightImg.setImageResource(R.drawable.editor_open_enable);

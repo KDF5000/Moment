@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +19,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.HomeActivity;
-import com.ktl.moment.android.activity.LabelSelectActivity;
 import com.ktl.moment.android.activity.MomentDialogActivity;
 import com.ktl.moment.android.activity.ReadActivity;
 import com.ktl.moment.android.adapter.MomentPlaAdapter;
 import com.ktl.moment.android.base.BaseFragment;
+import com.ktl.moment.android.component.LoadingDialog;
 import com.ktl.moment.android.component.etsy.StaggeredGridView;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
@@ -69,7 +69,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 
 	private ImageView navRightImg;// 同步图标
 	private AnimationDrawable syncAnimationDrawable;
-
+	private LoadingDialog loadingDlg;//加载动态图标
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -85,9 +85,14 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		pageNum = 1;
 	    dbPageNum = 1;
 		isSyncing = false;// 是否正在同步
+		momentList = new ArrayList<Moment>();
+		//加载中动态图标
+		loadingDlg = new LoadingDialog(getActivity());
+		loadingDlg.show();
+		
 		getDataFromDB();
 
-		momentList = new ArrayList<Moment>();
+		
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
 		momentPlaAdapter.notifyDataSetChanged();
@@ -261,8 +266,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Item Clicked: " + position,
-				Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(getActivity(), ReadActivity.class);
 		intent.putExtra("momentUid", momentList.get(position).getMomentUid());
 		startActivity(intent);
@@ -339,8 +342,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 					public void onComplete(int syncCount) {
 						// TODO Auto-generated method stub
 						// 从服务端获取数据
-						ToastUtil.show(getActivity(), syncCount + "");
-						// 从服务端获取数据
 						getDataFromServer();
 					}
 				});
@@ -356,9 +357,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			break;
 		}
 		case C.DbTaskId.GET_MOMENT_LIST:
-			List<Moment> list = (List<Moment>) res;
+			final List<Moment> list = (List<Moment>) res;
+			
 			if (list == null || list.isEmpty()) {
-				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT).show();
 				if(momentList == null || momentList.isEmpty()){
 					blankImg.setVisibility(View.VISIBLE);
 				}else{
@@ -374,8 +376,22 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 					momentList.clear();
 				}
 				momentList.addAll(list);
-				momentPlaAdapter.notifyDataSetChanged();
-				getDataFromDB();
+				if(loadingDlg.isShowing()){
+					loadingDlg.dismiss();
+					new Handler().postDelayed(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							momentPlaAdapter.notifyDataSetChanged();
+							getDataFromDB();
+						}
+					}, 800);
+				}else{
+					momentPlaAdapter.notifyDataSetChanged();
+					getDataFromDB();
+				}
+				
 			} catch (NullPointerException e) {
 				// TODO: handle exception
 				e.printStackTrace();

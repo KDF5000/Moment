@@ -31,15 +31,14 @@ import com.loopj.android.http.RequestParams;
 public class DynamicFragment extends BaseFragment {
 	private static final String TAG = "dynamicFragment";
 
-	private ZrcListView findListView;
+	private ZrcListView dynamicListView;
 	private List<Moment> momentList;// 灵感列表
 
 	private int pageSize = 2;
 	private int pageNum = 1;
-	private MomentListViewAdapter findListViewAdapter;
+	private MomentListViewAdapter dynamicListViewAdapter;
 	private long userId;
 
-	private boolean hasMore = true;
 	private LoadingDialog loading;
 
 	@Override
@@ -48,7 +47,7 @@ public class DynamicFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_dynamic, container,
 				false);
-		findListView = (ZrcListView) view.findViewById(R.id.fragment_dynamic_list);
+		dynamicListView = (ZrcListView) view.findViewById(R.id.fragment_dynamic_list);
 		//show loading dialog after fragment create
 		loading = new LoadingDialog(getActivity());
 		loading.show();
@@ -63,10 +62,10 @@ public class DynamicFragment extends BaseFragment {
 
 		initView();
 		momentList = new ArrayList<Moment>();
-		findListViewAdapter = new MomentListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
-		findListView.setAdapter(findListViewAdapter);
+		dynamicListViewAdapter = new MomentListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
+		dynamicListView.setAdapter(dynamicListViewAdapter);
 		initEvent();
-		findListView.refresh();
+		dynamicListView.refresh();
 		// 从服务端获取数据
 		return view;
 	}
@@ -76,22 +75,22 @@ public class DynamicFragment extends BaseFragment {
 		SimpleHeader header = new SimpleHeader(getActivity());
 		header.setTextColor(0xff0066aa);
 		header.setCircleColor(0xff33bbee);
-		findListView.setHeadable(header);
+		dynamicListView.setHeadable(header);
 
 		// 设置加载更多的样式（可选）
 		SimpleFooter footer = new SimpleFooter(getActivity());
 		footer.setCircleColor(0xff33bbee);
-		findListView.setFootable(footer);
+		dynamicListView.setFootable(footer);
 
 		// 设置列表项出现动画（可选）
-		findListView.setItemAnimForTopIn(R.anim.zrc_topitem_in);
-		findListView.setItemAnimForBottomIn(R.anim.zrc_bottomitem_in);
-		findListView.stopLoadMore();
+		dynamicListView.setItemAnimForTopIn(R.anim.zrc_topitem_in);
+		dynamicListView.setItemAnimForBottomIn(R.anim.zrc_bottomitem_in);
+		dynamicListView.stopLoadMore();
 	}
 
 	private void initEvent() {
 		// 下拉刷新事件回调（可选）
-		findListView.setOnRefreshStartListener(new OnStartListener() {
+		dynamicListView.setOnRefreshStartListener(new OnStartListener() {
 			@Override
 			public void onStart() {
 				// 刷新开始
@@ -100,7 +99,7 @@ public class DynamicFragment extends BaseFragment {
 		});
 
 		// 加载更多事件回调（可选）
-		findListView.setOnLoadMoreStartListener(new OnStartListener() {
+		dynamicListView.setOnLoadMoreStartListener(new OnStartListener() {
 			@Override
 			public void onStart() {
 				// 加载更多
@@ -114,7 +113,6 @@ public class DynamicFragment extends BaseFragment {
 	 */
 	private void getDataFromServer() {
 		pageNum = 1;
-		hasMore = true;
 		RequestParams params = new RequestParams();
 		params.put("pageNum", pageNum);
 		params.put("pageSize", pageSize);
@@ -137,9 +135,9 @@ public class DynamicFragment extends BaseFragment {
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
-								findListViewAdapter.notifyDataSetChanged();
-								findListView.setRefreshSuccess("");
-								findListView.startLoadMore();
+								dynamicListViewAdapter.notifyDataSetChanged();
+								dynamicListView.setRefreshSuccess("");
+								dynamicListView.startLoadMore();
 								loading.dismiss();
 							}
 						}, 500);
@@ -154,7 +152,7 @@ public class DynamicFragment extends BaseFragment {
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
-								findListView.setRefreshSuccess("");
+								dynamicListView.setRefreshSuccess("");
 								loading.dismiss();
 								ToastUtil.show(getActivity(), str);
 							}
@@ -166,19 +164,6 @@ public class DynamicFragment extends BaseFragment {
 	 * 上拉加载更多数据
 	 */
 	private void loadMoreMoment(){
-		if(hasMore == false){
-			new Handler().postDelayed(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					findListView.setLoadMoreSuccess();
-					findListView.stopLoadMore();
-					ToastUtil.show(getActivity(), "没有更多了~");
-				}
-			}, 500);
-			return ;
-		}
 		RequestParams params = new RequestParams();
 		params.put("pageNum", ++pageNum);
 		params.put("pageSize", pageSize);
@@ -190,18 +175,18 @@ public class DynamicFragment extends BaseFragment {
 					@Override
 					public void onSuccess(Object res) {
 						// TODO Auto-generated method stub
+						dynamicListView.setLoadMoreSuccess();
 						List<Moment> moments = (List<Moment>) res;
+						if(moments == null || moments.isEmpty()){
+							dynamicListView.stopLoadMore();
+							ToastUtil.show(getActivity(), "没有更多了~");
+							return ;
+						}
 						if(momentList==null){
 							momentList = new ArrayList<Moment>();
 						}
 						momentList.addAll(moments);
-						findListViewAdapter.notifyDataSetChanged();
-						if (moments.size() < pageSize) {
-							hasMore = false;
-						}else{
-							hasMore = true;
-						}
-						findListView.setLoadMoreSuccess();
+						dynamicListViewAdapter.notifyDataSetChanged();
 					}
 
 					@Override

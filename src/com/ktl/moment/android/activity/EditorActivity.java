@@ -896,7 +896,7 @@ public class EditorActivity extends BaseActivity {
 				for (Map.Entry<String, String> entry : resMap.entrySet()) {
 					Log.i("URL","-->" + entry.getKey() + "=" + entry.getValue());
 					// 替换et内容
-					content = content.replaceAll(entry.getKey(), "<img src = \""
+					content = content.replaceAll(entry.getKey(), "<img src=\""
 							+ C.API.QINIU_BASE_URL + entry.getValue() + "\"/>");
 					// 最好取第一个
 					moment.setMomentImgs(C.API.QINIU_BASE_URL + entry.getValue());
@@ -951,8 +951,14 @@ public class EditorActivity extends BaseActivity {
 								// 保存到本地数据库
 								Log.i("EditorActivity", res.toString());
 								ToastUtil.show(EditorActivity.this,"网络出错，保存到本地-->" + res.toString());
-								moment.setContent(contentRichEditText.getText()
-										.toString());
+								String content = contentRichEditText.getText().toString();
+								moment.setContent(content);
+								moment.setContentAbstract(RichEditUtils.extactAbstract(content, 40));
+								Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText.getText().toString());
+								for(Map.Entry<String, String> entry : imgMap.entrySet()){
+									moment.setMomentImgs(entry.getValue());
+									break;
+								}
 								moment.setDirty(1);
 								saveMomentDb(moment);
 //								// 跳回到主页面刷新moment页面的标志

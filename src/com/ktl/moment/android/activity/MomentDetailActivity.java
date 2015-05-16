@@ -134,7 +134,6 @@ public class MomentDetailActivity extends BaseActivity {
 		momentId = intent.getLongExtra("momentId", 0);
 		authorId = intent.getLongExtra("userId", 0);
 		userId = Account.getUserInfo().getUserId();
-		Toast.makeText(this, momentId + "", Toast.LENGTH_SHORT).show();
 		initView();
 		initEvent();
 	}

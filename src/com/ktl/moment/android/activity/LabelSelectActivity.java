@@ -126,13 +126,17 @@ public class LabelSelectActivity extends Activity{
 			switch (keyCode) {
 			case KeyEvent.KEYCODE_ENTER://回车
 				String str = inputLabelEt.getEditableText().toString();
-				String newStr = str.substring(afterInsertEditString.length());
+				int newStrLen = str.length() - afterInsertEditString.length();
+				int cursorPosition = inputLabelEt.getSelectionStart();
+				String newStr = str.substring(cursorPosition-newStrLen,cursorPosition);
 				Log.i(TAG, "newStr-->"+newStr.length()+"-->bool"+StrUtils.isEmpty(newStr));
 				if(StrUtils.isEmpty(newStr) || newStr=="\n" || newStr.endsWith("\n")){
 					break;
 				}
-				inputLabelEt.getEditableText().delete(afterInsertEditString.length(),str.length());
+//				inputLabelEt.getEditableText().delete(afterInsertEditString.length(),str.length());
+				inputLabelEt.getEditableText().delete(cursorPosition-newStr.length(),cursorPosition);
 				insertEditText(newStr.trim(), -1);//插入
+				updateSelectLabel();
 				int listPosition = StrUtils.findPositionInList(labelList, new String(newStr.trim()));
 				if(listPosition>=0){//说明存在list中
 					labelListAdapter.setCheckboxState(listPosition, true);
@@ -330,6 +334,7 @@ public class LabelSelectActivity extends Activity{
 		if(listPosition>=0){
 			labelListAdapter.setCheckboxState(listPosition, false);
 		}
+		afterInsertEditString = inputLabelEt.getEditableText().toString();
 	}
 	/**
 	 * 获取图片并插入EditText
@@ -356,7 +361,8 @@ public class LabelSelectActivity extends Activity{
 			if (index < 0 || index >= edit_text.length()) {
 				edit_text.append(spannableString);
 			} else {
-				edit_text.insert(edit_text.length(), spannableString);
+//				edit_text.insert(edit_text.length(), spannableString);
+				edit_text.insert(index, spannableString);
 			}
 			setSpanClickable(listPosition);
 			//插入到map
@@ -364,7 +370,7 @@ public class LabelSelectActivity extends Activity{
 			int end = edit_text.getSpanEnd(imageSpan);
 			LabelPosition labelPosition = new LabelPosition(start,end, listPosition);
 			selectedLabel.put(str, labelPosition);
-			inputLabelEt.getEditableText().append(" ");
+			inputLabelEt.getEditableText().insert(inputLabelEt.getSelectionStart(), " ");
 			afterInsertEditString = inputLabelEt.getEditableText().toString();
 //			if(StrUtils.findPositionInList(labelList, str)>=0){
 //				labelListAdapter.setCheckboxState(listPosition, true);
