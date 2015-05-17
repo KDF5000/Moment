@@ -1,5 +1,7 @@
 package com.ktl.moment.momentstore;
 
+import java.util.List;
+
 import android.util.Log;
 
 import com.ktl.moment.entity.Moment;
@@ -26,9 +28,15 @@ public class MomentSyncTask {
 			@Override
 			public void OnSuccess(Object res) {
 				// TODO Auto-generated method stub
+				List<Moment> list = (List<Moment>) res;
+				if(list==null || list.isEmpty()){
+					mManager.killSync("服务器返回数据无法解析");
+					return;
+				}
+				mMoment.setMomentId(list.get(0).getMomentId());
 				mMoment.setDirty(0);
-				DBManager.getInstance().update(mMoment,"dirty");//更新数据库里的dirty字段
-				Log.i("MomentUpdae", mMoment.getDirty()+"");
+				DBManager.getInstance().update(mMoment,"dirty","momentId");//更新数据库里的dirty字段
+				Log.i("MomentUpdae", "-->"+mMoment.getDirty()+"-->"+mMoment.getMomentId());
 				mManager.finishSync(res);
 			}
 			

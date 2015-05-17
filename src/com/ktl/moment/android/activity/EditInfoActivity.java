@@ -295,7 +295,7 @@ public class EditInfoActivity extends BaseActivity {
 			avatar = Account.getUserInfo().getUserAvatar();
 			submit();
 		} else {
-			QiniuManager.getInstance().uploadFile(this, imgPath, "img_",
+			QiniuManager.getInstance().uploadFile(this, imgPath, "img",
 					new QiniuRequestCallbBack() {
 
 						@Override

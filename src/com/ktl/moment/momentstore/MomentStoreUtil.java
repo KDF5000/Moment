@@ -134,6 +134,7 @@ public class MomentStoreUtil {
 		params.put("userId", userInfo.getUserId());
 		params.put("title", moment.getTitle());
 		params.put("content", moment.getContent());
+		params.put("contentAbstract", moment.getContentAbstract());
 		if(moment.getLabel()==null || moment.getLabel().equals("") || moment.getLabel() == ""){
 			moment.setLabel("");
 		}
@@ -165,6 +166,6 @@ public class MomentStoreUtil {
 				// TODO Auto-generated method stub
 				callback.OnFailed(res.toString());
 			}
-		}, "");
+		}, "Moment");
 	}
 }

@@ -370,6 +370,7 @@ public class C {
 		public static final int MOMENT_LIST_SAVE = 3;// 灵感页面保存momentlist
 		public static final int GET_MOMENT_DETAIL = 4;// 获取单条灵感内容
 		public static final int GET_MOMENT_LIST = 5;// 获取灵感页面list
+		public static final int DROP_DB = 6;//删除数据库
 	}
 
 	public static final class SharedPreferencesKey {

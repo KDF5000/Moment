@@ -109,6 +109,7 @@ public class ReadActivity extends BaseActivity {
 			Intent editIntent = new Intent(this, EditorActivity.class);
 			editIntent.putExtra("moment", momentDetail);
 			startActivity(editIntent);
+			finish();
 			break;
 		case R.id.title_right_img_left:
 			Intent commentIntent = new Intent(this, MomentCommentActivity.class);

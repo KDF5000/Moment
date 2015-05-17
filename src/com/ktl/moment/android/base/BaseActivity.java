@@ -327,5 +327,14 @@ public abstract class BaseActivity extends FragmentActivity {
 			Selector selector, DbTaskHandler handler) {
 		taskManager.addTask(taskId, taskType, null, selector, handler);
 	}
+	/**
+	 * 
+	 * @param taskId
+	 * @param taskType
+	 * @param handler
+	 */
+	protected void dropDbAsync(int taskId,DbTaskType taskType, DbTaskHandler handler){
+		taskManager.addTask(taskId, taskType, handler);
+	}
 
 }

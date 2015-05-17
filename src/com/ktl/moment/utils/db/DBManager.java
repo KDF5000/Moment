@@ -156,5 +156,16 @@ public class DBManager {
 		}
 		return null;
 	}
+	/**
+	 * 删除所有的数据
+	 */
+	public void dropDb(){
+		try {
+			db.dropDb();
+		} catch (DbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }

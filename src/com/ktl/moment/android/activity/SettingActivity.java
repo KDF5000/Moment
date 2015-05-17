@@ -2,6 +2,7 @@ package com.ktl.moment.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
@@ -10,9 +11,12 @@ import android.widget.RelativeLayout;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.manager.AppManager;
 import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.db.DbTaskHandler;
+import com.ktl.moment.utils.db.DbTaskType;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -44,7 +48,8 @@ public class SettingActivity extends BaseActivity {
 	private RelativeLayout aboutUsLayout;
 
 	private boolean isBindingWeibo = false;
-
+	private DbTaskHandler dbTaskHandler = new DbTaskHandler(this);
+	private LoginDialog loadingdialog;
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -54,6 +59,7 @@ public class SettingActivity extends BaseActivity {
 		ViewUtils.inject(this);
 
 		initView();
+		loadingdialog = new LoginDialog(this);
 	}
 
 	private void initView() {
@@ -97,10 +103,13 @@ public class SettingActivity extends BaseActivity {
 	public void click(View v) {
 		switch (v.getId()) {
 		case R.id.setting_logout:
-			SharedPreferencesUtil.getInstance().delete(C.SPKey.SPK_LOGIN_INFO);
-			Intent intent = new Intent(this, AccountActivity.class);
+			loadingdialog.setText("退出中...");
+			loadingdialog.show();
+			SharedPreferencesUtil.getInstance().deleteAll();
+			dropDbAsync(C.DbTaskId.DROP_DB, DbTaskType.dropDb, dbTaskHandler);
+/*			Intent intent = new Intent(this, AccountActivity.class);
 			startActivity(intent);
-			AppManager.getInstance().finishAll();
+			AppManager.getInstance().finishAll();*/
 			break;
 		case R.id.title_back_img:
 			finish();
@@ -164,6 +173,23 @@ public class SettingActivity extends BaseActivity {
 	@Override
 	public void OnDbTaskComplete(Message res) {
 		// TODO Auto-generated method stub
-
+		int taskId = res.what;
+		switch (taskId) {
+		case C.DbTaskId.DROP_DB:
+			new Handler().postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(SettingActivity.this, AccountActivity.class);
+					startActivity(intent);
+					loadingdialog.dismiss();
+					AppManager.getInstance().finishAll();
+				}
+			}, 500);
+			break;
+		default:
+			break;
+		}
 	}
 }

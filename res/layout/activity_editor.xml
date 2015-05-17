@@ -33,7 +33,7 @@
         android:layout_height="0dp"
         android:layout_weight="1" >
 
-        <com.ktl.moment.android.component.RichEditText
+        <!-- <com.ktl.moment.android.component.RichEditText
             android:id="@+id/editor_edit_area"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -46,7 +46,22 @@
             android:lineSpacingExtra="4.6dp"
             android:scrollbars="vertical"
             android:textColorHint="#bfbfbf"
-            android:textSize="16sp" />
+            android:textSize="16sp" /> -->
+
+   <com.ktl.moment.android.component.RichEditTextCustom
+       android:id="@+id/editor_edit_area"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_marginLeft="16dp"
+       android:layout_marginRight="16dp"
+       android:layout_marginTop="16dp"
+       android:background="@color/editor_main_color"
+       android:gravity="left|top"
+       android:hint="内容"
+       android:lineSpacingExtra="4.6dp"
+       android:scrollbars="vertical"
+       android:textColorHint="#bfbfbf"
+       android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/editor_record_audio"

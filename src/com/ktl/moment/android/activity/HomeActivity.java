@@ -302,6 +302,10 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
 			momentFragment.dataFinish(C.DbTaskId.GET_MOMENT_LIST,res.obj);
 			break;
+		case C.DbTaskId.MOMENT_LIST_SAVE:
+			momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
+			momentFragment.dataFinish(C.DbTaskId.MOMENT_LIST_SAVE,res.obj);
+			break;
 		default:
 			break;
 		}

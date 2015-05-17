@@ -29,7 +29,7 @@ public class RichEditUtils {
 	public static String extactAbstract(String content,int count){
 //		String str ="<img src = \"(/[\\w/\\/.]+)\"\\s*/>";
 //		String abstractContent = content.replaceAll(str, "");
-		String abstractContent = content.replaceAll("<img [^>]*/>","");
+		String abstractContent = content.replaceAll("<img [^>]*[/]{0,1}>","");
 		if(abstractContent.length() < count){
 			return abstractContent;
 		}

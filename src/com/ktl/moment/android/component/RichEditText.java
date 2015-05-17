@@ -5,14 +5,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.ktl.moment.manager.ImageManager;
-import com.ktl.moment.manager.ImageManager.ImgLoadCallback;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.Html;
@@ -23,6 +20,12 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
+
+import com.ktl.moment.manager.ImageManager;
+import com.ktl.moment.manager.ImageManager.ImgLoadCallback;
+import com.ktl.moment.utils.ImageUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 
 public class RichEditText extends EditText {
 
@@ -149,7 +152,8 @@ public class RichEditText extends EditText {
 				String filePath = path + String.valueOf(source.hashCode());
 				if (new File(filePath).exists()) {
 					// 获取本地文件返回Drawable
-					drawable = Drawable.createFromPath(filePath);
+//					drawable = Drawable.createFromPath(filePath);
+					drawable = ImageUtils.loadImage(filePath);
 					//获取控件的左右padding
 					int paddingLeft = getPaddingLeft();
 					int paddingRight = getPaddingRight();
@@ -194,5 +198,12 @@ public class RichEditText extends EditText {
 		this.mRichText = mRichText.replaceAll("[\\n\\r]", "<br>");
 		this.setText(Html.fromHtml(mRichText, httpImgGetter, null));
 	}
-
+	
+	public String getRichText(){
+		String richText = Html.toHtml(getEditableText());
+		//过滤掉换行
+		richText = richText.replaceAll("(<p dir=\"ltr\">)|(</p>)", "");
+		richText = richText.replaceAll("<br>", "\\n\\r");
+		return richText;
+	}
 }

@@ -91,7 +91,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		loadingDlg.show();
 		
 		getDataFromDB();
-
 		
 		momentPlaAdapter = new MomentPlaAdapter(getActivity(), momentList,
 				getDisplayImageOptions());
@@ -193,8 +192,17 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 						@SuppressWarnings("unchecked")
 						List<Moment> list = (List<Moment>) res;
 						if (list == null || list.isEmpty()) {
-							ToastUtil.show(getActivity(), "同步完成");
-							stopSyncAnimation();
+							// 保存到本地数据库
+							((HomeActivity) getActivity()).saveDbData(
+									C.DbTaskId.MOMENT_LIST_SAVE, Moment.class,
+									momentList);
+							/*ToastUtil.show(getActivity(), "同步完成");
+							if(momentList==null || momentList.isEmpty()){
+								blankImg.setVisibility(View.VISIBLE);
+							}else{
+								blankImg.setVisibility(View.GONE);
+							}
+							stopSyncAnimation();*/
 							return;
 						}
 						if (momentList == null) {
@@ -212,11 +220,20 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 							momentList.clear();
 						}
 						momentList.addAll(loacalList);
+						if(!momentList.isEmpty()){
+							if(blankImg.getVisibility() == View.VISIBLE){
+								blankImg.setVisibility(View.GONE);
+							}
+						}else{
+							if(blankImg.getVisibility() == View.GONE){
+								blankImg.setVisibility(View.VISIBLE);
+							}
+						}
 						momentPlaAdapter.notifyDataSetChanged();
 						// 保存到本地数据库
-						((HomeActivity) getActivity()).saveDbData(
+						/*((HomeActivity) getActivity()).saveDbData(
 								C.DbTaskId.MOMENT_LIST_SAVE, Moment.class,
-								loacalList);
+								loacalList);*/
 						// 继续获取数据
 						getDataFromServer();
 					}
@@ -268,6 +285,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(getActivity(), ReadActivity.class);
 		intent.putExtra("momentUid", momentList.get(position).getMomentUid());
+		Log.i(TAG, "momentUid-->"+momentList.get(position).getMomentUid());
 		startActivity(intent);
 	}
 
@@ -342,6 +360,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 					public void onComplete(int syncCount) {
 						// TODO Auto-generated method stub
 						// 从服务端获取数据
+						pageNum =1;
 						getDataFromServer();
 					}
 				});
@@ -361,6 +380,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			
 			if (list == null || list.isEmpty()) {
 //				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT).show();
+				loadingDlg.dismiss();
 				if(momentList == null || momentList.isEmpty()){
 					blankImg.setVisibility(View.VISIBLE);
 				}else{
@@ -396,6 +416,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				// TODO: handle exception
 				e.printStackTrace();
 			}
+			break;
+		case C.DbTaskId.MOMENT_LIST_SAVE:
+			ToastUtil.show(getActivity(), "同步完成");
+			stopSyncAnimation();
 			break;
 		default:
 			break;
