@@ -437,6 +437,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	public void refreshFragmentContent() {
 		// TODO Auto-generated method stub
 		super.refreshFragmentContent();
+		dbPageNum = 1;
 		getDataFromDB();
 	}
 }

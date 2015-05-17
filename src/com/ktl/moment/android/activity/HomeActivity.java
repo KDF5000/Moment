@@ -363,6 +363,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		Log.i(TAG, "-->onResume");
 		//跳回到主页面刷新moment页面的标志
 		boolean isSwitch2Moment =  SharedPreferencesUtil.getInstance().getBoolean(C.SPKey.SWITCH_TO_MOMENT_FG, false);
 		if(isSwitch2Moment == true){
