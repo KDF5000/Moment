@@ -77,7 +77,7 @@ public class RichEditTextCustom extends EditText {
 		int paddingRight = getPaddingRight();
 		int bmWidth = bitmap.getWidth();//图片高度
 		int bmHeight = bitmap.getHeight();//图片宽度
-		int zoomWidth = getWidth() - (paddingLeft + paddingRight);
+		int zoomWidth =  getWidth() - (paddingLeft + paddingRight);
 		int zoomHeight = (int) (((float)zoomWidth / (float)bmWidth) * bmHeight);
 		Bitmap newBitmap = zoomImage(bitmap, zoomWidth,zoomHeight);
 		ImageSpan imgSpan = new ImageSpan(mContext, newBitmap);
@@ -108,7 +108,7 @@ public class RichEditTextCustom extends EditText {
 		int paddingRight = getPaddingRight();
 		int bmWidth = bitmap.getWidth();//图片高度
 		int bmHeight = bitmap.getHeight();//图片宽度
-		int zoomWidth = getWidth() - (paddingLeft + paddingRight);
+		int zoomWidth =  getWidth() - (paddingLeft + paddingRight);
 		int zoomHeight = (int) (((float)zoomWidth / (float)bmWidth) * bmHeight);
 		Bitmap newBitmap = zoomImage(bitmap, zoomWidth,zoomHeight);
 		ImageSpan imgSpan = new ImageSpan(mContext, newBitmap);
@@ -160,6 +160,11 @@ public class RichEditTextCustom extends EditText {
 		// 获取这个图片的宽和高
 		float width = bgimage.getWidth();
 		float height = bgimage.getHeight();
+		//如果宽度为0 保持原图
+		if(newWidth == 0){
+			newWidth = width;
+			newHeight = height;
+		}
 		// 创建操作图片用的matrix对象
 		Matrix matrix = new Matrix();
 		// 计算宽高缩放率

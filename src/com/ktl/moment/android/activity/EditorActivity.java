@@ -821,6 +821,8 @@ public class EditorActivity extends BaseActivity {
 				 title = "一张图片";
 			 }
 		}
+		moment.setMomentImgs("");
+		moment.setAudioUrl("");
 		moment.setTitle(title);
 		moment.setContent(content);
 		moment.setContentAbstract(RichEditUtils.extactAbstract(content, 40));
