@@ -264,6 +264,12 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 						momentList.get(position).setIsOpen(1);
 					}
 					momentPlaAdapter.notifyDataSetChanged();
+					//请求服务器更新 并保存到本地
+					List<Moment> saveList = new ArrayList<Moment>();
+					saveList.add(momentList.get(position));
+					((HomeActivity) getActivity()).saveDbData(
+							C.DbTaskId.EDITOR_MOMENT_SAVE, Moment.class,
+							saveList);
 				}
 				break;
 			}
@@ -421,6 +427,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			ToastUtil.show(getActivity(), "同步完成");
 			stopSyncAnimation();
 			break;
+		case C.DbTaskId.EDITOR_MOMENT_SAVE:
+			ToastUtil.show(getActivity(), "修改成功");
 		default:
 			break;
 		}
