@@ -74,7 +74,7 @@ public class ReadActivity extends BaseActivity {
 		momentUid = intent.getLongExtra("momentUid", 0);
 
 		initView();
-		getData();
+//		getData();
 	}
 
 	private void initView() {
@@ -82,7 +82,7 @@ public class ReadActivity extends BaseActivity {
 		setTitleBackImgVisible(true);
 		setTitleRightImgLeftVisible(true);
 		setTitleRightImgVisible(true);
-		setTitleRightImg(R.drawable.editor_open_enable);
+		setTitleRightImg(R.drawable.editor_open_no);
 		setBaseActivityBgColor(getResources().getColor(
 				R.color.editor_main_color));
 
@@ -158,9 +158,9 @@ public class ReadActivity extends BaseActivity {
 		content.setRichText(momentDetail.getContent());
 
 		if (momentDetail.getIsOpen() == 0) {
-			titleRightImg.setImageResource(R.drawable.editor_open_enable);
+			titleRightImg.setImageResource(R.drawable.editor_open_no);
 		} else {
-			titleRightImg.setImageResource(R.drawable.editor_open_unable);
+			titleRightImg.setImageResource(R.drawable.editor_open_yes);
 		}
 		audioUrl = momentDetail.getAudioUrl();
 		if (!audioUrl.equals("") && audioUrl != null) {

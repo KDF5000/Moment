@@ -249,9 +249,9 @@ public class EditorActivity extends BaseActivity {
 			postTime = moment.getPostTime();
 		}
 		if (isOpen) {
-			setTitleRightImg(R.drawable.editor_open_enable);
+			setTitleRightImg(R.drawable.editor_open_yes);
 		} else {
-			setTitleRightImg(R.drawable.editor_open_unable);
+			setTitleRightImg(R.drawable.editor_open_no);
 		}
 		if(!StrUtils.isEmpty(recordAudioPath)){
 			editorRecordAudio.setVisibility(View.VISIBLE);
@@ -480,10 +480,10 @@ public class EditorActivity extends BaseActivity {
 	 */
 	public void setOpen() {
 		if (isOpen) {
-			setTitleRightImg(R.drawable.editor_open_enable);
+			setTitleRightImg(R.drawable.editor_open_no);
 			isOpen = false;
 		} else {
-			setTitleRightImg(R.drawable.editor_open_unable);
+			setTitleRightImg(R.drawable.editor_open_yes);
 			isOpen = true;
 		}
 	}
@@ -842,6 +842,7 @@ public class EditorActivity extends BaseActivity {
 		}
 		moment.setPostTime(postTime);
 		moment.setUpdateTime(currentTime);
+		moment.setIsOpen((isOpen==true ? 1 : 0));
 		// 用用户id，灵感标题，发布时间作为保存数据库的momentid
 		moment.setMomentUid(EncryptUtil.md5(user.getUserId()+"",articleTitle.getText().toString(), moment.getPostTime()).hashCode());
 
@@ -1063,6 +1064,9 @@ public class EditorActivity extends BaseActivity {
 					}else{
 						strLabel += labelList.get(i) +",";
 					}
+				}
+				if(moment==null){
+					moment = new Moment();
 				}
 				moment.setLabel(strLabel);
 				break;
