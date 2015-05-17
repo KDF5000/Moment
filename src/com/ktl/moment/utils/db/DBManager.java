@@ -40,6 +40,14 @@ public class DBManager {
 		db.configDebug(true);
 	}
 	/**
+	 * 
+	 */
+	public static void destoryInstance(){
+		if(dbManager!=null){
+			dbManager = null;
+		}
+	}
+	/**
 	 * 获取一个实例
 	 * @return dbManager
 	 */

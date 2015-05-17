@@ -235,7 +235,15 @@ public class EditorActivity extends BaseActivity {
 		moment = (Moment) intent.getSerializableExtra("moment");
 		if (moment != null) {
 			articleTitle.setText(moment.getTitle());
-			contentRichEditText.setRichText(moment.getContent());
+//			contentRichEditText.setRichText(moment.getContent());
+			contentRichEditText.post(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					contentRichEditText.setRichText(moment.getContent());
+				}
+			});
 			recordAudioPath = moment.getAudioUrl();
 			isOpen = moment.getIsOpen() == 0 ? false : true;
 			postTime = moment.getPostTime();

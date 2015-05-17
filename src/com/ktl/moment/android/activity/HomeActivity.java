@@ -33,6 +33,7 @@ import com.ktl.moment.utils.DensityUtil;
 import com.ktl.moment.utils.LogUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.db.DBManager;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.ktl.moment.utils.net.ApiManager;
@@ -68,7 +69,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 
 		// 注册信鸽
 		registXgPush();
-		
+		//初始化数据库
 		//初始化小红点
 		meRedDotView = initRedDotView(C.menu.FRAGMENT_ME_MENU_ID);
 		dynamicRedDotView = initRedDotView(C.menu.FRAGMENT_DYNAMIC_MENU_ID);
