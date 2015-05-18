@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.CommentListViewAdapter;
 import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.RichTextView;
 import com.ktl.moment.android.component.listview.arc.widget.SimpleFooter;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView;
 import com.ktl.moment.android.component.listview.arc.widget.ZrcListView.OnItemClickListener;
@@ -41,6 +42,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tencent.android.tpush.common.m;
 
 public class MomentDetailActivity extends BaseActivity {
 
@@ -66,7 +68,7 @@ public class MomentDetailActivity extends BaseActivity {
 	private ImageView focusAuthor;// 关注作者img
 
 	@ViewInject(R.id.moment_content)
-	private TextView momentContent;// 灵感内容
+	private RichTextView momentContent;// 灵感内容
 
 	@ViewInject(R.id.moment_label_tv)
 	private TextView momentLabel;// 灵感标签
