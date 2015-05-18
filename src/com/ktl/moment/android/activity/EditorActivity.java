@@ -241,7 +241,7 @@ public class EditorActivity extends BaseActivity {
 				}
 			});
 			recordAudioPath = moment.getAudioUrl();
-			isOpen = moment.getIsOpen() == 0 ? false : true;
+			isOpen = moment.getIsPublic() == 0 ? false : true;
 			postTime = moment.getPostTime();
 		}
 		if (isOpen) {
@@ -838,7 +838,7 @@ public class EditorActivity extends BaseActivity {
 		}
 		moment.setPostTime(postTime);
 		moment.setUpdateTime(currentTime);
-		moment.setIsOpen((isOpen==true ? 1 : 0));
+		moment.setIsPublic((isOpen==true ? 1 : 0));
 		// 用用户id，灵感标题，发布时间作为保存数据库的momentid
 		moment.setMomentUid(EncryptUtil.md5(user.getUserId()+"",articleTitle.getText().toString(), moment.getPostTime()).hashCode());
 
@@ -948,7 +948,7 @@ public class EditorActivity extends BaseActivity {
 					moment.setLabel("");
 				}
 				params.put("label", moment.getLabel());
-				params.put("isPublic", moment.getIsOpen());
+				params.put("isPublic", moment.getIsPublic());
 				if(moment.getMomentId() != 0){
 					params.put("momentId",moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
 				}

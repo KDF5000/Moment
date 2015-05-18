@@ -139,7 +139,7 @@ public class MomentStoreUtil {
 			moment.setLabel("");
 		}
 		params.put("label", moment.getLabel());
-		params.put("isPublic", moment.getIsOpen());
+		params.put("isPublic", moment.getIsPublic());
 		if(moment.getMomentId() != 0){
 			params.put("momentId",moment.getMomentId());//id为0说明是新增灵感，否则是更新灵感
 		}

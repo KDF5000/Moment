@@ -151,7 +151,7 @@ public class MomentCommentActivity extends BaseActivity {
 	private void loadComments() {
 		pageNum = 1;
 		RequestParams params = new RequestParams();
-		params.put("momentId", 2);
+		params.put("momentId", momentId);
 		params.put("pageSize", pageSize);
 		params.put("pageNum", pageNum);
 		ApiManager.getInstance().post(this, C.API.GET_COMMENT_LIST, params,
