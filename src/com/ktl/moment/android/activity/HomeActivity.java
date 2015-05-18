@@ -2,6 +2,7 @@ package com.ktl.moment.android.activity;
 
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -250,13 +251,15 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			return;
 		}
 		XGPushConfig.enableDebug(this, true);
-		XGPushManager.registerPush(getApplicationContext(), user.getUserId()
+		Context context = getApplicationContext();
+		XGPushManager.registerPush(context, user.getUserId()
 				+ "", new XGIOperateCallback() {
 
 			@Override
 			public void onSuccess(Object data, int flag) {
 				// TODO Auto-generated method stub
 				Log.i(TAG,"注册成功"+ XGPushConfig.getAccessId(getApplicationContext()));
+				//ToastUtil.show(HomeActivity.this, "注册成功");
 				// 向服务上传token
 				RequestParams params = new RequestParams();
 				params.put("user_id", user.getUserId());
@@ -281,7 +284,8 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			@Override
 			public void onFail(Object data, int errCode, String msg) {
 				// TODO Auto-generated method stub
-				Log.i(TAG, "注册失败" + msg);
+//				Log.i(TAG, "注册失败" + msg);
+				ToastUtil.show(HomeActivity.this, "注册失败"+msg);
 			}
 		});
 	}

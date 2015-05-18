@@ -56,7 +56,7 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 	public void onRegisterResult(Context arg0, int arg1,
 			XGPushRegisterResult arg2) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
