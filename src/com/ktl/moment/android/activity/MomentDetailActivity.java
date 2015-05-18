@@ -38,6 +38,7 @@ import com.ktl.moment.entity.UserTrack;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.PlayUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.StrUtils;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.TimerCountUtil;
 import com.ktl.moment.utils.ToastUtil;
@@ -211,8 +212,12 @@ public class MomentDetailActivity extends BaseActivity {
 		} else {
 			focusAuthor.setImageResource(R.drawable.focus_author_press);
 		}
-		momentContent.setText(moment.getContent());
-		momentLabel.setText(moment.getLabel());
+		momentContent.setRichText(moment.getContent());
+		if(StrUtils.isEmpty(moment.getLabel())){
+			momentLabel.setText("暂无标签");
+		}else{
+			momentLabel.setText(moment.getLabel());
+		}
 		commentsNum.setText(moment.getCommentNum() + "");
 
 		if (moment.getIsClipper() == 1) {

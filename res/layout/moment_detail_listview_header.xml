@@ -57,20 +57,12 @@
                 android:layout_centerVertical="true" />
         </RelativeLayout>
 
-       <!--  <TextView
-            android:id="@+id/moment_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:lineSpacingMultiplier="1.5"
-            android:textSize="15sp" /> -->
-
         <com.ktl.moment.android.component.RichTextView
             android:id="@+id/moment_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:lineSpacingMultiplier="1.5"
+            android:lineSpacingExtra="4.6dp"
             android:textSize="15sp" />
 
         <LinearLayout

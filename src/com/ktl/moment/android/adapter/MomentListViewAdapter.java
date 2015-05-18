@@ -27,6 +27,7 @@ import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.StrUtils;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -86,12 +87,18 @@ public class MomentListViewAdapter extends BaseAdapter {
 		}
 		final Moment moment = momentList.get(position);
 		momentHolder.tittleTv.setText(moment.getTitle());
-		momentHolder.contentTv.setText(moment.getContentAbstract());
+		if(StrUtils.isEmpty(moment.getContentAbstract())){
+			momentHolder.contentTv.setVisibility(View.GONE);
+		}else{
+			momentHolder.contentTv.setVisibility(View.VISIBLE);
+			momentHolder.contentTv.setText(moment.getContentAbstract());
+		}
 		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
 				momentHolder.avatar, options);
-		if (moment.getMomentImgs() == null || moment.getMomentImgs().equals("")) {
+		if (StrUtils.isEmpty(moment.getMomentImgs())) {
 			momentHolder.momentImg.setVisibility(View.GONE);
 		} else {
+			momentHolder.momentImg.setVisibility(View.VISIBLE);
 			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
 					momentHolder.momentImg, options);
 		}
@@ -138,8 +145,12 @@ public class MomentListViewAdapter extends BaseAdapter {
 		momentHolder.praiseNum.setText(moment.getPraiseNum() + "");
 
 		momentHolder.commentNum.setText(moment.getCommentNum() + "");
-		momentHolder.labelTv.setText(moment.getLabel());
-
+		if(StrUtils.isEmpty(moment.getLabel())){
+			momentHolder.labelTv.setText("暂无标签");
+		}else{
+			momentHolder.labelTv.setText(moment.getLabel());
+		}
+	
 		final User user = (User) SharedPreferencesUtil.getInstance().getObject(
 				C.SPKey.SPK_LOGIN_INFO);
 
