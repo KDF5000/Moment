@@ -106,6 +106,7 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 		Gson gson = new Gson();
 		CustomContent customContent = gson.fromJson(content,CustomContent.class);
 		mxgMessage.setContent(customContent);
+		Log.i("XgCustomMessage", "-->"+customContent.getMessage());
 		showNotification("您有一条新信息",customContent.getUserName(),customContent.getMessage());
 		int count = SharedPreferencesUtil.getInstance().getInt(C.SPKey.SPK_MESSAEG_COUNT,0);
 		SharedPreferencesUtil.getInstance().setInt(C.SPKey.SPK_MESSAEG_COUNT, count+1);//消息数加1
@@ -116,7 +117,6 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 				listener.OnReceive(mxgMessage);
 			}
 		}
-		
 	}
 	/**
 	 * 显示通知
