@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.MomentDetailActivity;
@@ -86,18 +87,18 @@ public class MomentListViewAdapter extends BaseAdapter {
 		final Moment moment = momentList.get(position);
 		momentHolder.tittleTv.setText(moment.getTitle());
 		momentHolder.contentTv.setText(moment.getContent());
-//		if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
-			ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
-					momentHolder.avatar, options);
-//		} else {
-//			momentHolder.avatar.setImageResource(R.drawable.default_img);
-//		}
-//		if (PregUtil.pregImgUrl(moment.getMomentImgs())) {
-			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
-					momentHolder.momentImg, options);
-//		} else {
-//			momentHolder.momentImg.setVisibility(View.GONE);
-//		}
+		// if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
+		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
+				momentHolder.avatar, options);
+		// } else {
+		// momentHolder.avatar.setImageResource(R.drawable.default_img);
+		// }
+		// if (PregUtil.pregImgUrl(moment.getMomentImgs())) {
+		ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
+				momentHolder.momentImg, options);
+		// } else {
+		// momentHolder.momentImg.setVisibility(View.GONE);
+		// }
 		momentHolder.userNameTv.setText(moment.getAuthorName());
 		momentHolder.postTime.setText(TimeFormatUtil.formatDate(moment
 				.getPostTime()));
@@ -169,7 +170,7 @@ public class MomentListViewAdapter extends BaseAdapter {
 				context.startActivity(intent);
 			}
 		});
-
+		
 		// 关注作者
 		momentHolder.focusAuthorImg.setOnClickListener(new OnClickListener() {
 			@Override
@@ -177,6 +178,7 @@ public class MomentListViewAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				Animation anim = AnimationUtils.loadAnimation(context,
 						R.anim.focus_img_anim);
+				anim.setFillAfter(true);
 				momentHolder.focusAuthorImg.setAnimation(anim);
 				int isAddFocus;
 				if (moment.getIsFocused() == 1) {
@@ -197,8 +199,7 @@ public class MomentListViewAdapter extends BaseAdapter {
 						@Override
 						public void onAnimationEnd(Animation animation) {
 							// TODO Auto-generated method stub
-							momentHolder.focusAuthorImg
-									.setImageResource(R.drawable.focus_author);
+							momentHolder.focusAuthorImg.setImageResource(R.drawable.focus_author45);
 							moment.setIsFocused(0);
 						}
 					});
@@ -222,12 +223,13 @@ public class MomentListViewAdapter extends BaseAdapter {
 						public void onAnimationEnd(Animation animation) {
 							// TODO Auto-generated method stub
 							momentHolder.focusAuthorImg
-									.setImageResource(R.drawable.focus_author_press);
+									.setImageResource(R.drawable.focus_author_press45);
 							moment.setIsFocused(1);
 						}
 					});
 					isAddFocus = 1;
 				}
+//				momentList.set(position, moment);
 				notifyDataSetChanged();
 				requestServer(isAddFocus, "isAddFocus", user.getUserId(),
 						moment.getAuthorId(), C.API.FOCUS_AUTHOR, "User");
@@ -343,7 +345,7 @@ public class MomentListViewAdapter extends BaseAdapter {
 	 *            当用于关注作者时，该字段为被关注用户的id
 	 * @param url
 	 */
-	public void requestServer(int isFlag, String flagName, long userId,
+	public void requestServer(int isFlag, final String flagName, long userId,
 			long momentId, String url, String modelName) {
 		RequestParams params = new RequestParams();
 		params.put("userId", userId);
@@ -353,18 +355,64 @@ public class MomentListViewAdapter extends BaseAdapter {
 			params.put("momentId", momentId);
 		}
 		params.put(flagName, isFlag);
+		final int flag = isFlag;
 		ApiManager.getInstance().post(context, url, params, new HttpCallBack() {
 
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
+				if (flag == 1) {
+					if (flagName.equals("isAddFocus")) {
+						Toast.makeText(context, "关注成功~", Toast.LENGTH_SHORT)
+								.show();
+					} else if (flagName.equals("isAddWatch")) {
+						Toast.makeText(context, "围观成功~", Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Toast.makeText(context, "点赞成功~", Toast.LENGTH_SHORT)
+								.show();
+					}
+				} else {
+					if (flagName.equals("isAddFocus")) {
+						Toast.makeText(context, "取消关注成功~", Toast.LENGTH_SHORT)
+								.show();
+					} else if (flagName.equals("isAddWatch")) {
+						Toast.makeText(context, "取消围观成功~", Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Toast.makeText(context, "取消点赞成功~", Toast.LENGTH_SHORT)
+								.show();
+					}
+				}
 
 			}
 
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-
+				if (flag == 1) {
+					if (flagName.equals("isAddFocus")) {
+						Toast.makeText(context, "关注失败~", Toast.LENGTH_SHORT)
+								.show();
+					} else if (flagName.equals("isAddWatch")) {
+						Toast.makeText(context, "围观失败~", Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Toast.makeText(context, "点赞失败~", Toast.LENGTH_SHORT)
+								.show();
+					}
+				} else {
+					if (flagName.equals("isAddFocus")) {
+						Toast.makeText(context, "取消关注失败~", Toast.LENGTH_SHORT)
+								.show();
+					} else if (flagName.equals("isAddWatch")) {
+						Toast.makeText(context, "取消围观失败~", Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Toast.makeText(context, "取消点赞失败~", Toast.LENGTH_SHORT)
+								.show();
+					}
+				}
 			}
 		}, modelName);
 	}

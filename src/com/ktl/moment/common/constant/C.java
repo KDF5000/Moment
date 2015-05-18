@@ -317,6 +317,7 @@ public class C {
 		public static final int JUMPTOCOMMENT = 8;// 跳转至评论输入界面，需要回传评论数据
 		public static final int REQUEST_UPDATE_INFO = 9;//更新用户信息回传
 		public static final int REQUEST_SELECT_LABEL = 10;//选择标签
+		public static final int REQUEST_SELECT_GENDER = 11;//更改性别
 	}
 
 	/**

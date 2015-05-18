@@ -33,7 +33,6 @@ import com.ktl.moment.utils.DensityUtil;
 import com.ktl.moment.utils.LogUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
-import com.ktl.moment.utils.db.DBManager;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.ktl.moment.utils.net.ApiManager;

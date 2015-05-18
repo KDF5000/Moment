@@ -9,7 +9,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.Html;
@@ -24,7 +23,6 @@ import android.widget.EditText;
 import com.ktl.moment.manager.ImageManager;
 import com.ktl.moment.manager.ImageManager.ImgLoadCallback;
 import com.ktl.moment.utils.ImageUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 
 public class RichEditText extends EditText {
