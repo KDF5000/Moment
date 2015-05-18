@@ -8,7 +8,6 @@ import com.ktl.moment.android.fragment.splash.FirstFragment;
 import com.ktl.moment.android.fragment.splash.SecondFragment;
 import com.ktl.moment.android.fragment.splash.ThirdFragment;
 import com.ktl.moment.common.constant.C;
-import com.ktl.moment.entity.User;
 import com.ktl.moment.utils.FileUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 
@@ -48,13 +47,8 @@ public class SplashActivity extends FragmentActivity implements
 		// 是否浏览过引导页
 		boolean isScanSplash = SharedPreferencesUtil.getInstance().getBoolean(
 				C.SPKey.SPK_IS_SCAN_SPLASH, false);
-		// 是否登陆了
-		User userInfo = (User) SharedPreferencesUtil.getInstance().getObject(
-				C.SPKey.SPK_LOGIN_INFO);
-		if (isScanSplash && userInfo != null) {
-			actionStart(HomeActivity.class);
-		} else if (isScanSplash && userInfo == null) {
-			actionStart(AccountActivity.class);
+		if(isScanSplash){
+			actionStart(StartPageActivity.class);
 		}
 
 		viewPager = (ViewPager) findViewById(R.id.splash_viewpager);
