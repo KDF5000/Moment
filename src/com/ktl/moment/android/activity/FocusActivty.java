@@ -63,8 +63,8 @@ public class FocusActivty extends BaseActivity {
 		this.inflater.inflate(R.layout.activity_my_focus, contentLayout, true);
 		ViewUtils.inject(this);
 		
-		loading = new LoadingDialog(this);
-		loading.show();
+//		loading = new LoadingDialog(this);
+//		loading.show();
 
 		Intent intent = getIntent();
 		intentFlag = intent.getStringExtra("intentFlag");
@@ -150,17 +150,17 @@ public class FocusActivty extends BaseActivity {
 				List<User> user = (List<User>) res;
 				focusList.clear();
 				focusList.addAll(user);
-				new Handler().postDelayed(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						loading.dismiss();
+//				new Handler().postDelayed(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						// TODO Auto-generated method stub
+//						loading.dismiss();
 						myFocus.setRefreshSuccess("");
 						myFocus.startLoadMore();// 允许加载更多
 						fansAdapter.notifyDataSetChanged();
-					}
-				}, 500);
+//					}
+//				}, 500);
 				if (user.size() < pageSize) {
 					hasMore = false;
 				} else {
@@ -172,17 +172,17 @@ public class FocusActivty extends BaseActivity {
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
 				final String str = (String)res;
-				new Handler().postDelayed(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						loading.dismiss();
+//				new Handler().postDelayed(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						// TODO Auto-generated method stub
+//						loading.dismiss();
 						ToastUtil.show(FocusActivty.this, str);
 						myFocus.setRefreshFail("");
 						myFocus.startLoadMore();// 允许加载更多
-					}
-				}, 1000);
+//					}
+//				}, 1000);
 			}
 		}, "User");
 	}

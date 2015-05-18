@@ -15,7 +15,6 @@ import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.manager.AppManager;
 import com.ktl.moment.utils.SharedPreferencesUtil;
-import com.ktl.moment.utils.db.DBManager;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.lidroid.xutils.ViewUtils;
