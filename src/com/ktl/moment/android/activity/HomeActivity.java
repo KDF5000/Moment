@@ -70,7 +70,15 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);// 设置默认的界面
 
 		// 注册信鸽
-		registXgPush();
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				registXgPush();
+			}
+		}, 500);
+		
 		//初始化数据库
 		//初始化小红点
 		meRedDotView = initRedDotView(C.menu.FRAGMENT_ME_MENU_ID);
@@ -251,8 +259,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			return;
 		}
 		XGPushConfig.enableDebug(this, true);
-		Context context = getApplicationContext();
-		XGPushManager.registerPush(context, user.getUserId()
+		XGPushManager.registerPush(getApplicationContext(), user.getUserId()
 				+ "", new XGIOperateCallback() {
 
 			@Override
@@ -405,7 +412,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	public void OnReceive(XgMessage msg) {
 		// TODO Auto-generated method stub
 		int messageType = msg.getMessageType();
-		ToastUtil.show(this, msg.getContent().getMessage());
+//		ToastUtil.show(this, msg.getContent().getMessage());
 		switch(messageType){
 		case 1://我的消息
 			//显示小红点

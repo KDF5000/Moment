@@ -856,6 +856,11 @@ public class EditorActivity extends BaseActivity {
 							final String token = TokenList.get(0).getToken();
 							// 如果有音频上传音频
 							if (!StrUtils.isEmpty(recordAudioPath)) {
+								if(recordAudioPath.contains(C.API.QINIU_BASE_URL)){
+									moment.setAudioUrl(recordAudioPath);
+									uploadFilte2Qiniu(token);
+									return ;
+								}
 								// 上传音频
 								QiniuManager.getInstance().uploadFile(
 										EditorActivity.this, recordAudioPath,

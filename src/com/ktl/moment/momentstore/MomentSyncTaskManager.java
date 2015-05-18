@@ -44,6 +44,9 @@ public class MomentSyncTaskManager {
 	
 	public void startSync(){
 		if(workingThreadNUm>=maxThreadNum){
+			if(this.momentSyncCallback != null){
+				this.momentSyncCallback.onComplete(0);
+			}
 			return ;
 		}
 		nextSync();

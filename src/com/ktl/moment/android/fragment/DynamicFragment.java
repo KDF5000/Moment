@@ -148,6 +148,8 @@ public class DynamicFragment extends BaseFragment {
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
 						final String str = (String)res;
+						ToastUtil.show(getActivity(), str);
+
 						new Handler().postDelayed(new Runnable() {
 							
 							@Override
@@ -155,7 +157,6 @@ public class DynamicFragment extends BaseFragment {
 								// TODO Auto-generated method stub
 								dynamicListView.setRefreshSuccess("");
 								loading.dismiss();
-								ToastUtil.show(getActivity(), str);
 							}
 						}, 1000);
 					}

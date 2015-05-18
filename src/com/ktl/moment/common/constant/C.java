@@ -285,7 +285,7 @@ public class C {
 		public static final String FRAGMENT_PROFILE = "perfectInfoFragment";
 		public static final String FRAGMENT_RECOMMEN = "recommenFragment";
 
-		public static final boolean IS_CHECK_INPUT = false;// 是否对输入框等控件做空值检测
+		public static final boolean IS_CHECK_INPUT = true;// 是否对输入框等控件做空值检测
 		public static final boolean IS_SEND_VERIFY = false; // 是否开启验证码
 	}
 
@@ -299,9 +299,10 @@ public class C {
 
 		public static final String YZX_KRY = "1234567890~!@#$%^&*()Abcdefghijk";
 		public static final String MD5KEY = "b1871a6961cda7efd5e522cfa31eba30";// 根据上述字符串取md5值得到的密钥
-		public static final String ACCOUNT_SID = "911c24149b30feb611f46b726dd39a48";// 开发者主账号
-		public static final String APP_ID = "4b4b8011d56d4342adb3719522664697";// app
-																				// id
+//		public static final String ACCOUNT_SID = "911c24149b30feb611f46b726dd39a48";// 开发者主账号
+		public static final String ACCOUNT_SID = "0fdacf72024efbb5b81a89d23f4f626f";
+//		public static final String APP_ID = "4b4b8011d56d4342adb3719522664697";// app
+		public static final String APP_ID = "9841691425da4e3d8018baf1bbdb281a";																// id
 		public static final String APP_NAME = "com.ktl.moment";
 		public static final int VERIFY_VALID_TIME = 1;// 验证码有效时间/minute
 		public static final int BUSSINESS_TYPE = 1;// 验证业务类型，当前智能验证业务参数值为1

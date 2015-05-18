@@ -20,6 +20,7 @@ import com.ktl.moment.utils.db.DbTaskType;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.tencent.android.tpush.XGPushManager;
 
 public class SettingActivity extends BaseActivity {
 
@@ -176,6 +177,7 @@ public class SettingActivity extends BaseActivity {
 		int taskId = res.what;
 		switch (taskId) {
 		case C.DbTaskId.DROP_DB:
+			XGPushManager.unregisterPush(getApplicationContext());
 			new Handler().postDelayed(new Runnable() {
 				
 				@Override
