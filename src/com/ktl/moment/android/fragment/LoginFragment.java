@@ -150,7 +150,6 @@ public class LoginFragment extends AccountBaseFragment {
 			EditTextUtil.setEditTextEmpty(loginPassEt);
 			break;
 		case R.id.login_btn:
-			toast("mobile login");
 			mobileLogin();
 			SharedPreferencesUtil.getInstance().putString(C.SPKey.SPK_IS_LOGIN,
 					"true");

@@ -34,7 +34,9 @@ import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
+import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.android.component.ResizeLinearLayout;
+import com.ktl.moment.android.component.RichEditTextCustom;
 import com.ktl.moment.android.component.ResizeLinearLayout.OnResizeListener;
 import com.ktl.moment.android.component.RichEditText;
 import com.ktl.moment.android.component.RippleBackground;
@@ -52,6 +54,7 @@ import com.ktl.moment.qiniu.QiniuTask;
 import com.ktl.moment.utils.BasicInfoUtil;
 import com.ktl.moment.utils.EncryptUtil;
 import com.ktl.moment.utils.FileUtil;
+import com.ktl.moment.utils.ImageUtils;
 import com.ktl.moment.utils.PlayUtil;
 import com.ktl.moment.utils.RecordUtil;
 import com.ktl.moment.utils.RichEditUtils;
@@ -67,6 +70,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 灵感编辑
@@ -95,7 +99,8 @@ public class EditorActivity extends BaseActivity {
 	private EditText articleTitle;
 
 	@ViewInject(R.id.editor_edit_area)
-	private RichEditText contentRichEditText;
+//	private RichEditText contentRichEditText;
+	private RichEditTextCustom contentRichEditText;
 
 	@ViewInject(R.id.editor_tool_content)
 	private RelativeLayout toolContent;
@@ -184,6 +189,8 @@ public class EditorActivity extends BaseActivity {
 	// private RecordPlaySeekbarUtil recordPlaySeekbarUtil;// seekbar工具类
 	private PlayUtil playUtil;
 
+	private String postTime = null;//发布时间
+	private LoginDialog loadDialog;
 	private InputHandler inputHandler = new InputHandler();
 
 	private class InputHandler extends Handler {
@@ -217,6 +224,8 @@ public class EditorActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		getLayoutInflater().inflate(R.layout.activity_editor, contentLayout,
 				true);
+		loadDialog = new LoginDialog(this);
+		loadDialog.setText("保存中");
 		init();
 		FileUtil.createDir("record");
 
@@ -226,17 +235,28 @@ public class EditorActivity extends BaseActivity {
 		moment = (Moment) intent.getSerializableExtra("moment");
 		if (moment != null) {
 			articleTitle.setText(moment.getTitle());
-			contentRichEditText.setText(moment.getContent());
+//			contentRichEditText.setRichText(moment.getContent());
+			contentRichEditText.post(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					contentRichEditText.setRichText(moment.getContent());
+				}
+			});
 			recordAudioPath = moment.getAudioUrl();
 			isOpen = moment.getIsOpen() == 0 ? false : true;
+			postTime = moment.getPostTime();
 		}
 		if (isOpen) {
-			setTitleRightImg(R.drawable.editor_open_enable);
+			setTitleRightImg(R.drawable.editor_open_yes);
 		} else {
-			setTitleRightImg(R.drawable.editor_open_unable);
+			setTitleRightImg(R.drawable.editor_open_no);
 		}
-		if(recordAudioPath != null){
+		if(!StrUtils.isEmpty(recordAudioPath)){
 			editorRecordAudio.setVisibility(View.VISIBLE);
+		}else{
+			editorRecordAudio.setVisibility(View.GONE);
 		}
 		if(moment==null){
 			moment = new Moment();
@@ -460,10 +480,10 @@ public class EditorActivity extends BaseActivity {
 	 */
 	public void setOpen() {
 		if (isOpen) {
-			setTitleRightImg(R.drawable.editor_open_enable);
+			setTitleRightImg(R.drawable.editor_open_no);
 			isOpen = false;
 		} else {
-			setTitleRightImg(R.drawable.editor_open_unable);
+			setTitleRightImg(R.drawable.editor_open_yes);
 			isOpen = true;
 		}
 	}
@@ -781,12 +801,14 @@ public class EditorActivity extends BaseActivity {
 	}
 
 	private void saveContent() {
+		
 		User user = Account.getUserInfo();
 		if( user == null){
 			ToastUtil.show(this, "请先登录");
 			actionStart(AccountActivity.class);
 			return;
 		}
+		loadDialog.show();
 		// 没有网络的话保存到本地
 		BasicInfoUtil basicInfoUtil = BasicInfoUtil.getInstance(this);
 		if (moment == null) {
@@ -794,9 +816,11 @@ public class EditorActivity extends BaseActivity {
 		}
 		//需要判断一下标题内容是否为空
 		String title = articleTitle.getText().toString();
-		String content = contentRichEditText.getText().toString();
+//		String content = contentRichEditText.getText().toString();
+		String content = contentRichEditText.getRichText();
 		if(content == null || content == "" || content.equals("")){
 			ToastUtil.show(this, "内容不能为空");
+			loadDialog.dismiss();
 			return ;
 		}
 		if(StrUtils.isEmpty(title)){
@@ -805,16 +829,22 @@ public class EditorActivity extends BaseActivity {
 				 title = "一张图片";
 			 }
 		}
-			
+		moment.setMomentImgs("");
+		moment.setAudioUrl("");
 		moment.setTitle(title);
 		moment.setContent(content);
 		moment.setContentAbstract(RichEditUtils.extactAbstract(content, 40));
-		moment.setAuthorId(1);
-		moment.setAuthorName("KDF5000");
-		String postTime = TimeFormatUtil.getCurrentDateTime();
+		moment.setAuthorId(user.getUserId());
+		moment.setAuthorName(user.getNickName());
+		String currentTime = TimeFormatUtil.getCurrentDateTime();
+		if(postTime == null){
+			postTime = currentTime;
+		}
 		moment.setPostTime(postTime);
+		moment.setUpdateTime(currentTime);
+		moment.setIsOpen((isOpen==true ? 1 : 0));
 		// 用用户id，灵感标题，发布时间作为保存数据库的momentid
-		moment.setMomentUid(EncryptUtil.md5(user.getUserId()+"",articleTitle.getText().toString(), postTime).hashCode());
+		moment.setMomentUid(EncryptUtil.md5(user.getUserId()+"",articleTitle.getText().toString(), moment.getPostTime()).hashCode());
 
 		if (basicInfoUtil.isNetworkConnected()) {// 有网
 			moment.setDirty(1);// 本地的标志
@@ -829,7 +859,7 @@ public class EditorActivity extends BaseActivity {
 							ArrayList<QiniuToken> TokenList = (ArrayList<QiniuToken>) res;
 							final String token = TokenList.get(0).getToken();
 							// 如果有音频上传音频
-							if (recordAudioPath != null) {
+							if (!StrUtils.isEmpty(recordAudioPath)) {
 								// 上传音频
 								QiniuManager.getInstance().uploadFile(
 										EditorActivity.this, recordAudioPath,
@@ -839,6 +869,7 @@ public class EditorActivity extends BaseActivity {
 											public void OnFailed(String msg) {
 												// TODO Auto-generated method
 												// stub
+												loadDialog.setText("网络出错保存到本地");
 												moment.setDirty(1);
 												moment.setAudioUrl(recordAudioPath);
 												saveMomentDb(moment);
@@ -861,14 +892,16 @@ public class EditorActivity extends BaseActivity {
 						@Override
 						public void onFailure(Object res) {
 							// TODO Auto-generated method stub
-							Toast.makeText(EditorActivity.this, (String) res,
-									Toast.LENGTH_SHORT).show();
+//							Toast.makeText(EditorActivity.this, (String) res,
+//									Toast.LENGTH_SHORT).show();
+							loadDialog.setText("网络出错保存到本地");
 							moment.setDirty(1);
 							saveMomentDb(moment);
 						}
 					}, "QiniuToken");
 
 		} else {
+			loadDialog.setText("网络出错保存到本地");
 			moment.setDirty(1);
 			saveMomentDb(moment);
 		}
@@ -878,25 +911,26 @@ public class EditorActivity extends BaseActivity {
 	 * 上传文件到七牛
 	 */
 	private void uploadFilte2Qiniu(String token) {
-		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText.getText().toString());
+		Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText.getRichText());
 		TaskManager manager = new TaskManager();
 		manager.setTaskCallBack(new TaskCallback() {
 
 			@Override
 			public void onError(String msg) {
 				// TODO Auto-generated method stub
-				Toast.makeText(EditorActivity.this, msg, Toast.LENGTH_SHORT).show();
+//				Toast.makeText(EditorActivity.this, msg, Toast.LENGTH_SHORT).show();
+				loadDialog.setText("网络出错保存到本地");
 				saveMomentDb(moment);
 			}
 
 			@Override
 			public void onComplete(Map<String, String> resMap) {
 				// TODO Auto-generated method stub
-				String content = contentRichEditText.getText().toString();
+				String content = contentRichEditText.getRichText();
 				for (Map.Entry<String, String> entry : resMap.entrySet()) {
 					Log.i("URL","-->" + entry.getKey() + "=" + entry.getValue());
 					// 替换et内容
-					content = content.replaceAll(entry.getKey(), "<img src = \""
+					content = content.replaceAll(entry.getKey(), "<img src=\""
 							+ C.API.QINIU_BASE_URL + entry.getValue() + "\"/>");
 					// 最好取第一个
 					moment.setMomentImgs(C.API.QINIU_BASE_URL + entry.getValue());
@@ -939,6 +973,14 @@ public class EditorActivity extends BaseActivity {
 							public void onSuccess(Object res) {
 								// TODO Auto-generated method stub
 								// 保存数据库
+								List<Moment> list = (List<Moment>) res;
+								if(list==null || list.isEmpty()){
+//									ToastUtil.show(EditorActivity.this, "服务器出现故障~");
+									loadDialog.setText("服务器出现故障保存到本地");
+									saveMomentDb(moment);
+									return;
+								}
+								moment.setMomentId(list.get(0).getMomentId());
 								saveMomentDb(moment);
 								// 跳回到主页面刷新moment页面的标志
 //								SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
@@ -950,16 +992,23 @@ public class EditorActivity extends BaseActivity {
 								// TODO Auto-generated method stub
 								// 保存到本地数据库
 								Log.i("EditorActivity", res.toString());
-								ToastUtil.show(EditorActivity.this,"网络出错，保存到本地-->" + res.toString());
-								moment.setContent(contentRichEditText.getText()
-										.toString());
+//								ToastUtil.show(EditorActivity.this,"网络出错，保存到本地-->" + res.toString());
+								loadDialog.setText("网络出错保存到本地");
+								String content = contentRichEditText.getRichText();
+								moment.setContent(content);
+								moment.setContentAbstract(RichEditUtils.extactAbstract(content, 40));
+								Map<String, String> imgMap = RichEditUtils.extractImg(contentRichEditText.getRichText());
+								for(Map.Entry<String, String> entry : imgMap.entrySet()){
+									moment.setMomentImgs(entry.getValue());
+									break;
+								}
 								moment.setDirty(1);
 								saveMomentDb(moment);
 //								// 跳回到主页面刷新moment页面的标志
 //								SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
 //								finish();
 							}
-						}, "");
+						}, "Moment");
 			}
 		});
 		for (Map.Entry<String, String> entry : imgMap.entrySet()) {
@@ -988,19 +1037,22 @@ public class EditorActivity extends BaseActivity {
 				ContentResolver resolver = getContentResolver();
 				Bitmap originalBitmap = null;
 				Uri originalUri = data.getData();
-				try {
-					originalBitmap = BitmapFactory.decodeStream(resolver
-							.openInputStream(originalUri));
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (originalBitmap != null) {
-					contentRichEditText.addImage(originalBitmap,
-							getAbsoluteImagePath(originalUri));
-				} else {
-					Toast.makeText(this, "获取图片失败", Toast.LENGTH_LONG).show();
-				}
+//				try {
+//					originalBitmap = BitmapFactory.decodeStream(resolver
+//							.openInputStream(originalUri));
+//					originalBitmap = ImageUtils.loadImage(resolver.openInputStream(originalUri));
+					originalBitmap = ImageLoader.getInstance().loadImageSync(originalUri.toString());
+					if (originalBitmap != null) {
+						contentRichEditText.addImage(originalBitmap,getAbsoluteImagePath(originalUri));
+					} else {
+						Toast.makeText(this, "获取图片失败", Toast.LENGTH_LONG).show();
+					}
+//					
+//				} catch (FileNotFoundException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//					Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+//				}
 				break;
 			}
 			case C.ActivityRequest.REQUEST_SELECT_LABEL:
@@ -1012,6 +1064,9 @@ public class EditorActivity extends BaseActivity {
 					}else{
 						strLabel += labelList.get(i) +",";
 					}
+				}
+				if(moment==null){
+					moment = new Moment();
 				}
 				moment.setLabel(strLabel);
 				break;
@@ -1042,7 +1097,8 @@ public class EditorActivity extends BaseActivity {
 		int taskId = res.what;
 		switch (taskId) {
 		case C.DbTaskId.EDITOR_MOMENT_SAVE:
-			Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
+			loadDialog.setText("保存成功");
 			// 跳回到主页面刷新moment页面的标志
 			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG,true);
 			finish();

@@ -67,22 +67,20 @@ public class LabelSelectActivity extends Activity{
 		setContentView(R.layout.activity_label_select);
 		ViewUtils.inject(this);
 		labelList = new ArrayList<String>();
-		labelList.add("大数据1");
-		labelList.add("互联网2");
-		labelList.add("物联网3");
-		labelList.add("通信4");
-		labelList.add("大数据5");
-		labelList.add("互联网6");
-		labelList.add("物联网7");
-		labelList.add("通信8");
-		labelList.add("大数据9");
-		labelList.add("互联网10");
-		labelList.add("物联网11");
-		labelList.add("通信12");
-		labelList.add("大数据13");
-		labelList.add("互联网14");
-		labelList.add("物联网15");
-		labelList.add("通信16");
+		labelList.add("餐饮");
+		labelList.add("O2O");
+		labelList.add("移动支付");
+		labelList.add("移动APP");
+		labelList.add("大数据");
+		labelList.add("互联网");
+		labelList.add("物联网");
+		labelList.add("通信");
+		labelList.add("写作平台");
+		labelList.add("协作工具");
+		labelList.add("小游戏");
+		labelList.add("思维导图工具");
+		labelList.add("理财工具");
+		labelList.add("安全工具");
 		checkBoxstate = new HashMap<Integer, Boolean>();
 		
 		selectedLabel = new HashMap<String,LabelPosition>();
@@ -126,13 +124,17 @@ public class LabelSelectActivity extends Activity{
 			switch (keyCode) {
 			case KeyEvent.KEYCODE_ENTER://回车
 				String str = inputLabelEt.getEditableText().toString();
-				String newStr = str.substring(afterInsertEditString.length());
+				int newStrLen = str.length() - afterInsertEditString.length();
+				int cursorPosition = inputLabelEt.getSelectionStart();
+				String newStr = str.substring(cursorPosition-newStrLen,cursorPosition);
 				Log.i(TAG, "newStr-->"+newStr.length()+"-->bool"+StrUtils.isEmpty(newStr));
 				if(StrUtils.isEmpty(newStr) || newStr=="\n" || newStr.endsWith("\n")){
 					break;
 				}
-				inputLabelEt.getEditableText().delete(afterInsertEditString.length(),str.length());
+//				inputLabelEt.getEditableText().delete(afterInsertEditString.length(),str.length());
+				inputLabelEt.getEditableText().delete(cursorPosition-newStr.length(),cursorPosition);
 				insertEditText(newStr.trim(), -1);//插入
+				updateSelectLabel();
 				int listPosition = StrUtils.findPositionInList(labelList, new String(newStr.trim()));
 				if(listPosition>=0){//说明存在list中
 					labelListAdapter.setCheckboxState(listPosition, true);
@@ -330,6 +332,7 @@ public class LabelSelectActivity extends Activity{
 		if(listPosition>=0){
 			labelListAdapter.setCheckboxState(listPosition, false);
 		}
+		afterInsertEditString = inputLabelEt.getEditableText().toString();
 	}
 	/**
 	 * 获取图片并插入EditText
@@ -356,7 +359,8 @@ public class LabelSelectActivity extends Activity{
 			if (index < 0 || index >= edit_text.length()) {
 				edit_text.append(spannableString);
 			} else {
-				edit_text.insert(edit_text.length(), spannableString);
+//				edit_text.insert(edit_text.length(), spannableString);
+				edit_text.insert(index, spannableString);
 			}
 			setSpanClickable(listPosition);
 			//插入到map
@@ -364,7 +368,7 @@ public class LabelSelectActivity extends Activity{
 			int end = edit_text.getSpanEnd(imageSpan);
 			LabelPosition labelPosition = new LabelPosition(start,end, listPosition);
 			selectedLabel.put(str, labelPosition);
-			inputLabelEt.getEditableText().append(" ");
+			inputLabelEt.getEditableText().insert(inputLabelEt.getSelectionStart(), " ");
 			afterInsertEditString = inputLabelEt.getEditableText().toString();
 //			if(StrUtils.findPositionInList(labelList, str)>=0){
 //				labelListAdapter.setCheckboxState(listPosition, true);

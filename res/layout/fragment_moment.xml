@@ -11,6 +11,8 @@
         android:layout_height="match_parent"
         android:background="#eeeeee"
         app:column_count_portrait="2"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"
         app:item_margin="10dp" >
     </com.ktl.moment.android.component.etsy.StaggeredGridView>
 

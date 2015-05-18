@@ -7,7 +7,7 @@
     <com.ktl.moment.android.component.listview.arc.widget.ZrcListView
         android:id="@+id/my_focus"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:listSelector="@android:color/transparent"
         android:background="#ffffff"
         android:scrollbars="none" >

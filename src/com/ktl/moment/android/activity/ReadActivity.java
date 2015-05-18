@@ -74,7 +74,7 @@ public class ReadActivity extends BaseActivity {
 		momentUid = intent.getLongExtra("momentUid", 0);
 
 		initView();
-		getData();
+//		getData();
 	}
 
 	private void initView() {
@@ -82,7 +82,7 @@ public class ReadActivity extends BaseActivity {
 		setTitleBackImgVisible(true);
 		setTitleRightImgLeftVisible(true);
 		setTitleRightImgVisible(true);
-		setTitleRightImg(R.drawable.editor_open_enable);
+		setTitleRightImg(R.drawable.editor_open_no);
 		setBaseActivityBgColor(getResources().getColor(
 				R.color.editor_main_color));
 
@@ -109,6 +109,7 @@ public class ReadActivity extends BaseActivity {
 			Intent editIntent = new Intent(this, EditorActivity.class);
 			editIntent.putExtra("moment", momentDetail);
 			startActivity(editIntent);
+//			finish();
 			break;
 		case R.id.title_right_img_left:
 			Intent commentIntent = new Intent(this, MomentCommentActivity.class);
@@ -154,12 +155,12 @@ public class ReadActivity extends BaseActivity {
 		}
 		momentDetail = list.get(0);
 		title.setText(momentDetail.getTitle());
-		content.setText(momentDetail.getContent());
+		content.setRichText(momentDetail.getContent());
 
 		if (momentDetail.getIsOpen() == 0) {
-			titleRightImg.setImageResource(R.drawable.editor_open_enable);
+			titleRightImg.setImageResource(R.drawable.editor_open_no);
 		} else {
-			titleRightImg.setImageResource(R.drawable.editor_open_unable);
+			titleRightImg.setImageResource(R.drawable.editor_open_yes);
 		}
 		audioUrl = momentDetail.getAudioUrl();
 		if (!audioUrl.equals("") && audioUrl != null) {
@@ -245,4 +246,10 @@ public class ReadActivity extends BaseActivity {
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		getData();
+	}
 }

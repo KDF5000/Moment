@@ -78,4 +78,8 @@ public class ImageManager {
 				.considerExifParams(true).build();
 		return options;
 	}
+	
+	public Bitmap loadImageSync(String filePath){
+		return ImageLoader.getInstance().loadImageSync(filePath, getDisplayImageOptions());
+	}
 }

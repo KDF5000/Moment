@@ -38,15 +38,13 @@
                     android:id="@+id/me_user_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MR.TANG"
                     android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/me_sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/male" />
+                    android:layout_marginLeft="10dp" />
             </LinearLayout>
 
             <TextView
@@ -54,7 +52,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="自由设计师，爱绘画，爱旅游，爱摄影"
                 android:textColor="#535353"
                 android:textSize="12sp" />
 

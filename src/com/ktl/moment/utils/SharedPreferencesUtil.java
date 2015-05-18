@@ -188,6 +188,12 @@ public class SharedPreferencesUtil {
 	public synchronized int getInt(String key,int defValue){
 		return sharedPreferences.getInt(key, defValue);
 	}
-	
-	
+	/**
+	 * 删除所有保存的变量
+	 */
+	public synchronized void deleteAll(){
+		Editor editor = sharedPreferences.edit();
+		editor.clear();
+		editor.commit();
+	}
 }

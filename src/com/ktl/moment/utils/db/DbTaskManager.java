@@ -57,6 +57,21 @@ public class DbTaskManager {
 			taskPool.shutdown();
 		}
 	}
+	/**
+	 * 
+	 * @param taskId
+	 * @param taskType
+	 * @param taskHandler
+	 */
+	public void addTask(int taskId,DbTaskType dbTaskType,DbTaskHandler taskHandler){
+		try {
+			taskPool.execute(new TaskThread(taskId, dbTaskType, taskHandler));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			taskPool.shutdown();
+		}
+	}
 
 	/**
 	 * 
@@ -116,7 +131,12 @@ public class DbTaskManager {
 			this.taskId = taskId;
 			this.selector = selector;
 		}
-
+		
+		public TaskThread(int taskId, DbTaskType dbTaskType, DbTaskHandler taskHandler) {
+			this.dbTaskType = dbTaskType;
+			this.taskHandler = taskHandler;
+			this.taskId = taskId;
+		}
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -139,12 +159,15 @@ public class DbTaskManager {
 						this.whereBuilder);
 				break;
 			case deleteAll:
-
+				
 				break;
 			case detele:
 				break;
 			case selectByCustom:
 				res = DBManager.getInstance().selectByCustom(selector);
+				break;
+			case dropDb:
+				DBManager.getInstance().dropDb();
 				break;
 			default:
 				break;

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class RichEditUtils {
 	
 	public static Map<String,String> extractImg(String content){
-		String str ="<img src = \"(/[\\w/\\/.]+)\"\\s*/>";
+		String str ="<img src=\"(/[\\w\\W/\\/.]+)\"\\s*/>";
 		Pattern pattern = Pattern.compile(str);
 		Matcher matcher = pattern.matcher(content);
 	    Map<String, String> fileMap = new HashMap<String, String>();
@@ -27,8 +27,9 @@ public class RichEditUtils {
 	 * @return
 	 */
 	public static String extactAbstract(String content,int count){
-		String str ="<img src = \"(/[\\w/\\/.]+)\"\\s*/>";
-		String abstractContent = content.replaceAll(str, "");
+//		String str ="<img src = \"(/[\\w/\\/.]+)\"\\s*/>";
+//		String abstractContent = content.replaceAll(str, "");
+		String abstractContent = content.replaceAll("<img [^>]*[/]{0,1}>","");
 		if(abstractContent.length() < count){
 			return abstractContent;
 		}

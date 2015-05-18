@@ -48,7 +48,7 @@ public class EditInfoActivity extends BaseActivity {
 	private EditText editNickname;
 
 	@ViewInject(R.id.edit_sex)
-	private EditText editSex;
+	private TextView editSex;
 
 	@ViewInject(R.id.edit_area)
 	private TextView editArea;
@@ -88,7 +88,6 @@ public class EditInfoActivity extends BaseActivity {
 				.getColor(R.color.main_title_color));
 
 		EditTextUtil.setEditable(editNickname, false);
-		EditTextUtil.setEditable(editSex, false);
 		EditTextUtil.setEditable(editSignature, false);
 	}
 
@@ -154,7 +153,6 @@ public class EditInfoActivity extends BaseActivity {
 	@OnTouch({ R.id.edit_base_layout })
 	public boolean onTouch(View v, MotionEvent e) {
 		EditTextUtil.setEditable(editNickname, false);
-		EditTextUtil.setEditable(editSex, false);
 		EditTextUtil.setEditable(editSignature, false);
 		/**
 		 * 隐藏软键盘
@@ -180,7 +178,10 @@ public class EditInfoActivity extends BaseActivity {
 	}
 
 	private void editSex() {
-		EditTextUtil.setEditable(editSex, true);
+		Intent genderIntent = new Intent(this, GenderSelectActivity.class);
+		genderIntent.putExtra("gender", editSex.getText().toString().trim());
+		startActivityForResult(genderIntent,
+				C.ActivityRequest.REQUEST_SELECT_GENDER);
 	}
 
 	private void editSignature() {
@@ -286,6 +287,9 @@ public class EditInfoActivity extends BaseActivity {
 				String birthday = data.getStringExtra("birthday");
 				editBirthday.setText(birthday);
 				break;
+			case C.ActivityRequest.REQUEST_SELECT_GENDER:
+				editSex.setText(data.getStringExtra("gender"));
+				break;
 			}
 		}
 	}
@@ -295,7 +299,7 @@ public class EditInfoActivity extends BaseActivity {
 			avatar = Account.getUserInfo().getUserAvatar();
 			submit();
 		} else {
-			QiniuManager.getInstance().uploadFile(this, imgPath, "img_",
+			QiniuManager.getInstance().uploadFile(this, imgPath, "img",
 					new QiniuRequestCallbBack() {
 
 						@Override

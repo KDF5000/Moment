@@ -9,4 +9,5 @@ public enum DbTaskType {
 	detele,
 	deleteAll,
 	selectByCustom,
+	dropDb,
 }

@@ -40,6 +40,14 @@ public class DBManager {
 		db.configDebug(true);
 	}
 	/**
+	 * 
+	 */
+	public static void destoryInstance(){
+		if(dbManager!=null){
+			dbManager = null;
+		}
+	}
+	/**
 	 * 获取一个实例
 	 * @return dbManager
 	 */
@@ -155,6 +163,17 @@ public class DBManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	/**
+	 * 删除所有的数据
+	 */
+	public void dropDb(){
+		try {
+			db.dropDb();
+		} catch (DbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

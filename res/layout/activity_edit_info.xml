@@ -51,8 +51,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
                 android:layout_marginBottom="22dp"
+                android:layout_marginTop="22dp"
                 android:text="昵称"
                 android:textColor="#959595"
                 android:textSize="16sp" />
@@ -90,7 +90,7 @@
                 android:textColor="#959595"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edit_sex"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -177,9 +177,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginLeft="17dp"
             android:layout_marginRight="17dp"
+            android:layout_weight="1"
             android:orientation="horizontal"
             android:paddingTop="22dp" >
 
@@ -197,8 +197,8 @@
                 android:layout_marginLeft="20dp"
                 android:background="#0000"
                 android:hint="快来发表你的个性签名吧~"
-                android:textColorHint="#959595"
                 android:textColor="#000000"
+                android:textColorHint="#959595"
                 android:textSize="16sp" />
         </LinearLayout>
 

@@ -33,6 +33,7 @@ import com.ktl.moment.utils.DensityUtil;
 import com.ktl.moment.utils.LogUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
+import com.ktl.moment.utils.db.DBManager;
 import com.ktl.moment.utils.db.DbTaskHandler;
 import com.ktl.moment.utils.db.DbTaskType;
 import com.ktl.moment.utils.net.ApiManager;
@@ -68,7 +69,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 
 		// 注册信鸽
 		registXgPush();
-		
+		//初始化数据库
 		//初始化小红点
 		meRedDotView = initRedDotView(C.menu.FRAGMENT_ME_MENU_ID);
 		dynamicRedDotView = initRedDotView(C.menu.FRAGMENT_DYNAMIC_MENU_ID);
@@ -302,6 +303,14 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
 			momentFragment.dataFinish(C.DbTaskId.GET_MOMENT_LIST,res.obj);
 			break;
+		case C.DbTaskId.MOMENT_LIST_SAVE:
+			momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
+			momentFragment.dataFinish(C.DbTaskId.MOMENT_LIST_SAVE,res.obj);
+			break;
+		case C.DbTaskId.EDITOR_MOMENT_SAVE:
+			momentFragment = (MomentFragment) getFragmentByTag(C.menu.FRAGMENT_MOMENT_TAG);
+			momentFragment.dataFinish(C.DbTaskId.EDITOR_MOMENT_SAVE,res.obj);
+			break;
 		default:
 			break;
 		}
@@ -358,6 +367,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		Log.i(TAG, "-->onResume");
 		//跳回到主页面刷新moment页面的标志
 		boolean isSwitch2Moment =  SharedPreferencesUtil.getInstance().getBoolean(C.SPKey.SWITCH_TO_MOMENT_FG, false);
 		if(isSwitch2Moment == true){

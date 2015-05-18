@@ -108,7 +108,7 @@ public class FansAdapter extends BaseAdapter {
 				User user = (User) SharedPreferencesUtil.getInstance()
 						.getObject(C.SPKey.SPK_LOGIN_INFO);
 				RequestParams params = new RequestParams();
-				params.put("userId", user.getId());
+				params.put("userId", user.getUserId());
 				params.put("attentionUserId", fans.getUserId());
 				params.put("isAddFocus", isAddFocus);
 				ApiManager.getInstance().post(context, C.API.FOCUS_AUTHOR,
