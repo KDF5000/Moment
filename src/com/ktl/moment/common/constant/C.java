@@ -196,6 +196,11 @@ public class C {
 		 */
 		public static final String PRAISE_COMMENT = URL_BASE
 				+ "MomentsService/MomentOperate/praiseComment";
+		/**
+		 * 上传用户日志行为
+		 */
+		public static final String USER_BEHAVIOR_LOG = URL_BASE
+				+ "MomentService/UserInfoService/recordUserBehavior";
 	}
 
 	/******************************************************************************
@@ -351,6 +356,7 @@ public class C {
 		
 		public static final String SPK_IS_SCAN_SPLASH = "splash";//是否浏览过引导页 true | false;
 		public static final String SPK_CHANNEL_LIST = "channelList";//保存用户自定义的channel顺序
+		public static final String SPK_USER_TRACK_LIST = "userTrack";
 	}
 
 	/**

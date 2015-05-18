@@ -21,6 +21,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 
 import com.ktl.moment.R;
+import com.ktl.moment.android.activity.EditorActivity;
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.activity.MomentDialogActivity;
 import com.ktl.moment.android.activity.ReadActivity;
@@ -253,10 +254,11 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
-			switch (requestCode) {
-			case REAUEST_CODE_OPEN: {
+			int menuSelect = data.getIntExtra("menuSelect", 0);
+			int position = data.getIntExtra("position", 0);
+			switch (menuSelect) {
+			case 2: {//open
 				boolean isOpen = data.getBooleanExtra("isClick", false);
-				int position = data.getIntExtra("position", 0);
 				if (isOpen) {
 					if (momentList.get(position).getIsOpen() == 1) {
 						momentList.get(position).setIsOpen(0);
@@ -273,8 +275,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 				}
 				break;
 			}
-			case REAUEST_CODE_LABEL:
-				
+			case 1://编辑
+				Intent editIntent = new Intent(getActivity(), EditorActivity.class);
+				editIntent.putExtra("moment", momentList.get(position));
+				startActivity(editIntent);
 				break;
 			case REQUEST_CODE_DELETE:
 				

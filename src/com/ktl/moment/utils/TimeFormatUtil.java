@@ -23,6 +23,7 @@ public class TimeFormatUtil {
 		return sf.format(new Date());
 	}
 
+	
 	/**
 	 * 将字符串时间转化为毫秒时间
 	 * 

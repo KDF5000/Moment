@@ -1,7 +1,9 @@
 package com.ktl.moment.android.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.ktl.moment.R;
 import com.ktl.moment.android.adapter.CommentListViewAdapter;
 import com.ktl.moment.android.base.BaseActivity;
@@ -31,8 +34,10 @@ import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Comment;
 import com.ktl.moment.entity.Moment;
+import com.ktl.moment.entity.UserTrack;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.PlayUtil;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.TimeFormatUtil;
 import com.ktl.moment.utils.TimerCountUtil;
 import com.ktl.moment.utils.ToastUtil;
@@ -127,7 +132,8 @@ public class MomentDetailActivity extends BaseActivity {
 	private boolean isPlaying = false;
 	private boolean isPause = false;
 	private boolean isReplay = false;
-
+	private long stayTime;//用于计时
+	
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -136,6 +142,7 @@ public class MomentDetailActivity extends BaseActivity {
 		momentId = intent.getLongExtra("momentId", 0);
 		authorId = intent.getLongExtra("userId", 0);
 		userId = Account.getUserInfo().getUserId();
+		stayTime = System.currentTimeMillis();//用于计时
 		initView();
 		initEvent();
 	}
@@ -695,4 +702,20 @@ public class MomentDetailActivity extends BaseActivity {
 
 	}
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		stayTime = System.currentTimeMillis() - stayTime;
+		UserTrack userTrack = new UserTrack();
+		userTrack.setUserId(userId);
+		userTrack.setMomentId(momentId);
+		userTrack.setStickTime(stayTime);
+		List<UserTrack> userTrackList = SharedPreferencesUtil.getInstance().getList(C.SPKey.SPK_USER_TRACK_LIST);
+		if(userTrackList == null){
+			userTrackList = new ArrayList<UserTrack>();
+		}
+		userTrackList.add(userTrack);
+		SharedPreferencesUtil.getInstance().putList(C.SPKey.SPK_USER_TRACK_LIST, userTrackList);
+	}
 }

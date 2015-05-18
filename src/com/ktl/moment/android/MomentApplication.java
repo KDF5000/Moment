@@ -3,6 +3,7 @@ package com.ktl.moment.android;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.util.Log;
 
 import com.ktl.moment.config.AppConfig;
 import com.ktl.moment.utils.SharedPreferencesUtil;
@@ -58,5 +59,10 @@ public class MomentApplication extends Application {
 		}
 		return notificationManager;
 	}
-	
+	@Override
+	public void onTerminate() {
+		// TODO Auto-generated method stub
+		super.onTerminate();
+		Log.i("MomentApplication", "onTerminate");
+	}
 }

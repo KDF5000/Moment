@@ -55,7 +55,7 @@ public class MomentDialogActivity extends Activity{
 	public void onClick(View v){
 		switch (v.getId()) {
 		case R.id.moment_dialog_edit:
-			
+			edit();
 			break;
 		case R.id.moment_dialog_open:
 			open();
@@ -75,6 +75,15 @@ public class MomentDialogActivity extends Activity{
 		Intent intent = new Intent(this,HomeActivity.class );
 		intent.putExtra("position", position);
 		intent.putExtra("isClick", true);
+		intent.putExtra("menuSelect", 2);//open
+		setResult(Activity.RESULT_OK, intent);
+		finish();
+	}
+	
+	public void edit(){
+		Intent intent = new Intent(this,HomeActivity.class );
+		intent.putExtra("position", position);
+		intent.putExtra("menuSelect", 1);//编辑
 		setResult(Activity.RESULT_OK, intent);
 		finish();
 	}
