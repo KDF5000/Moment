@@ -165,7 +165,7 @@ public class MomentDetailActivity extends BaseActivity {
 				getDisplayImageOptions());
 		commentsListView.setAdapter(commentListViewAdapter);
 
-		// 设置加载更多评论的样式（可选）
+		// 设置加载更多评论的样式private（可选）
 		SimpleFooter footer = new SimpleFooter(this);
 		footer.setCircleColor(0xff33bbee);
 		commentsListView.setFootable(footer);
@@ -293,7 +293,7 @@ public class MomentDetailActivity extends BaseActivity {
 			finish();
 			break;
 		case R.id.focus_author_icon:
-			focusClick();
+			focus();
 			break;
 		case R.id.detail_operate_comment:
 			Intent commentIntent = new Intent(MomentDetailActivity.this,
@@ -469,13 +469,14 @@ public class MomentDetailActivity extends BaseActivity {
 				}, "Moment");
 	}
 
-	private void focusClick() {
+	public void focus() {
 		// TODO Auto-generated method stub
-		Animation anim = AnimationUtils.loadAnimation(
-				MomentDetailActivity.this, R.anim.focus_img_anim);
+		Animation anim = AnimationUtils.loadAnimation(this,
+				R.anim.focus_img_anim);
+		anim.setFillAfter(true);
 		focusAuthor.startAnimation(anim);
-		int isAddFocus = 0;
-		if (moment.getIsFocused() == 0) {
+		int isAddFocus;
+		if (moment.getIsFocused() == 1) {
 			anim.setAnimationListener(new AnimationListener() {
 
 				@Override
@@ -493,11 +494,11 @@ public class MomentDetailActivity extends BaseActivity {
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					// TODO Auto-generated method stub
-					focusAuthor.setImageResource(R.drawable.focus_author_press);
-					moment.setIsFocused(1);
+					focusAuthor.setImageResource(R.drawable.focus_author45);
+					moment.setIsFocused(0);
 				}
 			});
-			isAddFocus = 1;
+			isAddFocus = 0;
 		} else {
 			anim.setAnimationListener(new AnimationListener() {
 
@@ -516,12 +517,14 @@ public class MomentDetailActivity extends BaseActivity {
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					// TODO Auto-generated method stub
-					focusAuthor.setImageResource(R.drawable.focus_author);
-					moment.setIsFocused(0);
+					focusAuthor
+							.setImageResource(R.drawable.focus_author_press45);
+					moment.setIsFocused(1);
 				}
 			});
-			isAddFocus = 0;
+			isAddFocus = 1;
 		}
+		commentListViewAdapter.notifyDataSetChanged();
 
 		requestServer(isAddFocus, "isAddFocus", userId, moment.getAuthorId(),
 				C.API.FOCUS_AUTHOR, "User");
@@ -582,7 +585,7 @@ public class MomentDetailActivity extends BaseActivity {
 	 *            当用于关注作者时，该字段为被关注用户的id
 	 * @param url
 	 */
-	public void requestServer(int isFlag, String flagName, long userId,
+	public void requestServer(int isFlag, final String flagName, long userId,
 			long momentId, String url, String modelName) {
 		RequestParams params = new RequestParams();
 		params.put("userId", userId);
@@ -592,18 +595,76 @@ public class MomentDetailActivity extends BaseActivity {
 			params.put("momentId", momentId);
 		}
 		params.put(flagName, isFlag);
+
+		final int flag = isFlag;
 		ApiManager.getInstance().post(this, url, params, new HttpCallBack() {
 
 			@Override
 			public void onSuccess(Object res) {
 				// TODO Auto-generated method stub
-
+				if (flag == 1) {
+					if (flagName.equals("isAddFocus")) {
+						Toast.makeText(MomentDetailActivity.this, "关注成功~",
+								Toast.LENGTH_SHORT).show();
+					} else if (flagName.equals("isAddWatch")) {
+						Toast.makeText(MomentDetailActivity.this, "围观成功~",
+								Toast.LENGTH_SHORT).show();
+					} else if (flagName.equals("isAddClipper")) {
+						Toast.makeText(MomentDetailActivity.this, "剪藏成功~",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(MomentDetailActivity.this, "点赞成功~",
+								Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					if (flagName.equals("isAddFocus")) {
+						Toast.makeText(MomentDetailActivity.this, "取消关注成功~",
+								Toast.LENGTH_SHORT).show();
+					} else if (flagName.equals("isAddWatch")) {
+						Toast.makeText(MomentDetailActivity.this, "取消围观成功~",
+								Toast.LENGTH_SHORT).show();
+					} else if (flagName.equals("isAddClipper")) {
+						Toast.makeText(MomentDetailActivity.this, "剪藏成功~",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(MomentDetailActivity.this, "取消点赞成功~",
+								Toast.LENGTH_SHORT).show();
+					}
+				}
 			}
 
 			@Override
 			public void onFailure(Object res) {
 				// TODO Auto-generated method stub
-
+				if (flag == 1) {
+					if (flagName.equals("isAddFocus")) {
+						Toast.makeText(MomentDetailActivity.this, "关注失敗~",
+								Toast.LENGTH_SHORT).show();
+					} else if (flagName.equals("isAddWatch")) {
+						Toast.makeText(MomentDetailActivity.this, "围观失敗~",
+								Toast.LENGTH_SHORT).show();
+					} else if (flagName.equals("isAddClipper")) {
+						Toast.makeText(MomentDetailActivity.this, "剪藏失敗~",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(MomentDetailActivity.this, "点赞失敗~",
+								Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					if (flagName.equals("isAddFocus")) {
+						Toast.makeText(MomentDetailActivity.this, "取消关注失敗~",
+								Toast.LENGTH_SHORT).show();
+					} else if (flagName.equals("isAddWatch")) {
+						Toast.makeText(MomentDetailActivity.this, "取消围观失敗~",
+								Toast.LENGTH_SHORT).show();
+					} else if (flagName.equals("isAddClipper")) {
+						Toast.makeText(MomentDetailActivity.this, "剪藏失敗~",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(MomentDetailActivity.this, "取消点赞失敗~",
+								Toast.LENGTH_SHORT).show();
+					}
+				}
 			}
 		}, modelName);
 	}
