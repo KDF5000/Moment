@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
+import com.ktl.moment.common.constant.C;
 import com.ktl.moment.infrastructure.BaseTask;
 import com.ktl.moment.manager.TaskManager;
 import com.qiniu.android.http.ResponseInfo;
@@ -29,7 +30,10 @@ public class QiniuTask extends BaseTask {
 		// TODO Auto-generated method stub
 		super.start();
 		UploadManager uploadManager = new UploadManager();
-
+		if(this.localPath.contains(C.API.QINIU_BASE_URL)){
+			manager.finishTask(key, this.localPath.replaceAll(C.API.QINIU_BASE_URL, ""));
+			return ;
+		}
 		uploadManager.put(this.localPath, "img_" + System.currentTimeMillis(),
 				token, new UpCompletionHandler() {
 					@Override

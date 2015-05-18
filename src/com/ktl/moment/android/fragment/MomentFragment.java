@@ -260,10 +260,10 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			case 2: {//open
 				boolean isOpen = data.getBooleanExtra("isClick", false);
 				if (isOpen) {
-					if (momentList.get(position).getIsOpen() == 1) {
-						momentList.get(position).setIsOpen(0);
+					if (momentList.get(position).getIsPublic() == 1) {
+						momentList.get(position).setIsPublic(0);
 					} else {
-						momentList.get(position).setIsOpen(1);
+						momentList.get(position).setIsPublic(1);
 					}
 					momentPlaAdapter.notifyDataSetChanged();
 					//请求服务器更新 并保存到本地
@@ -329,7 +329,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		Intent dialogIntent = new Intent(getActivity(),
 				MomentDialogActivity.class);
 		dialogIntent.putExtra("position", position);
-		if (momentList.get(position).getIsOpen() == 1) {
+		if (momentList.get(position).getIsPublic() == 1) {
 			dialogIntent.putExtra("isPublic", 1);
 		} else {
 			dialogIntent.putExtra("isPublic", 0);
