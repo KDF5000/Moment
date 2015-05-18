@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 
+import com.google.gson.Gson;
 import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.base.BaseFragment;
@@ -25,6 +26,7 @@ import com.ktl.moment.android.fragment.MomentFragment;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
+import com.ktl.moment.entity.UserTrack;
 import com.ktl.moment.im.entity.XgMessage;
 import com.ktl.moment.im.xg.receiver.XgMessageReceiver;
 import com.ktl.moment.im.xg.receiver.XgMessageReceiver.OnCustomMessageListener;
@@ -491,6 +493,22 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			break;
 		default:
 			break;
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.i(TAG, "onDestroy");
+		//上传浏览日志
+		List<UserTrack> userTrackList = SharedPreferencesUtil.getInstance().getList(C.SPKey.SPK_USER_TRACK_LIST);
+		if(userTrackList != null){
+			//上传日志
+			RequestParams params = new RequestParams();
+			Gson gson = new Gson();
+			params.put("userBehavior", gson.toJson(userTrackList));
+			ApiManager.getInstance().post(this,C.API.USER_BEHAVIOR_LOG, params,null,"");
 		}
 	}
 }
