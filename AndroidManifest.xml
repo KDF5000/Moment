@@ -38,9 +38,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <!-- SplashActivity -->
+        <!-- StartPageActivity -->
         <activity
-            android:name="com.ktl.moment.android.activity.SplashActivity"
+            android:name="com.ktl.moment.android.activity.StartPageActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
@@ -48,6 +48,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <!-- SplashActivity -->
+        <activity
+            android:name="com.ktl.moment.android.activity.SplashActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
         </activity>
 
         <!-- 账户体系activity -->
@@ -272,6 +278,7 @@
             android:name="com.ktl.moment.android.activity.LabelSelectActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>
+        <!-- 用户性别选择 -->
         <activity
             android:name="com.ktl.moment.android.activity.GenderSelectActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
