@@ -387,10 +387,11 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		}
 		case C.DbTaskId.GET_MOMENT_LIST:
 			final List<Moment> list = (List<Moment>) res;
-			
+			if(loadingDlg.isShowing()){
+				loadingDlg.dismiss();
+			}
 			if (list == null || list.isEmpty()) {
 //				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT).show();
-				loadingDlg.dismiss();
 				if(momentList == null || momentList.isEmpty()){
 					blankImg.setVisibility(View.VISIBLE);
 				}else{

@@ -34,7 +34,7 @@ public class DynamicFragment extends BaseFragment {
 	private ZrcListView dynamicListView;
 	private List<Moment> momentList;// 灵感列表
 
-	private int pageSize = 2;
+	private int pageSize = 5;
 	private int pageNum = 1;
 	private MomentListViewAdapter dynamicListViewAdapter;
 	private long userId;

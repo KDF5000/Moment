@@ -106,6 +106,10 @@ public class ReadActivity extends BaseActivity {
 			if(play != null){
 				play.stopPlay();
 			}
+			if(momentDetail.getIsClipper() == 1){
+				ToastUtil.show(this, "剪藏的灵感不能编辑!");
+				return ;
+			}
 			Intent editIntent = new Intent(this, EditorActivity.class);
 			editIntent.putExtra("moment", momentDetail);
 			startActivity(editIntent);

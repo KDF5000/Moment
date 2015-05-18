@@ -426,7 +426,7 @@ public class EditorActivity extends BaseActivity {
 			recordOver();
 			break;
 		case R.id.title_back_img:
-			actionStart(HomeActivity.class);
+			finish();
 			TimerCountUtil.getInstance().stopTimerCount();
 			break;
 		case R.id.title_right_img:

@@ -25,6 +25,7 @@ public class LoadingDialog extends Dialog {
 		anim = AnimationUtils.loadAnimation(context, R.anim.loading_media_anim);
 		mediaImg.startAnimation(anim);
 		setCanceledOnTouchOutside(true);
+		setCancelable(true);
 	}
 
 	@Override

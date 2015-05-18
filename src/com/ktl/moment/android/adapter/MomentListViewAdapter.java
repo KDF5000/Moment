@@ -87,11 +87,11 @@ public class MomentListViewAdapter extends BaseAdapter {
 		}
 		final Moment moment = momentList.get(position);
 		momentHolder.tittleTv.setText(moment.getTitle());
-		if(StrUtils.isEmpty(moment.getContentAbstract())){
+		if(StrUtils.isEmpty(moment.getContentAbstract().trim())){
 			momentHolder.contentTv.setVisibility(View.GONE);
 		}else{
 			momentHolder.contentTv.setVisibility(View.VISIBLE);
-			momentHolder.contentTv.setText(moment.getContentAbstract());
+			momentHolder.contentTv.setText(moment.getContentAbstract().trim());
 		}
 		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
 				momentHolder.avatar, options);
