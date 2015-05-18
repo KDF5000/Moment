@@ -131,7 +131,6 @@ public class StartFragment extends AccountBaseFragment {
 	}
 
 	public void startAnim(final boolean isLogin) {
-		ToastUtil.show(getActivity(), "login");
 		Animation lumpAnim = AnimationUtils.loadAnimation(getActivity(),
 				R.anim.lump_move_up);
 		Animation wordsAnim = AnimationUtils.loadAnimation(getActivity(),
@@ -167,7 +166,6 @@ public class StartFragment extends AccountBaseFragment {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				// TODO Auto-generated method stub
-				ToastUtil.show(getActivity(), "good bye");
 			}
 		});
 	}

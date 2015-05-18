@@ -966,6 +966,8 @@ public class EditorActivity extends BaseActivity {
 				params.put("audioUrl", moment.getAudioUrl());
 				params.put("isClipper", 0);
 				params.put("contentAbstract",moment.getContentAbstract());
+				params.put("postTime", moment.getPostTime());
+				params.put("updateTime", moment.getUpdateTime());
 				ApiManager.getInstance().post(EditorActivity.this,
 						C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 
