@@ -47,8 +47,9 @@ public class DynamicFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_dynamic, container,
 				false);
-		dynamicListView = (ZrcListView) view.findViewById(R.id.fragment_dynamic_list);
-		//show loading dialog after fragment create
+		dynamicListView = (ZrcListView) view
+				.findViewById(R.id.fragment_dynamic_list);
+		// show loading dialog after fragment create
 		loading = new LoadingDialog(getActivity());
 		loading.show();
 
@@ -135,10 +136,10 @@ public class DynamicFragment extends BaseFragment {
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
+								loading.dismiss();
 								dynamicListViewAdapter.notifyDataSetChanged();
 								dynamicListView.setRefreshSuccess("");
 								dynamicListView.startLoadMore();
-								loading.dismiss();
 							}
 						}, 500);
 					}

@@ -40,7 +40,7 @@
 
         <!-- StartPageActivity -->
         <activity
-            android:name="com.ktl.moment.android.activity.StartPageActivity"
+            android:name="com.ktl.moment.android.activity.SplashActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
@@ -52,7 +52,7 @@
         
         <!-- SplashActivity -->
         <activity
-            android:name="com.ktl.moment.android.activity.SplashActivity"
+            android:name="com.ktl.moment.android.activity.StartPageActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
         </activity>
 
