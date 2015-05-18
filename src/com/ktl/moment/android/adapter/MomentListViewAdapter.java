@@ -86,19 +86,15 @@ public class MomentListViewAdapter extends BaseAdapter {
 		}
 		final Moment moment = momentList.get(position);
 		momentHolder.tittleTv.setText(moment.getTitle());
-		momentHolder.contentTv.setText(moment.getContent());
-		// if (PregUtil.pregImgUrl(moment.getUserAvatar())) {
+		momentHolder.contentTv.setText(moment.getContentAbstract());
 		ImageLoader.getInstance().displayImage(moment.getUserAvatar(),
 				momentHolder.avatar, options);
-		// } else {
-		// momentHolder.avatar.setImageResource(R.drawable.default_img);
-		// }
-		// if (PregUtil.pregImgUrl(moment.getMomentImgs())) {
-		ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
-				momentHolder.momentImg, options);
-		// } else {
-		// momentHolder.momentImg.setVisibility(View.GONE);
-		// }
+		if (moment.getMomentImgs() == null || moment.getMomentImgs().equals("")) {
+			momentHolder.momentImg.setVisibility(View.GONE);
+		} else {
+			ImageLoader.getInstance().displayImage(moment.getMomentImgs(),
+					momentHolder.momentImg, options);
+		}
 		momentHolder.userNameTv.setText(moment.getAuthorName());
 		momentHolder.postTime.setText(TimeFormatUtil.formatDate(moment
 				.getPostTime()));
