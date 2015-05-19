@@ -92,6 +92,22 @@ public class DbTaskManager {
 			taskPool.shutdown();
 		}
 	}
+	/**
+	 * 
+	 * @param taskId
+	 * @param dbTaskType
+	 * @param entityType
+	 * @param taskHandler
+	 */
+	public void addTask(int taskId, DbTaskType dbTaskType, Class<?> entityType, DbTaskHandler taskHandler) {
+		try {
+			taskPool.execute(new TaskThread(taskId, dbTaskType, entityType,taskHandler));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			taskPool.shutdown();
+		}
+	}
 
 	private class TaskThread implements Runnable {
 		private DbTaskHandler taskHandler;
@@ -137,6 +153,13 @@ public class DbTaskManager {
 			this.taskHandler = taskHandler;
 			this.taskId = taskId;
 		}
+		
+		public TaskThread(int taskId, DbTaskType dbTaskType,Class<?> entityType, DbTaskHandler taskHandler) {
+			this.dbTaskType = dbTaskType;
+			this.taskHandler = taskHandler;
+			this.entityType = entityType;
+			this.taskId = taskId;
+		}
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -168,6 +191,9 @@ public class DbTaskManager {
 				break;
 			case dropDb:
 				DBManager.getInstance().dropDb();
+				break;
+			case dropTable:
+				DBManager.getInstance().dropTable(entityType);
 				break;
 			default:
 				break;

@@ -638,7 +638,7 @@ public class MomentDetailActivity extends BaseActivity {
 						Toast.makeText(MomentDetailActivity.this, "取消围观成功~",
 								Toast.LENGTH_SHORT).show();
 					} else if (flagName.equals("isAddClipper")) {
-						Toast.makeText(MomentDetailActivity.this, "剪藏成功~",
+						Toast.makeText(MomentDetailActivity.this, "取消剪藏成功~",
 								Toast.LENGTH_SHORT).show();
 					} else {
 						Toast.makeText(MomentDetailActivity.this, "取消点赞成功~",

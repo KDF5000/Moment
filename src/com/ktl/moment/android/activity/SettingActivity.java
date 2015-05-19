@@ -13,6 +13,7 @@ import com.ktl.moment.R;
 import com.ktl.moment.android.base.BaseActivity;
 import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.common.constant.C;
+import com.ktl.moment.entity.Moment;
 import com.ktl.moment.manager.AppManager;
 import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.db.DbTaskHandler;
@@ -107,7 +108,8 @@ public class SettingActivity extends BaseActivity {
 			loadingdialog.setText("退出中...");
 			loadingdialog.show();
 			SharedPreferencesUtil.getInstance().deleteAll();
-			dropDbAsync(C.DbTaskId.DROP_DB, DbTaskType.dropDb, dbTaskHandler);
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_IS_SCAN_SPLASH, true);//有退出说明肯定看过引导页了
+			dropTableAsync(C.DbTaskId.DROP_TABLE, DbTaskType.dropTable, Moment.class,dbTaskHandler);
 /*			Intent intent = new Intent(this, AccountActivity.class);
 			startActivity(intent);
 			AppManager.getInstance().finishAll();*/
@@ -176,7 +178,7 @@ public class SettingActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		int taskId = res.what;
 		switch (taskId) {
-		case C.DbTaskId.DROP_DB:
+		case C.DbTaskId.DROP_TABLE:
 			XGPushManager.unregisterPush(getApplicationContext());
 			new Handler().postDelayed(new Runnable() {
 				
