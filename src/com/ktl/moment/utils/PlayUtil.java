@@ -48,6 +48,7 @@ public class PlayUtil implements OnBufferingUpdateListener, OnPreparedListener {
 			player.reset();
 			player.setDataSource(path);
 			player.prepare();
+			duration = player.getDuration();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,7 +62,7 @@ public class PlayUtil implements OnBufferingUpdateListener, OnPreparedListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		duration = player.getDuration();
+		
 	}
 
 	@Override
