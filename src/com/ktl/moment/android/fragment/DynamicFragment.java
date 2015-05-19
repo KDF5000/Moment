@@ -71,6 +71,12 @@ public class DynamicFragment extends BaseFragment {
 		return view;
 	}
 
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+	
 	private void initView() {
 		// 设置下拉刷新的样式（可选，但如果没有Header则无法下拉刷新）
 		SimpleHeader header = new SimpleHeader(getActivity());
