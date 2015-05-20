@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,6 @@ public class DynamicFragment extends BaseFragment {
 		dynamicListView = (ZrcListView) view
 				.findViewById(R.id.fragment_dynamic_list);
 		// show loading dialog after fragment create
-		loading = new LoadingDialog(getActivity());
-		loading.show();
-
 		User user = Account.getUserInfo();
 		if (user == null) {
 			Intent intent = new Intent(getActivity(), AccountActivity.class);
@@ -67,6 +65,8 @@ public class DynamicFragment extends BaseFragment {
 		dynamicListView.setAdapter(dynamicListViewAdapter);
 		initEvent();
 		dynamicListView.refresh();
+		loading = new LoadingDialog(getActivity());
+		loading.show();
 		// 从服务端获取数据
 		return view;
 	}
@@ -75,6 +75,7 @@ public class DynamicFragment extends BaseFragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		Log.i(TAG,"OnResume");
 	}
 	
 	private void initView() {
