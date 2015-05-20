@@ -152,6 +152,8 @@ public class MomentStoreUtil {
 		}
 		params.put("audioUrl", moment.getAudioUrl());
 		params.put("isClipper", 0);
+		params.put("postTime", moment.getPostTime());
+		params.put("updateTime", moment.getUpdateTime());
 		//设置参数
 		ApiManager.getInstance().post(MomentApplication.getApplication(), C.API.UPLOAD_MOMENT, params, new HttpCallBack() {
 			

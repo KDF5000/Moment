@@ -2,6 +2,7 @@ package com.ktl.moment.android.activity;
 
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,7 +70,15 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 		switchMenuByTag(C.menu.FRAGMENT_DEFAULT_SHOW_TAG);// 设置默认的界面
 
 		// 注册信鸽
-		registXgPush();
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				registXgPush();
+			}
+		}, 500);
+		
 		//初始化数据库
 		//初始化小红点
 		meRedDotView = initRedDotView(C.menu.FRAGMENT_ME_MENU_ID);
@@ -257,6 +266,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			public void onSuccess(Object data, int flag) {
 				// TODO Auto-generated method stub
 				Log.i(TAG,"注册成功"+ XGPushConfig.getAccessId(getApplicationContext()));
+				//ToastUtil.show(HomeActivity.this, "注册成功");
 				// 向服务上传token
 				RequestParams params = new RequestParams();
 				params.put("user_id", user.getUserId());
@@ -281,7 +291,8 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			@Override
 			public void onFail(Object data, int errCode, String msg) {
 				// TODO Auto-generated method stub
-				Log.i(TAG, "注册失败" + msg);
+//				Log.i(TAG, "注册失败" + msg);
+				ToastUtil.show(HomeActivity.this, "注册失败"+msg);
 			}
 		});
 	}
@@ -401,7 +412,7 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 	public void OnReceive(XgMessage msg) {
 		// TODO Auto-generated method stub
 		int messageType = msg.getMessageType();
-		ToastUtil.show(this, msg.getContent().getMessage());
+//		ToastUtil.show(this, msg.getContent().getMessage());
 		switch(messageType){
 		case 1://我的消息
 			//显示小红点

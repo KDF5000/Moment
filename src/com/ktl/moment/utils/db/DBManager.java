@@ -176,4 +176,16 @@ public class DBManager {
 		}
 	}
 	
+	/**
+	 * 删除指定的表
+	 */
+	public void dropTable(Class<?> entityType){
+		try {
+			db.dropTable(entityType);
+		} catch (DbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

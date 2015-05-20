@@ -66,7 +66,6 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 	private int pageNum = 1;
     private int dbPageNum = 1;
 	private boolean isSyncing = false;// 是否正在同步
-	MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
 
 	private ImageView navRightImg;// 同步图标
 	private AnimationDrawable syncAnimationDrawable;
@@ -352,6 +351,7 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 			if (dirtyMoments != null && !dirtyMoments.isEmpty()) {
 				// 上传灵感
 				int len = dirtyMoments.size();
+				MomentSyncTaskManager syncMomentManager = new MomentSyncTaskManager();
 				for (int i = 0; i < len; i++) {
 					MomentSyncTask task = new MomentSyncTask(
 							dirtyMoments.get(i), syncMomentManager);
@@ -387,10 +387,11 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 		}
 		case C.DbTaskId.GET_MOMENT_LIST:
 			final List<Moment> list = (List<Moment>) res;
-			
+			if(loadingDlg.isShowing()){
+				loadingDlg.dismiss();
+			}
 			if (list == null || list.isEmpty()) {
 //				Toast.makeText(getActivity(), "加载完成~", Toast.LENGTH_SHORT).show();
-				loadingDlg.dismiss();
 				if(momentList == null || momentList.isEmpty()){
 					blankImg.setVisibility(View.VISIBLE);
 				}else{

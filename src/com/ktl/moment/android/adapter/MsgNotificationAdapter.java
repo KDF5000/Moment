@@ -73,35 +73,46 @@ public class MsgNotificationAdapter extends BaseAdapter {
 		notifyHolder.nickname.setText(notification.getUserNickname());
 		notifyHolder.date.setText(notification.getNotifyDate());
 		notifyHolder.title.setText(notification.getNotifyTitle());
-		notifyHolder.content.setText("“" + notification.getNotifyContent() + "”");
 		CharSequence typeChar = "";
 		switch (notification.getNotifyType()) {
 		case 0:
-			typeChar = "评论了你的灵感：";
+			typeChar = "评论灵感：";
+			notifyHolder.content.setVisibility(View.VISIBLE);
+			notifyHolder.content.setText(notification.getNotifyContent());
 			break;
 		case 1:
-			typeChar = "赞了你的灵感：";
+			typeChar = "赞了灵感：";
+			notifyHolder.content.setVisibility(View.GONE);
 			break;
 		case 2:
-			typeChar = "剪藏了你的灵感：";
+			typeChar = "剪藏了灵感：";
+			notifyHolder.content.setVisibility(View.GONE);
 			break;
 		case 3:
-			typeChar = "围观了你的灵感：";
+			typeChar = "围观了灵感：";
+			notifyHolder.content.setVisibility(View.GONE);
 			break;
 		case 4:
-			typeChar = "分享了你的灵感：";
+			typeChar = "分享了灵感：";
+			notifyHolder.content.setVisibility(View.GONE);
 			break;
 		case 5:
-			typeChar = "回复了你的评论：";
+			typeChar = "回复了评论：";
+			notifyHolder.content.setVisibility(View.VISIBLE);
+			notifyHolder.content.setText(notification.getNotifyContent());
 			break;
 		case 6:
 			typeChar = "你关注的灵感更新了：";
+			notifyHolder.content.setVisibility(View.GONE);
 			break;
 		case 7:
-			typeChar = "你关注的灵感被评论了：";
+			typeChar = "评论你围观的灵感：";
+			notifyHolder.content.setVisibility(View.VISIBLE);
+			notifyHolder.content.setText(notification.getNotifyContent());
 			break;
 		case 8:
-			typeChar = "赞了你的评论：";
+			typeChar = "赞了评论：";
+			notifyHolder.content.setVisibility(View.GONE);
 			break;
 		default:
 			break;

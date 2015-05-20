@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginTop="6dp"
+            android:layout_marginBottom="8dp"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -93,7 +94,6 @@
                 android:id="@+id/notification_comment_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:lineSpacingExtra="4dp"
