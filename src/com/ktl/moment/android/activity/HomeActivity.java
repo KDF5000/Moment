@@ -396,6 +396,14 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 			}, 300);
 			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SWITCH_TO_MOMENT_FG, false);
 		}
+		
+		boolean isRefreshMe = SharedPreferencesUtil.getInstance().getBoolean(C.SPKey.SPK_REFRESH_ME_FG, true);
+		if (isRefreshMe) {
+			((BaseFragment) getFragmentByTag(currentFgTag))
+					.refreshFragmentContent();
+			SharedPreferencesUtil.getInstance().setBoolean(
+					C.SPKey.SPK_REFRESH_ME_FG, false);
+		}
 		XGPushManager.onActivityStarted(this);
 		XgMessageReceiver.addCustomMessageListener(this);
 	}
