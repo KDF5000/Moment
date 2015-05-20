@@ -1906,7 +1906,7 @@ public abstract class ZrcAbsListView extends ZrcAdapterView<ListAdapter>
 	public void onRestoreInstanceState(Parcelable state) {
 		SavedState ss = (SavedState) state;
 		super.onRestoreInstanceState(ss.getSuperState());
-		mFirstPosition = ss.mFirstPosition;
+//		mFirstPosition = ss.mFirstPosition;//KDF 获取之前保存的状态  但是不知道注释掉会不会有问题
 		requestLayout();
 		if (mFlingRunnable != null) {
 			mFlingRunnable.scrollToAdjustViewsUpOrDown();

@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.EditorActivity;
@@ -241,7 +242,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(getActivity(), res.toString());
+//						ToastUtil.show(getActivity(), res.toString());
+						Toast.makeText(getActivity(), "网络错误!", Toast.LENGTH_SHORT).show();
 						stopSyncAnimation();
 					}
 				}, "Moment");
@@ -362,7 +364,8 @@ public class MomentFragment extends BaseFragment implements OnScrollListener,
 					@Override
 					public void onError(String msg) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(getActivity(), msg);
+//						ToastUtil.show(getActivity(), msg);
+						Toast.makeText(getActivity(), "同步失败", Toast.LENGTH_SHORT).show();
 						stopSyncAnimation();
 					}
 

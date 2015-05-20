@@ -132,7 +132,8 @@ public class RecomendFragment extends BaseFragment {
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(getActivity(), (String) res);
+//						ToastUtil.show(getActivity(), (String) res);
+						ToastUtil.show(getActivity(), "网络错误，请检查您的网络连接!");
 						recommendListview.setRefreshSuccess("");
 					}
 				}, "Moment");

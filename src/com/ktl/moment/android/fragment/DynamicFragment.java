@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.AccountActivity;
@@ -64,6 +65,7 @@ public class DynamicFragment extends BaseFragment {
 		dynamicListViewAdapter = new MomentListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
 		dynamicListView.setAdapter(dynamicListViewAdapter);
 		initEvent();
+		Log.i(TAG,"listView-->refresh");
 		dynamicListView.refresh();
 		loading = new LoadingDialog(getActivity());
 		loading.show();
@@ -154,9 +156,8 @@ public class DynamicFragment extends BaseFragment {
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						final String str = (String)res;
-						ToastUtil.show(getActivity(), str);
-
+//						ToastUtil.show(getActivity(), str);//
+						Toast.makeText(getActivity(), "获取动态信息失败!", Toast.LENGTH_SHORT).show();
 						new Handler().postDelayed(new Runnable() {
 							
 							@Override
@@ -201,7 +202,8 @@ public class DynamicFragment extends BaseFragment {
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(getActivity(), (String) res);
+//						ToastUtil.show(getActivity(), (String) res);
+						Toast.makeText(getActivity(), "网络错误，请检查您的网络链接!", Toast.LENGTH_SHORT).show();
 					}
 				}, "Moment");
 	}

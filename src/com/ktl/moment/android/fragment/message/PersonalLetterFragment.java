@@ -105,7 +105,8 @@ public class PersonalLetterFragment extends Fragment {
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(getActivity(), (String) res);
+//						ToastUtil.show(getActivity(), (String) res);
+						ToastUtil.show(getActivity(), "获取私信失败!");
 						blankImg.setVisibility(View.VISIBLE);
 					}
 				}, "Message");

@@ -221,7 +221,8 @@ public class ProfileFragment extends AccountBaseFragment {
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
 						dialog.dismiss();
-						ToastUtil.show(getActivity(), (String) res);
+//						ToastUtil.show(getActivity(), (String) res);
+						ToastUtil.show(getActivity(), "注册失败");
 					}
 				}, "User");
 	}

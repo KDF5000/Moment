@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ktl.moment.R;
 import com.ktl.moment.android.activity.EditInfoActivity;
@@ -212,7 +213,7 @@ public class MeFragment extends BaseFragment implements OnCustomMessageListener{
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-
+						Toast.makeText(getActivity(), "网络出错，获取信息失败", Toast.LENGTH_SHORT).show();
 					}
 				}, "User");
 	}

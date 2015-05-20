@@ -330,7 +330,8 @@ public class StartFragment extends AccountBaseFragment {
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
 						dialog.dismiss();
-						ToastUtil.show(getActivity(), (String) res);
+//						ToastUtil.show(getActivity(), (String) res);
+						ToastUtil.show(getActivity(), "网络错误，请检查您的网络连接!");
 					}
 				}, "User");
 	}

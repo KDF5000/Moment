@@ -87,7 +87,8 @@ public class NewFansFragment extends Fragment {
 					@Override
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
-						ToastUtil.show(getActivity(), (String) res);
+//						ToastUtil.show(getActivity(), (String) res);
+						ToastUtil.show(getActivity(), "获取新粉丝失败");
 						blankImg.setVisibility(View.VISIBLE);
 					}
 				}, "User");

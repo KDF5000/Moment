@@ -21,6 +21,7 @@ import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.EditTextUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -225,7 +226,8 @@ public class LoginFragment extends AccountBaseFragment {
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
 						dialog.dismiss();
-						toast((String) res);
+//						toast((String) res);
+						ToastUtil.show(getActivity(), "登录失败!");
 					}
 				}, "User");
 	}
