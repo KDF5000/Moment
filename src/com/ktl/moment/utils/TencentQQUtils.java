@@ -15,6 +15,7 @@ import android.text.TextUtils;
 
 import com.ktl.moment.android.activity.HomeActivity;
 import com.ktl.moment.android.activity.RecommendAuthorActivity;
+import com.ktl.moment.android.activity.ShareActivity;
 import com.ktl.moment.android.component.LoginDialog;
 import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
@@ -173,9 +174,12 @@ public class TencentQQUtils {
 	IUiListener tencentListener = new BaseUiListener() {
 		@Override
 		protected void doComplete(JSONObject values) {
-			ToastUtil.show(activity, "login");
-			initOpenIdAndToken(values);
-			getQQUserInfo();
+			if(activity instanceof ShareActivity){
+			    ((ShareActivity) activity).ShareFinish();
+			}else{
+				initOpenIdAndToken(values);
+				getQQUserInfo();
+			}
 		};
 	};
 
@@ -276,7 +280,7 @@ public class TencentQQUtils {
 					public void onFailure(Object res) {
 						// TODO Auto-generated method stub
 						dialog.dismiss();
-						ToastUtil.show(activity, (String) res);
+						ToastUtil.show(activity, "登陆失败");
 					}
 				}, "User");
 	}

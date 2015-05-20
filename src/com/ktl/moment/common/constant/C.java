@@ -361,6 +361,7 @@ public class C {
 		public static final String SPK_USER_TRACK_LIST = "userTrack";
 		
 		public static final String SPK_REFRESH_ME_FG = "refreshMeFragment";//强制刷新我的页面
+		public static final String SPK_REFRESH_DYNAMIC_FG = "refreshDynamic";//强制刷新动态
 	}
 
 	/**

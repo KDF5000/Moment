@@ -30,7 +30,8 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 	private Context mContext;
 	private final int CUSTOM_MSG_NOTIFICATION = 1;//自定义的消息，点赞，评论，关注，收藏，围观
 	private final int CUSTOM_MSG_NEW_FANS = 2;//新的粉丝
-	private final int CHAT_MSG = 3;//聊天
+	private final int CUSTOM_MSG_DYNAMIC = 3;//动态
+	private final int CHAT_MSG = 4;//聊天
 	private XgMessage mxgMessage;//信鸽消息
 	private static List<OnCustomMessageListener> onCustomMessageListenerList;
 	@Override
@@ -77,15 +78,25 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 			mxgMessage = new XgMessage();
 		}
 		mxgMessage.setMessageType(messageType);
+		int count = 0;//消息数
 		switch (messageType) {
 		case CUSTOM_MSG_NOTIFICATION:
 			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_HAS_NOTIFY_MESSAGE, true);//有通知到来
+			count = SharedPreferencesUtil.getInstance().getInt(C.SPKey.SPK_MESSAEG_COUNT,0);
+			SharedPreferencesUtil.getInstance().setInt(C.SPKey.SPK_MESSAEG_COUNT, count+1);//消息数加1
+			Log.i("XGMessageCount", (count+1)+ "");
 			parseCustomMsg(content);
 			break;
 		case CUSTOM_MSG_NEW_FANS:
 			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_HAS_NEWFANS_MESSAGE, true);//有新的粉丝
+		    count = SharedPreferencesUtil.getInstance().getInt(C.SPKey.SPK_MESSAEG_COUNT,0);
+			SharedPreferencesUtil.getInstance().setInt(C.SPKey.SPK_MESSAEG_COUNT, count+1);//消息数加1
+			Log.i("XGMessageCount", (count+1)+ "");
 			parseCustomMsg(content);
 			break;
+		case CUSTOM_MSG_DYNAMIC:
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_REFRESH_DYNAMIC_FG, true);//有新的动态
+			parseCustomMsg(content);
 		case CHAT_MSG:
 			
 		default:
@@ -108,9 +119,6 @@ public class XgMessageReceiver extends XGPushBaseReceiver {
 		mxgMessage.setContent(customContent);
 		Log.i("XgCustomMessage", "-->"+customContent.getMessage());
 		showNotification("您有一条新信息",customContent.getUserName(),customContent.getMessage());
-		int count = SharedPreferencesUtil.getInstance().getInt(C.SPKey.SPK_MESSAEG_COUNT,0);
-		SharedPreferencesUtil.getInstance().setInt(C.SPKey.SPK_MESSAEG_COUNT, count+1);//消息数加1
-		Log.i("XGMessageCount", (count+1)+ "");
 		//通知监听的对象
 		if(onCustomMessageListenerList!=null && onCustomMessageListenerList.size()>0){
 			for(OnCustomMessageListener listener : onCustomMessageListenerList){

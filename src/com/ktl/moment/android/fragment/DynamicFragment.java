@@ -26,6 +26,7 @@ import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.Moment;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.loopj.android.http.RequestParams;
@@ -81,6 +82,11 @@ public class DynamicFragment extends BaseFragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		boolean isRefresh = SharedPreferencesUtil.getInstance().getBoolean(C.SPKey.SPK_REFRESH_DYNAMIC_FG, false);
+		if(isRefresh){
+			dynamicListView.refresh();
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_REFRESH_DYNAMIC_FG, false);
+		}
 		Log.i(TAG,"OnResume");
 	}
 	
@@ -211,4 +217,5 @@ public class DynamicFragment extends BaseFragment {
 					}
 				}, "Moment");
 	}
+	
 }

@@ -424,10 +424,11 @@ public class HomeActivity extends BaseActivity implements OnCustomMessageListene
 //		ToastUtil.show(this, msg.getContent().getMessage());
 		switch(messageType){
 		case 1://我的消息
+		case 2://新的粉丝
 			//显示小红点
 			showRedDot(meRedDotView);
 			break;
-		case 2://动态
+		case 3://动态
 			showRedDot(dynamicRedDotView);
 		}
 	}

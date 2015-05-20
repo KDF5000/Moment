@@ -110,4 +110,10 @@ public class ShareActivity extends Activity {
 			break;
 		}
 	}
+	/**
+	 * 分享完成
+	 */
+	public void ShareFinish(){
+		finish();
+	}
 }
