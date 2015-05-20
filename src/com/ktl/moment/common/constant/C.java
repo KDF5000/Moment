@@ -324,6 +324,7 @@ public class C {
 		public static final int REQUEST_UPDATE_INFO = 9;//更新用户信息回传
 		public static final int REQUEST_SELECT_LABEL = 10;//选择标签
 		public static final int REQUEST_SELECT_GENDER = 11;//更改性别
+		public static final int REQUEST_FOCUS = 12;//关注用户
 	}
 
 	/**
@@ -358,6 +359,8 @@ public class C {
 		public static final String SPK_IS_SCAN_SPLASH = "splash";//是否浏览过引导页 true | false;
 		public static final String SPK_CHANNEL_LIST = "channelList";//保存用户自定义的channel顺序
 		public static final String SPK_USER_TRACK_LIST = "userTrack";
+		
+		public static final String SPK_REFRESH_ME_FG = "refreshMeFragment";//强制刷新我的页面
 	}
 
 	/**

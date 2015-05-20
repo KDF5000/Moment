@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.ktl.moment.common.Account;
 import com.ktl.moment.common.constant.C;
 import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
+import com.ktl.moment.utils.SharedPreferencesUtil;
 import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
@@ -246,8 +248,19 @@ public class FocusActivty extends BaseActivity {
 	@OnClick({ R.id.title_back_img })
 	private void click(View v) {
 		if (v.getId() == R.id.title_back_img) {
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_REFRESH_ME_FG, true);
 			finish();
 		}
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			SharedPreferencesUtil.getInstance().setBoolean(C.SPKey.SPK_REFRESH_ME_FG, true);
+			finish();
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

@@ -257,4 +257,11 @@ public class MeFragment extends BaseFragment implements OnCustomMessageListener{
 		XGPushManager.onActivityStoped(getActivity());
 		XgMessageReceiver.removeCustomMessageListener(this);
 	}
+	
+	@Override
+	public void refreshFragmentContent() {
+		// TODO Auto-generated method stub
+		super.refreshFragmentContent();
+		getDataFromServer();
+	}
 }

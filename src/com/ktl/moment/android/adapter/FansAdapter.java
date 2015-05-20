@@ -9,6 +9,7 @@ import com.ktl.moment.entity.User;
 import com.ktl.moment.infrastructure.HttpCallBack;
 import com.ktl.moment.utils.PregUtil;
 import com.ktl.moment.utils.SharedPreferencesUtil;
+import com.ktl.moment.utils.ToastUtil;
 import com.ktl.moment.utils.net.ApiManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -111,6 +112,7 @@ public class FansAdapter extends BaseAdapter {
 				params.put("userId", user.getUserId());
 				params.put("attentionUserId", fans.getUserId());
 				params.put("isAddFocus", isAddFocus);
+				final int oprationFlag = isAddFocus;
 				ApiManager.getInstance().post(context, C.API.FOCUS_AUTHOR,
 						params, new HttpCallBack() {
 
@@ -118,12 +120,22 @@ public class FansAdapter extends BaseAdapter {
 							public void onSuccess(Object res) {
 								// TODO Auto-generated method stub
 								Log.i(TAG, "success");
+								if(oprationFlag == 1){
+									ToastUtil.show(context, "关注成功");
+								}else{
+									ToastUtil.show(context, "取消关注成功");
+								}
 							}
 
 							@Override
 							public void onFailure(Object res) {
 								// TODO Auto-generated method stub
 								Log.i(TAG, "fail");
+								if(oprationFlag == 1){
+									ToastUtil.show(context, "关注失败");
+								}else{
+									ToastUtil.show(context, "取消关注失败");
+								}
 							}
 						}, "User");
 			}
