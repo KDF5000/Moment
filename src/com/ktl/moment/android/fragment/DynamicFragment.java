@@ -61,15 +61,19 @@ public class DynamicFragment extends BaseFragment {
 		userId = user.getUserId();
 
 		initView();
-		momentList = new ArrayList<Moment>();
+		if(momentList==null){
+			momentList = new ArrayList<Moment>();
+		}
+		if(momentList.size()==0){
+			Log.i(TAG,"listView-->refresh");
+			// 从服务端获取数据
+			dynamicListView.refresh();
+			loading = new LoadingDialog(getActivity());
+			loading.show();
+		}
 		dynamicListViewAdapter = new MomentListViewAdapter(getActivity(),momentList, getDisplayImageOptions());
 		dynamicListView.setAdapter(dynamicListViewAdapter);
 		initEvent();
-		Log.i(TAG,"listView-->refresh");
-		dynamicListView.refresh();
-		loading = new LoadingDialog(getActivity());
-		loading.show();
-		// 从服务端获取数据
 		return view;
 	}
 
